@@ -5,52 +5,18 @@ import part_common as pc
 
 SLOTS = ("Horn",)
 
-SPINE = ((0.0, 0.0), (0.50, 0.15), (0.42, -0.05), (1.0, 0.04))
-HALF = (0.064, 0.064, 0.064, 0.004)
-
-
-def _offset_line(a, b, h):
-    d = (b - a).normalized()
-    n = Vector((-d.y, d.x))
-    return a + n * h, d
-
-
-def _intersect(p, d, q, e):
-    den = d.x * e.y - d.y * e.x
-    if abs(den) < 1e-6:
-        return (p + q) / 2
-    t = ((q.x - p.x) * e.y - (q.y - p.y) * e.x) / den
-    return p + d * t
-
-
-def _side(pts, halves, sign):
-    out = []
-    segs = []
-    for i in range(len(pts) - 1):
-        a, d = _offset_line(pts[i], pts[i + 1], sign * halves[i])
-        segs.append((a, d))
-    first_n = Vector((-segs[0][1].y, segs[0][1].x))
-    out.append(pts[0] + first_n * sign * halves[0])
-    for i in range(1, len(pts) - 1):
-        out.append(_intersect(segs[i - 1][0], segs[i - 1][1], segs[i][0], segs[i][1]))
-    last_d = segs[-1][1]
-    out.append(pts[-1] + Vector((-last_d.y, last_d.x)) * sign * halves[-1])
-    return out
-
-
-def outline():
-    pts = [Vector(p) for p in SPINE]
-    left = _side(pts, HALF, 1)
-    right = _side(pts, HALF, -1)
-    return left + list(reversed(right))
+OUTLINE = ((0.00, 0.12), (0.68, 0.34), (0.52, 0.07), (1.45, -0.02), (0.72, -0.07), (0.00, -0.09))
+TIP_U = 1.45
+FWD = Vector((0.34, -1.0, -0.04))
+TILT = 38
+THICK = 0.055
 
 
 def bolt(name, root, fwd, up, T):
     fwd = fwd.normalized()
     up = (up - fwd * up.dot(fwd)).normalized()
     nrm = fwd.cross(up).normalized()
-    poly = outline()
-    L = SPINE[-1][0]
+    poly = [Vector(p) for p in OUTLINE]
     bm = bmesh.new()
     front = [bm.verts.new(Vector((p.x, p.y, T / 2))) for p in poly]
     back = [bm.verts.new(Vector((p.x, p.y, -T / 2))) for p in poly]
@@ -65,7 +31,7 @@ def bolt(name, root, fwd, up, T):
     bmesh.ops.triangulate(bm, faces=[f for f in bm.faces if len(f.verts) > 4], quad_method="BEAUTY", ngon_method="EAR_CLIP")
     for v in bm.verts:
         u, w, z = v.co
-        z *= 1 - 0.45 * max(0.0, u / L)
+        z *= 1 - 0.75 * max(0.0, u / TIP_U) ** 1.3
         v.co = root + fwd * u + up * w + nrm * z
     obj = pc.new_object(name, bm)
     pc.shade_smooth(obj, 35)
@@ -73,13 +39,11 @@ def bolt(name, root, fwd, up, T):
 
 
 def build(arm):
-    p, nrm = pc.surface_point((1.5, -0.36, 2.4), Vector((-1.0, 0, -0.95)))
-    root = p - nrm * 0.06 - Vector((0, 0, 0.0))
-    fwd = Vector((0.7, -1.0, 0.38))
-    tilt = math.radians(15)
-    up0 = Vector((0, 0, 1.0))
-    up = Matrix.Rotation(-tilt, 3, fwd.normalized()) @ up0
-    left = bolt("Horn_Rayo_L", root - fwd.normalized() * 0.06, fwd, up, 0.045)
+    p, nrm = pc.surface_point((1.5, -0.34, 2.4), Vector((-1.0, 0, -0.95)))
+    fwd = FWD.normalized()
+    root = p - nrm * 0.05 - fwd * 0.10
+    up = Matrix.Rotation(-math.radians(TILT), 3, fwd) @ Vector((0, 0, 1.0))
+    left = bolt("Horn_Rayo_L", root, fwd, up, THICK)
     pc.apply_transforms(left)
     right = pc.mirror_x(left, "Horn_Rayo_R")
     for o in (left, right):

@@ -8,9 +8,6 @@ public class MonchiVisualizer : MonoBehaviour
 {
     [Required, SerializeField] private Transform modelRoot;
 
-    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
-    private static readonly int Shade1ColorId = Shader.PropertyToID("_1st_ShadeColor");
-    private static readonly int Shade2ColorId = Shader.PropertyToID("_2nd_ShadeColor");
     private static readonly int RimColorId = Shader.PropertyToID("_RimLightColor");
     private static readonly int RimPowerId = Shader.PropertyToID("_RimLight_Power");
     private static readonly int RimInsideMaskId = Shader.PropertyToID("_RimLight_InsideMask");
@@ -182,39 +179,21 @@ public class MonchiVisualizer : MonoBehaviour
             if (furMat != null)
                 renderer.sharedMaterial = furMat;
 
-            Color color;
-            if (partName.Length >= 11 && partName.StartsWith("Deco_") && ColorUtility.TryParseHtmlString("#" + partName.Substring(5, 6), out var decoColor))
-                color = decoColor;
-            else if (partName.StartsWith("Wing"))
-                color = wing;
-            else if (partName.StartsWith("Horn") || partName.StartsWith("Back"))
-                color = accent;
-            else if (partName == "Teech")
-                color = Color.Lerp(Color.white, currentDna.BaseColor, 0.12f);
-            else
-                color = currentDna.BaseColor;
-
+            var color = MonchiTint.ColorFor(partName, currentDna, wing, accent);
             Tint(renderer, color);
         }
     }
 
     private void Tint(Renderer renderer, Color color)
     {
-        var palette = ColorGenetics.BuildFurPalette(color, ColorGenetics.DeriveSecondary(color));
         var mpb = new MaterialPropertyBlock();
-        mpb.SetColor(BaseColorId, palette.Base);
-        mpb.SetColor(Shade1ColorId, palette.Shade1);
-        mpb.SetColor(Shade2ColorId, palette.Shade2);
+        MonchiTint.Fill(mpb, color);
         if (rimOverride)
         {
             mpb.SetColor(RimColorId, rimOverrideColor);
             mpb.SetFloat(RimPowerId, rimOverridePower);
             mpb.SetFloat(RimInsideMaskId, rimOverrideInsideMask);
             mpb.SetFloat(RimLightColorSwitchId, 0f);
-        }
-        else
-        {
-            mpb.SetColor(RimColorId, Color.Lerp(color, Color.white, 0.65f));
         }
         renderer.SetPropertyBlock(mpb);
     }

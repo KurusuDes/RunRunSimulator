@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67fa77d685e6a434c802090c27ab7a98, type: 3}
+  m_Name: BackPart_Cometitas
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BackPart
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Icon: {fileID: 21300000, guid: f9d316f416f44514aa49d6104fca09b2, type: 3}
+  ID: BK13
+  Name: Cometitas
+  Rarity: 0
+  Tier: 0
+  Set: {fileID: 11400000, guid: 430b97b8c3541da40b4e645635737581, type: 2}
+  HP: 0
+  Attack: 0
+  Speed: 0
+  Ability: {fileID: 11400000, guid: 75a71a522b5e9b74881f20ac4adb6484, type: 2}

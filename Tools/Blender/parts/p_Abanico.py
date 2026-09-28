@@ -5,15 +5,17 @@ import part_common as pc
 
 SLOTS = ("Back",)
 
-RIM_FULL = [(-0.56, 1.05), (-0.54, 1.37), (-0.40, 1.64), (-0.15, 1.81), (0.18, 1.82), (0.48, 1.66),
-            (0.77, 1.38), (0.98, 1.00), (1.09, 0.62), (1.07, 0.40)]
-SCALE_Y, SCALE_Z, BASE_Z = 0.78, 0.6, 1.0
-RIM = [(y * SCALE_Y, BASE_Z + (z - BASE_Z) * SCALE_Z) for y, z in RIM_FULL]
-INNER = [(-0.30 * SCALE_Y, 1.00), (0.74 * SCALE_Y, BASE_Z + (0.42 - BASE_Z) * SCALE_Z)]
-N = 81
-J = 9
+RIM = [(-0.66, 1.00), (-0.70, 1.20), (-0.74, 1.40), (-0.78, 1.60), (-0.73, 1.76), (-0.58, 1.85), (-0.36, 1.89),
+       (-0.10, 1.86), (0.24, 1.76), (0.49, 1.61), (0.71, 1.40), (0.87, 1.16), (0.98, 0.91), (1.04, 0.67), (1.03, 0.50)]
+INNER = [RIM[0], RIM[-1]]
+PIVOT = Vector((0, -0.05, 0.75))
+N = 101
+T = (0.0, 0.07, 0.18, 0.34, 0.54, 0.76, 1.0)
 K = 6
-PLEATS = 16
+PLEATS = 18
+PLEAT_AMP = 0.005
+SINK = 0.06
+MIN_H = 0.012
 
 
 def catmull(pts, n):
@@ -40,30 +42,44 @@ def catmull(pts, n):
     return out
 
 
+def rib(tip):
+    d = (tip - PIVOT).normalized()
+    hit, _ = pc.surface_point(PIVOT + d * 3.0, -d)
+    if hit is None:
+        hit = PIVOT + d * 0.5
+    hit = Vector((0, hit.y, hit.z))
+    if (tip - PIVOT).length < (hit - PIVOT).length + MIN_H:
+        tip = hit + d * MIN_H
+    return hit - d * SINK, hit, tip, d
+
+
 def build(arm):
     rim = catmull(RIM, N)
-    a, b = Vector((0, *INNER[0])), Vector((0, *INNER[1]))
     X = Vector((1, 0, 0))
     bm = bmesh.new()
     loops = []
     for i in range(N):
         u = i / (N - 1)
-        base, tip = a.lerp(b, u), rim[i]
-        d = (tip - base).normalized()
+        base, surf, tip, d = rib(rim[i])
         wave = math.sin(2 * math.pi * PLEATS * u)
         end = min(u, 1 - u)
-        fade = min(1.0, end / 0.04)
+        fade = min(1.0, end / 0.05)
+        taper = 0.45 + 0.55 * min(1.0, end / 0.08) ** 0.6
 
-        def mid(s):
-            return base.lerp(tip, s) + X * (0.014 * s ** 1.3 * wave * fade)
+        def point(q):
+            p = surf.lerp(tip, q) if q >= 0 else surf.lerp(base, -q)
+            return p + X * (PLEAT_AMP * max(0.0, q) ** 1.2 * wave * fade)
 
-        def half(s):
-            return 0.072 - 0.03 * s
+        def half(q):
+            q = max(0.0, q)
+            return taper * (0.016 + 0.020 * (1 - q) ** 1.5 + 0.026 * max(0.0, 1 - q / 0.14) ** 2)
 
-        plus = [mid(j / (J - 1)) + X * half(j / (J - 1)) for j in range(J)]
+        qs = [-1.0] + list(T)
+        plus = [point(q) + X * half(q) for q in qs]
         hr = half(1.0)
-        cap = [mid(1.0) + d * hr * math.sin(math.pi * k / K) + X * hr * math.cos(math.pi * k / K) for k in range(1, K)]
-        minus = [mid(j / (J - 1)) - X * half(j / (J - 1)) for j in reversed(range(J))]
+        top = point(1.0)
+        cap = [top + d * hr * math.sin(math.pi * k / K) + X * hr * math.cos(math.pi * k / K) for k in range(1, K)]
+        minus = [point(q) - X * half(q) for q in reversed(qs)]
         loops.append([bm.verts.new(p) for p in plus + cap + minus])
     M = len(loops[0])
     for la, lb in zip(loops, loops[1:]):

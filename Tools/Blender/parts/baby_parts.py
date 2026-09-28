@@ -92,7 +92,7 @@ def baby(mode, slot, objs, body, shell, link):
     for o, name in zip(objs, names):
         mini = ts.conform(o, body, shell, name + "_mini", k, lift)
         mini.parent = None
-        if soft:
+        if soft and len(mini.data.vertices) >= 50:
             ts.soften(mini, soft)
         out += split(mini, [name])
     return out

@@ -1,0 +1,215 @@
+.egg-lab {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.egg-lab__labels {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.egg-lab__num {
+    position: absolute;
+    translate: -50% 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    border-width: 3px;
+    border-color: var(--mm-frame);
+    background-color: var(--mm-surface);
+    color: var(--mm-ink);
+    font-size: 20px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    padding: 0;
+    margin: 0;
+}
+
+.egg-lab__num:hover {
+    background-color: var(--mm-gold);
+}
+
+.egg-lab__rearm {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    translate: -50% 0;
+    padding: 10px 22px;
+    border-radius: 14px;
+    border-width: 3px;
+    border-color: var(--mm-frame);
+    background-color: var(--mm-coral);
+    color: var(--mm-surface);
+    font-size: 16px;
+    -unity-font-style: bold;
+}
+
+.egg-lab__rearm:hover {
+    background-color: var(--mm-gold);
+}
+
+.egg-lab__card {
+    display: none;
+    position: absolute;
+    right: 24px;
+    top: 80px;
+    width: 340px;
+    padding: 14px;
+    border-radius: 14px;
+    border-width: 3px;
+    border-color: var(--mm-frame);
+    background-color: var(--mm-surface);
+}
+
+.egg-lab__card-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.egg-lab__card-title {
+    color: var(--mm-ink);
+    font-size: 18px;
+    -unity-font-style: bold;
+}
+
+.egg-lab__card-close {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 14px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    background-color: var(--mm-surface-2);
+    color: var(--mm-ink);
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.egg-lab__card-close:hover {
+    background-color: var(--mm-coral);
+    color: var(--mm-surface);
+}
+
+.egg-lab__portrait {
+    height: 160px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    background-color: var(--mm-surface-2);
+    margin-bottom: 10px;
+}
+
+.egg-lab__parents {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.egg-lab__parent {
+    flex-direction: row;
+    align-items: center;
+    max-width: 155px;
+}
+
+.egg-lab__parent-swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    margin-right: 6px;
+}
+
+.egg-lab__parent-name {
+    color: var(--mm-ink);
+    font-size: 13px;
+}
+
+.egg-lab__progress-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.egg-lab__radial {
+    width: 72px;
+    height: 72px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.egg-lab__radial-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.egg-lab__radial-percent {
+    color: var(--mm-ink);
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.egg-lab__cost {
+    padding: 6px 14px;
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    background-color: var(--mm-teal);
+    color: var(--mm-surface);
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+
+.egg-lab__slots {
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.egg-lab__slot {
+    align-items: center;
+    width: 80px;
+}
+
+.egg-lab__slot-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    border-width: 2px;
+    border-color: var(--mm-frame);
+    color: var(--mm-ink);
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.egg-lab__slot--horn .egg-lab__slot-mark {
+    background-color: var(--mm-gold);
+}
+
+.egg-lab__slot--back .egg-lab__slot-mark {
+    background-color: var(--mm-teal);
+}
+
+.egg-lab__slot--wing .egg-lab__slot-mark {
+    background-color: var(--mm-plum);
+}
+
+.egg-lab__slot-name {
+    margin-top: 4px;
+    color: var(--mm-ink-soft);
+    font-size: 11px;
+}

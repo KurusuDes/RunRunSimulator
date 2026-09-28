@@ -4,6 +4,36 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-09-28 (Session 136 — **laboratorio de huevos con idles y ficha, 20 patrones de piel nuevos, rondas 2-5 de partes contra la referencia y versiones bebé completas** — 7 `.cs` creados, 2 modificados; compila 0 errores; verificado en editor y Play)
+
+**Focus:** [[Index/30 - Huevos y Slimes (pipeline Blender)]] y [[Index/31 - Partes nuevas (referencia Mega Tiny Dragon)]].
+
+1. **Idles del huevo** — `Tools/Blender/rig_egg.py` (en `build_monchi_eggs.ps1`): rig `Egg_Rig` (`Root` → `Body`, huevo rígido, rueda sobre el centro de curvatura sin hundirse) y clips `Egg_Idle` (bucle), `Egg_Wobble`, `Egg_Hop`, `Egg_Jingle`. `MonchiEggAnimator.controller` (las variantes vuelven solas a Idle). `EggIdleShuffler` alterna variantes al azar con desfase.
+2. **Laboratorio `Resources/Scenes/EggLab.unity`** (solo laboratorio, no es el ensamblado de HC-5): `EggLabBuilder` cruza 24 parejas reales (`BreedingService.Breed` sobre un registro en memoria), `EggLabAssembler` arma el huevo desde el ADN (cachito por cuerpo, partes bebé del banco re-emparentadas al hueso `Body`, tinte), número flotante clicable, botón Rearmar y **ficha del huevito** (`EggLabPanel` + `EggLabPortrait`: huevo girando, padres con color, `RadialSlot` de incubación, costo en Minerita, 3 ranuras con "?").
+3. **`MonchiTint`** (estática): regla de color por nombre de renderer + paleta MPB, extraída de `MonchiVisualizer` (mismo resultado) y reutilizada por el huevo.
+4. **Patrones de piel 33-52** — pipeline `Tools/Blender/patterns/` (`posmap.py` hornea el mapa 3D del `Dragon_body` sobre su UV; `gen_patterns.py` 20 recetas en numpy; `preview_patterns.py`). `FurType.Pattern33..52`, `MonchiFur_33..52`, alta en `FurTypeDatabase` con peso 1 (≈ la mitad de las crías nuevas los sacan). Calibrados contra los viejos (detalle 0,05-0,08 vs 0,02). **Juan los aprobó** vistos en `GameScene` (tienda, luz y post-proceso reales).
+5. **Partes, rondas 2 a 5 con Juan** (agentes Opus, lámina numerada 1-17): 3 espaldas nuevas `Espuelas` (BK15, set Astas), `Espinas` (BK14, Hoz), `Cometitas` (BK13, Pez abisal); `Aletas` sale del set Ballena (ala suelta). Cometa y Copete = gema facetada al ras de la frente (la aletita de arriba de la cabeza es del cuerpo del pack, no se modela). Ronda 5 (última, pendiente de veredicto): melena del Unicornio en ola, punta del Carnero en gancho, placas cuadradas, antenas en coronilla con punta de cuchara, Lana en pelotitas, Cometa angosta, Hoz rehecha tipo guadaña, Abanico con borde delantero recto.
+6. **Versiones bebé completas** — huevo 28/28 y slime 16/16 (el `.blend` de piel del slime se regeneró en esta PC). `baby_parts.py` no suaviza partes de < 50 vértices (las colapsaba). Íconos regenerados; `icon_part.py` sin el truco `LOBED` de Lana.
+
+**Decisiones de Juan:** sin formas de cuerpo nuevas (la variedad va en patrones); moño descartado; ojitos propios coloreables en sesión aparte; "collar arcoíris" = dientes (solo aclaración).
+
+**Quirks:** `MonchiVisualizer.Assemble` fuera de Play deja warnings "Destroy may not be called from edit mode" (del injerto; inofensivo para renders). Para capturas de patrones: armar en `GameScene` sobre el piso amarillo (x≈-20, z 21-30, y 0), escala 0,7, ocultar `Player`/`Snack`, no guardar la escena.
+
+**Siguiente paso:** veredicto de Juan sobre la lámina de la ronda 5 y ajustes que marque; íconos flojos (Cometitas); sesión de **ojitos propios estandarizados y coloreables**; actualizar `Index/30`/`Index/31` con lo de esta sesión (a pedido); pendientes viejos: ensamblado huevo/slime real + incubadora (HC-5), etapa de vida del slime.
+
+**Archivos `.cs` creados (7) · modificados (2):**
+- `Assets/RunRunSimulator/Scripts/Core/MonchiTint.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/EggIdleShuffler.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/EggLabEntry.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/EggLabAssembler.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/EggLabBuilder.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/EggLabPanel.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/EggLabPortrait.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiVisualizer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/GeneticsEnums.cs` → MODIFICADO
+
+---
+
 **Session:** 2026-09-28 (Session 135 — **arquitectura de partes: las 29 partes nuevas en el ADN, banco por forma, habilidad por parte, sets como datos e iconos pixel art** — 2 `.cs` creados, 10 modificados, 1 borrado; compila 0 errores; verificado en editor y Play)
 
 **Focus:** [[Index/31 - Partes nuevas (referencia Mega Tiny Dragon)]] y [[Index/02 - Genetics & Breeding]].

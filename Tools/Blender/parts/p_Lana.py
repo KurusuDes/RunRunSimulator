@@ -1,57 +1,36 @@
-import bpy, math
+import bmesh
 from mathutils import Vector
 import part_common as pc
 
 SLOTS = ("Horn",)
 
-LOBES = (
-    (0.00, -0.46, 0.28, 0.85),
-    (0.00, -0.12, 0.22, 0.85),
-    (0.22, -0.28, 0.19, 0.55),
-    (-0.22, -0.28, 0.19, 0.55),
-    (0.16, -0.52, 0.17, 0.55),
-    (-0.16, -0.52, 0.17, 0.55),
-    (0.00, 0.10, 0.17, 0.45),
-    (0.20, 0.00, 0.15, 0.40),
-    (-0.20, 0.00, 0.15, 0.40),
+BALLS = (
+    (0.00, -0.54, 0.26),
+    (0.00, -0.26, 0.20),
+    (0.17, -0.40, 0.14),
+    (-0.17, -0.40, 0.14),
+    (0.00, -0.02, 0.15),
 )
+SINK = 0.07
+SQUASH = 0.92
+SEG_U, SEG_V = 18, 12
 
-FRONT_FLOOR = 1.10
 
-
-def lobe_center(x, y, r, lift):
-    p, n = pc.surface_point((x, y, 3.0), (0, 0, -1))
-    c = p + n * r * lift
-    if y < -0.3:
-        c.z = max(c.z, FRONT_FLOOR + r * 0.9)
-    return c
+def ball(name, x, y, r):
+    p, n = pc.head_top(x, y)
+    n = (n + Vector((0, 0, 1))).normalized()
+    center = p + n * (r * SQUASH - SINK)
+    bm = bmesh.new()
+    bmesh.ops.create_uvsphere(bm, u_segments=SEG_U, v_segments=SEG_V, radius=r)
+    for v in bm.verts:
+        v.co = Vector((v.co.x, v.co.y, v.co.z * SQUASH)) + center
+    obj = pc.new_object(name, bm)
+    pc.shade_smooth(obj, 80)
+    return obj
 
 
 def build(arm):
-    mb = bpy.data.metaballs.new("LanaMeta")
-    mb.resolution = 0.045
-    mb.render_resolution = 0.045
-    mb.threshold = 0.6
-    for x, y, r, lift in LOBES:
-        r *= 0.95
-        el = mb.elements.new()
-        el.co = lobe_center(x, y, r, lift)
-        el.radius = r * 1.45
-        el.stiffness = 2.4
-    ob = bpy.data.objects.new("LanaMeta", mb)
-    bpy.context.scene.collection.objects.link(ob)
-    bpy.context.view_layer.update()
-    bpy.ops.object.select_all(action="DESELECT")
-    ob.select_set(True)
-    bpy.context.view_layer.objects.active = ob
-    bpy.ops.object.convert(target="MESH")
-    obj = bpy.context.view_layer.objects.active
-    obj.name = "Horn_Lana"
-    obj.data.name = "Horn_Lana"
-    if len(obj.data.vertices) > 2400:
-        mod = obj.modifiers.new("dec", "DECIMATE")
-        mod.ratio = 2300 / len(obj.data.vertices)
-        bpy.ops.object.modifier_apply(modifier=mod.name)
-    pc.shade_smooth(obj)
+    parts = [ball("lana%d" % i, x, y, r) for i, (x, y, r) in enumerate(BALLS)]
+    obj = pc.join(parts, "Horn_Lana")
     pc.skin_like(obj, arm, "Horn")
     return [obj]

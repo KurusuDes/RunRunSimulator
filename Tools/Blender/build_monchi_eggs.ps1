@@ -17,6 +17,7 @@ foreach ($mode in 'egg', 'slime') {
     & $Blender --background --factory-startup $blend --python (Join-Path $here 'transfer_skin.py') -- $Work $fbxDir $pattern $mode | Select-String 'NOSE|SINK|SCALES|SKIN_DONE|Traceback'
 }
 & $Blender --background --factory-startup (Join-Path $Work 'MonchiSlime_Skin.blend') --python (Join-Path $here 'rig_slime.py') -- $Work | Select-String 'RIG_DONE|Traceback'
+& $Blender --background --factory-startup (Join-Path $Work 'MonchiEgg_Skin.blend') --python (Join-Path $here 'rig_egg.py') -- $Work | Select-String 'RIG_DONE|Traceback'
 & $Blender --background --factory-startup --python (Join-Path $here 'gen_scales.py') -- (Join-Path $Work 'EggScales.png') | Select-String 'SCALES_DONE|Traceback'
 
 Copy-Item (Join-Path $Work 'MonchiEgg.fbx'), (Join-Path $Work 'MonchiSlime.fbx') $models -Force

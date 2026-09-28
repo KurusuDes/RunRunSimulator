@@ -26,7 +26,7 @@ MonoBehaviour:
   Name: Aletas
   Rarity: 0
   Tier: 0
-  Set: {fileID: 11400000, guid: d3606408d4260164f9bd92d0f593321e, type: 2}
+  Set: {fileID: 0}
   HP: 0
   Attack: 0
   Speed: 0

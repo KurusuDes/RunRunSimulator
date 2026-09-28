@@ -22,7 +22,7 @@ def mallow(name, base, axis, R, H, sink=0.05, bevel=0.15, dome=0.004, sides=16, 
 def build(arm):
     pieces = []
     n = 9
-    y0, y1 = -0.17, 1.06
+    y0, y1 = -0.24, 1.06
     ys = [y0 + (y1 - y0) * k / 200 for k in range(201)]
     spine = [pc.surface_point((0, y, 3.0), (0, 0, -1))[0] for y in ys]
     arc = [0.0]
@@ -41,7 +41,7 @@ def build(arm):
         x = 0.018 * side
         p, nrm = pc.surface_point((x, ys[k], 3.0), (0, 0, -1))
         R = Rs[i]
-        H = 0.16 - 0.065 * t ** 0.7
+        H = 0.205 - 0.09 * t ** 0.7
         axis = (nrm + Vector((0.08 * side, 0, 0))).normalized()
         pieces.append(mallow("m%d" % i, p, axis, R, H, side_hint=(1, 0, 0)))
     obj = pc.join(pieces, "Back_Malvaviscos")

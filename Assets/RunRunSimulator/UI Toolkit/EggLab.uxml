@@ -1,0 +1,49 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Theme.uss" />
+    <Style src="EggLabStyle.uss" />
+    <ui:VisualElement name="egg-lab-root" class="mm-theme mm-theme--night egg-lab" picking-mode="Ignore">
+        <ui:VisualElement name="egg-lab__labels" class="egg-lab__labels" picking-mode="Ignore" />
+
+        <ui:Button name="egg-lab__rearm" text="Rearmar huevos" class="egg-lab__rearm" />
+
+        <ui:VisualElement name="egg-lab__card" class="egg-lab__card">
+            <ui:VisualElement class="egg-lab__card-header">
+                <ui:Label name="egg-lab__card-title" text="Huevo #0" class="egg-lab__card-title" />
+                <ui:Button name="egg-lab__card-close" text="×" class="egg-lab__card-close" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="egg-lab__portrait" class="egg-lab__portrait" />
+
+            <ui:VisualElement class="egg-lab__parents">
+                <ui:VisualElement name="egg-lab__mother" class="egg-lab__parent">
+                    <ui:VisualElement name="egg-lab__mother-swatch" class="egg-lab__parent-swatch" />
+                    <ui:Label name="egg-lab__mother-name" class="egg-lab__parent-name" />
+                </ui:VisualElement>
+                <ui:VisualElement name="egg-lab__father" class="egg-lab__parent">
+                    <ui:VisualElement name="egg-lab__father-swatch" class="egg-lab__parent-swatch" />
+                    <ui:Label name="egg-lab__father-name" class="egg-lab__parent-name" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="egg-lab__progress-row">
+                <ui:VisualElement name="egg-lab__radial" class="egg-lab__radial" />
+                <ui:Label name="egg-lab__cost" text="Minerita 0" class="egg-lab__cost" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="egg-lab__slots">
+                <ui:VisualElement class="egg-lab__slot egg-lab__slot--horn">
+                    <ui:Label text="?" class="egg-lab__slot-mark" />
+                    <ui:Label text="Cuerno" class="egg-lab__slot-name" />
+                </ui:VisualElement>
+                <ui:VisualElement class="egg-lab__slot egg-lab__slot--back">
+                    <ui:Label text="?" class="egg-lab__slot-mark" />
+                    <ui:Label text="Espalda" class="egg-lab__slot-name" />
+                </ui:VisualElement>
+                <ui:VisualElement class="egg-lab__slot egg-lab__slot--wing">
+                    <ui:Label text="?" class="egg-lab__slot-mark" />
+                    <ui:Label text="Alas" class="egg-lab__slot-name" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

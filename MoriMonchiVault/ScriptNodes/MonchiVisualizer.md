@@ -6,7 +6,7 @@ tags: [script, visual, component]
 
 **Ruta:** `World/Creatures/MonchiVisualizer.cs`
 
-**Responsabilidad:** Visualizador del modelo Suriyun. Instancia body FBX por BodyShapeID, mapea renderers (Face, Wings, Arms, etc.), aplica tintado por ColorGenetics.BuildHarmony. `SetMood()` swapea material Face. **S61:** `Assemble()` ahora hace `SetActive(false)` a los hijos viejos antes de `Object.Destroy()` — Destroy es diferido a fin de frame y el fotomatón renderiza en el mismo frame, causando superposición del cuerpo viejo en headshots batch. **S110:** Nuevos métodos `SetRimOverride()` y `ClearRimOverride()` para controlar rim light genético (anulable con color/power/mask de rival). **S115:** Assemble() propaga la capa del Root (`modelRoot.gameObject.layer`) a todos los hijos del body instanciado; esto permite la pasada de renderer URP (RenderObjects de `PC_Renderer` con tags CreatureBodyMask/CreatureBodySilhouette sobre capa `CreatureBody`) que filtra por esa capa para dibujo de silueta/stencil. **S134:** Modular part assembly — Assemble ahora carga partes prefabricadas (HornID, BackID, WingID) desde el banco, desactiva renderers baked de esos prefijos, e injerta partes FBX con su propio Armature usando MonchiPartGrafter.
+**Responsabilidad:** Visualizador del modelo Suriyun. Instancia body FBX por BodyShapeID, mapea renderers (Face, Wings, Arms, etc.), aplica tintado por ColorGenetics.BuildHarmony. `SetMood()` swapea material Face. **S61:** `Assemble()` ahora hace `SetActive(false)` a los hijos viejos antes de `Object.Destroy()` — Destroy es diferido a fin de frame y el fotomatón renderiza en el mismo frame, causando superposición del cuerpo viejo en headshots batch. **S110:** Nuevos métodos `SetRimOverride()` y `ClearRimOverride()` para controlar rim light genético (anulable con color/power/mask de rival). **S115:** Assemble() propaga la capa del Root (`modelRoot.gameObject.layer`) a todos los hijos del body instanciado; esto permite la pasada de renderer URP (RenderObjects de `PC_Renderer` con tags CreatureBodyMask/CreatureBodySilhouette sobre capa `CreatureBody`) que filtra por esa capa para dibujo de silueta/stencil. **S134:** Modular part assembly — Assemble ahora carga partes prefabricadas (HornID, BackID, WingID) desde el banco, desactiva renderers baked de esos prefijos, e injerta partes FBX con su propio Armature usando MonchiPartGrafter. **S136:** ApplyLook() refactorizado — tintado centralizado via MonchiTint.ColorFor() (determinismo nombre renderer) + MonchiTint.Fill() (paleta MPB).
 
 ## Métodos Públicos
 
@@ -57,7 +57,7 @@ tags: [script, visual, component]
    - `GraftPart(dna.BackID, "Back")` → desactiva renderers "Back*", injerta si partPrefab existe
    - `GraftPart(dna.WingID, "Wing")` → desactiva renderers "Wing*", injerta si partPrefab existe
 8. **Recorre renderers activos:** busca Face, acumula resto en tintRenderers (solo componentes activos, ignora desactivados)
-9. **Aplica look:** tintado de colores genéticos + override si existe
+9. **Aplica look:** tintado de colores genéticos + override si existe (**S136 MODIFICADO:** usa MonchiTint)
 10. **Aplica mood:** SetMood(currentMood) para sincronizar facial material
 
 ## Método GraftPart() S134 (NUEVO)
@@ -218,6 +218,64 @@ foreach (var renderer in bodyInstance.GetComponentsInChildren<SkinnedMeshRendere
 - Tintado unificado: ApplyLook() recorre tintRenderers que mezcla baked+injertados sin diferenciar
 - DNA determinístico: cada criatura con mismo BodyShapeID+HornID+BackID+WingID renderiza idéntico
 
+## Cambios S136
+
+**ApplyLook() — Refactorización de tintado (línea 158-189 MODIFICADO):**
+
+Antes (S110-S134):
+```csharp
+// Lógica inline de mapeo de colores por nombre renderer
+if (rendererName.StartsWith("Wing")) { color = wing; }
+else if (rendererName.StartsWith("Horn") || ...) { color = accent; }
+// ... etc.
+var palette = ColorGenetics.BuildFurPalette(...);
+mpb.SetColor(_BaseColorId, palette.Base);
+// ... etc.
+```
+
+Ahora (S136):
+```csharp
+var color = MonchiTint.ColorFor(partName, currentDna, wing, accent);
+Tint(renderer, color);  // En Tint(), se llama MonchiTint.Fill()
+```
+
+**Método Tint() — Refactorizado (línea 191-203 MODIFICADO):**
+
+Antes (S110-S134):
+```csharp
+private void Tint(Renderer renderer, Color color)
+{
+    var mpb = new MaterialPropertyBlock();
+    // Inline: mpb.SetColor(_BaseColorId, palette.Base); etc.
+}
+```
+
+Ahora (S136):
+```csharp
+private void Tint(Renderer renderer, Color color)
+{
+    var mpb = new MaterialPropertyBlock();
+    MonchiTint.Fill(mpb, color);        // Centraliza paleta
+    if (rimOverride)
+    {
+        mpb.SetColor(RimColorId, rimOverrideColor);
+        // ... override rules
+    }
+    renderer.SetPropertyBlock(mpb);
+}
+```
+
+**Responsabilidad de MonchiTint (S136 NUEVO):**
+- `MonchiTint.ColorFor(name, dna, wing, accent)` → determina color por regla de nombre renderer (Deco_*, Wing*, Horn/Back, Teech, default)
+- `MonchiTint.Fill(mpb, color)` → arma paleta 4-color (Base, Shade1, Shade2, Rim)
+- Beneficio: lógica reutilizable en EggLabAssembler (mismo tintado para huevos)
+
+**Impacto S136:**
+- Desacoplamiento: lógica de color extraída a utilidad estática reutilizable
+- Reducción de código: MonchiVisualizer ApplyLook/Tint más legibles
+- Reutilización: EggLabAssembler.Build() usa MonchiTint sin duplicar lógica
+- Determinismo: ColorFor() garantiza mismo resultado varias veces (nombre = determinista)
+
 ## Invariantes
 
 - Assemble() desactiva visualmente los hijos viejos inmediatamente (SetActive), luego los destruye diferido
@@ -226,6 +284,7 @@ foreach (var renderer in bodyInstance.GetComponentsInChildren<SkinnedMeshRendere
 - Override de rim es toggle (bool rimOverride) sin estado gradual — on/off nítido
 - **S115:** Layer propagation es determinístico: todos los hijos heredan exactamente del Root
 - **S134:** GraftPart solo actúa si partPrefab existe; partId nil o no en banco = body baked se mantiene
+- **S136:** MonchiTint.ColorFor() es determinístico en nombre renderer; mismo nombre = mismo color
 
 ## Notas S61
 
@@ -261,11 +320,21 @@ foreach (var renderer in bodyInstance.GetComponentsInChildren<SkinnedMeshRendere
 - **Tintado universal:** ApplyLook() no distingue entre baked/injertado, aplica mismo ColorGenetics
 - **MonchiPartGrafter:** utilidad estática que maneja plomería de bindposes y huesos (sin estado, reusable)
 
+## Notas S136
+
+- **Refactorización de tintado:** lógica de color extraída a MonchiTint para reutilización
+- **ColorFor() determinista:** mismo nombre renderer = mismo color (regla de mapeo fija)
+- **Fill() centralizado:** paleta 4-color armada una sola vez (antes en Tint inline)
+- **Reutilización:** EggLabAssembler.Build() llama MonchiTint sin duplicar código
+- **Invariante de rim:** override de rim se aplica DESPUÉS de Fill() en Tint() (nivel de prioridad correcto)
+
 ## Vinculado a
 
 - [[Index/10 - Visualization]]
 - [[Index/23 - Arena Sandbox y Expedicion]]
+- [[Index/31 - EggLab & Incubadora]] — (S136 NUEVO) EggLabAssembler reutiliza MonchiTint
 - [[MonchiVisualBankSO]], [[ColorGenetics]]
+- [[MonchiTint]] — (S136 NUEVO) utilidad de mapeo de colores
 - [[MonchiTeamRim]] — (S110 NUEVO) llamador de SetRimOverride/ClearRimOverride
 - [[MonchiPartGrafter]] — (S134 NUEVO) utilidad de injerto de partes
 
@@ -281,7 +350,12 @@ foreach (var renderer in bodyInstance.GetComponentsInChildren<SkinnedMeshRendere
 - Material Face swapped por mood
 - MPB de rim light (genético u override)
 - Partes injertadas integradas en tintRenderers (S134)
+- Tintado determinístico via MonchiTint (S136)
 
 **Dependencias S134:**
 - MonchiVisualBankSO.GetPartMesh(partId) → obtiene FBX de parte
 - MonchiPartGrafter.Graft() → injerta y remapea huesos
+
+**Dependencias S136:**
+- MonchiTint.ColorFor() → mapeo determinístico de color por renderer name
+- MonchiTint.Fill() → paleta 4-color en MPB
