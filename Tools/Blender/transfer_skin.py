@@ -272,7 +272,7 @@ def strip_constant_marks(ob, faces_dir):
     print("FACE constant-mark polys removed=%d of mask px=%d" % (len(doomed), int(mask.sum())))
 
 
-def place_rigid(part, body, shell, name, s, lift):
+def place_rigid(part, body, shell, name, s, lift, link=0.25):
     bm = bmesh.new()
     bm.from_mesh(body.data)
     bm.transform(body.matrix_world)
@@ -307,7 +307,7 @@ def place_rigid(part, body, shell, name, s, lift):
     for isl in islands:
         cen = sum((v.co for v in isl), Vector()) / len(isl)
         for grp in groups:
-            if (grp[0] - cen).length < 0.25:
+            if (grp[0] - cen).length < link:
                 grp[1].extend(isl)
                 break
         else:
@@ -546,4 +546,5 @@ def main():
     print("SKIN_DONE")
 
 
-main()
+if __name__ == "__main__":
+    main()
