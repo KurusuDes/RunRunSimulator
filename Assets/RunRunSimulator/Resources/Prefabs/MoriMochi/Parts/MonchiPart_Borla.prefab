@@ -56,11 +56,31 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 6a5b714232a53b8439ffe66ba495670f, type: 2}
+    - target: {fileID: -5612564146214071240, guid: 3cb933fb2681172498af0590036b0358, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a5b714232a53b8439ffe66ba495670f, type: 2}
+    - target: {fileID: -595164206247268531, guid: 3cb933fb2681172498af0590036b0358, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a5b714232a53b8439ffe66ba495670f, type: 2}
     - target: {fileID: 919132149155446097, guid: 3cb933fb2681172498af0590036b0358, type: 3}
       propertyPath: m_Name
       value: MonchiPart_Borla
       objectReference: {fileID: 0}
     - target: {fileID: 1906858414945527050, guid: 3cb933fb2681172498af0590036b0358, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a5b714232a53b8439ffe66ba495670f, type: 2}
+    - target: {fileID: 1960599817353453433, guid: 3cb933fb2681172498af0590036b0358, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a5b714232a53b8439ffe66ba495670f, type: 2}
+    - target: {fileID: 2029349725339687608, guid: 3cb933fb2681172498af0590036b0358, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a5b714232a53b8439ffe66ba495670f, type: 2}
+    - target: {fileID: 4311276652148693751, guid: 3cb933fb2681172498af0590036b0358, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 6a5b714232a53b8439ffe66ba495670f, type: 2}

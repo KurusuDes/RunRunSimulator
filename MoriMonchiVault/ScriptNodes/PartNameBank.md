@@ -1,30 +1,38 @@
 ---
-tags: [script, genetics]
+tags: [script, genetics, deprecated]
 ---
 
 # PartNameBank.cs
 
-**Ruta:** `Data/Genetics/PartNameBank.cs`
+**Ruta:** `Data/Genetics/PartNameBank.cs` — ⚠️ ELIMINADO S135
 
-**Responsabilidad:** Bancos de palabras para nombres procedurales de partes. `Dictionary<PartSet, Dictionary<PartRole, string[]>>` mapea conjuntos temáticos (PartSet) × slots de partes (PartRole) → palabras disponibles. **S75:** PartRole actualizado a Body/Horn/Back/Wing/Face.
+**Estado:** BORRADO en S135. Los nombres de partes ahora son estáticos (campo `BodyPart.Name`), no procedurales por PartSet.
 
-## Estructura
+## Histórico
 
-Mapeo temático bidireccional:
-- **PartSet:** Temas visuales (GooGang, BogBrigade, FuzzFactory, CosmicCreeps, NeonNightmares, CrunchCrew, GrimGlobs, SpudSquad, MoldMob, ZapZone, None)
-- **PartRole:** Slots genéticos (Body, Horn, Back, Wing, Face) — **S75:** 5 roles
-- **Palabras:** Array de strings descriptivos por set + role
+Antes de S135, `PartNameBank` mantenía un banco de palabras procedurales:
+- `Dictionary<PartSet, Dictionary<PartRole, string[]>>`
+- Mapeo: Set × Rol → array de palabras para generación de nombres random
 
-## Cambios en S75
+**Cambios en S135:**
 
-- **PartRole.Body** — Cuerpo principal
-- **PartRole.Horn** — Cuerno/adorno cabeza (reemplaza Arm)
-- **PartRole.Back** — Dorso/espalda (reemplaza Eye)
-- **PartRole.Wing** — Ala/apéndice (reemplaza Mouth)
-- **PartRole.Face** — Cara/rostro (NUEVO)
+1. **Introducido `PartSetSO`:** Cada set es ahora ScriptableObject con `Name` + `Color`
+2. **Nombres en BodyPart:** Campo `BodyPart.Name` asignado en inspector (o via editor button "RollAllNames()" que asigna random directo)
+3. **Eliminada generación procedural:** No se invocan nombres procedurales por más
+
+## Transición
+
+- Antes: `PartNameBank.GetRandomName(set, role)` → string random
+- Ahora: `BodyPart.Name` → string directo asignado en inspector
+
+## Ficheros Afectados (Referencias Vivas)
+
+Necesitan revisión para remover imports/referencias a `PartNameBank`:
+- Buscar `using PartNameBank` o `PartNameBank.Get*`
+- Remover todas las invocaciones
 
 ## Vinculado a
 
 - [[Index/02 - Genetics & Breeding]]
 
-**Conexiones:** [[CreatureDNA]], [[GeneticsEnums]], [[GeneticsEnums]]
+**Conexiones Obsoletas:** ~~PartNameBank~~ → remplazado por [[PartSetSO]] + [[BodyPart]].Name

@@ -4,6 +4,39 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-09-28 (Session 135 — **arquitectura de partes: las 29 partes nuevas en el ADN, banco por forma, habilidad por parte, sets como datos e iconos pixel art** — 2 `.cs` creados, 10 modificados, 1 borrado; compila 0 errores; verificado en editor y Play)
+
+**Focus:** [[Index/31 - Partes nuevas (referencia Mega Tiny Dragon)]] y [[Index/02 - Genetics & Breeding]].
+
+1. **Registrador de partes** — menú `RunRunSimulator/Parts/Registrar partes modulares` (`MonchiPartRegistrar`, idempotente): por cada `MonchiPart_<Nombre>.prefab` detecta la ranura por nombre de renderer, crea/carga el SO de parte, lo da de alta con el siguiente ID libre **sin renumerar** (`KeyedDatabaseSO.RegisterEntry`) y carga el banco. IDs: H1-H16, BK4-BK12, W2-W5 (H0, BK0-3, W0-1 intactos). Nombres con tilde.
+2. **Contrato `Deco_` ampliado** — `Deco_RRGGBB_<ranura>…` (`horn`/`back`/`wing`) indica la ranura en partes todo-color-fijo. Borla re-exportada (`p_Borla.py`), material `MonchiFur_00` repuesto.
+3. **Banco por forma** — `MonchiForm { Adult, Egg, Slime }`; `MonchiVisualBankSO` guarda adulto (`partMeshes`), huevo y slime bajo el MISMO ID; el registrador toma `Egg/EggPart_<N>.fbx` y `Blobim/BlobimPart_<N>.fbx`. Cobertura: huevo 18, slime 10 (faltan 6 cuernos + Abanico: los `.blend` de piel viven en la PC2).
+4. **Habilidad por parte** — `BodyPart.Ability` (ref a `AbilitySO` de `AbilityDatabase`); `AbilitySO.PartIds` borrado; `AbilityDatabaseSO.Resolve(dna, creatureDatabase)` usa la de la parte y cae al hash solo si es null. Reparto: cuernos Embestida; placas/púas gruesas Coraza; púas/borla Coletazo; cristales/abanico Cresta; lanas/malvaviscos Alforja; alas Colibrí/Picada.
+5. **Sets como datos** — `PartSetSO` (Name, Color), 18 assets en `ScriptableObjects/Parts/Sets/` (los 17 de la foto + Clásico para las 7 originales). Enum `PartSet` y `PartNameBank` borrados.
+6. **Iconos** — `Tools/Blender/parts/icon_parts.ps1` → `Resources/Sprites/PartIcons/PartIcon_<N>.png` (32×32, 3 grises, contorno 1 px). Reglas de Juan: cuernos con base abajo-derecha y punta a la izquierda (curvos de perfil); espaldas = close-up de 3 protuberancias sin zócalo; alas sin tocar. La UI (ficha y cría) tinta por ranura vía USS: cuerno `--mm-gold`, espalda `--mm-teal`, ala `--mm-plum`. Juan aprobó la ronda 5.
+
+**Quirks:** `execute_code` necesita `UnityEngine.Object` explícito (ambiguo con `object`); los SkinnedMeshRenderer injertados tienen bounds ×2,5 (encuadrar con `Dragon_body`); los sub-agentes coder no pueden borrar archivos.
+
+**Siguiente paso:** generar en la PC2 las versiones bebé faltantes (Antenas, Astas, Carnero, Cometa, Mechón, Triceratops, Abanico) con `baby_parts.py` y re-registrar; pulir iconos flojos si Juan lo pide (Cuernitos, Cometa, Antenas); decidir si los sets tienen bono de juego (diseño) y habilidades propias para cuernos. Siguen abiertas: 3 formas de adulto en `BODYSHAPE`, componente de ensamblado huevo/slime (HC-5).
+
+**Archivos `.cs` creados (2) · modificados (10) · borrados (1):**
+- `Assets/RunRunSimulator/Scripts/Editor/MonchiPartRegistrar.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Parts/PartSetSO.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Databases/KeyedDatabaseSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Databases/MonchiVisualBankSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Databases/PartDatabaseSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Parts/BodyPart.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Expedition/AbilitySO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Expedition/AbilityDatabaseSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/CreatureEnums.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/GeneticsEnums.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/DetailInfoTabPresenter.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BreedingBreedTabPresenter.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Expedition/ArenaSandbox.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Genetics/PartNameBank.cs` → BORRADO
+
+---
+
 **Session:** 2026-09-25 (Session 134 — **29 partes nuevas modeladas (referencia Mega Tiny Dragon) + ensamblado modular por injerto + prefabs** — 1 `.cs` creado, 2 modificados; compila 0 errores; injerto verificado en editor sobre los 4 cuerpos y los 24 clips)
 
 **Focus:** [[Index/31 - Partes nuevas (referencia Mega Tiny Dragon)]] (decisión 3 resuelta: todas las de las fotos).

@@ -6,9 +6,9 @@ tags: [scriptable-object, database, data]
 
 **Ruta:** `Data/Databases/KeyedDatabaseSO.cs`
 
-**Responsabilidad:** Base genérica abstracta `KeyedDatabaseSO<T>` para databases que indexan entidades por string ID. Define protocolo: abstract `Entries` (Dictionary<string, T>), `IDPrefix` (prefijo para asignación automática), y `SetEntryID()` para actualizar ID del asset. Métodos: `PopulateFromBuffer()` (editor: arrastra assets y asigna IDs), `SyncAllIDs()` (renumera todos los entries con prefijo), `GetByID(string id)` (búsqueda), `GetAllIDs()`, `Count`. Hereda `SerializedScriptableObject` para soporte Odin dictionaries.
+**Responsabilidad:** Base genérica abstracta `KeyedDatabaseSO<T>` para databases que indexan entidades por string ID. Define protocolo: abstract `Entries` (Dictionary<string, T>), `IDPrefix` (prefijo para asignación automática), y `SetEntryID()` para actualizar ID del asset. Métodos: `PopulateFromBuffer()` (editor: arrastra assets y asigna IDs), `SyncAllIDs()` (renumera todos los entries con prefijo), `RegisterEntry()` (registro runtime de nuevos assets), `GetByID(string id)` (búsqueda), `GetAllIDs()`, `Count`. Hereda `SerializedScriptableObject` para soporte Odin dictionaries.
 
-**S93:** Extracción de base común de PartDatabaseSO, EquipmentDatabaseSO, ItemDatabaseSO, FurnitureDatabaseSO.
+**S135:** Nuevo método `RegisterEntry()` para registrar partes dinámicamente desde `MonchiPartRegistrar` (editor).
 
 ## Métodos Públicos
 
@@ -16,6 +16,7 @@ tags: [scriptable-object, database, data]
 |--------|---------|-------------|
 | `GetByID(string id)` | `T` | Busca asset por ID; null si no existe o id es empty |
 | `GetAllIDs()` | `List<string>` | Lista de todos los IDs registrados |
+| `RegisterEntry(T entry)` | `string` | Busca ID existente o asigna siguiente; modifica entry y diccionario |
 | `Count` | `int` | Propiedad read-only, total de entries |
 
 ## Métodos Editor (Odin)
@@ -59,5 +60,4 @@ protected virtual void OnPopulated(int added) { }
 
 - [[Index/02 - Content & Databases]]
 
-**Conexiones:** [[PartDatabaseSO]], [[EquipmentDatabaseSO]], [[ItemDatabaseSO]], [[FurnitureDatabaseSO]]
-
+**Conexiones:** [[PartDatabaseSO]], [[EquipmentDatabaseSO]], [[ItemDatabaseSO]], [[FurnitureDatabaseSO]], [[MonchiPartRegistrar]]

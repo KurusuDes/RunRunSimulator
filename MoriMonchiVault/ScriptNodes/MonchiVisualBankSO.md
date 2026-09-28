@@ -1,31 +1,28 @@
 ---
-tags: [script, visual, database]
+tags: [scriptable-object, visual-data, genetics]
 ---
 
 # MonchiVisualBankSO.cs
 
 **Ruta:** `Data/Databases/MonchiVisualBankSO.cs`
 
-**Responsabilidad:** Banco visual centralizado del modelo Suriyun. Mantiene la lista de cuerpos FBX prefabricados (`bodies` list) con posibilidad de sobrescrituras por BodyShape ID (`bodyOverrides` dict), el AnimatorController compartido, la lista de materiales gema para brillantes, referencia al MoodSet, y **S134:** diccionario de prefabs de partes modulares (`partMeshes` dict) indexados por Part ID. `GetBody(bodyShapeId)` devuelve determinísticamente (hash FNV-1a % count) el cuerpo correspondiente al BodyShapeID, priorizando overrides. `GetPartMesh(partId)` devuelve el prefab FBX de parte si existe en el diccionario. `GetGem(uniqueId)` devuelve el material gema usando el mismo hash determinístico sobre uniqueID. Usa `StableHash()` interna para garantizar consistencia en replay/red.
+**Responsabilidad:** Banco visual centralizado del modelo Suriyun. Mantiene listas/diccionarios de cuerpos, partes modulares (Adult/Egg/Slime), materiales gemas, AnimatorController compartido y MoodSet. `GetBody()` retorna body por BodyShapeID con hash determinístico. `GetPartMesh()` retorna prefab FBX por Part ID y forma (Adult/Egg/Slime). `GetGem()` retorna material gema por hash estable de ID. Única fuente de verdad para instanciación visual multi-forma.
 
-## Métodos Públicos
-
-| Método | Parámetros | Descripción |
-|--------|-----------|-------------|
-| `GetBody(string bodyShapeId)` | `bodyShapeId` | Retorna body prefab: busca override primero, sino aplica hash FNV-1a % count a lista bodies |
-| `GetPartMesh(string partId)` | `partId` | **S134 NUEVO** Retorna prefab FBX de parte (ID → GameObject con Armature + SkinnedMeshRenderers); null si partId vacío o no en diccionario |
-| `GetGem(string uniqueId)` | `uniqueId` | Retorna material gema: hash FNV-1a % count sobre gemMaterials |
+**S134:** Diccionario `partMeshes` para partes modulares adultas.
+**S135:** Agregados diccionarios `eggPartMeshes` y `slimePartMeshes` + método editor `SetPartMesh()` multi-forma.
 
 ## Campos Serializados
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `bodies` | `List<GameObject>` | Pool de body FBX base (Suriyun); GetBody hace hash determinístico sobre lista |
-| `bodyOverrides` | `Dictionary<string, GameObject>` | Overrides explícitos por BodyShapeID (ej. "BS0" → custom body); prioridad sobre bodies list |
-| `partMeshes` | `Dictionary<string, GameObject>` | **S134 NUEVO** Mapeo Part ID → prefab FBX de parte (ej. "H0" → horn FBX con Armature, "BK0" → back FBX, "W0" → wing FBX); GetPartMesh(partId) busca aquí |
-| `animatorController` | `RuntimeAnimatorController` | Controller compartido asignado a Animator del body |
-| `gemMaterials` | `List<Material>` | Pool de materiales brillantes (shiny); GetGem hace hash determinístico |
-| `moodSet` | `MonchiMoodSetSO` | Reference al MoodSet para swapeo de materiales Face |
+| `bodies` | `List<GameObject>` | Pool de body FBX base (Suriyun); GetBody hace hash determinístico |
+| `bodyOverrides` | `Dictionary<string, GameObject>` | Overrides explícitos por BodyShapeID; prioridad sobre bodies list |
+| `partMeshes` | `Dictionary<string, GameObject>` | Part ID → prefab FBX adulto (S134) |
+| `eggPartMeshes` | `Dictionary<string, GameObject>` | **S135 NUEVO** Part ID → prefab FBX forma Egg |
+| `slimePartMeshes` | `Dictionary<string, GameObject>` | **S135 NUEVO** Part ID → prefab FBX forma Slime |
+| `animatorController` | `RuntimeAnimatorController` | Controller compartido para Animator del body |
+| `gemMaterials` | `List<Material>` | Pool de materiales brillantes; hash determinístico |
+| `moodSet` | `MonchiMoodSetSO` | Referencia a MoodSet para swapeo de materiales Face |
 
 ## Propiedades Públicas
 
@@ -34,95 +31,58 @@ tags: [script, visual, database]
 | `AnimatorController` | `RuntimeAnimatorController` | Getter del controller |
 | `MoodSet` | `MonchiMoodSetSO` | Getter del mood set |
 
+## Métodos Públicos
+
+| Método | Retorna | Descripción |
+|--------|---------|-------------|
+| `GetBody(string bodyShapeId)` | `GameObject` | Body por BodyShapeID; override primero, sino hash sobre bodies list |
+| `GetPartMesh(string partId, MonchiForm form)` | `GameObject` | Prefab FBX según forma (Adult/Egg/Slime); null si partId vacío o no existe |
+| `GetGem(string uniqueId)` | `Material` | Material gema por hash FNV-1a estable |
+| `SetPartMesh(string partId, GameObject prefab, MonchiForm form)` | `void` | [Editor] Registra prefab en diccionario según forma |
+
 ## Métodos Privados
 
-| Método | Descripción |
-|--------|-------------|
-| `StableHash(string s)` | Calcula hash FNV-1a de string: seed 2166136261u, XOR cada char, mult 16777619u, retorna positivo (& 0x7FFFFFFF). Determinístico, no colisiona típicamente para IDs cortos (H0, BK1, W0, etc.). Usado por GetBody/GetGem para indexación modular. |
+| Método | Retorna | Descripción |
+|--------|---------|-------------|
+| `GetPartMeshDictionary(MonchiForm)` | `Dictionary<string, GameObject>` | Retorna diccionario según forma; lazy-init si null |
+| `StableHash(string s)` | `int` | FNV-1a hash: seed 2166136261u, XOR+mult 16777619u, resultado positivo (& 0x7FFFFFFF) |
+
+## Formas Soportadas (MonchiForm enum)
+
+| Forma | Valor | Diccionario | Descripción |
+|-------|-------|-------------|-------------|
+| `Adult` | 0 | `partMeshes` | Partes adultas normales |
+| `Egg` | 1 | `eggPartMeshes` | Formas de huevo (modulares S135) |
+| `Slime` | 2 | `slimePartMeshes` | Formas de slime (variantes babosas S135) |
+
+## Cambios S135
+
+**Diccionarios Egg/Slime y GetPartMesh() multi-forma:**
+
+- Agregados `eggPartMeshes` y `slimePartMeshes` (Odin Dictionary)
+- `GetPartMeshDictionary(form)` retorna diccionario según forma; lazy-init si null
+- `GetPartMesh(partId, form=Adult)` busca en diccionario correspondiente
+- `SetPartMesh(partId, prefab, form=Adult)` registra prefab en diccionario editor-time
+
+**Propósito:**
+- Soportar formas de MoriMochi: adulto, huevo (tutorial), slime (alternativa visual)
+- Prefabs distintos por forma pero mismo Part ID (ej. "H1" adulto vs "H1" egg → modelos distintos, genética igual)
+- MonchiPartRegistrar.RegisterAll() invoca SetPartMesh para cada forma detectada
 
 ## Invariantes
 
-- `bodies` list siempre tiene al menos 1 elemento (fallback si override falta o cuenta=0)
-- `bodyOverrides` prioridad máxima: GetBody busca override primero
-- `partMeshes` vacío = sin partes modulares (MonchiVisualizer.GraftPart fallback a baked)
-- `gemMaterials` vacío = GetGem retorna null (MonchiVisualizer.ApplyLook fallback a fur genético)
-- `moodSet` requerido por MonchiVisualizer.SetMood; null = silencio visual
-- **S134:** GetPartMesh(null) → null; GetPartMesh("") → null; GetPartMesh("H0") → prefab o null (no existe)
-
-## Cambios S134
-
-**Diccionario partMeshes y GetPartMesh() — NUEVO:**
-
-```csharp
-[OdinSerialize]
-[DictionaryDrawerSettings(KeyLabel = "Part ID", ValueLabel = "Part Mesh")]
-private Dictionary<string, GameObject> partMeshes = new Dictionary<string, GameObject>();
-
-public GameObject GetPartMesh(string partId)
-{
-    if (string.IsNullOrEmpty(partId))
-        return null;
-    
-    if (partMeshes != null && partMeshes.TryGetValue(partId, out var partMesh))
-        return partMesh;
-    
-    return null;
-}
-```
-
-**Propósito:**
-- Centraliza prefabs de partes modulares (Cuernos, Espalda, Alas) mapeados por Part ID
-- MonchiVisualizer.GraftPart() consulta aquí para obtener prefab antes de injertar via MonchiPartGrafter
-- IDs de partes no pueden contener "-" (separador del DNA string; regla S132)
-- Ejemplos esperados: "H0", "H1" (cuernos), "BK0", "BK1", "BK2", "BK3" (espalda), "W0", "W1" (alas), "FC0", "FC1" (cara — si modular fuera soporte)
-
-**Flujo S134:**
-1. CreatureDNA (ej. "BSx-H1-BK2-W0-RRGGBB") incluye HornID, BackID, WingID
-2. MonchiVisualizer.Assemble(dna) llama GraftPart(dna.HornID, "Horn"), etc.
-3. GraftPart consulta bank.GetPartMesh("H1") → retorna prefab o null
-4. Si no null: desactiva renderers "Horn*" baked, injerta FBX "H1" via MonchiPartGrafter.Graft()
-5. Si null: GraftPart retorna silenciosamente, body mantiene baked "Horn*" renderer
-
-**Impacto S134:**
-- Sistema modular: cada creatura puede combinar 3 partes independientes (Horn, Back, Wing) sin duplicar body base
-- Determinístico: mismo DNA = mismo visual (mismo BodyShapeID + HornID/BackID/WingID = mismas mallas injertadas)
-- Escalable: añadir partes nuevas = añadir entrada al diccionario partMeshes en editor
-- Fallback: partId vacío/nil o no en banco = body mantiene renderer baked (no falla, no warning)
-
-**Editor Odin:**
-- `[DictionaryDrawerSettings(KeyLabel = "Part ID", ValueLabel = "Part Mesh")]` → inspector legible con columnas Part ID | Part Mesh
-- Drag-drop prefabs FBX en el diccionario directamente
+- `bodies` siempre ≥ 1 elemento (fallback si override falta)
+- `bodyOverrides` prioridad máxima
+- `partMeshes` vacío = sin partes adultas modulares
+- `eggPartMeshes` / `slimePartMeshes` vacío = formas no disponibles (graceful fallback)
+- `GetPartMesh(null|"", any)` → null
+- `GetPartMesh("H0", Egg)` busca en eggPartMeshes; si no existe → null (no falla)
 
 ## Vinculado a
 
-- [[Index/02 - Genetics & Breeding]] — partes modulares en genética
-- [[Index/10 - Visualization]] — ensamblado visual
+- [[Index/02 - Genetics & Breeding]]
+- [[Index/10 - Visualization]]
 
 ## Conexiones
 
-**Consumido por:**
-- [[MonchiVisualizer.Assemble()]] → llama GetBody(bodyShapeId), GraftPart → GetPartMesh(partId)
-- [[MonchiVisualizer.GraftPart()]] — consulta GetPartMesh per slot
-- [[MonchiPartGrafter.Graft()]] — recibe prefab de GetPartMesh como entrada
-
-**Entrada:**
-- Editor: diccionarios bodies, bodyOverrides, partMeshes, gemMaterials, animatorController, moodSet
-
-**Salida:**
-- GetBody: body FBX base
-- GetPartMesh: prefab FBX de parte (S134)
-- GetGem: material shiny
-- AnimatorController: RuntimeAnimatorController para Animator
-- MoodSet: MonchiMoodSetSO para mood faces
-
-## Notas S134
-
-- **Modular assembly:** partMeshes es la fuente única de verdad para partes (no duplicar en otro SO)
-- **Naming convención:** Part IDs sin guión (H0, BK1, W0); guión es separador en DNA string
-- **Prefab reqs:** cada partMesh debe tener:
-  - GameObject root con nombre obvio (ej. "Horn_H0", "Back_BK2", "Wing_W0")
-  - Hijo Armature con Transform hierarchy de huesos
-  - SkinnedMeshRenderer(s) dentro de Armature (ej. "Horn_*", "Back_*", "Wing_*", "Deco_RRGGBB_*")
-  - Nombres de huesos = exactamente coincidentes con bodyInstance Armature (MonchiPartGrafter remapea por nombre)
-- **Determinismo:** hash FNV-1a garantiza que ID → prefab siempre retorna lo mismo
-- **Backup baked:** si partMesh nil/no existe → no falla, body simplemente usa renderer baked (graceful fallback)
+[[MoriMonchiController]], [[MonchiPartRegistrar]], [[MonchiVisualizer]], [[BodyPart]], [[PartDatabaseSO]]

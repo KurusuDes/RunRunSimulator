@@ -1,103 +1,113 @@
 ---
-tags: [script, data, scriptableobject, expedition]
+tags: [scriptable-object, data, expedition]
 ---
 
 # AbilitySO.cs
 
 **Ruta:** `Data/Expedition/AbilitySO.cs`
 
-**Responsabilidad:** ScriptableObject que define una habilidad individual (Damage, Mobility o Passive) de un MoriMochi. Mapea intención → ClashMove (Damage) o buff de velocidad (Mobility), con cooldown y disparadores (RivalInReach, Fleeing, Chasing). Pasivas otorgan stats operacionales (capacidad, velocidad cargado, resistencia, guarda, visibilidad). Uno por parte de cuerpo (Horn/Wings/Back) en AbilityDatabaseSO. Propietarias por IDs de parte (PartIds). **S118:** agregados Damage.Super con carga acumulable, campos ChargeOnHit/Mined/Secured.
+**Responsabilidad:** ScriptableObject que define una habilidad individual (Damage, Mobility, Passive) de un MoriMochi. Mapea intención → ClashMove (Damage) o buff velocidad (Mobility), con cooldown y disparadores (RivalInReach, Fleeing, Chasing). Pasivas otorgan stats operacionales. Resolucionable por AbilityDatabaseSO vía PartIds explícitas O hash determinístico.
 
-**Enums:**
-- `AbilityKind { Damage = 0, Mobility = 1, Passive = 2 }` — tipo de habilidad (S109: Passive agregado)
-- `AbilityRole { Basic, Super }` — **S118 NUEVO:** clasificador de Damage (Basic = cooldown; Super = carga)
-- `AbilityChargeSource { Hit, Mined, Secured }` — **S118 NUEVO:** fuentes de carga para Supers
-- `AbilityTrigger [Flags] { None = 0, RivalInReach = 1, Fleeing = 2, Chasing = 4 }` — triggers para disparo automático
+**S118:** Agregados `AbilityRole (Basic/Super)` y carga acumulable (ChargeOnHit/Mined/Secured).
+**S135:** Ahora asignables directamente a partes vía `BodyPart.Ability`.
 
-**Campos Serializados:**
+## Enums
 
-**General:**
-- `Name` (string) — nombre mostrado en HUD (ej: "Embestida")
-- `Description` (TextArea) — tooltip o descripción larga
-- `Slot` (ClashSlot: Horn/Wings/Back) — mapeo de parte corporal
-- `Kind` (AbilityKind) — Damage, Mobility o Passive (S109)
-- `Role` (AbilityRole) — **S118 NUEVO:** Basic o Super (solo para Kind == Damage)
-- `Cooldown` (float, Min 0) — segundos entre disparos (Damage) o buffs
-- `Trigger` (AbilityTrigger, EnumToggleButtons) — flags de disparadores
-- `Color` (Color) — color renderizado en HUD y guías (RGB 1, 0.6, 0.2 por defecto)
+| Enum | Valores | Descripción |
+|------|---------|-------------|
+| `AbilityKind` | Damage, Mobility, Passive | Tipo de habilidad |
+| `AbilityRole` | Basic, Super | Clasificador de Damage (S118) |
+| `AbilityChargeSource` | Hit, Mined, Secured | Fuentes de carga para Supers (S118) |
+| `AbilityTrigger` [Flags] | None, RivalInReach, Fleeing, Chasing | Triggers automáticos |
 
-**Daño (Section):**
-- `Move` (ClashMoveSO) — movimiento de choque asociado (null si no es Damage)
-- `MinDistance` (float, Min 0) — distancia mínima al rival (requerida)
-- `MinRivalsNearby` (int, Min 0) — mínimo de rivales en rango (requerida) — prioridad alta
+## Campos Serializados
 
-**Carga (Super) — S118 NUEVO:**
-- `ChargeOnHit` (float, Range 0-1) — carga acumulada al golpear rival (0.34 default)
-- `ChargeOnMined` (float, Range 0-1) — carga acumulada al minar mineral (0.08 default)
-- `ChargeOnSecured` (float, Range 0-1) — carga acumulada al asegurar material (0.25 default)
+### General
 
-**Movilidad (Section):**
-- `SpeedMultiplier` (float, Min 1) — factor de velocidad (1.35 defecto)
-- `BoostSeconds` (float, Min 0) — duración del buff
+| Campo | Tipo | Rango | Descripción |
+|-------|------|-------|-------------|
+| `Name` | `string` | | Nombre mostrado en HUD |
+| `Description` | `TextArea` | | Tooltip/descripción larga |
+| `Slot` | `ClashSlot` | | Horn, Wings, Back |
+| `Kind` | `AbilityKind` | | Damage/Mobility/Passive |
+| `Role` | `AbilityRole` | | Basic o Super (solo Damage) |
+| `Cooldown` | `float` | Min 0 | Segundos entre disparos (Damage Basic) |
+| `Trigger` | `AbilityTrigger` | [EnumToggleButtons] | Flags de activación |
+| `Color` | `Color` | | Color renderizado en HUD |
 
-**Pasiva / costo (Section, S109):**
-- `CarryCapacity` (int, Min 0) — override de capacidad (0 = sin cambio; si > 0, aplica el menor entre abilities)
-- `LoadedSpeedFactor` (float, Min 0) — multiplicador de velocidad cuando cargado (0 = sin cambio; 1f default; < 1 penaliza)
-- `KeepCarryOnKnock` (bool) — si true, no suelta carga al ser golpeado
-- `GuardRadius` (float, Min 0) — radio de custodio en metros (0 = sin cambio)
-- `VisibleFrom` (float, Min 0) — distancia visible para percepción rival (0 = sin cambio; max acumulativo)
+### Daño
 
-**Partes que la otorgan (S109):**
-- `PartIds` (List<string>) — IDs de parte que conceden esta habilidad (ej: ["horn-prong", "back-spikes"]). Si no vacío, AbilityDatabaseSO.Pick() busca primero por coincidencia.
+| Campo | Tipo | Rango | Descripción |
+|-------|------|-------|-------------|
+| `Move` | `ClashMoveSO` | | Movimiento de choque |
+| `MinDistance` | `float` | Min 0 | Distancia mínima requerida |
+| `MinRivalsNearby` | `int` | Min 0 | Rivales en rango requeridos |
 
-**Métodos Públicos:**
-- `bool Triggers(AbilityTrigger t) → bool` — chequea si flag t está seteado: `(Trigger & t) != 0`
+### Carga (Super, S118)
 
-- `float ChargeFor(AbilityChargeSource s) → float` — **S118 NUEVO:** retorna carga acumulada según fuente:
-  - `Hit` → ChargeOnHit
-  - `Mined` → ChargeOnMined
-  - `Secured` → ChargeOnSecured
-  - default → 0f
+| Campo | Tipo | Rango | Descripción |
+|-------|------|-------|-------------|
+| `ChargeOnHit` | `float` | 0-1 | Carga acumulada al golpear |
+| `ChargeOnMined` | `float` | 0-1 | Carga acumulada al minar |
+| `ChargeOnSecured` | `float` | 0-1 | Carga acumulada al asegurar |
 
-**Uso:**
+### Movilidad
 
-- **Damage Basic:** Disparada cuando rival en rango AND cooldown listo AND RivalInReach en Trigger. Retorna ClashMoveSO para agente.
+| Campo | Tipo | Rango | Descripción |
+|-------|------|-------|-------------|
+| `SpeedMultiplier` | `float` | Min 1 | Factor de velocidad (1.35 default) |
+| `BoostSeconds` | `float` | Min 0 | Duración del buff |
 
-- **Damage Super:** **S118 NUEVO** Carga acumula desde Hit/Mined/Secured. Dispara cuando Charge >= 1 AND RivalInReach AND distancia OK, o si jugador solicita via Request(). Retorna ClashMoveSO.
+### Pasiva (S109)
 
-- **Mobility:** Disparada automáticamente si Trigger Fleeing/Chasing activo AND cooldown listo. Aplica buff de velocidad por BoostSeconds via `AgentAbilities.TickMobility()`.
+| Campo | Tipo | Rango | Descripción |
+|-------|------|-------|-------------|
+| `CarryCapacity` | `int` | Min 0 | Override capacidad (0 = sin cambio) |
+| `LoadedSpeedFactor` | `float` | Min 0 | Multiplicador velocidad cargado |
+| `KeepCarryOnKnock` | `bool` | | No suelta carga si golpeado |
+| `GuardRadius` | `float` | Min 0 | Radio de custodio |
+| `VisibleFrom` | `float` | Min 0 | Distancia visible para rivales |
 
-- **Passive (S109):** Se resuelve en `ExpeditionStats.Resolve()` junto con Occupation y ExpeditionRulesSO. Afecta operacionales: CarryCapacity, velocidad cargado, custodio, visibilidad.
+## Métodos Públicos
 
-**Integración:**
+| Método | Retorna | Descripción |
+|--------|---------|-------------|
+| `Triggers(AbilityTrigger t)` | `bool` | Chequea si trigger t está activo |
+| `ChargeFor(AbilityChargeSource s)` | `float` | Retorna carga acumulada según fuente (S118) |
 
-- Instancias creadas en editor o runtime (CreateAssetMenu)
-- Resueltas por AbilityDatabaseSO.Resolve(DNA) → retorna array [Horn, Wings, Back]
-- Asignadas a AgentAbilities.Bind() en ArenaSandbox.SpawnAgent()
-- Accedidas en tiempo real por AgentAbilities para cooldowns y disparo (Damage/Mobility)
-- PassiveS109 feeds ExpeditionStats.Resolve() para stats operacionales
-- Renderizadas en ArenaHudCard (Charge01, color, clase pasiva, Armed state) y CreatureCueDrawer (AbilityBursts)
-- ChargeFor() llamado desde ClashStrike.Impact() con AbilityChargeSource.Hit via owner.NotifyCharge()
+## Resolución (S135)
 
-**S118 Cambios:**
+Dos rutas para resolver qué habilidad usa una parte:
 
-- `AbilityRole { Basic, Super }` — nueva clasificación de Damage abilities
-- Sección "Carga (Super)" completa con 3 campos (ChargeOnHit, ChargeOnMined, ChargeOnSecured)
-- `ChargeFor(source)` método: retorna carga según fuente de evento
-- Supers se acumulan independientemente, sin cooldown inicial (Charge = 0); listo cuando Charge >= 1
-- Supers se resuelven en `AgentAbilities.TryFireDamage()` con verificación Role == Super
-- ArenaHudCard renderiza Supers con estado Armed cuando solicitados por jugador
+1. **Explícita (BodyPart.Ability):** Parte vinculada directamente en inspector (S135)
+   - AbilityDatabaseSO.Resolve() consulta `parts.GetHorn(id).Ability` primero
+   - Si null, fallback a búsqueda por hash
 
-**Invariantes:**
+2. **Hash determinístico:** AbilityDatabaseSO.Pick() filtra por Slot y usa StableHash(partID) para índice
+   - Garantiza reproducibilidad en replay/multiplayer
+   - Permite variedad sin duplicar AbilitySOs
 
-- Una habilidad puede ser solo Damage O Mobility O Passive (not mixed)
-- Damage Basic requiere `Cooldown > 0`; Super no usa cooldown (Charge es el mediador)
-- Damage Super requiere `Kind == Damage, Role == Super`
-- Pasivas se aplican desde Bind (via RefreshStats); no hay "disparo" de pasiva
-- PartIds puede estar vacío; cae a hash si no hay dueño declarado
-- CarryCapacity: si múltiples abilities lo definen, gana el menor (costo más estricto)
-- ChargeOnHit/Mined/Secured: solo se consultan si Role == Super
+## Invariantes
 
-**Vinculado a:** [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]], [[Index/22 - Bajada Nocturna y Linaje]], S118
+- Una habilidad es solo Damage O Mobility O Passive (mutualmente excluyentes)
+- Damage Basic requiere Cooldown > 0
+- Damage Super no usa cooldown (Charge es mediador)
+- Pasivas se aplican en Bind, no hay "disparo"
+- CarryCapacity: si múltiples pasivas lo definen, gana el menor
+- ChargeOnHit/Mined/Secured: solo consultados si Role == Super
 
-**Conexiones:** [[AbilityDatabaseSO]], [[AgentAbilities]], [[ClashStrike]], [[ExpeditionStats]], [[ClashMoveSO]], [[ClashSlot]], [[ArenaHudCard]], [[RadialSlot]], [[CreatureCueDrawer]]
+## Cambios S135
+
+**BodyPart.Ability agregado:**
+- Partes ahora pueden referenciar AbilitySO directamente
+- AbilityDatabaseSO.Resolve() prioriza parte.Ability sobre búsqueda por hash
+- Permite habilidades únicas por parte modular sin duplicar lógica
+
+## Vinculado a
+
+- [[Index/23 - Arena Sandbox & Expedicion]]
+- [[Index/22 - Bajada Nocturna y Linaje]]
+
+## Conexiones
+
+[[AbilityDatabaseSO]], [[BodyPart]], [[ClashMoveSO]], [[AgentAbilities]], [[ExpeditionStats]], [[CreatureDNA]], [[ClashSlot]]

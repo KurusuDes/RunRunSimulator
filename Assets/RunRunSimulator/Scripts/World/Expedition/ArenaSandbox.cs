@@ -405,7 +405,7 @@ public class ArenaSandbox : MonoBehaviour
         controller.transform.SetParent(transform, true);
         controller.Initialize(dna, profileTable, observer, visualBank, furDatabase);
         controller.Agent.SetOrders(orders);
-        if (abilityDatabase != null) controller.Agent.SetAbilities(abilityDatabase.Resolve(dna), team == ExpeditionTeam.Player);
+        if (abilityDatabase != null) controller.Agent.SetAbilities(abilityDatabase.Resolve(dna, creatureDatabase), team == ExpeditionTeam.Player);
         controller.Agent.SetHomeExit(home);
         controller.Agent.SetBlackboard(BoardFor(team));
         if (targetGroup != null) targetGroup.AddMember(controller.transform, 1f, 1.2f);

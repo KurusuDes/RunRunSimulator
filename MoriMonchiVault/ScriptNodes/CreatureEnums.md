@@ -6,61 +6,57 @@ tags: [enum, creature, core, expedition]
 
 **Ruta:** `Core/Enums/CreatureEnums.cs`
 
-**Responsabilidad:** Enumeraciones centrales de comportamiento y estado. CreatureGender, LifeStage, MonchiMood, Tier, BusyReason, NeedType, CreatureCondition, CreatureIntent (S103: 30 valores), ProximityReaction, EmoteKind, SocialInteractionKind, HatchResult (S131). S131: Agregado HatchResult enum para flujo de cría local.
+**Responsabilidad:** Enumeraciones centrales de comportamiento, estado y forma de MoriMonchi. CreatureGender, LifeStage, MonchiMood, Tier, BusyReason, HatchResult, NeedType, CreatureCondition, CreatureIntent (30 valores), ProximityReaction, EmoteKind, SocialInteractionKind, MonchiForm (S135).
 
-## Enumeraciones
+**S131:** Agregado HatchResult para flujo de cría local.
+**S135:** Agregado MonchiForm para soportar Egg/Slime/Adult.
 
-| Enum | Valores |
-|------|---------|
-| CreatureGender | Unknown, Male, Female |
-| LifeStage | Newborn, Child, Teen, Adult, Elder |
-| MonchiMood | Neutral, Feliz, Triste, Dolor, Enojado, Dormido, Enfermo, Mareado, Asustado, Amoroso, Emocionado, KO |
-| Tier | Tier1, Tier2, Tier3 |
-| BusyReason | None, Breeding, Sold |
-| NeedType | Health, Energy, Affect |
-| CreatureCondition | Healthy, InNeed, Sick |
-| **CreatureIntent** | **S103: 30 valores** (Idle 0 - Reporting 29) |
-| ProximityReaction | Ignore, Flee, Approach, Follow, Retreat |
-| EmoteKind | Curioso, Feliz, Jugando, Molesto, Corazon, Zzz |
-| SocialInteractionKind | PlayChase, SleepTogether, GremlinFight |
-| **HatchResult** | **(S131)** Hatched, NotReady, InsufficientMinerita, Invalid |
+## Enumeraciones Principales
 
-## CreatureIntent S103 (30 valores)
+| Enum | Valores | Descripción |
+|------|---------|-------------|
+| `CreatureGender` | Unknown, Male, Female | Sexo de la criatura |
+| `LifeStage` | Newborn, Child, Teen, Adult, Elder | Etapa de vida |
+| `MonchiMood` | 12 valores (Neutral - KO) | Estado emocional/físico |
+| `Tier` | Tier1, Tier2, Tier3 | Nivel de rareza/poder |
+| `BusyReason` | None, Breeding, Sold | Razón de ocupación |
+| `NeedType` | Health, Energy, Affect | Tipos de necesidad básica |
+| `CreatureCondition` | Healthy, InNeed, Sick | Condición de salud |
+| `HatchResult` | Hatched, NotReady, InsufficientMinerita, Invalid | Resultado de eclosión (S131) |
+| `ProximityReaction` | Ignore, Flee, Approach, Follow, Retreat | Reacción a otros |
+| `EmoteKind` | 6 valores (Curioso - Zzz) | Tipo de emote visual |
+| `SocialInteractionKind` | PlayChase, SleepTogether, GremlinFight | Interacción social |
+| `MonchiForm` | Adult (0), Egg (1), Slime (2) | Forma del MoriMochi (S135) |
+
+## CreatureIntent (30 valores)
 
 ```
-Idle = 0
-Wandering = 1
-Following = 2
-Approaching = 3
-Fleeing = 4
-Retreating = 5
-SeekingFood = 6
-SeekingRest = 7
-SeekingPlay = 8
-Eating = 9
-Resting = 10
-Playing = 11
-Held = 12
-Tumbling = 13
-Socializing = 14
-Chasing = 15
-SleepingTogether = 16
-Fighting = 17
-Collecting = 18        (S97: busca material)
-Taking = 19            (S98: minando)
-Losing = 20            (S99: rival toma su mineral)
-Clashing = 21          (S100: combate físico)
-Dazed = 22             (S100: post-golpe)
-Carrying = 23          (S101: cargando material)
-Securing = 24          (S101: depositando)
-Guarding = 25          (S101: vigilando)
-Hunting = 26           (S101: persiguiendo rival)
-Taunting = 27          (S101: provocando rival)
-Exploring = 28         (S103: scout navega a veta NUEVO)
-Reporting = 29         (S103: scout reporta veta NUEVO)
+0:  Idle              5: Retreating     10: Playing       15: Chasing       20: Losing       25: Guarding
+1:  Wandering         6: SeekingFood    11: Held          16: SleepTogether  21: Clashing      26: Hunting
+2:  Following         7: SeekingRest    12: Tumbling      17: Fighting       22: Dazed         27: Taunting
+3:  Approaching       8: SeekingPlay    13: Socializing   18: Collecting     23: Carrying      28: Exploring
+4:  Fleeing           9: Eating         14: (reserved)    19: Taking         24: Securing      29: Reporting
 ```
 
-## HatchResult S131 (NUEVO)
+### Cambios por Sesión
+
+**S97-S103:** Collecting, Taking, Losing, Clashing, Dazed, Carrying, Securing, Guarding, Hunting, Taunting, Exploring, Reporting
+**S103:** Exploring (28) = scout viajando; Reporting (29) = scout reportando veta
+
+## MonchiForm (S135)
+
+| Forma | Valor | Descripción | Mallas |
+|-------|-------|-------------|--------|
+| `Adult` | 0 | Forma adulta estándar | partMeshes |
+| `Egg` | 1 | Forma de huevo (incubación) | eggPartMeshes |
+| `Slime` | 2 | Forma de slime (alternativa) | slimePartMeshes |
+
+**Uso:**
+- `MonchiVisualBankSO.GetPartMesh(id, form)` → retorna prefab según forma
+- Permite misma genética (DNA) con visuales distintos por ciclo de vida
+- S135: Registración dinámica de formas via `MonchiPartRegistrar.RegisterAll()`
+
+## HatchResult (S131)
 
 ```csharp
 public enum HatchResult
@@ -72,72 +68,38 @@ public enum HatchResult
 }
 ```
 
-**Propósito:** Retorno de `IncubationService.TryHatch()` para indicar éxito o tipo de falla.
+| Resultado | Significado | Acción UI |
+|-----------|-------------|-----------|
+| **Hatched** | Eclosión exitosa | Animar hatching, mostrar criatura |
+| **NotReady** | Incubación no finalizada | Toast + mostrar tiempo faltante |
+| **InsufficientMinerita** | Cartera insuficiente | Toast + mostrar costo |
+| **Invalid** | Estado corrupto | Toast error + log |
 
-| Valor | Significado | Acción UI |
-|-------|-------------|-----------|
-| **Hatched** | Eclosión exitosa; criatura mintada y registrada | Animar hatching, mostrar criatura nueva |
-| **NotReady** | Huevo aún incubando; BreedReadyAt no alcanzado | Toast "No está listo" + mostrar tiempo faltante |
-| **InsufficientMinerita** | Cartera insuficiente para pagar eclosión | Toast "Insuficiente Minerita" + mostrar costo |
-| **Invalid** | Padres no encontrados o estado corrupto | Toast "Error: estado inválido" + log error |
+## MonchiMood (12 valores)
 
-**Flujo en BreedingEggsTabPresenter:**
+Neutral, Feliz, Triste, Dolor, Enojado, Dormido, Enfermo, Mareado, Asustado, Amoroso, Emocionado, KO
+
+Usado por: `MonchiMoodDriver`, `MonchiVisualizer` (swap face materials), UI badges.
+
+## Cambios S135
+
+**MonchiForm agregado:**
 ```csharp
-HatchResult result = IncubationService.TryHatch(motherID, fatherID);
-switch (result)
+public enum MonchiForm
 {
-    case HatchResult.Hatched:
-        // Animar eclosión
-        break;
-    case HatchResult.NotReady:
-        // Mostrar tiempo faltante
-        break;
-    case HatchResult.InsufficientMinerita:
-        // Pedir más Minerita
-        break;
-    case HatchResult.Invalid:
-        // Log error
-        break;
+    Adult = 0,
+    Egg   = 1,
+    Slime = 2
 }
 ```
 
-## S103 Cambios: Exploring & Reporting
-
-**Exploring = 28** — scout viajando a veta descubierta
-- Generado por: AgentScout.Step=Traveling
-- Gesto: locomotion normal (no mapeado)
-- Mood: Neutral (exploración tranquila)
-- Color Cue: verde azulado (0.55, 0.9, 0.6)
-
-**Reporting = 29** — scout reportando veta al pizarrón
-- Generado por: AgentScout.Step=Reporting
-- Gesto: "Yes" (celebración reporte, S103)
-- Mood: Emocionado (descubrimiento exitoso)
-- Color Cue: amarillo-verde (0.75, 1, 0.45)
-
-## Cambios S131 (HC-4)
-
-**Agregado:** HatchResult enum (introducido en S131 para cría local síncrona).
-
-**Propósito:** IncubationService.TryHatch() retorna HatchResult en lugar de Task<bool> o void. Permite UI distinguir entre no listo, insuficiente fondos e inválido.
+Propósito: Diferenciar forma visual del MoriMochi para soporte de ciclos de vida e incubadora.
 
 ## Vinculado a
 
 - [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]]
-- [[Index/02 - Genetics & Breeding]] (S131)
-- [[Index/09 - Active Context]] (S131)
+- [[Index/02 - Genetics & Breeding]]
 
 ## Conexiones
 
-**S103 (Exploración):**
-- [[AgentScout]], [[AgentExpedition]], [[TeamBlackboard]], [[MonchiMoodDriver]], [[MonchiGestureSetSO]], [[CueStyleSO]]
-
-**S131 (Cría local):**
-- [[IncubationService]] — retorna HatchResult
-- [[BreedingEggsTabPresenter]] — consume HatchResult en UI
-- [[Wallet]] — costo de eclosión en Minerita
-
-## Notas
-
-- **HatchResult orden:** Hatched=0 (éxito), luego fallos en orden de probabilidad (NotReady > InsufficientMinerita > Invalid).
-- **Integración UI:** BreedingEggsTabPresenter usa switch(result) para animar/toastear.
+[[MonchiVisualBankSO]], [[IncubationService]], [[MonchiMoodDriver]], [[MonchiPartRegistrar]], [[CreatureDNA]]

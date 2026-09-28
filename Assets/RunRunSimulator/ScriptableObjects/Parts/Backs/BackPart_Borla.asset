@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67fa77d685e6a434c802090c27ab7a98, type: 3}
+  m_Name: BackPart_Borla
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BackPart
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Icon: {fileID: 21300000, guid: 2041da5893512f34db0184ad53a9dc82, type: 3}
+  ID: BK12
+  Name: Borla
+  Rarity: 0
+  Tier: 0
+  Set: {fileID: 11400000, guid: b85a50a2cc881064aaa2971495beace0, type: 2}
+  HP: 0
+  Attack: 0
+  Speed: 0
+  Ability: {fileID: 11400000, guid: 8af1842d74f58dc448fca07b5c4191b5, type: 2}

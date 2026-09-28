@@ -127,4 +127,11 @@ public enum SocialInteractionKind
     SleepTogether = 1,
     GremlinFight  = 2,
 }
+
+public enum MonchiForm
+{
+    Adult = 0,
+    Egg   = 1,
+    Slime = 2
+}
 }

@@ -54,6 +54,30 @@ public abstract class KeyedDatabaseSO<T> : SerializedScriptableObject where T : 
         OnPopulated(added);
         Debug.Log($"[{GetType().Name}] Populate: {added} entradas añadidas, IDs sincronizados.");
     }
+
+    public string RegisterEntry(T entry)
+    {
+        foreach (var kvp in Entries)
+        {
+            if (ReferenceEquals(kvp.Value, entry))
+                return kvp.Key;
+        }
+
+        int nextNumber = 0;
+        foreach (var key in Entries.Keys)
+        {
+            if (!key.StartsWith(IDPrefix)) continue;
+            if (int.TryParse(key.Substring(IDPrefix.Length), out int number) && number >= nextNumber)
+                nextNumber = number + 1;
+        }
+
+        string id = $"{IDPrefix}{nextNumber}";
+        SetEntryID(entry, id);
+        Entries[id] = entry;
+        UnityEditor.EditorUtility.SetDirty(entry);
+        UnityEditor.EditorUtility.SetDirty(this);
+        return id;
+    }
 #endif
 
     [ButtonGroup("Admin")]

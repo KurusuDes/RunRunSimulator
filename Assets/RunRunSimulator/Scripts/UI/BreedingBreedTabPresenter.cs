@@ -239,10 +239,28 @@ public class BreedingBreedTabPresenter : ITabPresenter
 
         var swatch = new VisualElement();
         swatch.AddToClassList("preview-swatch");
-        swatch.style.backgroundColor = part != null ? BodyPart.SetColor(part.Set) : Color.gray;
+
+        Color setColor = part?.Set != null ? part.Set.Color : Color.gray;
+
+        if (part != null && part.Icon != null)
+        {
+            swatch.AddToClassList("preview-icon");
+            swatch.style.backgroundImage = new StyleBackground(part.Icon);
+            swatch.style.backgroundColor = new Color(0f, 0f, 0f, 0f);
+            switch (part.GetPartRole())
+            {
+                case PartRole.Horn: swatch.AddToClassList("preview-icon--horn"); break;
+                case PartRole.Back: swatch.AddToClassList("preview-icon--back"); break;
+                case PartRole.Wing: swatch.AddToClassList("preview-icon--wing"); break;
+            }
+        }
+        else
+        {
+            swatch.style.backgroundColor = setColor;
+        }
         row.Add(swatch);
 
-        var text = new Label(part != null ? $"{part.Name} · {part.Set}" : "—");
+        var text = new Label(part != null ? $"{part.Name} · {(part.Set != null ? part.Set.Name : "—")}" : "—");
         text.AddToClassList("preview-part-text");
         row.Add(text);
 

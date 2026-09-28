@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 namespace MoriMonchiSimulator
@@ -45,9 +44,6 @@ public class AbilitySO : ScriptableObject
     public bool KeepCarryOnKnock = false;
     [Min(0f)] public float GuardRadius = 0f;
     [Min(0f)] public float VisibleFrom = 0f;
-
-    [Title("Partes que la otorgan")]
-    public List<string> PartIds = new List<string>();
 
     public bool Triggers(AbilityTrigger t) => (Trigger & t) != 0;
 

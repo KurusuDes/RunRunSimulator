@@ -1,67 +1,89 @@
 ---
-tags: [script, data, scriptableobject, expedition]
+tags: [scriptable-object, database, expedition]
 ---
 
 # AbilityDatabaseSO.cs
 
 **Ruta:** `Data/Expedition/AbilityDatabaseSO.cs`
 
-**Responsabilidad:** Base de datos que resuelve habilidades de un agente según partes genéticas del DNA (Horn/Wings/Back). Mapea stableHash(partID) % candidates.Count para selección determinista. Búsqueda en dos pasos: primero por `PartIds` (propietarias explícitas), fallback a hash si no hay dueño.
+**Responsabilidad:** Base de datos que resuelve habilidades de un agente según genética (Horn/Wings/Back). Mapea DNA → array [HornAbility, WingAbility, BackAbility]. Resolución en dos niveles: (1) consulta BodyPart.Ability si existe, (2) fallback a selección determinística por StableHash(partID) filtrando por Slot.
 
-**Campos Serializados:**
-- `Abilities` (List<AbilitySO>) — pool de todas las habilidades disponibles (~20 típico, una por slot/variante)
+**S118:** Introducida lógica de habilidades dinámicas.
+**S135:** Ahora consulta BodyPart.Ability primero (creando nexo con PartDatabaseSO).
 
-**Métodos Públicos:**
+## Campos Serializados
 
-- `AbilitySO[] Resolve(CreatureDNA dna) → AbilitySO[]` — retorna array [Horn, Wings, Back]:
-  - Llama Pick(dna.HornID, Horn), Pick(dna.WingID, Wings), Pick(dna.BackID, Back)
-  - Cada uno retorna la habilidad asociada o null
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `Abilities` | `List<AbilitySO>` | Pool de habilidades disponibles (~20, una por variante/slot) |
 
-**Métodos Privados:**
+## Métodos Públicos
 
-- `AbilitySO Pick(string partId, ClashSlot slot) → AbilitySO` (S109 ACTUALIZADO):
-  - Paso 1: Si partId no es null ni vacío, busca habilidad que:
-    - Tenga Slot == slot
-    - Tenga partId en ability.PartIds
-    - Si encuentra, retorna inmediatamente (búsqueda por propietaria explícita)
-  - Paso 2 (fallback hash): filtra Abilities por ability.Slot == slot
-  - Usa StableHash(partId) % candidates.Count para índice determinista
-  - Retorna candidates[index] o null si no hay candidatos
+| Método | Retorna | Descripción |
+|--------|---------|-------------|
+| `Resolve(CreatureDNA dna, CreatureDatabaseSO parts)` | `AbilitySO[]` | Resuelve array [Horn, Wing, Back] según genética y PartDatabase |
 
-- `int StableHash(string s) → int` — hash determinista de string:
-  - Suma con rotación: h = h * 31 + c para cada char
-  - Retorna h & 0x7fffffff (positivo, evita negativo en módulo)
-
-**Invariantes:**
-
-- **Determinismo:** mismo partID → siempre misma habilidad (xor, replay, multiplayer)
-- **Prioridad de búsqueda:** PartIds explícito > hash (fallback). Si una habilidad declara partIds, toma precedencia
-- **Balanceo:** cada slot (Horn/Wings/Back) puede tener múltiples candidatos (variedad vía hash)
-- **Null safety:** si partId == null o no hay candidatos, retorna null
-- **Estabilidad multi-sesión:** hash es puro (sin Random, sin Time), reproducible
-
-**Integración:**
-
-- Referenciado en ArenaSandbox (campo `abilityDatabase`)
-- Llamado en ArenaSandbox.SpawnAgent() antes de AgentAbilities.Bind()
-- El array resuelto se pasa directamente a Bind()
-- Permite que cada MoriMochi tenga combo único Horn+Wings+Back según genética
-- S109: PartIds hace posible que partes específicas otorguen habilidades específicas
-
-**S109 Cambios:**
-
-- Método Pick() actualizado: búsqueda dos pasos (PartIds → fallback hash)
-- Soporta mezcla de abilities con y sin PartIds en el mismo database
-- Si múltiples abilities comparten PartIds para el mismo slot, cualquiera matchea
-
-**Ejemplo S109:**
+## Flujo de Resolve (S135)
 
 ```
-Database: [Ability1(Slot=Horn, PartIds=["horn-prong"]), Ability2(Slot=Horn, PartIds=[]), Ability3(Slot=Horn, PartIds=["horn-crown"])]
-dna.HornID = "horn-prong" → Pick busca PartIds.Contains("horn-prong") → retorna Ability1
-dna.HornID = "horn-other" → no matchea PartIds, fallback hash → Ability2 o Ability3 determinista
+Para cada slot (Horn, Wing, Back):
+  1. dna.HornID/WingID/BackID → parts.GetHorn/GetWing/GetBack(id)
+  2. Si parte != null y parte.Ability != null → retorna parte.Ability
+  3. Si no → fallback: Pick(partID, slot)
+    - Filtra Abilities por Slot == slot
+    - StableHash(partID) % candidates.Count → índice determinístico
+    - Retorna candidates[index] o null
 ```
 
-**Vinculado a:** [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]]
+## Métodos Privados
 
-**Conexiones:** [[AbilitySO]], [[AgentAbilities]], [[CreatureDNA]], [[ArenaSandbox]], [[PartDatabaseSO]], [[ExpeditionStats]]
+| Método | Retorna | Descripción |
+|--------|---------|-------------|
+| `Pick(string partId, ClashSlot slot)` | `AbilitySO` | Fallback hash: selecciona habilidad determinísticamente por slot |
+| `StableHash(string s)` | `int` | Hash determinista (h = h*31 + c, máscara 0x7fffffff) |
+
+## Parámetros Resolve (S135)
+
+Ahora acepta `CreatureDatabaseSO parts` como segundo parámetro:
+- Permite acceso a partes específicas y sus AbilitySOs
+- Si parte.Ability asignada → usa esa (prioridad máxima)
+- Si no → fallback hash
+
+## Invariantes
+
+- **Determinismo:** mismo DNA/partID → siempre misma habilidad (replay, multiplayer)
+- **Prioridad:** BodyPart.Ability > hash fallback
+- **Null-safe:** si partId null o no hay candidatos → retorna null
+- **Un slot por tipo:** exactamente 3 abilities (una por Horn/Wing/Back) en el array resuelto
+
+## Ejemplo S135
+
+```csharp
+// DNA: "BS0-H1-BK2-W0-RRGGBB"
+// HornDatabase.GetHorn("H1") → HornPart con Ability = AbilityFireStrike
+// abilityDatabase.Resolve(dna, partDatabase)
+// → [FireStrike, [fallback Wings], [fallback Back]]
+```
+
+## Integración
+
+- Referenciado en `ArenaSandbox` (campo `abilityDatabase`)
+- Llamado en `ArenaSandbox.SpawnAgent()` antes de `AgentAbilities.Bind()`
+- Array resuelto pasa directamente a Bind() para asignación a agente
+
+## Cambios S135
+
+**Firma Resolve() actualizada:**
+- Antes: `Resolve(CreatureDNA dna)` → solo usaba Pick/hash
+- Ahora: `Resolve(CreatureDNA dna, CreatureDatabaseSO parts)` → consulta partes primero
+
+**Impacto:** Permite habilidades únicas por parte modular sin duplicar en pool Abilities
+
+## Vinculado a
+
+- [[Index/23 - Arena Sandbox & Expedicion]]
+- [[Index/02 - Genetics & Breeding]]
+
+## Conexiones
+
+[[AbilitySO]], [[BodyPart]], [[PartDatabaseSO]], [[CreatureDatabaseSO]], [[CreatureDNA]], [[AgentAbilities]], [[ArenaSandbox]], [[ClashSlot]]

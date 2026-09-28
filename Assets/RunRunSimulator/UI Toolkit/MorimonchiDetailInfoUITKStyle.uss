@@ -255,6 +255,18 @@
     margin-right: 8px;
 }
 
+.part-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.part-icon--horn { -unity-background-image-tint-color: var(--mm-gold); }
+.part-icon--back { -unity-background-image-tint-color: var(--mm-teal); }
+.part-icon--wing { -unity-background-image-tint-color: var(--mm-plum); }
+
 .part-text {
     flex-grow: 1;
     -unity-text-generator: advanced;

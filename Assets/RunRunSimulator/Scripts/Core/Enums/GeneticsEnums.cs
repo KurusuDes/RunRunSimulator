@@ -9,21 +9,6 @@ public enum Rarity
     Legendary = 4
 }
 
-public enum PartSet
-{
-    None           = 0,
-    GooGang        = 1,
-    BogBrigade     = 2,
-    FuzzFactory    = 3,
-    CosmicCreeps   = 4,
-    NeonNightmares = 5,
-    CrunchCrew     = 6,
-    GrimGlobs      = 7,
-    SpudSquad      = 8,
-    MoldMob        = 9,
-    ZapZone        = 10
-}
-
 public enum PartRole
 {
     Body = 0,

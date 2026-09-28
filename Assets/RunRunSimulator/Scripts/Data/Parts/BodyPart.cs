@@ -26,7 +26,7 @@ public abstract class BodyPart : SerializedScriptableObject
 
     [VerticalGroup("Header/Info"), LabelWidth(55)]
     [GUIColor(nameof(GetSetColor))]
-    public PartSet Set;
+    public PartSetSO Set;
 
     [BoxGroup("Stats"), LabelWidth(80), Range(0, 10)]
     public float HP     = 0f;
@@ -35,19 +35,14 @@ public abstract class BodyPart : SerializedScriptableObject
     [BoxGroup("Stats"), LabelWidth(80), Range(0, 10)]
     public float Speed  = 0f;
 
-    [Button("Roll Name"), GUIColor(0.5f, 0.85f, 1f)]
-    private void RollName()
-    {
-        Name = PartNameBank.GetRandomName(Set, GetPartRole());
-#if UNITY_EDITOR
-        UnityEditor.EditorUtility.SetDirty(this);
-#endif
-    }
+    [BoxGroup("Combate")]
+    [AssetsOnly]
+    public AbilitySO Ability;
 
     public abstract PartRole GetPartRole();
 
     private Color GetRarityColor() => RarityColor(Rarity);
-    private Color GetSetColor()    => SetColor(Set);
+    private Color GetSetColor()    => Set != null ? Set.Color : Color.gray;
 
     public static Color RarityColor(Rarity rarity) => rarity switch
     {
@@ -57,21 +52,6 @@ public abstract class BodyPart : SerializedScriptableObject
         Rarity.Epic      => new Color(0.85f, 0.45f, 1f),
         Rarity.Legendary => new Color(1f, 0.75f, 0.2f),
         _                => Color.white
-    };
-
-    public static Color SetColor(PartSet set) => set switch
-    {
-        PartSet.GooGang        => new Color(0.4f, 0.95f, 0.4f),
-        PartSet.BogBrigade     => new Color(0.55f, 0.75f, 0.25f),
-        PartSet.FuzzFactory    => new Color(1f,   0.7f,  0.85f),
-        PartSet.CosmicCreeps   => new Color(0.5f, 0.3f,  1f),
-        PartSet.NeonNightmares => new Color(1f,   0.2f,  0.85f),
-        PartSet.CrunchCrew     => new Color(0.85f, 0.65f, 0.2f),
-        PartSet.GrimGlobs      => new Color(0.55f, 0.55f, 0.65f),
-        PartSet.SpudSquad      => new Color(0.95f, 0.85f, 0.55f),
-        PartSet.MoldMob        => new Color(0.65f, 0.85f, 0.3f),
-        PartSet.ZapZone        => new Color(1f,   1f,   0.3f),
-        _                      => Color.gray
     };
 }
 }

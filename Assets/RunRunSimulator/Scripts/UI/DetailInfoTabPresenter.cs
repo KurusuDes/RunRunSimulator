@@ -95,16 +95,12 @@ public class DetailInfoTabPresenter
     {
         var row = new VisualElement();
         row.AddToClassList("part-row");
-
-        var swatch = new VisualElement();
-        swatch.AddToClassList("part-swatch");
-        swatch.style.backgroundColor = part != null ? BodyPart.SetColor(part.Set) : Color.gray;
-        row.Add(swatch);
+        row.Add(BuildPartSwatch(part));
 
         var text = new Label();
         text.AddToClassList("part-text");
         text.text = part != null
-            ? Loc.Tr("ui.detail.partrow", SlotName(slot), part.Name, part.Set, LocEnumMaps.RarityName(part.Rarity))
+            ? Loc.Tr("ui.detail.partrow", SlotName(slot), part.Name, SetName(part), LocEnumMaps.RarityName(part.Rarity))
             : Loc.Tr("ui.detail.partrow.empty", SlotName(slot));
         row.Add(text);
 
@@ -115,16 +111,12 @@ public class DetailInfoTabPresenter
     {
         var row = new VisualElement();
         row.AddToClassList("part-row");
-
-        var swatch = new VisualElement();
-        swatch.AddToClassList("part-swatch");
-        swatch.style.backgroundColor = part != null ? BodyPart.SetColor(part.Set) : Color.gray;
-        row.Add(swatch);
+        row.Add(BuildPartSwatch(part));
 
         var text = new Label();
         text.AddToClassList("part-text");
         text.text = part != null
-            ? Loc.Tr("ui.detail.partrow.level", SlotName(slot), part.Name, part.Set, LocEnumMaps.RarityName(part.Rarity), (int)tier, potential)
+            ? Loc.Tr("ui.detail.partrow.level", SlotName(slot), part.Name, SetName(part), LocEnumMaps.RarityName(part.Rarity), (int)tier, potential)
             : Loc.Tr("ui.detail.partrow.level.empty", SlotName(slot), (int)tier, potential);
         row.Add(text);
 
@@ -134,6 +126,35 @@ public class DetailInfoTabPresenter
 
         partsContainer.Add(row);
     }
+
+    private static VisualElement BuildPartSwatch(BodyPart part)
+    {
+        var swatch = new VisualElement();
+        swatch.AddToClassList("part-swatch");
+
+        Color setColor = part?.Set != null ? part.Set.Color : Color.gray;
+
+        if (part != null && part.Icon != null)
+        {
+            swatch.AddToClassList("part-icon");
+            swatch.style.backgroundImage = new StyleBackground(part.Icon);
+            swatch.style.backgroundColor = new Color(0f, 0f, 0f, 0f);
+            switch (part.GetPartRole())
+            {
+                case PartRole.Horn: swatch.AddToClassList("part-icon--horn"); break;
+                case PartRole.Back: swatch.AddToClassList("part-icon--back"); break;
+                case PartRole.Wing: swatch.AddToClassList("part-icon--wing"); break;
+            }
+        }
+        else
+        {
+            swatch.style.backgroundColor = setColor;
+        }
+
+        return swatch;
+    }
+
+    private static string SetName(BodyPart part) => part?.Set != null ? part.Set.Name : "—";
 
     private static string SlotName(PartRole r) => r switch
     {

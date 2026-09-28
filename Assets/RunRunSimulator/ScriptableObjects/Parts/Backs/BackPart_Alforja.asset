@@ -26,7 +26,8 @@ MonoBehaviour:
   Name: Alforja
   Rarity: 0
   Tier: 0
-  Set: 0
+  Set: {fileID: 11400000, guid: b4ca656a285875845a23c1d8ce683057, type: 2}
   HP: 0
   Attack: 0
   Speed: 0
+  Ability: {fileID: 11400000, guid: e67d19a969c82124490bb18d98e41959, type: 2}

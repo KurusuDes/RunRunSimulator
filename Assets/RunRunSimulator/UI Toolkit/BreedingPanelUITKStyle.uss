@@ -215,6 +215,10 @@
 .preview-name { font-size: 18px; -unity-font-style: bold; color: var(--mm-ink); margin-bottom: 4px; white-space: normal; }
 .preview-part-row { flex-direction: row; align-items: center; margin-bottom: 3px; }
 .preview-swatch { width: 16px; height: 16px; border-radius: 4px; margin-right: 6px; }
+.preview-icon { width: 32px; height: 32px; border-radius: 0; background-color: rgba(0, 0, 0, 0); -unity-background-scale-mode: scale-to-fit; }
+.preview-icon--horn { -unity-background-image-tint-color: var(--mm-gold); }
+.preview-icon--back { -unity-background-image-tint-color: var(--mm-teal); }
+.preview-icon--wing { -unity-background-image-tint-color: var(--mm-plum); }
 .preview-part-text { flex-grow: 1; font-size: 13px; color: var(--mm-ink); white-space: normal; }
 
 /* ── Side lists (always visible) ── */

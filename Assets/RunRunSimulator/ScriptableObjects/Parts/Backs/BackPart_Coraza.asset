@@ -26,7 +26,8 @@ MonoBehaviour:
   Name: Coraza
   Rarity: 0
   Tier: 0
-  Set: 0
+  Set: {fileID: 11400000, guid: b4ca656a285875845a23c1d8ce683057, type: 2}
   HP: 0
   Attack: 0
   Speed: 0
+  Ability: {fileID: 11400000, guid: 1acc3bbb08d23b241b1f19d9b0517ddf, type: 2}

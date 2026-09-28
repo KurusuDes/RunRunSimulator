@@ -47,7 +47,7 @@ def build(arm):
         p2 = tip + Vector((0, -0.085, -0.06))
         p3 = tip
         pts = pc.bezier(p0, p1, p2, p3, 14)
-        objs.append(lock("Deco_%s_borla%d" % (RAINBOW[i], i), pts, 0.098, 0.078))
+        objs.append(lock("Deco_%s_back%d" % (RAINBOW[i], i), pts, 0.098, 0.078))
     for o in objs:
         pc.skin_like(o, arm, "Back")
     return objs

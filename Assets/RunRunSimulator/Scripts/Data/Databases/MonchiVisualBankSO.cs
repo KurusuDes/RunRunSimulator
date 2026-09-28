@@ -18,6 +18,14 @@ public class MonchiVisualBankSO : SerializedScriptableObject
     [DictionaryDrawerSettings(KeyLabel = "Part ID", ValueLabel = "Part Mesh")]
     private Dictionary<string, GameObject> partMeshes = new Dictionary<string, GameObject>();
 
+    [OdinSerialize]
+    [DictionaryDrawerSettings(KeyLabel = "Part ID", ValueLabel = "Egg Part Mesh")]
+    private Dictionary<string, GameObject> eggPartMeshes = new Dictionary<string, GameObject>();
+
+    [OdinSerialize]
+    [DictionaryDrawerSettings(KeyLabel = "Part ID", ValueLabel = "Slime Part Mesh")]
+    private Dictionary<string, GameObject> slimePartMeshes = new Dictionary<string, GameObject>();
+
     [SerializeField] private RuntimeAnimatorController animatorController;
     [SerializeField] private List<Material> gemMaterials = new List<Material>();
     [SerializeField] private MonchiMoodSetSO moodSet;
@@ -39,15 +47,41 @@ public class MonchiVisualBankSO : SerializedScriptableObject
         return bodies[StableHash(bodyShapeId) % bodies.Count];
     }
 
-    public GameObject GetPartMesh(string partId)
+    public GameObject GetPartMesh(string partId, MonchiForm form = MonchiForm.Adult)
     {
         if (string.IsNullOrEmpty(partId))
             return null;
 
-        if (partMeshes != null && partMeshes.TryGetValue(partId, out var partMesh))
+        var dict = GetPartMeshDictionary(form);
+        if (dict.TryGetValue(partId, out var partMesh))
             return partMesh;
 
         return null;
+    }
+
+#if UNITY_EDITOR
+    public void SetPartMesh(string partId, GameObject prefab, MonchiForm form = MonchiForm.Adult)
+    {
+        var dict = GetPartMeshDictionary(form);
+        dict[partId] = prefab;
+        UnityEditor.EditorUtility.SetDirty(this);
+    }
+#endif
+
+    private Dictionary<string, GameObject> GetPartMeshDictionary(MonchiForm form)
+    {
+        switch (form)
+        {
+            case MonchiForm.Egg:
+                if (eggPartMeshes == null) eggPartMeshes = new Dictionary<string, GameObject>();
+                return eggPartMeshes;
+            case MonchiForm.Slime:
+                if (slimePartMeshes == null) slimePartMeshes = new Dictionary<string, GameObject>();
+                return slimePartMeshes;
+            default:
+                if (partMeshes == null) partMeshes = new Dictionary<string, GameObject>();
+                return partMeshes;
+        }
     }
 
     public Material GetGem(string uniqueId)
