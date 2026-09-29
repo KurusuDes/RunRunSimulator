@@ -6,7 +6,7 @@ tags: [script, store, transactions]
 
 **Ruta:** `Systems/Store/StoreManager.cs`
 
-**Responsabilidad:** Orquestador de compras. Valida saldo vía [[Wallet]], stock, ownership. Muta inventario y dispara eventos. Crea `DeliveryBox` para entregas (props y cajas de criaturas). **S128:** ahora valida saldo con `Wallet.Balance()` y cobra con `Wallet.TrySpend()` (puerta única); orden de operaciones fija: comprueba saldo → concede mueble/prop → cobra al final (un solo evento de persistencia). **S130:** añade `BuyCreatureBox()` con flujo idéntico a props.
+**Responsabilidad:** Orquestador de compras. Valida saldo vía [[Wallet]], stock, ownership. Muta inventario y dispara eventos. Crea `DeliveryBox` para entregas (props y cajas de criaturas). S137: `BuyCreatureBox()` ahora instancia criaturas con Form especificado (Egg/Slime/Adult via CreatureBoxSO). **S128:** ahora valida saldo con `Wallet.Balance()` y cobra con `Wallet.TrySpend()` (puerta única); orden de operaciones fija: comprueba saldo → concede mueble/prop → cobra al final (un solo evento de persistencia). **S130:** añade `BuyCreatureBox()` con flujo idéntico a props. **S137:** cajas de huevos (Form=Egg) son el entry point del ciclo de vida.
 
 ## Métodos Públicos
 
@@ -14,7 +14,8 @@ tags: [script, store, transactions]
 |--------|---------|-------------|
 | `BuyFurniture(FurnitureDefinitionSO def, StoreShopData shop)` | `BuyResult` | Compra mueble; valida stock/saldo/ownership, añade al inventario, cobra |
 | `BuyWorldProp(ItemDefinitionSO def, StoreShopData shop)` | `BuyResult` | Compra prop; instancia `DeliveryBox`, spawna en punto, cobra |
-| `BuyCreatureBox(CreatureBoxSO box, StoreShopData shop)` | `BuyResult` | Compra caja de criaturas; instancia `DeliveryBox`, configura caja, cobra (S130 NUEVO) |
+| `BuyCreatureBox(CreatureBoxSO box, StoreShopData shop)` | `BuyResult` | **(S137)** Compra caja de criaturas con Form especificado; instancia `DeliveryBox`, configura caja, cobra. DeliveryBox mintea criaturas con Form=box.Form |
+| `CreatureBoxPrice(CreatureBoxSO box, StoreShopData shop)` | `int` | **(S137)** Calcula precio de caja de criaturas |
 | `RestockIfNeeded()` | `void` | Comprueba schedule en catálogo, recarga si aplica |
 
 ## BuyResult (enum)
@@ -24,73 +25,21 @@ tags: [script, store, transactions]
 - `AlreadyOwned` — mueble ya poseído (furniture solo)
 - `InsufficientFunds` — saldo insuficiente
 
-## Flujo BuyFurniture (S128)
-
-```
-1. Valida args (def, shop)
-2. Valida stock (shop.InStock)
-3. Valida inventario no-nulo
-4. Valida no duplicado (HasFurniture)
-5. Calcula precio final (ShopCatalogSO)
-6. Valida saldo: Wallet.Balance(Dabloons) >= price
-7. TryConsume stock
-8. AddFurniture
-9. Cobra: Wallet.TrySpend(Dabloons, price)
-   SI price == 0: dispara InventoryChanged manualmente
-```
-
-**Invariante S128:** saldo validado ANTES, concedido EN MEDIO, cobrado AL FINAL → un solo evento.
-
-## Flujo BuyWorldProp (S128)
-
-```
-1. Valida args + delivery system (prefab, spawn point)
-2. Valida Application.isPlaying
-3. Valida inventario no-nulo
-4. Calcula precio
-5. Cobra primero (BuyResult si insuficiente)
-6. TryConsume stock
-7. Instancia DeliveryBox via SpawnDeliveryBox()
-8. Configure(item)
-9. Si price == 0: dispara InventoryChanged manualmente
-```
-
-**Nota:** Props cobran ANTES de instanciar (distinto de muebles); si falla al crear box → reembolso vía `Wallet.Add()`.
-
-## Flujo BuyCreatureBox (S130 NUEVO)
+## Flujo BuyCreatureBox (S130 + S137)
 
 ```
 1. Valida args (box, shop)
 2. Valida stock (shop.InStock)
 3. Valida inventario no-nulo
-4. Calcula precio
+4. Calcula precio via CreatureBoxPrice()
 5. Cobra primero (BuyResult si insuficiente)
 6. TryConsume stock
 7. Instancia DeliveryBox via SpawnDeliveryBox()
-8. Configure(box)
+8. Configure(box) — box contiene Form (S137)
 9. Si price == 0: dispara InventoryChanged manualmente
 ```
 
-**Identidad a BuyWorldProp:** cobro anterior a spawn, reembolso si falla.
-
-## Helper SpawnDeliveryBox
-
-```csharp
-private DeliveryBox SpawnDeliveryBox(int price, StoreShopData shop)
-{
-    var go  = Instantiate(deliveryBoxPrefab, deliverySpawnPoint.position, rotation);
-    var box = go.GetComponent<DeliveryBox>();
-    if (box == null)
-    {
-        Destroy(go);
-        if (price > 0) { Wallet.Add(price, "store-refund"); shop.CurrentStock++; }
-        return null;
-    }
-    return box;
-}
-```
-
-Centraliza validación y reembolso ante fallo de spawn.
+**Invariante S137:** DeliveryBox.Interact() mintea criaturas con `dna.Form = box.Form`. Kit inicial contiene cajas Form=Egg (5 gratuitas).
 
 ## Referencias
 
@@ -100,6 +49,11 @@ Centraliza validación y reembolso ante fallo de spawn.
 | `deliveryBoxPrefab` | `DeliveryBox` (prefab) | Instancia para props + cajas de criaturas |
 | `deliverySpawnPoint` | `Transform` | Punto de spawn de cajas |
 
+## Integración S137
+
+- Ciclo de vida: cajas de huevos gratis en kit inicial. Kit inicial (S137) contiene 1 caja creatorBox con Form=Egg y Count=5.
+- AutoPlayer.Step2_BuyEggBox() filtra cajas por Form=Egg y precio=0
+
 ## Integración S128
 
 - **Acceso a saldo:** `Wallet.Balance(Currency)` (no directo a SO)
@@ -108,9 +62,9 @@ Centraliza validación y reembolso ante fallo de spawn.
 
 ## Vinculado a
 
-[[Index/04 - Store & Transactions]]
-[[Index/28 - Cimientos y camino a Game Ready]] (§3 · two currencies)
-[[Index/29 - Plan HC - Cimientos (ejecutable)]] (§5 · C3 wallet)
+- [[Index/04 - Store & Transactions]]
+- [[Index/02 - Genetics & Breeding]] (S137: ciclo de vida)
+- [[Index/09 - Active Context]] (S137: kit inicial)
+- [[Index/28 - Cimientos y camino a Game Ready]] (§3 · two currencies)
 
-**Conexiones:** [[Wallet]], [[GameManager]], [[PlayerInventorySO]], [[ShopCatalogSO]], [[StoreShopData]], [[DeliveryBox]], [[StorePanelUITK]], [[GameEvents]], [[CreatureBoxSO]]
-
+**Conexiones:** [[Wallet]], [[GameManager]], [[PlayerInventorySO]], [[ShopCatalogSO]], [[StoreShopData]], [[DeliveryBox]], [[CreatureBoxSO]], [[StorePanelUITK]], [[GameEvents]]

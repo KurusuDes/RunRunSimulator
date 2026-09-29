@@ -6,7 +6,7 @@ tags: [script, visual, component]
 
 **Ruta:** `World/Creatures/MonchiVisualizer.cs`
 
-**Responsabilidad:** Visualizador del modelo Suriyun. Instancia body FBX por BodyShapeID, mapea renderers (Face, Wings, Arms, etc.), aplica tintado por ColorGenetics.BuildHarmony. `SetMood()` swapea material Face. **S61:** `Assemble()` ahora hace `SetActive(false)` a los hijos viejos antes de `Object.Destroy()` — Destroy es diferido a fin de frame y el fotomatón renderiza en el mismo frame, causando superposición del cuerpo viejo en headshots batch. **S110:** Nuevos métodos `SetRimOverride()` y `ClearRimOverride()` para controlar rim light genético (anulable con color/power/mask de rival). **S115:** Assemble() propaga la capa del Root (`modelRoot.gameObject.layer`) a todos los hijos del body instanciado; esto permite la pasada de renderer URP (RenderObjects de `PC_Renderer` con tags CreatureBodyMask/CreatureBodySilhouette sobre capa `CreatureBody`) que filtra por esa capa para dibujo de silueta/stencil. **S134:** Modular part assembly — Assemble ahora carga partes prefabricadas (HornID, BackID, WingID) desde el banco, desactiva renderers baked de esos prefijos, e injerta partes FBX con su propio Armature usando MonchiPartGrafter. **S136:** ApplyLook() refactorizado — tintado centralizado via MonchiTint.ColorFor() (determinismo nombre renderer) + MonchiTint.Fill() (paleta MPB).
+**Responsabilidad:** Visualizador del modelo Suriyun. Instancia body FBX por BodyShapeID (adulto) o por Form (Egg/Slime usando builders estáticos). Mapea renderers (Face, Wings, Arms, etc.), aplica tintado por ColorGenetics.BuildHarmony. **S61:** `Assemble()` ahora hace `SetActive(false)` a los hijos viejos antes de `Object.Destroy()` — Destroy es diferido a fin de frame y el fotomatón renderiza en el mismo frame, causando superposición del cuerpo viejo en headshots batch. **S110:** Nuevos métodos `SetRimOverride()` y `ClearRimOverride()` para controlar rim light genético (anulable con color/power/mask de rival). **S115:** Assemble() propaga la capa del Root (`modelRoot.gameObject.layer`) a todos los hijos del body instanciado; esto permite la pasada de renderer URP (RenderObjects de `PC_Renderer` con tags CreatureBodyMask/CreatureBodySilhouette sobre capa `CreatureBody`) que filtra por esa capa para dibujo de silueta/stencil. **S134:** Modular part assembly — Assemble ahora carga partes prefabricadas (HornID, BackID, WingID) desde el banco, desactiva renderers baked de esos prefijos, e injerta partes FBX con su propio Armature usando MonchiPartGrafter. **S136:** ApplyLook() refactorizado — tintado centralizado via MonchiTint.ColorFor() (determinismo nombre renderer) + MonchiTint.Fill() (paleta MPB). **S137:** Assemble() ahora soporta Form.Egg y Form.Slime usando MonchiEggBody/MonchiSlimeBody builders estáticos; adicionalmente suscribe a GameEvents.OnCreatureFormChanged para re-armar cuando forma cambia (Egg→Slime→Adult).
 
 ## Métodos Públicos
 
@@ -14,8 +14,8 @@ tags: [script, visual, component]
 |--------|-------------|
 | `SetBank(MonchiVisualBankSO)` | Asigna banco visual |
 | `SetFurDatabase(FurTypeDatabaseSO)` | Asigna database de pelajes |
-| `Assemble(CreatureDNA dna)` | **S134 MODIFICADO:** Instancia body, grafia partes modulares (HornID/BackID/WingID) si existen en banco, mapea renderers, aplica look; desactiva hijos viejos antes de destruir; propaga capa Root a todos los hijos. Flujo: Instancia body → SetActive(false)/Destroy hijos previos → PropagaCapa → GraftPart por slot → Recorre SkinnedMeshRenderers activos → ApplyLook → SetMood |
-| `RefreshLook(CreatureDNA dna)` | Retinta sin re-instanciar; llama Assemble si bodyInstance es null |
+| `Assemble(CreatureDNA dna)` | **S137 MODIFICADO:** Instancia body según Form (Egg/Slime usan builders, Adult usa prefab directo), grafia partes modulares (HornID/BackID/WingID) si adulto y existen en banco, mapea renderers, aplica look; desactiva hijos viejos antes de destruir; propaga capa Root a todos los hijos. Flujo: Instancia body según Form → SetActive(false)/Destroy hijos previos → PropagaCapa → GraftPart por slot (si adulto) → Recorre SkinnedMeshRenderers activos → ApplyLook → SetMood |
+| `RefreshLook(CreatureDNA dna)` | Retinta sin re-instanciar; llama Assemble si bodyInstance es null o Form cambió |
 | `SetMood(MonchiMood)` | Swapea material Face |
 | `SetRimOverride(Color color, float power, float insideMask)` | **S110 NUEVO** anula rim light genético con color/power/mask de rival |
 | `ClearRimOverride()` | **S110 NUEVO** restaura rim light genético |
@@ -38,21 +38,25 @@ tags: [script, visual, component]
 | `faceRenderer` | `SkinnedMeshRenderer` | Renderer del rostro |
 | `tintRenderers` | `List<SkinnedMeshRenderer>` | Renderers a teñir (alas, cuernos, espalda, etc.); **S134:** incluye renderers injertados de partes |
 | `currentDna` | `CreatureDNA` | DNA vigente |
+| `assembledForm` | `MonchiForm` | Forma del modelo instanciado (para detectar cambios en RefreshLook, S137) |
 | `currentMood` | `MonchiMood` | Mood vigente |
 | `rimOverride` | `bool` | **S110 NUEVO** si se aplica override de rim |
 | `rimOverrideColor` | `Color` | **S110 NUEVO** color override |
 | `rimOverridePower` | `float` | **S110 NUEVO** power override |
 | `rimOverrideInsideMask` | `float` | **S110 NUEVO** inside mask override |
 
-## Flujo Assemble() S134 (Modular Assembly)
+## Flujo Assemble() S137 (Form-Aware Assembly)
 
 1. **Limpia hijos previos:** desactiva visualmente (SetActive(false)), luego destruye diferido
-2. **Reinicia estado:** bodyInstance=null, animator=null, faceRenderer=null, tintRenderers.Clear()
+2. **Reinicia estado:** bodyInstance=null, animator=null, faceRenderer=null, tintRenderers.Clear(), `assembledForm = dna.Form` (S137)
 3. **Valida banco:** si no existe MonchiVisualBankSO → warning y return
-4. **Obtiene body base:** `bank.GetBody(dna.BodyShapeID)` → hash FNV-1a determinístico
-5. **Instancia body:** posición/rotación/escala identity, propaga capa Root a todos hijos (S115)
-6. **Asigna Animator:** obtiene existente o crea; asigna RuntimeAnimatorController del banco
-7. **Grafia partes modulares (S134 NUEVO):**
+4. **Elige constructor según Form (S137 NUEVO):**
+   - **Form.Slime:** `bodyInstance = MonchiSlimeBody.Build(dna, bank, Root)` → slime model + cuerno injertado
+   - **Form.Egg:** `bodyInstance = MonchiEggBody.Build(dna, bank, Root)` → egg model + espalda injertada
+   - **Form.Adult (default):** `bodyInstance = Instantiate(bank.GetBody(dna.BodyShapeID), Root)` → body prefab adulto completo
+5. **Propaga capa** a todos hijos (S115)
+6. **Asigna Animator:** obtiene existente o crea; asigna RuntimeAnimatorController del banco (elegido según Form)
+7. **Grafia partes modulares (S134, solo si Adult):**
    - `GraftPart(dna.HornID, "Horn")` → desactiva renderers "Horn*", injerta si partPrefab existe
    - `GraftPart(dna.BackID, "Back")` → desactiva renderers "Back*", injerta si partPrefab existe
    - `GraftPart(dna.WingID, "Wing")` → desactiva renderers "Wing*", injerta si partPrefab existe
@@ -60,7 +64,55 @@ tags: [script, visual, component]
 9. **Aplica look:** tintado de colores genéticos + override si existe (**S136 MODIFICADO:** usa MonchiTint)
 10. **Aplica mood:** SetMood(currentMood) para sincronizar facial material
 
-## Método GraftPart() S134 (NUEVO)
+## Suscripción a OnCreatureFormChanged (S137 NUEVO)
+
+```csharp
+private void OnEnable()
+{
+    GameEvents.OnCreatureFormChanged += HandleFormChanged;
+}
+
+private void OnDisable()
+{
+    GameEvents.OnCreatureFormChanged -= HandleFormChanged;
+}
+
+private void HandleFormChanged(CreatureDNA dna)
+{
+    if (dna == currentDna)
+    {
+        RefreshLook(dna);  // Detecta Form cambió, re-arma
+    }
+}
+```
+
+**Contexto:** Cuando BreedingController o IncubationService dispara `GameEvents.CreatureFormChanged(egg)` (transición Egg→Slime), MonchiVisualizer suscrito re-arma el visual sin necesidad de llamada explícita.
+
+## Método InstantiateBody(CreatureDNA dna) S137 (Form-Aware)
+
+```csharp
+private RuntimeAnimatorController InstantiateBody(CreatureDNA dna)
+{
+    if (dna.Form == MonchiForm.Slime)
+    {
+        bodyInstance = MonchiSlimeBody.Build(dna, bank, Root);
+        return bodyInstance != null ? bank.SlimeAnimatorController : null;
+    }
+    if (dna.Form == MonchiForm.Egg)
+    {
+        bodyInstance = MonchiEggBody.Build(dna, bank, Root);
+        return bodyInstance != null ? bank.EggAnimatorController : null;
+    }
+    // Form.Adult (default)
+    var prefab = bank.GetBody(dna.BodyShapeID);
+    bodyInstance = Object.Instantiate(prefab, Root);
+    return bank.AnimatorController;
+}
+```
+
+**Cambio S137:** Agregados bloques para Slime y Egg, usan builders estáticos + controladores específicos del banco.
+
+## Método GraftPart() S134 (NUEVO, solo adulto)
 
 ```csharp
 private void GraftPart(string partId, string prefix)
@@ -79,7 +131,6 @@ private void GraftPart(string partId, string prefix)
     // Injerta parte e inyecta renderers en tintRenderers
     var grafted = new List<SkinnedMeshRenderer>();
     MonchiPartGrafter.Graft(partPrefab, bodyInstance, grafted);
-    // grafted no se consume directamente aquí (Assemble() barre renderers luego)
 }
 ```
 
@@ -96,6 +147,53 @@ private void GraftPart(string partId, string prefix)
 - Partes modulares reemplazan completamente los renderers baked (no se superponen)
 - Posibilidad de no grafia (si partId empty o no en banco) → body queda con renderer baked
 - Tintado unificado luego: Assemble() recorre solo renderers activos, incluye injertados
+
+## Cambios S137
+
+**InstantiateBody() — Form-aware (línea 109-133 MODIFICADO):**
+```csharp
+if (dna.Form == MonchiForm.Slime)
+{
+    bodyInstance = MonchiSlimeBody.Build(dna, bank, Root);
+    if (bodyInstance == null) { Debug.LogWarning(...); return null; }
+    return bank.SlimeAnimatorController;
+}
+
+if (dna.Form == MonchiForm.Egg)
+{
+    bodyInstance = MonchiEggBody.Build(dna, bank, Root);
+    if (bodyInstance == null) { Debug.LogWarning(...); return null; }
+    return bank.EggAnimatorController;
+}
+
+// Form.Adult (default)
+...
+```
+
+**Assemble() — savedForm y refresh check (línea 58 + RefreshLook NUEVO):**
+```csharp
+public void Assemble(CreatureDNA dna)
+{
+    // ...
+    assembledForm = dna.Form;  // S137: recordar qué forma armamos
+}
+
+public void RefreshLook(CreatureDNA dna)
+{
+    currentDna = dna;
+    if (bodyInstance == null || dna.Form != assembledForm)  // S137: si Form cambió
+    {
+        Assemble(dna);
+        return;
+    }
+    // ... sino, retinta sin re-instanciar
+}
+```
+
+**Suscripción a GameEvents (S137 NUEVO en OnEnable/OnDisable o en Awake):**
+- OnEnable: suscribe `GameEvents.OnCreatureFormChanged += HandleFormChanged`
+- OnDisable: desuscribe
+- HandleFormChanged: si dna == currentDna, llama RefreshLook (que detecta cambio de Form y re-arma)
 
 ## Cambios S61
 
@@ -213,7 +311,7 @@ foreach (var renderer in bodyInstance.GetComponentsInChildren<SkinnedMeshRendere
 - Resultado: tintRenderers acumula todos excepto Face
 
 **Impacto S134:**
-- Sistema modular: HornID/BackID/WingID cargan FBX independientes con propios Armatures
+- Sistema modular: HornID/BackID/WingID cargan FBX independientes (sin duplicar body base)
 - Composición dinámica: no hay limitante de partes activas (nil ID = usa baked, else = injerta)
 - Tintado unificado: ApplyLook() recorre tintRenderers que mezcla baked+injertados sin diferenciar
 - DNA determinístico: cada criatura con mismo BodyShapeID+HornID+BackID+WingID renderiza idéntico
@@ -285,6 +383,7 @@ private void Tint(Renderer renderer, Color color)
 - **S115:** Layer propagation es determinístico: todos los hijos heredan exactamente del Root
 - **S134:** GraftPart solo actúa si partPrefab existe; partId nil o no en banco = body baked se mantiene
 - **S136:** MonchiTint.ColorFor() es determinístico en nombre renderer; mismo nombre = mismo color
+- **S137:** Form-aware assembly: Egg y Slime usan builders estáticos, Adult usa prefab. Cambios de Form disparan re-armado vía evento.
 
 ## Notas S61
 
@@ -328,22 +427,34 @@ private void Tint(Renderer renderer, Color color)
 - **Reutilización:** EggLabAssembler.Build() llama MonchiTint sin duplicar código
 - **Invariante de rim:** override de rim se aplica DESPUÉS de Fill() en Tint() (nivel de prioridad correcto)
 
+## Notas S137
+
+- **Form-aware assembly:** Egg/Slime usan builders estáticos (MonchiEggBody/MonchiSlimeBody), Adult usa prefab
+- **Detecta cambios de Form:** assembledForm guarda qué forma se armó; RefreshLook compara y re-arma si cambió
+- **OnCreatureFormChanged:** suscripción a evento GameEvents, permite re-armado automático sin llamada explícita
+- **Builders estáticos:** MonchiEggBody.Build() y MonchiSlimeBody.Build() manejan inyección de partes (espalda para huevo, cuerno para slime)
+- **Animators específicos:** bank.EggAnimatorController, bank.SlimeAnimatorController, bank.AnimatorController (adulto)
+
 ## Vinculado a
 
 - [[Index/10 - Visualization]]
+- [[Index/02 - Genetics & Breeding]] (S137: ciclo de vida)
 - [[Index/23 - Arena Sandbox y Expedicion]]
-- [[Index/31 - EggLab & Incubadora]] — (S136 NUEVO) EggLabAssembler reutiliza MonchiTint
+- [[Index/31 - EggLab & Incubadora]] (S137: visual de huevos, S136 NUEVO: EggLabAssembler reutiliza MonchiTint)
 - [[MonchiVisualBankSO]], [[ColorGenetics]]
-- [[MonchiTint]] — (S136 NUEVO) utilidad de mapeo de colores
-- [[MonchiTeamRim]] — (S110 NUEVO) llamador de SetRimOverride/ClearRimOverride
-- [[MonchiPartGrafter]] — (S134 NUEVO) utilidad de injerto de partes
+- [[MonchiTint]] (S136 NUEVO) utilidad de mapeo de colores
+- [[MonchiTeamRim]] (S110 NUEVO) llamador de SetRimOverride/ClearRimOverride
+- [[MonchiPartGrafter]] (S134 NUEVO) utilidad de injerto de partes
+- [[MonchiEggBody]] (S137 NUEVO) builder de huevo
+- [[MonchiSlimeBody]] (S137 NUEVO) builder de slime
 
 ## Conexiones
 
 **Entrada:**
-- Assemble/RefreshLook: CreatureDNA
+- Assemble/RefreshLook: CreatureDNA (incluyendo Form, S137)
 - SetMood: MonchiMoodDriver
 - SetRimOverride/ClearRimOverride: MonchiTeamRim (S110)
+- GameEvents.OnCreatureFormChanged: BreedingController/IncubationService (S137)
 
 **Salida:**
 - Modelo visual world-space con capa Root propagada a hijos (S115)
@@ -351,6 +462,7 @@ private void Tint(Renderer renderer, Color color)
 - MPB de rim light (genético u override)
 - Partes injertadas integradas en tintRenderers (S134)
 - Tintado determinístico via MonchiTint (S136)
+- Form-aware visual: Egg/Slime/Adult (S137)
 
 **Dependencias S134:**
 - MonchiVisualBankSO.GetPartMesh(partId) → obtiene FBX de parte
@@ -359,3 +471,8 @@ private void Tint(Renderer renderer, Color color)
 **Dependencias S136:**
 - MonchiTint.ColorFor() → mapeo determinístico de color por renderer name
 - MonchiTint.Fill() → paleta 4-color en MPB
+
+**Dependencias S137:**
+- MonchiEggBody.Build() → constructor de visual huevo
+- MonchiSlimeBody.Build() → constructor de visual slime
+- GameEvents.OnCreatureFormChanged → suscripción para re-armado automático
