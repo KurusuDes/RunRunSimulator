@@ -88,6 +88,41 @@ public class IncubationService : MonoBehaviour
         return odds.HatchCost(mother, father);
     }
 
+    public int EggHatchCost
+    {
+        get
+        {
+            var odds = BreedingController.Instance != null ? BreedingController.Instance.InheritanceOdds : null;
+            return odds != null ? odds.HatchCostBase : 10;
+        }
+    }
+
+    public HatchResult TryHatchEgg(CreatureDNA egg)
+    {
+        if (egg == null || egg.IsDead || egg.Form != MonchiForm.Egg)
+        {
+            Debug.LogError("[Incubation] TryHatchEgg: invalid egg.");
+            return HatchResult.Invalid;
+        }
+
+        int cost = EggHatchCost;
+        if (!Wallet.TrySpend(Currency.Minerita, cost, "hatch-egg"))
+        {
+            status = $"Not enough Minerita to hatch egg ({cost}).";
+            return HatchResult.InsufficientMinerita;
+        }
+
+        CreatureGrowth.Hatch(egg);
+        egg.BirthDay = GameClock.Instance != null ? GameClock.Instance.Day : 1;
+
+        GameEvents.RegistryChanged(registry);
+        GameEvents.CreatureFormChanged(egg);
+
+        status = $"Egg hatched! \"{egg.CustomName}\" woke up as a Slime.";
+        Debug.Log($"[Incubation] {status}  {egg.UniqueID}");
+        return HatchResult.Hatched;
+    }
+
     public HatchResult TryHatch(string motherID, string fatherID)
     {
         if (!registry.TryGet(motherID, out var mother) || !registry.TryGet(fatherID, out var father))
@@ -162,6 +197,7 @@ public class IncubationService : MonoBehaviour
         child.CustomName = CreatureNameBank.GetRandomName();
         child.Stamp();
         child.BirthDay = GameClock.Instance != null ? GameClock.Instance.Day : 1;
+        CreatureGrowth.Hatch(child);
         if (!registry.Register(child)) return;
 
         if (registry.TryGet(motherID, out var m)) m.ChildrenIDs.Add(child.UniqueID);

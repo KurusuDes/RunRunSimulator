@@ -16,6 +16,8 @@ PLEATS = 18
 PLEAT_AMP = 0.005
 SINK = 0.06
 MIN_H = 0.012
+CREST_H = 0.42
+EDGE = 0.07
 
 
 def catmull(pts, n):
@@ -63,6 +65,9 @@ def build(arm):
         base, surf, tip, d = rib(rim[i])
         wave = math.sin(2 * math.pi * PLEATS * u)
         end = min(u, 1 - u)
+        edge = min(1.0, end / EDGE)
+        tip = surf + d * CREST_H * math.sqrt(max(0.0, 1 - (1 - edge) ** 2))
+        tip = surf + d * max((tip - surf).length, MIN_H)
         fade = min(1.0, end / 0.05)
         taper = 0.45 + 0.55 * min(1.0, end / 0.08) ** 0.6
 

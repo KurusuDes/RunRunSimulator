@@ -31,6 +31,13 @@ public class CreatureLifeStageTableSO : SerializedScriptableObject
 
     public string Label(LifeStage stage) => LocEnumMaps.LifeStageName(stage);
 
+    [Title("Evolution")]
+    [MinValue(1)]
+    [SerializeField]
+    private int explorationsToEvolve = 3;
+
+    public int ExplorationsToEvolve => explorationsToEvolve;
+
     [Button("Seed Defaults", ButtonSizes.Large), GUIColor(0.55f, 1f, 0.7f)]
     private void SeedDefaults()
     {

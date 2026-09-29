@@ -35,6 +35,7 @@ namespace MoriMonchiSimulator
         private bool turning;
         private readonly Dictionary<string, bool> hasStateCache = new();
         private readonly Dictionary<string, float> clipLengthCache = new();
+        private Animator lastAnimator;
 
         public bool IsGesturing => gestureState != "" && (gestureHeld || Time.time < gestureUntil);
         public bool IsStill { get; private set; }
@@ -47,9 +48,23 @@ namespace MoriMonchiSimulator
         private Animator GetAnimator() => visualizer != null ? visualizer.Animator : null;
         private bool CanGesture() => (combatDriver == null || !combatDriver.IsBusy) && IsStill;
 
-        public bool PlayGesture(string state)
+        private Animator CurrentAnimator()
         {
             var anim = GetAnimator();
+            if (anim != lastAnimator)
+            {
+                lastAnimator = anim;
+                hasStateCache.Clear();
+                clipLengthCache.Clear();
+                currentState = "";
+                flying = false;
+            }
+            return anim;
+        }
+
+        public bool PlayGesture(string state)
+        {
+            var anim = CurrentAnimator();
             if (anim == null || !CanGesture() || !HasState(anim, state)) return false;
             anim.CrossFadeInFixedTime(state, gestureCrossFade);
             gestureState = state;
@@ -61,7 +76,7 @@ namespace MoriMonchiSimulator
         public bool HoldGesture(string state)
         {
             if (gestureHeld && gestureState == state) return true;
-            var anim = GetAnimator();
+            var anim = CurrentAnimator();
             if (anim == null || !CanGesture() || !HasState(anim, state)) return false;
             anim.CrossFadeInFixedTime(state, gestureCrossFade);
             gestureState = state;
@@ -78,7 +93,7 @@ namespace MoriMonchiSimulator
 
         private void Update()
         {
-            var anim = GetAnimator();
+            var anim = CurrentAnimator();
             if (anim == null || !anim.isActiveAndEnabled) return;
 
             if (combatDriver != null && combatDriver.IsBusy)
@@ -144,7 +159,7 @@ namespace MoriMonchiSimulator
 
             if (isMoving && wasIdle)
             {
-                flying = Random.value < flyChance;
+                flying = HasState(anim, "Fly") && Random.value < flyChance;
                 if (flying) onTakeOff?.Invoke();
             }
 

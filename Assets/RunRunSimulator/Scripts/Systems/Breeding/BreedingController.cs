@@ -52,6 +52,11 @@ public class BreedingController : MonoBehaviour
     public HatchResult TryHatch(string motherID, string fatherID) =>
         incubation != null ? incubation.TryHatch(motherID, fatherID) : HatchResult.Invalid;
 
+    public HatchResult TryHatchEgg(CreatureDNA egg) =>
+        incubation != null ? incubation.TryHatchEgg(egg) : HatchResult.Invalid;
+
+    public int EggHatchCost => incubation != null ? incubation.EggHatchCost : 10;
+
     public void CancelBreeding(string motherID, string fatherID) => incubation?.CancelBreeding(motherID, fatherID);
 
     public void CancelAllBreeding() => incubation?.CancelAllBreeding();

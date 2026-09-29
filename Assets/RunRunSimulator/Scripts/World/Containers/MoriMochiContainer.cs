@@ -69,10 +69,14 @@ public class MoriMochiContainer : MonoBehaviour
     public virtual Vector3 AnchorPosition(int slot) => Center;
     public virtual bool    TryReclaim(MoriMochiAgent agent, int slot) => Claim(agent);
 
+    protected virtual bool Accepts(MoriMochiAgent agent) => true;
+
     private void OnTriggerEnter(Collider other)
     {
         var agent = other.GetComponentInParent<MoriMochiAgent>();
         if (agent == null || occupants.Contains(agent) || !agent.IsAirborne) return;
+
+        if (!Accepts(agent)) { BounceOut(agent); return; }
 
         if (IsFull) BounceOut(agent);
         else        Admit(agent);
@@ -83,6 +87,7 @@ public class MoriMochiContainer : MonoBehaviour
         if (IsFull) return;
         var agent = other.GetComponentInParent<MoriMochiAgent>();
         if (agent == null || occupants.Contains(agent) || !agent.IsAirborne) return;
+        if (!Accepts(agent)) return;
         Admit(agent);
     }
 

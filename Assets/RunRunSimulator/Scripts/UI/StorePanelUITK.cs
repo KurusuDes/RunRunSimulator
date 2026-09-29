@@ -183,7 +183,7 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
         name.AddToClassList("store-row__name");
         el.Add(name);
 
-        el.Add(BuildPrice(row.Shop, discountActive));
+        el.Add(BuildPrice(row, discountActive));
         el.Add(BuildStock(row.Shop));
 
         bool canBuy = row.Shop == null || row.Shop.InStock;
@@ -196,13 +196,14 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
         return el;
     }
 
-    private VisualElement BuildPrice(StoreShopData shop, bool discountActive)
+    private VisualElement BuildPrice(StoreRows.Row row, bool discountActive)
     {
+        var shop = row.Shop;
         var box = new VisualElement();
         box.AddToClassList("store-row__price");
 
-        bool discounted = discountActive && shop?.DiscountBase > 0f;
-        int  final      = shop != null ? shop.FinalPrice(discounted) : 0;
+        bool discounted = !row.PriceOverride.HasValue && discountActive && shop?.DiscountBase > 0f;
+        int  final      = row.PriceOverride ?? (shop != null ? shop.FinalPrice(discounted) : 0);
 
         if (discounted)
         {

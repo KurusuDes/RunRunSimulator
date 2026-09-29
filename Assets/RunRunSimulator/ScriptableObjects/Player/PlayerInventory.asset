@@ -29,7 +29,7 @@ MonoBehaviour:
       Data: 1
     - Name: 
       Entry: 1
-      Data: F4
+      Data: F10
     - Name: 
       Entry: 13
       Data: 
@@ -41,76 +41,7 @@ MonoBehaviour:
       Data: 1|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 24
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
+      Data: 1
     - Name: 
       Entry: 1
       Data: I1
@@ -152,7 +83,7 @@ MonoBehaviour:
       Data: 
     - Name: dabloons
       Entry: 3
-      Data: 136
+      Data: 0
     - Name: minerita
       Entry: 3
-      Data: 128
+      Data: 0

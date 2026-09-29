@@ -15,5 +15,9 @@ public class CreatureBoxSO : SerializedScriptableObject
 
     [Title("Contents")]
     [MinValue(1)] public int Count = 5;
+    public MonchiForm Form = MonchiForm.Adult;
+
+    [Title("Pricing")]
+    public bool FreeWhileNoCreatures;
 }
 }

@@ -21,10 +21,8 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  DiscountDays: 112
-  DiscountMonths: 4095
-  RestockMonths: 4095
-  RestockPeriod: 2
+  RestockEveryDays: 3
+  DiscountEveryDays: 7
   furnitureListings:
   - Furniture: {fileID: 11400000, guid: 80f4b68885003194fa09dafad1fd2e30, type: 2}
     Shop:
@@ -124,6 +122,15 @@ MonoBehaviour:
       TypeFilter: 0
       Tags: []
   creatureBoxListings:
+  - Box: {fileID: 11400000, guid: a45874471a59ebf48b50fdc68582b6c2, type: 2}
+    Shop:
+      BasePrice: 50
+      DiscountBase: 0
+      CurrentStock: -1
+      MaxStock: -1
+      TypeFilter: 0
+      Tags:
+      - nuevo
   - Box: {fileID: 11400000, guid: 6053008ed9cb20648b419a8091509803, type: 2}
     Shop:
       BasePrice: 50

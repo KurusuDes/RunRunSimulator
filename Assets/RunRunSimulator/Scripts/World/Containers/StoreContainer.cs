@@ -7,6 +7,8 @@ namespace MoriMonchiSimulator
 
 public class StoreContainer : MoriMochiContainer
 {
+    protected override bool Accepts(MoriMochiAgent agent) => agent.DNA == null || agent.DNA.Form != MonchiForm.Egg;
+
     [SerializeField, Min(0f)]
     [Title("Store Display")]
     private float restoreRate = 25f;

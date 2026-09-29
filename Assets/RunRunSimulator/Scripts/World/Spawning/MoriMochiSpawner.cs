@@ -109,6 +109,7 @@ public class MoriMochiSpawner : MonoBehaviour
         GameEvents.OnRegistryChanged  += OnRegistryChanged;
         GameEvents.OnRegistryReloaded += OnRegistryReloaded;
         GameEvents.OnNavMeshRebaked   += OnNavMeshReady;
+        GameEvents.OnCreatureFormChanged += OnCreatureFormChanged;
     }
 
     private void OnDisable()
@@ -116,6 +117,7 @@ public class MoriMochiSpawner : MonoBehaviour
         GameEvents.OnRegistryChanged  -= OnRegistryChanged;
         GameEvents.OnRegistryReloaded -= OnRegistryReloaded;
         GameEvents.OnNavMeshRebaked   -= OnNavMeshReady;
+        GameEvents.OnCreatureFormChanged -= OnCreatureFormChanged;
         pump               = null;
         prewarmRoutine     = null;
         worldReadyDebounce = null;
@@ -161,6 +163,13 @@ public class MoriMochiSpawner : MonoBehaviour
     }
 
     private void OnRegistryChanged(CreatureRegistrySO registry) => Sync(registry);
+
+    private void OnCreatureFormChanged(CreatureDNA dna)
+    {
+        if (dna == null) return;
+        if (spawned.TryGetValue(dna.UniqueID, out var controller) && controller != null)
+            controller.Rebind(dna, Table, FurDb);
+    }
 
     public void RegisterBirthLaunch(string childId, Vector3 muzzle, Vector3 landing)
     {

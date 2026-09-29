@@ -16,7 +16,7 @@ public static class CreatureAvailability
     }
 
     public static bool CanExplore(CreatureDNA dna, CareGateSO gate) =>
-        IsFree(dna) && IsWellCared(dna, gate);
+        IsFree(dna) && IsWellCared(dna, gate) && dna.Form != MonchiForm.Egg;
 
     public static NeedType? WeakestNeed(CreatureDNA dna, CareGateSO gate)
     {

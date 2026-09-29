@@ -4,6 +4,57 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-09-28/29 (Session 137 — **kit para la artista, ronda 5 cerrada, ciclo de vida huevo → blobim → adulto, partida nueva y bot de apertura** — 7 `.cs` creados, 22 modificados; compila 0 errores; verificado en editor y Play)
+
+**Focus:** ciclo de vida y loop de apertura (Juan lo definió en esta sesión). Diseño en [[Index/30 - Huevos y Slimes (pipeline Blender)]] (pendiente de volcar).
+
+1. **Kit para la artista** en `ArtistKit/` (fuera de git): brief `.md` + `.docx` + 6 láminas adulto/slime/huevo + ambiente.
+2. **Ronda 5 de partes cerrada**: lámina nueva en Unity con referencia (formato guardado en memoria). Ajustes: Abanico con cresta pareja, Cometitas sin el ala de la cabeza (adulto, huevo e ícono regenerados con Blender 5.2; esta PC no tiene 4.5). El resto OK.
+3. **Regla de forma por etapa** (Juan): huevo = solo espalda, blobim = solo cuernos, adulto = todo. Huevo sin la capa `Egg_Scales` (se ve color y patrón) y 15 % más alto.
+4. **Ciclo de vida**: `CreatureDNA.Form` (Adult por defecto, guardados viejos sin migración) + `Explorations`. Nace blobim al eclosionar; 3 exploraciones exitosas (volver vivo de bajada no perdida; dato `CreatureLifeStageTableSO.ExplorationsToEvolve`) → adulto. Blobim no cría y puede morir. `CreatureGrowth` (Lay/Hatch/RecordExploration), evento `GameEvents.OnCreatureFormChanged` → el spawner re-arma el visual. `MonchiSlimeBody`/`MonchiEggBody` arman slime (escala 3,4) y huevo desde el banco; locomoción sin vuelo si el controller no tiene `Fly`.
+5. **Loop de apertura (Juan)**: tienda → PC → llegan 5 huevos → incubadora → eclosionar 3 con la Minerita inicial (quedan 2) → bajada → volver, eclosionar los otros 2 y breeding room con materiales → criar → vender en vitrina (clientes) → mejoras → explorar. Implementado hasta la vuelta: `StarterKitSO`/`StarterKitService` (30 Minerita + incubadora, una vez por partida vía `TutorialStep`), caja `CBE` de 5 huevos gratis mientras no hay criaturas vivas (`CreatureBoxSO.Form/FreeWhileNoCreatures`, `StoreManager.CreatureBoxPrice`), mueble **Incubadora F10** (`IncubatorContainer`: solo huevos, E = eclosiona uno pagando `HatchCostBase` 10), huevos inertes en el mundo.
+6. **Partida nueva**: reinicio completo local + nube (respaldo en `LocalLow/.../backup_S137_20260928_2340`). Hallazgo previo: el guardado viejo tenía las 17 claves con IDs de partes viejos (claves ≠ `UniqueID`), las bajadas no encontraban a nadie.
+7. **Bot `AutoPlayer`** (`Systems/Dev`, se instancia en Play por MCP): pasos 1-9 OK en la primera corrida; frena en el 10.
+
+**Decisiones de Juan:** tamaño del blobim OK; huevo con color y patrón, sin escamas; reinicio completo; el bot se detiene en cada bug, se arregla y se vuelve a jugar.
+
+**Hallazgos del bot pendientes:** (a) **balance**: la primera bajada da 8 Minerita y eclosionar los 2 huevos restantes cuesta 20; propuesta ×5 Minerita por material y breeding room a 20 Minerita (espera decisión de Juan); (b) huevos diminutos en el mundo (falta escala como el slime); (c) `ArenaCastSource` cuenta huevos como vivos disponibles; (d) la arena fuerza `timeScale` 1 (el bot no acelera); (e) `MintCreature` repite timestamp entre crías del mismo lote.
+
+**Siguiente paso:** decisión de balance → arreglar (a)-(c) → volver a correr el bot y agregarle los pasos de breeding room, criar, vitrina/venta y mejoras (las mejoras no existen). Pendientes viejos: ojitos coloreables, rostros y animaciones de eclosión/evolución, volcar esta sesión en `Index/30`/`Index/31`.
+
+**Archivos `.cs` creados (7) · modificados (22):**
+- `Assets/RunRunSimulator/Scripts/Systems/Creatures/CreatureGrowth.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiSlimeBody.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiEggBody.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Containers/IncubatorContainer.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Player/StarterKitSO.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Systems/Player/StarterKitService.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Systems/Dev/AutoPlayer.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Core/GameEvents.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Breeding/CreatureLifeStageTableSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Databases/MonchiVisualBankSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Genetics/CreatureAvailability.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Genetics/CreatureDNA.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Store/CreatureBoxSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Breeding/BreedingController.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Breeding/IncubationService.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Expedition/ExpeditionBridge.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Store/DeliveryBox.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Store/StoreManager.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/StorePanelUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/StoreRows.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/AI/MoriMochiAgent.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Containers/BreedingContainer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Containers/MoriMochiContainer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Containers/StoreContainer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/EggLabAssembler.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/EggLabBuilder.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiLocomotionAnimator.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiVisualizer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Spawning/MoriMochiSpawner.cs` → MODIFICADO
+
+---
+
 **Session:** 2026-09-28 (Session 136 — **laboratorio de huevos con idles y ficha, 20 patrones de piel nuevos, rondas 2-5 de partes contra la referencia y versiones bebé completas** — 7 `.cs` creados, 2 modificados; compila 0 errores; verificado en editor y Play)
 
 **Focus:** [[Index/30 - Huevos y Slimes (pipeline Blender)]] y [[Index/31 - Partes nuevas (referencia Mega Tiny Dragon)]].

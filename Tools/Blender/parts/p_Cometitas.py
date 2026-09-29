@@ -10,6 +10,7 @@ WRIST = Vector((0.08, 0.2))
 TIPS = (Vector((0.46, 0.29)), Vector((0.44, 0.1)), Vector((0.3, -0.03)))
 TAIL = Vector((0.08, -0.05))
 DEPTH = 0.42
+ICON_BASE = [(-0.2, 0.7), (0.4, 0.7)]
 
 
 def quad(a, b, c, n):
@@ -91,13 +92,7 @@ def kite(name, root, arm_dir, fin_dir, size, tips=TIPS, wrist=WRIST, tail=TAIL, 
     return pc.join(parts, name)
 
 
-PENNANT_TIPS = (Vector((0.44, 0.34)), Vector((0.46, 0.16)), Vector((0.34, 0.02)))
-
-
 def build(arm):
-    top, _ = pc.head_top(0.0, -0.12)
-    pen = kite("Back_Cometitas_top", top + Vector((0, 0.0, 0.02)), (0, 0.3, 1), (0, -1, 0.35), 1.3,
-               tips=PENNANT_TIPS, tail=Vector((0.12, 0.06)), bend=0.0)
     side = []
     for s in (1, -1):
         p, nrm = pc.surface_point((3.0 * s, 0.02, 0.76), (-s, 0, 0))
@@ -105,7 +100,7 @@ def build(arm):
         o = kite("Back_Cometitas_%s" % ("L" if s > 0 else "R"), root, (0.4 * s, 0.55, 0.8),
                  (0.2 * s, 1.0, -0.15), 1.3, bend=-0.3 * s)
         side.append(o)
-    obj = pc.join([pen] + side, "Back_Cometitas")
+    obj = pc.join(side, "Back_Cometitas")
     pc.shade_smooth(obj, 70)
     pc.skin_like(obj, arm, "Back")
     return [obj]

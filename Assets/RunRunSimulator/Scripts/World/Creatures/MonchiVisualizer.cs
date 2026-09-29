@@ -18,8 +18,9 @@ public class MonchiVisualizer : MonoBehaviour
     private GameObject bodyInstance;
     private Animator animator;
     private SkinnedMeshRenderer faceRenderer;
-    private readonly List<SkinnedMeshRenderer> tintRenderers = new();
+    private readonly List<Renderer> tintRenderers = new();
     private CreatureDNA currentDna;
+    private MonchiForm assembledForm;
     private MonchiMood currentMood = MonchiMood.Neutral;
     private bool rimOverride;
     private Color rimOverrideColor;
@@ -54,6 +55,7 @@ public class MonchiVisualizer : MonoBehaviour
         animator = null;
         faceRenderer = null;
         tintRenderers.Clear();
+        assembledForm = dna.Form;
 
         if (bank == null)
         {
@@ -61,15 +63,9 @@ public class MonchiVisualizer : MonoBehaviour
             return;
         }
 
-        var prefab = bank.GetBody(dna.BodyShapeID);
-        if (prefab == null)
-        {
-            Debug.LogWarning($"[MonchiVisualizer] No body prefab for BodyShapeID '{dna.BodyShapeID}'.");
+        var controller = InstantiateBody(dna);
+        if (bodyInstance == null)
             return;
-        }
-
-        bodyInstance = Object.Instantiate(prefab, Root);
-        bodyInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
         foreach (var childTransform in bodyInstance.GetComponentsInChildren<Transform>(true))
             childTransform.gameObject.layer = Root.gameObject.layer;
@@ -77,24 +73,75 @@ public class MonchiVisualizer : MonoBehaviour
         animator = bodyInstance.GetComponent<Animator>();
         if (animator == null)
             animator = bodyInstance.AddComponent<Animator>();
-        if (bank.AnimatorController != null)
-            animator.runtimeAnimatorController = bank.AnimatorController;
+        if (controller != null)
+            animator.runtimeAnimatorController = controller;
 
-        GraftPart(dna.HornID, "Horn");
-        GraftPart(dna.BackID, "Back");
-        GraftPart(dna.WingID, "Wing");
-
-        foreach (var renderer in bodyInstance.GetComponentsInChildren<SkinnedMeshRenderer>(false))
+        if (dna.Form != MonchiForm.Adult)
         {
-            if (renderer.gameObject.name == "Face")
-                faceRenderer = renderer;
-            else
-                tintRenderers.Add(renderer);
+            foreach (var renderer in bodyInstance.GetComponentsInChildren<Renderer>(false))
+            {
+                if (renderer.gameObject.name == "Face" && renderer is SkinnedMeshRenderer skinned)
+                    faceRenderer = skinned;
+                else
+                    tintRenderers.Add(renderer);
+            }
+        }
+        else
+        {
+            GraftPart(dna.HornID, "Horn");
+            GraftPart(dna.BackID, "Back");
+            GraftPart(dna.WingID, "Wing");
+
+            foreach (var renderer in bodyInstance.GetComponentsInChildren<SkinnedMeshRenderer>(false))
+            {
+                if (renderer.gameObject.name == "Face")
+                    faceRenderer = renderer;
+                else
+                    tintRenderers.Add(renderer);
+            }
         }
 
         currentDna = dna;
         ApplyLook();
         SetMood(currentMood);
+    }
+
+    private RuntimeAnimatorController InstantiateBody(CreatureDNA dna)
+    {
+        if (dna.Form == MonchiForm.Slime)
+        {
+            bodyInstance = MonchiSlimeBody.Build(dna, bank, Root);
+            if (bodyInstance == null)
+            {
+                Debug.LogWarning($"[MonchiVisualizer] No slime body for BodyShapeID '{dna.BodyShapeID}'.");
+                return null;
+            }
+
+            return bank.SlimeAnimatorController;
+        }
+
+        if (dna.Form == MonchiForm.Egg)
+        {
+            bodyInstance = MonchiEggBody.Build(dna, bank, Root);
+            if (bodyInstance == null)
+            {
+                Debug.LogWarning($"[MonchiVisualizer] No egg body for BodyShapeID '{dna.BodyShapeID}'.");
+                return null;
+            }
+
+            return bank.EggAnimatorController;
+        }
+
+        var prefab = bank.GetBody(dna.BodyShapeID);
+        if (prefab == null)
+        {
+            Debug.LogWarning($"[MonchiVisualizer] No body prefab for BodyShapeID '{dna.BodyShapeID}'.");
+            return null;
+        }
+
+        bodyInstance = Object.Instantiate(prefab, Root);
+        bodyInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        return bank.AnimatorController;
     }
 
     private void GraftPart(string partId, string prefix)
@@ -116,7 +163,7 @@ public class MonchiVisualizer : MonoBehaviour
     public void RefreshLook(CreatureDNA dna)
     {
         currentDna = dna;
-        if (bodyInstance == null)
+        if (bodyInstance == null || dna.Form != assembledForm)
         {
             Assemble(dna);
             return;
@@ -176,6 +223,8 @@ public class MonchiVisualizer : MonoBehaviour
         foreach (var renderer in tintRenderers)
         {
             var partName = renderer.gameObject.name;
+            if (partName.StartsWith("Egg_"))
+                partName = partName.Substring(4);
             if (furMat != null)
                 renderer.sharedMaterial = furMat;
 

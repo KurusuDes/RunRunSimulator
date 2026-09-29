@@ -105,7 +105,33 @@ public class ExpeditionBridge : MonoBehaviour
             }
         }
 
+        int evolved = 0;
+        var evolvedDnas = new List<CreatureDNA>();
+
+        if (registry != null && !result.Lost && result.TeamIds != null)
+        {
+            int toEvolve = BreedingController.Instance != null && BreedingController.Instance.LifeStageTable != null
+                ? BreedingController.Instance.LifeStageTable.ExplorationsToEvolve
+                : 3;
+
+            foreach (var id in result.TeamIds)
+            {
+                if (!registry.TryGet(id, out var dna) || dna == null || dna.IsDead) continue;
+                if (result.FallenIds != null && result.FallenIds.Contains(id)) continue;
+
+                bool wasSlime = dna.Form == MonchiForm.Slime;
+                if (CreatureGrowth.RecordExploration(dna, toEvolve))
+                {
+                    evolved++;
+                    evolvedDnas.Add(dna);
+                }
+                if (wasSlime) touched = true;
+            }
+        }
+
         if (touched) GameEvents.RegistryChanged(registry);
+
+        foreach (var dna in evolvedDnas) GameEvents.CreatureFormChanged(dna);
 
         GameEvents.ExpeditionReturned(new ExpeditionReturn
         {
@@ -119,7 +145,7 @@ public class ExpeditionBridge : MonoBehaviour
             Lost = result.Lost
         });
 
-        Debug.Log($"[ExpeditionBridge] run {result.Seed}: {result.Floors} pisos, perdida={result.Lost} → +{material} material, {result.Fallen} caídas");
+        Debug.Log($"[ExpeditionBridge] run {result.Seed}: {result.Floors} pisos, perdida={result.Lost} → +{material} material, {result.Fallen} caídas, {evolved} evolucionan");
     }
 }
 }

@@ -1098,3 +1098,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 2422a2d2cfdda3044bf821bc6f776c4b, type: 2}
   - {fileID: 2100000, guid: a899b1c03d10f0546a262049c1a1bf2b, type: 2}
   moodSet: {fileID: 11400000, guid: 33539b5bb470aa644baa22775cd48a7e, type: 2}
+  slimeModel: {fileID: 919132149155446097, guid: 9c71b2187f1fbc6429d0bd99a42711b9, type: 3}
+  slimeAnimatorController: {fileID: 9100000, guid: 7c6a8f05229b7e54c9a23633402f36b0, type: 2}
+  slimeScale: 3.4
+  eggModel: {fileID: 919132149155446097, guid: fa7357ef6217c2e4bb28f01c26669555, type: 3}
+  eggAnimatorController: {fileID: 9100000, guid: de66ac216c1950d46bbe8188de78bbbe, type: 2}
+  eggHeight: 1.15

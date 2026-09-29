@@ -98,7 +98,7 @@ public class StoreManager : MonoBehaviour
         var inventory = GameManager.CurrentInventory;
         if (inventory == null) { Debug.LogError("[StoreManager] No PlayerInventory available."); return BuyResult.OutOfStock; }
 
-        int price = catalog.FinalPrice(shop, Today);
+        int price = CreatureBoxPrice(box, shop);
         if (price > 0 && !Wallet.TrySpend(Currency.Dabloons, price, "store")) return BuyResult.InsufficientFunds;
 
         shop.TryConsume();
@@ -110,6 +110,25 @@ public class StoreManager : MonoBehaviour
         if (price <= 0) GameEvents.InventoryChanged(inventory);
         Debug.Log($"[StoreManager] Ordered creature box '{box.DisplayName}' ({box.Id}) for {price} Dabloons.");
         return BuyResult.Success;
+    }
+
+    public int CreatureBoxPrice(CreatureBoxSO box, StoreShopData shop)
+    {
+        if (box != null && box.FreeWhileNoCreatures)
+        {
+            var registry = GameManager.Instance?.Registry;
+            if (registry == null) return catalog.FinalPrice(shop, Today);
+
+            bool hasLivingCreature = false;
+            foreach (var dna in registry.GetAll().Values)
+            {
+                if (dna.IsDead || dna.IsSold) continue;
+                hasLivingCreature = true;
+                break;
+            }
+            if (!hasLivingCreature) return 0;
+        }
+        return catalog.FinalPrice(shop, Today);
     }
 
     private DeliveryBox SpawnDeliveryBox(int price, StoreShopData shop)

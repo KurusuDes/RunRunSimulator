@@ -8,6 +8,8 @@ namespace MoriMonchiSimulator
 
 public class BreedingContainer : MoriMochiContainer, IInteractable
 {
+    protected override bool Accepts(MoriMochiAgent agent) => agent.DNA == null || agent.DNA.Form != MonchiForm.Egg;
+
     [BoxGroup("Breeding")]
     [SerializeField, Range(0f, 1f)] private float diceChance = 0.5f;
 
@@ -298,7 +300,7 @@ public class BreedingContainer : MoriMochiContainer, IInteractable
     {
         var table = BreedingController.Instance != null ? BreedingController.Instance.LifeStageTable : null;
         int today = GameClock.Instance != null ? GameClock.Instance.Day : 1;
-        return table == null || table.GetStage(d.AgeDays(today)) >= LifeStage.Adult;
+        return (table == null || table.GetStage(d.AgeDays(today)) >= LifeStage.Adult) && d.Form == MonchiForm.Adult;
     }
 
     public void Interact()

@@ -41,6 +41,9 @@ public static class GameEvents
     public static event Action<CreatureDNA> OnCreatureDeparted;
     public static void CreatureDeparted(CreatureDNA dna) => OnCreatureDeparted?.Invoke(dna);
 
+    public static event Action<CreatureDNA> OnCreatureFormChanged;
+    public static void CreatureFormChanged(CreatureDNA dna) => OnCreatureFormChanged?.Invoke(dna);
+
     public static event Action<WorldStateSO> OnWorldStateChanged;
     public static void WorldStateChanged(WorldStateSO state) => OnWorldStateChanged?.Invoke(state);
 

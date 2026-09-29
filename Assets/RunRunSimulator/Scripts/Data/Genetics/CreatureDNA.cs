@@ -54,6 +54,9 @@ public class CreatureDNA
 
     public bool IsDead = false;
 
+    public MonchiForm Form        = MonchiForm.Adult;
+    public int         Explorations = 0;
+
     public NeedsState Needs = new NeedsState();
 
     public BusyReason BusyState = BusyReason.None;

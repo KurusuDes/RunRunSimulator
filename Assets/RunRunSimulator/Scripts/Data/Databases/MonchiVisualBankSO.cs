@@ -30,8 +30,22 @@ public class MonchiVisualBankSO : SerializedScriptableObject
     [SerializeField] private List<Material> gemMaterials = new List<Material>();
     [SerializeField] private MonchiMoodSetSO moodSet;
 
+    [SerializeField] private GameObject slimeModel;
+    [SerializeField] private RuntimeAnimatorController slimeAnimatorController;
+    [SerializeField] private float slimeScale = 3.4f;
+
+    [SerializeField] private GameObject eggModel;
+    [SerializeField] private RuntimeAnimatorController eggAnimatorController;
+    [SerializeField] private float eggHeight = 1.15f;
+
     public RuntimeAnimatorController AnimatorController => animatorController;
     public MonchiMoodSetSO MoodSet => moodSet;
+    public GameObject SlimeModel => slimeModel;
+    public RuntimeAnimatorController SlimeAnimatorController => slimeAnimatorController;
+    public float SlimeScale => slimeScale;
+    public GameObject EggModel => eggModel;
+    public RuntimeAnimatorController EggAnimatorController => eggAnimatorController;
+    public float EggHeight => eggHeight;
 
     public GameObject GetBody(string bodyShapeId)
     {

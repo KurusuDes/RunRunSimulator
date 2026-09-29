@@ -12,6 +12,7 @@ public static class StoreRows
         public string          Name;
         public StoreShopData   Shop;
         public Func<BuyResult> Buy;
+        public int?            PriceOverride;
     }
 
     public static string TabLabel(Tab tab) => tab switch
@@ -55,9 +56,10 @@ public static class StoreRows
                 var capturedShop = listing.Shop;
                 rows.Add(new Row
                 {
-                    Name = NameOf(box.DisplayName, box.Id),
-                    Shop = capturedShop,
-                    Buy  = () => store.BuyCreatureBox(capturedBox, capturedShop),
+                    Name          = NameOf(box.DisplayName, box.Id),
+                    Shop          = capturedShop,
+                    Buy           = () => store.BuyCreatureBox(capturedBox, capturedShop),
+                    PriceOverride = store.CreatureBoxPrice(capturedBox, capturedShop),
                 });
             }
             return;

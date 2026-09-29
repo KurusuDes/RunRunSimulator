@@ -19,14 +19,15 @@ namespace MoriMonchiSimulator
                 ? bodyPrefab.name[bodyPrefab.name.Length - 1]
                 : 'A';
 
-            ApplyPrefixVariant(instance.transform, "Egg_Horn_", "Egg_Horn_" + bodyLetter);
+            ApplyPrefixVariant(instance.transform, "Egg_Horn_", null);
             ApplyPrefixVariant(instance.transform, "Egg_Back_", bodyLetter == 'D' ? "Egg_Back_B" : "Egg_Back_A");
 
             if (bank != null)
-            {
-                GraftEggPart(instance.transform, bank.GetPartMesh(dna.HornID, MonchiForm.Egg), "Egg_Horn_");
                 GraftEggPart(instance.transform, bank.GetPartMesh(dna.BackID, MonchiForm.Egg), "Egg_Back_");
-            }
+
+            var scales = FindChildByName(instance.transform, "Egg_Scales");
+            if (scales != null)
+                scales.gameObject.SetActive(false);
 
             ColorGenetics.BuildHarmony(dna.BaseColor, out var wing, out var accent);
 
@@ -35,9 +36,6 @@ namespace MoriMonchiSimulator
 
             foreach (var renderer in instance.GetComponentsInChildren<Renderer>(false))
             {
-                if (renderer.gameObject.name == "Egg_Scales")
-                    continue;
-
                 if (material != null)
                     renderer.sharedMaterial = material;
 

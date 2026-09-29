@@ -30,12 +30,14 @@ public class DeliveryBox : MonoBehaviour, IInteractable
             {
                 var dna = GameManager.Instance.MintCreature();
                 if (dna == null) continue;
+                if (creatureBox.Form == MonchiForm.Egg) CreatureGrowth.Lay(dna);
                 MoriMochiSpawner.Instance?.RegisterBirthLaunch(dna.UniqueID, transform.position + Vector3.up * 0.5f);
                 minted++;
             }
 
             if (minted > 0) GameEvents.RegistryChanged(registry);
-            Debug.Log($"[DeliveryBox] Creature box '{creatureBox.Id}' opened: {minted} MoriMonchis.");
+            string kind = creatureBox.Form == MonchiForm.Egg ? "huevos" : "MoriMonchis";
+            Debug.Log($"[DeliveryBox] Creature box '{creatureBox.Id}' opened: {minted} {kind}.");
 
             Destroy(gameObject);
             return;

@@ -137,6 +137,12 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
         if (forceRagdoll && ctx.IsNavMeshControlled()) { brain.ReleaseStation(); physics.EnterRagdoll(); }
         physics.RecoverIfStuckOffMesh();
 
+        if (IsEgg && ctx.State != AgentState.Thrown && ctx.State != AgentState.Recovering && ctx.State != AgentState.Carried)
+        {
+            ctx.SetStopped(true);
+            return;
+        }
+
         brain.TickAlways(Time.deltaTime);
         senses.Tick();
         ctx.ApplyGaitSpeed(expedition.Carried > 0);
@@ -173,6 +179,7 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
         ? ctx.Rb.linearVelocity
         : (ctx.Agent != null && ctx.Agent.enabled ? ctx.Agent.velocity : Vector3.zero);
     public CreatureDNA DNA => ctx.Dna;
+    private bool IsEgg => ctx.Dna != null && ctx.Dna.Form == MonchiForm.Egg;
 
     public bool IsPenned => ctx.CurrentContainer != null;
 

@@ -21,6 +21,7 @@ namespace MoriMonchiSimulator
         [SerializeField] private int columns = 6;
         [SerializeField] private float spacing = 0.55f;
         [SerializeField] private float faceYaw = 180f;
+        [MinValue(0.5f), SerializeField] private float eggHeight = 1.15f;
 
         private readonly List<EggLabEntry> entries = new List<EggLabEntry>();
         private CreatureRegistrySO registry;
@@ -97,6 +98,7 @@ namespace MoriMonchiSimulator
                 };
 
                 var root = EggLabAssembler.Build(child, visualBank, furDatabase, eggModel, eggController, eggsRoot);
+                root.transform.localScale = Vector3.Scale(root.transform.localScale, new Vector3(1f, eggHeight, 1f));
                 float x = (i % columns - (columns - 1) / 2f) * spacing;
                 float z = -(i / columns) * spacing;
                 root.transform.SetLocalPositionAndRotation(new Vector3(x, 0f, z), Quaternion.Euler(0f, faceYaw, 0f));
