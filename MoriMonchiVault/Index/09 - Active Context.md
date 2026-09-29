@@ -17,9 +17,12 @@ tags: [index, core]
 
 **Hallazgos para el feedback de Juan (sin tocar):** (1) bajada todo-o-nada: ~50 % perdidas, perder el piso da 0 Minerita aunque se junte material (10 vs 12 = nada); blobims contra rivales adultos; la primera pareja adulta costó 4-13 bajadas. (2) La grilla deja poner muebles sobre la caja/fila o en la trastienda (sin acceso de clientes) sin aviso. (3) La pareja vuelve a criar sola apenas eclosiona. (4) Primera venta de un blobim: 24 dabloons.
 
+7. **Tráiler de prueba (15 s, a Juan le gustó, "en un futuro podemos hacer nuestros tráilers"):** `TrailerCameraRig` (dev: órbita/dolly con evitar obstáculos y autofoco del DOF) + Unity Recorder por MCP (tag `TrailerCam`; secuencia **JPG**, el MP4 del Recorder cae a 1 fps; Unity en primer plano y sin llamadas MCP mientras graba, cada llamada congela un frame) + montaje ffmpeg + música sintetizada + logo 3D Blender. Scripts en `Tools/Trailer/` (`synth.py`, `logo.py`, `make_trailer.sh`). Hallazgo: `Time.fixedDeltaTime` y el greybox de la tienda (solo sirve en primeros planos con desenfoque).
+
 **Siguiente paso:** feedback de Juan sobre el loop → cambios a cómo impactan las partes en el gameplay. Pendientes viejos: ojitos coloreables, rostros y animaciones de eclosión/evolución, volcar S137-S138 en `Index/30`/`Index/31`.
 
-**Archivos `.cs` creados (4) · modificados (18):**
+**Archivos `.cs` creados (5) · modificados (18):**
+- `Assets/RunRunSimulator/Scripts/Systems/Dev/TrailerCameraRig.cs` → NUEVO
 - `Assets/RunRunSimulator/Scripts/Data/Store/ShopUpgradeSO.cs` → NUEVO
 - `Assets/RunRunSimulator/Scripts/Systems/Dev/AutoPlayerLoopSteps.cs` → NUEVO
 - `Assets/RunRunSimulator/Scripts/Systems/Dev/AutoPlayerOpeningSteps.cs` → NUEVO
