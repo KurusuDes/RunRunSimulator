@@ -4,6 +4,28 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-09-29 (Session 139 — **rostros: set hembra con pestañitas y transición animada entre caras de ánimo** — 1 `.cs` creado, 3 modificados + 1 shader; compila 0 errores; verificado en Play en `GameScene` por sonda de `_FaceT`)
+
+**Focus:** pendiente viejo de rostros y transiciones (el feedback del loop y el theorycrafting quedan para después, pedido de Juan).
+
+1. **Exploración de estilos (scratchpad, sin assets):** lámina del set actual (12 ánimos en 14 PNG de 512 con alfa; solo ojos y cejas, la boca viene en el modelado), estilo Tuerto con X (A gruesa ✅ "fiel al diseño simplista"; la X no expresa, choca con KO) y 8 estilos en neutral renderizados sobre `MonchiBody_A` en una preview scene (`execute_code`: `NewPreviewScene` + `Camera.Render` + `MonchiTint.Fill`). A Juan le gustan todos; decide que un solo set de emociones para todos alcanza y que importa más la transición. Generadores PIL guardados en `Tools/Faces/` (`styles.py`, `tuerto.py`, `fem_sheet.py`, `trans.py`).
+2. **Regla de Juan ⭐: hembra = mismo set + pestañitas.** Pestañas solo en ojos "reales" (Neutral, Triste, Triste b, Enojado, Enojado b, Asustado); Feliz con colita de delineado; Dormido con pestañas colgando; sin pestañas en Dolor, KO, Enfermo, Mareado, Amoroso, Emocionado. Assets: `MonchiFaceF_{03,05,07,08,10,11,15,24}` (png + mat) y `MonchiMoodSetFemale.asset`; `MonchiVisualBankSO.MoodSetFor(Gender)`.
+3. **Transición de cara:** material único `MonchiFace.mat` con shader `MoriMonchi/MonchiFace` (`_MainTex`/`_PrevTex`/`_FaceT`/`_FaceMode`; banda de ojos v 0,43-0,707: parpadeo = aplastar vertical, pop = escalar por ojo con rebote; rubor en fundido). `MonchiVisualizer.SetMood` escribe la textura del material del set por MPB y dispara `MonchiFaceTransition` (nuevo, en la raíz de `MorimonchiAgent`) → `Feedbacks/OnMoodBlink` (0,2 s) y `OnMoodPop` (0,36 s), MMF_ShaderController + ShaderController sobre `_FaceT`. `MonchiMoodSetSO.popMoods` = Emocionado, Amoroso, KO. Sin `faceTransition` (fotomatón, tornamesa) = cambio instantáneo. Comparadas en GIF: parpadeo, fundido (se ve gris) y pop.
+4. **Quirk:** el `ShaderController` de Feel con `UseMaterialPropertyBlocks` escribe el bloque **por material (índice 0)**; el visualizador tiene que usar `Get/SetPropertyBlock(mpb, 0)` o no comparten valores (la cara quedaba congelada en el ánimo anterior).
+
+**Decidido para después (Juan ✅):** eclosión y evolución baratas con **poof**: el huevo se sacude (clips existentes) → destello + nube con cáscara tapa el cambio de modelo → el blobim sale con rebote; evolución igual con brillo de rim antes. Requiere retrasar el re-armado del visual (hoy `OnCreatureFormChanged` re-arma al instante).
+
+**Siguiente paso:** poof de eclosión/evolución; después feedback de Juan sobre el loop y theorycrafting de partes. Opcional: estilos por plantilla (tuerto y otros) sobre el set general. El Play volvió a escribir valores de runtime en `New Creature Registry SO.asset` y `PlayerInventory.asset` (van en el commit, quirk conocido).
+
+**Archivos `.cs` creados (1) · modificados (3):**
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiFaceTransition.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiVisualizer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/MonchiMoodSetSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Databases/MonchiVisualBankSO.cs` → MODIFICADO
+- (shader) `Assets/RunRunSimulator/Shaders/MonchiFace.shader` → NUEVO
+
+---
+
 **Session:** 2026-09-29 (Session 138 — **loop de apertura completo de punta a punta: balance, tienda por moneda, mejoras mínimas, bot tanda 2 y 5 bugs de estructura** — 4 `.cs` creados, 18 modificados; compila 0 errores; verificado en Play con el bot hasta `FIN tanda 2`)
 
 **Focus:** Juan pidió "toda la estructura lista y funcionando" antes de cambiar cómo impactan las partes al gameplay; balance delegado ("hacé los balanceos necesarios").

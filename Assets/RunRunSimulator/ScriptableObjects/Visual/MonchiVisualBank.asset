@@ -1098,6 +1098,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 2422a2d2cfdda3044bf821bc6f776c4b, type: 2}
   - {fileID: 2100000, guid: a899b1c03d10f0546a262049c1a1bf2b, type: 2}
   moodSet: {fileID: 11400000, guid: 33539b5bb470aa644baa22775cd48a7e, type: 2}
+  moodSetFemale: {fileID: 11400000, guid: 30db7b35fc2e6cb46940e92f4c7c716f, type: 2}
+  faceMaterial: {fileID: 2100000, guid: 0c53b371a2dd74e4992f19c54f1f4cee, type: 2}
   slimeModel: {fileID: 919132149155446097, guid: 9c71b2187f1fbc6429d0bd99a42711b9, type: 3}
   slimeAnimatorController: {fileID: 9100000, guid: 7c6a8f05229b7e54c9a23633402f36b0, type: 2}
   slimeScale: 3.4

@@ -13,6 +13,14 @@ public class MonchiVisualizer : MonoBehaviour
     private static readonly int RimInsideMaskId = Shader.PropertyToID("_RimLight_InsideMask");
     private static readonly int RimLightColorSwitchId = Shader.PropertyToID("_Is_LightColor_RimLight");
 
+    private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+    private static readonly int PrevTexId = Shader.PropertyToID("_PrevTex");
+    private static readonly int FaceTId = Shader.PropertyToID("_FaceT");
+    private static readonly int FaceModeId = Shader.PropertyToID("_FaceMode");
+
+    [SerializeField] private MonchiFaceTransition faceTransition;
+
+    private Texture currentFaceTexture;
     private MonchiVisualBankSO bank;
     private FurTypeDatabaseSO furDatabase;
     private GameObject bodyInstance;
@@ -54,6 +62,7 @@ public class MonchiVisualizer : MonoBehaviour
         bodyInstance = null;
         animator = null;
         faceRenderer = null;
+        currentFaceTexture = null;
         tintRenderers.Clear();
         assembledForm = dna.Form;
 
@@ -99,6 +108,13 @@ public class MonchiVisualizer : MonoBehaviour
                 else
                     tintRenderers.Add(renderer);
             }
+        }
+
+        if (faceRenderer != null && bank.FaceMaterial != null)
+        {
+            faceRenderer.sharedMaterial = bank.FaceMaterial;
+            if (faceTransition != null)
+                faceTransition.Bind(faceRenderer);
         }
 
         currentDna = dna;
@@ -192,11 +208,38 @@ public class MonchiVisualizer : MonoBehaviour
     public void SetMood(MonchiMood mood)
     {
         currentMood = mood;
-        if (faceRenderer == null || bank?.MoodSet == null) return;
+        if (faceRenderer == null || bank == null) return;
 
-        var face = bank.MoodSet.GetFace(mood);
-        if (face != null)
+        var set = bank.MoodSetFor(currentDna != null ? currentDna.Gender : CreatureGender.Unknown);
+        if (set == null) return;
+
+        var face = set.GetFace(mood);
+        if (face == null) return;
+
+        if (bank.FaceMaterial == null)
+        {
             faceRenderer.sharedMaterial = face;
+            return;
+        }
+
+        var tex = face.mainTexture;
+        if (tex == currentFaceTexture) return;
+
+        var prev = currentFaceTexture != null ? currentFaceTexture : tex;
+        currentFaceTexture = tex;
+        bool pop = set.IsPop(mood);
+        bool animate = faceTransition != null && faceTransition.isActiveAndEnabled && prev != tex;
+
+        var mpb = new MaterialPropertyBlock();
+        faceRenderer.GetPropertyBlock(mpb, 0);
+        mpb.SetTexture(MainTexId, tex);
+        mpb.SetTexture(PrevTexId, prev);
+        mpb.SetFloat(FaceModeId, pop ? 1f : 0f);
+        mpb.SetFloat(FaceTId, animate ? 0f : 1f);
+        faceRenderer.SetPropertyBlock(mpb, 0);
+
+        if (animate)
+            faceTransition.Play(pop);
     }
 
     private void ApplyLook()

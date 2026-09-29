@@ -6,7 +6,7 @@ tags: [script, visual, component]
 
 **Ruta:** `World/Creatures/MonchiVisualizer.cs`
 
-**Responsabilidad:** Visualizador del modelo Suriyun. Instancia body FBX por BodyShapeID (adulto) o por Form (Egg/Slime usando builders estáticos). Mapea renderers (Face, Wings, Arms, etc.), aplica tintado por ColorGenetics.BuildHarmony. **S61:** `Assemble()` ahora hace `SetActive(false)` a los hijos viejos antes de `Object.Destroy()` — Destroy es diferido a fin de frame y el fotomatón renderiza en el mismo frame, causando superposición del cuerpo viejo en headshots batch. **S110:** Nuevos métodos `SetRimOverride()` y `ClearRimOverride()` para controlar rim light genético (anulable con color/power/mask de rival). **S115:** Assemble() propaga la capa del Root (`modelRoot.gameObject.layer`) a todos los hijos del body instanciado; esto permite la pasada de renderer URP (RenderObjects de `PC_Renderer` con tags CreatureBodyMask/CreatureBodySilhouette sobre capa `CreatureBody`) que filtra por esa capa para dibujo de silueta/stencil. **S134:** Modular part assembly — Assemble ahora carga partes prefabricadas (HornID, BackID, WingID) desde el banco, desactiva renderers baked de esos prefijos, e injerta partes FBX con su propio Armature usando MonchiPartGrafter. **S136:** ApplyLook() refactorizado — tintado centralizado via MonchiTint.ColorFor() (determinismo nombre renderer) + MonchiTint.Fill() (paleta MPB). **S137:** Assemble() ahora soporta Form.Egg y Form.Slime usando MonchiEggBody/MonchiSlimeBody builders estáticos; adicionalmente suscribe a GameEvents.OnCreatureFormChanged para re-armar cuando forma cambia (Egg→Slime→Adult).
+**Responsabilidad:** Visualizador del modelo Suriyun. Instancia body FBX por BodyShapeID (adulto) o por Form (Egg/Slime usando builders estáticos). Mapea renderers (Face, Wings, Arms, etc.), aplica tintado por ColorGenetics.BuildHarmony. **S61:** `Assemble()` ahora hace `SetActive(false)` a los hijos viejos antes de `Object.Destroy()` — Destroy es diferido a fin de frame y el fotomatón renderiza en el mismo frame, causando superposición del cuerpo viejo en headshots batch. **S110:** Nuevos métodos `SetRimOverride()` y `ClearRimOverride()` para controlar rim light genético (anulable con color/power/mask de rival). **S115:** Assemble() propaga la capa del Root (`modelRoot.gameObject.layer`) a todos los hijos del body instanciado; esto permite la pasada de renderer URP (RenderObjects de `PC_Renderer` con tags CreatureBodyMask/CreatureBodySilhouette sobre capa `CreatureBody`) que filtra por esa capa para dibujo de silueta/stencil. **S134:** Modular part assembly — Assemble ahora carga partes prefabricadas (HornID, BackID, WingID) desde el banco, desactiva renderers baked de esos prefijos, e injerta partes FBX con su propio Armature usando MonchiPartGrafter. **S136:** ApplyLook() refactorizado — tintado centralizado via MonchiTint.ColorFor() (determinismo nombre renderer) + MonchiTint.Fill() (paleta MPB). **S137:** Assemble() ahora soporta Form.Egg y Form.Slime usando MonchiEggBody/MonchiSlimeBody builders estáticos; adicionalmente suscribe a GameEvents.OnCreatureFormChanged para re-armar cuando forma cambia (Egg→Slime→Adult). **S139:** SetMood() refactorizado — material único (bank.FaceMaterial, shader MoriMonchi/MonchiFace) con MPB write (_MainTex/_PrevTex/_FaceT/_FaceMode índice material 0); obtiene set de ánimo por género via bank.MoodSetFor(Gender); integra MonchiFaceTransition para feedback sincronizado (blink/pop).
 
 ## Métodos Públicos
 
@@ -16,7 +16,7 @@ tags: [script, visual, component]
 | `SetFurDatabase(FurTypeDatabaseSO)` | Asigna database de pelajes |
 | `Assemble(CreatureDNA dna)` | **S137 MODIFICADO:** Instancia body según Form (Egg/Slime usan builders, Adult usa prefab directo), grafia partes modulares (HornID/BackID/WingID) si adulto y existen en banco, mapea renderers, aplica look; desactiva hijos viejos antes de destruir; propaga capa Root a todos los hijos. Flujo: Instancia body según Form → SetActive(false)/Destroy hijos previos → PropagaCapa → GraftPart por slot (si adulto) → Recorre SkinnedMeshRenderers activos → ApplyLook → SetMood |
 | `RefreshLook(CreatureDNA dna)` | Retinta sin re-instanciar; llama Assemble si bodyInstance es null o Form cambió |
-| `SetMood(MonchiMood)` | Swapea material Face |
+| `SetMood(MonchiMood)` | **S139 MODIFICADO:** Material único (bank.FaceMaterial) + MPB write (_MainTex/_PrevTex/_FaceT/_FaceMode idx 0); interpola _FaceT 0→1 vía shader; llama bank.MoodSetFor(gender) para obtener set correcto; sincroniza MonchiFaceTransition feedback (blink/pop) si está activo |
 | `SetRimOverride(Color color, float power, float insideMask)` | **S110 NUEVO** anula rim light genético con color/power/mask de rival |
 | `ClearRimOverride()` | **S110 NUEVO** restaura rim light genético |
 
@@ -31,6 +31,8 @@ tags: [script, visual, component]
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
+| `modelRoot` | `Transform` | Raíz del modelo (si null, usa transform) |
+| `faceTransition` | `MonchiFaceTransition` | **S139 NUEVO** Coordinador de feedback blink/pop |
 | `bank` | `MonchiVisualBankSO` | Visual bank |
 | `furDatabase` | `FurTypeDatabaseSO` | Database de pelajes |
 | `bodyInstance` | `GameObject` | Instancia del body prefab |
@@ -40,6 +42,7 @@ tags: [script, visual, component]
 | `currentDna` | `CreatureDNA` | DNA vigente |
 | `assembledForm` | `MonchiForm` | Forma del modelo instanciado (para detectar cambios en RefreshLook, S137) |
 | `currentMood` | `MonchiMood` | Mood vigente |
+| `currentFaceTexture` | `Texture` | **S139 NUEVO** Textura de cara actual (para detectar cambios) |
 | `rimOverride` | `bool` | **S110 NUEVO** si se aplica override de rim |
 | `rimOverrideColor` | `Color` | **S110 NUEVO** color override |
 | `rimOverridePower` | `float` | **S110 NUEVO** power override |
@@ -61,8 +64,9 @@ tags: [script, visual, component]
    - `GraftPart(dna.BackID, "Back")` → desactiva renderers "Back*", injerta si partPrefab existe
    - `GraftPart(dna.WingID, "Wing")` → desactiva renderers "Wing*", injerta si partPrefab existe
 8. **Recorre renderers activos:** busca Face, acumula resto en tintRenderers (solo componentes activos, ignora desactivados)
-9. **Aplica look:** tintado de colores genéticos + override si existe (**S136 MODIFICADO:** usa MonchiTint)
-10. **Aplica mood:** SetMood(currentMood) para sincronizar facial material
+9. **Vincula MonchiFaceTransition (S139):** si faceRenderer != null y bank.FaceMaterial != null y faceTransition != null, llama `faceTransition.Bind(faceRenderer)` para vincular ShaderControllers
+10. **Aplica look:** tintado de colores genéticos + override si existe (**S136 MODIFICADO:** usa MonchiTint)
+11. **Aplica mood:** SetMood(currentMood) para sincronizar facial material
 
 ## Suscripción a OnCreatureFormChanged (S137 NUEVO)
 
@@ -148,6 +152,54 @@ private void GraftPart(string partId, string prefix)
 - Posibilidad de no grafia (si partId empty o no en banco) → body queda con renderer baked
 - Tintado unificado luego: Assemble() recorre solo renderers activos, incluye injertados
 
+## Método SetMood() S139 (Material Único + MPB)
+
+```csharp
+public void SetMood(MonchiMood mood)
+{
+    currentMood = mood;
+    if (faceRenderer == null || bank == null) return;
+
+    var set = bank.MoodSetFor(currentDna != null ? currentDna.Gender : CreatureGender.Unknown);
+    if (set == null) return;
+
+    var face = set.GetFace(mood);           // Material con mainTexture = cara
+    if (face == null) return;
+
+    if (bank.FaceMaterial == null)          // Fallback: material viejo (legacy)
+    {
+        faceRenderer.sharedMaterial = face;
+        return;
+    }
+
+    var tex = face.mainTexture;             // Textura de cara del mood
+    if (tex == currentFaceTexture) return;  // Sin cambio = sin-op
+
+    var prev = currentFaceTexture != null ? currentFaceTexture : tex;
+    currentFaceTexture = tex;
+    bool pop = set.IsPop(mood);             // Pop transition vs blink
+    bool animate = faceTransition != null && faceTransition.isActiveAndEnabled && prev != tex;
+
+    var mpb = new MaterialPropertyBlock();
+    faceRenderer.GetPropertyBlock(mpb, 0);                       // Obtiene MPB actual idx 0
+    mpb.SetTexture(MainTexId, tex);                              // _MainTex = textura nueva
+    mpb.SetTexture(PrevTexId, prev);                             // _PrevTex = textura previa
+    mpb.SetFloat(FaceModeId, pop ? 1f : 0f);                     // _FaceMode: 1=pop, 0=blink
+    mpb.SetFloat(FaceTId, animate ? 0f : 1f);                    // _FaceT: 0=inicio anim, 1=fin
+    faceRenderer.SetPropertyBlock(mpb, 0);                       // Escribe MPB idx 0
+
+    if (animate)
+        faceTransition.Play(pop);                                // Reproduce feedback blink/pop
+}
+```
+
+**Cambio S139:**
+- **Material único:** usa `bank.FaceMaterial` en lugar de swapear material completo
+- **MPB write:** escribe _MainTex, _PrevTex, _FaceMode, _FaceT en índice material 0
+- **Gender-aware set:** `bank.MoodSetFor(gender)` retorna moodSetFemale si existe y gender=Female, sino moodSet
+- **Feedback sincronizado:** si MonchiFaceTransition está activo y hay cambio de textura, reproduce feedback (ShaderController anima _FaceT)
+- **Shader-driven animation:** el shader MoriMonchi/MonchiFace interpola _MainTex (nueva) ← → _PrevTex (vieja) usando _FaceT y _FaceMode
+
 ## Cambios S137
 
 **InstantiateBody() — Form-aware (línea 109-133 MODIFICADO):**
@@ -194,6 +246,73 @@ public void RefreshLook(CreatureDNA dna)
 - OnEnable: suscribe `GameEvents.OnCreatureFormChanged += HandleFormChanged`
 - OnDisable: desuscribe
 - HandleFormChanged: si dna == currentDna, llama RefreshLook (que detecta cambio de Form y re-arma)
+
+## Cambios S139
+
+**SetMood() — Material único + MPB + Gender-aware (línea 208-243 COMPLETAMENTE REFACTORIZADO):**
+
+Antes (S110-S136):
+```csharp
+public void SetMood(MonchiMood mood)
+{
+    currentMood = mood;
+    if (faceRenderer == null || bank == null) return;
+    var face = bank.MoodSet.GetFace(mood);  // Material directo, swapea sharedMaterial
+    faceRenderer.sharedMaterial = face;
+}
+```
+
+Ahora (S139):
+```csharp
+public void SetMood(MonchiMood mood)
+{
+    currentMood = mood;
+    if (faceRenderer == null || bank == null) return;
+    
+    var set = bank.MoodSetFor(currentDna != null ? currentDna.Gender : CreatureGender.Unknown);
+    if (set == null) return;
+    
+    var face = set.GetFace(mood);
+    if (face == null) return;
+    
+    if (bank.FaceMaterial == null)  // Fallback legacy
+    {
+        faceRenderer.sharedMaterial = face;
+        return;
+    }
+    
+    var tex = face.mainTexture;
+    if (tex == currentFaceTexture) return;  // Sin cambio
+    
+    var prev = currentFaceTexture != null ? currentFaceTexture : tex;
+    currentFaceTexture = tex;
+    bool pop = set.IsPop(mood);
+    bool animate = faceTransition != null && faceTransition.isActiveAndEnabled && prev != tex;
+    
+    var mpb = new MaterialPropertyBlock();
+    faceRenderer.GetPropertyBlock(mpb, 0);          // Lee MPB actual
+    mpb.SetTexture(MainTexId, tex);                  // _MainTex = cara nueva
+    mpb.SetTexture(PrevTexId, prev);                 // _PrevTex = cara previa
+    mpb.SetFloat(FaceModeId, pop ? 1f : 0f);         // _FaceMode: 1=pop, 0=blink
+    mpb.SetFloat(FaceTId, animate ? 0f : 1f);        // _FaceT: 0=anim, 1=fin
+    faceRenderer.SetPropertyBlock(mpb, 0);          // Escribe MPB idx 0
+    
+    if (animate)
+        faceTransition.Play(pop);  // Reproduce feedback
+}
+```
+
+**Responsabilidad S139:**
+- `bank.MoodSetFor(gender)` → retorna set correcto (female/male/neutral)
+- Material único evita overhead de instantiate por mood
+- MPB write permite shader-driven transitions sin material swap
+- ShaderController (Feel) escribe en material durante feedback, sincronizado con _FaceT
+
+**Impacto S139:**
+- Animaciones faciales suaves (blink/pop) manejadas por shader + feedback
+- Soporte de sets de ánimo por género (hembra diferente de macho)
+- Performance: un material = cero allocations de material instantiation
+- Quirk: ShaderController escribe `faceRenderer.material`, MPB escribe `faceRenderer.GetPropertyBlock()` — orden importa (MPB primero, luego feedback)
 
 ## Cambios S61
 
@@ -384,6 +503,7 @@ private void Tint(Renderer renderer, Color color)
 - **S134:** GraftPart solo actúa si partPrefab existe; partId nil o no en banco = body baked se mantiene
 - **S136:** MonchiTint.ColorFor() es determinístico en nombre renderer; mismo nombre = mismo color
 - **S137:** Form-aware assembly: Egg y Slime usan builders estáticos, Adult usa prefab. Cambios de Form disparan re-armado vía evento.
+- **S139:** Material único + MPB: setea _MainTex/_PrevTex/_FaceT/_FaceMode en índice 0; fallback legacy si bank.FaceMaterial null. Gender-aware set: MoodSetFor(gender). Feedback sincronizado: animate solo si MonchiFaceTransition activo y cambio de textura.
 
 ## Notas S61
 
@@ -435,6 +555,15 @@ private void Tint(Renderer renderer, Color color)
 - **Builders estáticos:** MonchiEggBody.Build() y MonchiSlimeBody.Build() manejan inyección de partes (espalda para huevo, cuerno para slime)
 - **Animators específicos:** bank.EggAnimatorController, bank.SlimeAnimatorController, bank.AnimatorController (adulto)
 
+## Notas S139
+
+- **Material único:** bank.FaceMaterial es el material shader MoriMonchi/MonchiFace que anima transiciones
+- **MPB write:** _MainTex (nueva cara), _PrevTex (cara previa), _FaceT (interpolación 0→1), _FaceMode (0=blink, 1=pop)
+- **Gender-aware set:** `bank.MoodSetFor(gender)` retorna moodSetFemale si existe y es Female, sino moodSet
+- **Feedback sincronizado:** MonchiFaceTransition.Play(pop) reproduce feedback mientras shader anima _FaceT
+- **Quirk:** ShaderController escribe en material completo; MPB escribe en índice 0. Orden: SetPropertyBlock primero (MPB), luego Play (ShaderController). Si ambos escriben al mismo tiempo, ShaderController puede pisar MPB en el frame de feedback — monitorear en QA.
+- **Fallback legacy:** si bank.FaceMaterial null, swapea sharedMaterial directamente (compatibilidad backwards)
+
 ## Vinculado a
 
 - [[Index/10 - Visualization]]
@@ -447,22 +576,24 @@ private void Tint(Renderer renderer, Color color)
 - [[MonchiPartGrafter]] (S134 NUEVO) utilidad de injerto de partes
 - [[MonchiEggBody]] (S137 NUEVO) builder de huevo
 - [[MonchiSlimeBody]] (S137 NUEVO) builder de slime
+- [[MonchiFaceTransition]] (S139 NUEVO) coordinador de feedback blink/pop
 
 ## Conexiones
 
 **Entrada:**
 - Assemble/RefreshLook: CreatureDNA (incluyendo Form, S137)
-- SetMood: MonchiMoodDriver
+- SetMood: MonchiMoodDriver (S139: ahora usa bank.MoodSetFor(gender))
 - SetRimOverride/ClearRimOverride: MonchiTeamRim (S110)
 - GameEvents.OnCreatureFormChanged: BreedingController/IncubationService (S137)
 
 **Salida:**
 - Modelo visual world-space con capa Root propagada a hijos (S115)
-- Material Face swapped por mood
+- Material Face único con MPB write (_MainTex/_PrevTex/_FaceT/_FaceMode, S139)
 - MPB de rim light (genético u override)
 - Partes injertadas integradas en tintRenderers (S134)
 - Tintado determinístico via MonchiTint (S136)
 - Form-aware visual: Egg/Slime/Adult (S137)
+- Feedback blink/pop sincronizado vía MonchiFaceTransition (S139)
 
 **Dependencias S134:**
 - MonchiVisualBankSO.GetPartMesh(partId) → obtiene FBX de parte
@@ -476,3 +607,10 @@ private void Tint(Renderer renderer, Color color)
 - MonchiEggBody.Build() → constructor de visual huevo
 - MonchiSlimeBody.Build() → constructor de visual slime
 - GameEvents.OnCreatureFormChanged → suscripción para re-armado automático
+
+**Dependencias S139:**
+- MonchiVisualBankSO.FaceMaterial → material único shader-driven
+- MonchiVisualBankSO.MoodSetFor(gender) → set de ánimo por género
+- MonchiMoodSetSO.GetFace(mood) → obtiene material con mainTexture
+- MonchiMoodSetSO.IsPop(mood) → determina tipo de transición (pop vs blink)
+- MonchiFaceTransition → coordinador de feedback blink/pop

@@ -13,6 +13,10 @@ public class MonchiMoodSetSO : SerializedScriptableObject
     [DictionaryDrawerSettings(KeyLabel = "Mood", ValueLabel = "Face Materials")]
     private Dictionary<MonchiMood, List<Material>> faces = new Dictionary<MonchiMood, List<Material>>();
 
+    [SerializeField] private List<MonchiMood> popMoods = new List<MonchiMood>();
+
+    public bool IsPop(MonchiMood mood) => popMoods != null && popMoods.Contains(mood);
+
     public Material GetFace(MonchiMood mood)
     {
         if (faces != null && faces.TryGetValue(mood, out var list) && list != null && list.Count > 0)

@@ -29,6 +29,8 @@ public class MonchiVisualBankSO : SerializedScriptableObject
     [SerializeField] private RuntimeAnimatorController animatorController;
     [SerializeField] private List<Material> gemMaterials = new List<Material>();
     [SerializeField] private MonchiMoodSetSO moodSet;
+    [SerializeField] private MonchiMoodSetSO moodSetFemale;
+    [SerializeField] private Material faceMaterial;
 
     [SerializeField] private GameObject slimeModel;
     [SerializeField] private RuntimeAnimatorController slimeAnimatorController;
@@ -41,6 +43,8 @@ public class MonchiVisualBankSO : SerializedScriptableObject
 
     public RuntimeAnimatorController AnimatorController => animatorController;
     public MonchiMoodSetSO MoodSet => moodSet;
+    public Material FaceMaterial => faceMaterial;
+    public MonchiMoodSetSO MoodSetFor(CreatureGender gender) => gender == CreatureGender.Female && moodSetFemale != null ? moodSetFemale : moodSet;
     public GameObject SlimeModel => slimeModel;
     public RuntimeAnimatorController SlimeAnimatorController => slimeAnimatorController;
     public float SlimeScale => slimeScale;

@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba5bd679884a9cb44b30c36cbbce7a73, type: 3}
-  m_Name: MonchiMoodSet
+  m_Name: MonchiMoodSetFemale
   m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.MonchiMoodSetSO
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 2100000, guid: e97926db1914c554bb16614711a494ca, type: 2}
-    - {fileID: 2100000, guid: a2d92571753fd80439627ec376c393c5, type: 2}
-    - {fileID: 2100000, guid: 568b3d7d4cfced241b5deaed0ed209b4, type: 2}
-    - {fileID: 2100000, guid: 564f41fa2319c0647b247c53d5c11c3a, type: 2}
+    - {fileID: 2100000, guid: 3072a3763fdb4d24186c3964f00bc620, type: 2}
+    - {fileID: 2100000, guid: 8381d1f8bd307ad4d9e14eef25190653, type: 2}
+    - {fileID: 2100000, guid: 6c74ba5ba9d67254bbc24d116dcaff66, type: 2}
+    - {fileID: 2100000, guid: 2b8469aed7e2ec640bb93e308794fd60, type: 2}
     - {fileID: 2100000, guid: a9a6ae90c2fa485439311c57f7caa90c, type: 2}
-    - {fileID: 2100000, guid: e2f7213444bb9cc428fc596571988c29, type: 2}
-    - {fileID: 2100000, guid: 8cc0b82d973483c4192cc846e7f371aa, type: 2}
-    - {fileID: 2100000, guid: 201d60e9f308c5b4fa9ef569762b8184, type: 2}
+    - {fileID: 2100000, guid: ec2345f2ea4923d46b130c0c295afa56, type: 2}
+    - {fileID: 2100000, guid: 8dd0d261a744d4546a926911da08d8d8, type: 2}
+    - {fileID: 2100000, guid: 75383e8f2164a4e42aa756c1899edf80, type: 2}
     - {fileID: 2100000, guid: 4d76423fa231ffd479ed304fdedb991c, type: 2}
     - {fileID: 2100000, guid: b7eda4997acc8974d9ec821947837046, type: 2}
-    - {fileID: 2100000, guid: 2d07bfbb383d14e419970116a9f056de, type: 2}
+    - {fileID: 2100000, guid: 250e3cad2e6c86d45ba53d9b73367291, type: 2}
     - {fileID: 2100000, guid: 925a015aae2bcc04fb9e5062f4668806, type: 2}
     - {fileID: 2100000, guid: b6d6b67e38799524fab11d953ae3a3a7, type: 2}
     - {fileID: 2100000, guid: ae6219b903168a340ac7fd35d4e21613, type: 2}
