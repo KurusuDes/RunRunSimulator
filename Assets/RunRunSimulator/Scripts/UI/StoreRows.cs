@@ -13,6 +13,7 @@ public static class StoreRows
         public StoreShopData   Shop;
         public Func<BuyResult> Buy;
         public int?            PriceOverride;
+        public ShopUpgradeSO   Upgrade;
     }
 
     public static string TabLabel(Tab tab) => tab switch
@@ -41,6 +42,18 @@ public static class StoreRows
                     Name = NameOf(def.DisplayName, def.Id),
                     Shop = capturedShop,
                     Buy  = () => store.BuyFurniture(capturedDef, capturedShop),
+                });
+            }
+            foreach (var upgrade in catalog.UpgradeListings)
+            {
+                if (upgrade == null) continue;
+                var capturedUpgrade = upgrade;
+                rows.Add(new Row
+                {
+                    Name          = NameOf(upgrade.DisplayName, upgrade.Id),
+                    Buy           = () => store.BuyUpgrade(capturedUpgrade),
+                    PriceOverride = upgrade.PriceFor(upgrade.CurrentLevel),
+                    Upgrade       = capturedUpgrade,
                 });
             }
             return;

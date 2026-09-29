@@ -1,35 +1,38 @@
 ---
-tags: [script, scriptable-object, world-state]
+tags: [script, scriptable-object, world-state, data]
 ---
 
-# WorldStateSO
+# WorldStateSO.cs
 
 **Ruta:** `Data/World/WorldStateSO.cs`
 
-**Responsabilidad:** ScriptableObject runtime que mantiene el estado del mundo (día actual, minuto del día, paso del tutorial). Propiedades públicas: `Day`, `MinuteOfDay`, `TutorialStep`. Métodos: `GetData()` (devuelve `WorldStateData` para persistencia), `LoadFrom(WorldStateData)` (carga desde persistencia). Se suscribe a `GameEvents.OnWorldStateChanged` en GameManager para disparar persistencia automática vía `SaveSystem.SaveWorldState()`.
+**Responsabilidad:** ScriptableObject runtime: estado del mundo (día, minuto, tutorial). **S138:** añade diccionario de niveles de mejoras. Métodos: GetData(), LoadFrom(). Suscripción automática a GameEvents.OnWorldStateChanged → SaveSystem.SaveWorldState().
 
 ## Campos Serializados
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `day` | int | Día actual (1-indexed, default 1) |
-| `minuteOfDay` | float | Minuto del día actual (0-1440, default 360 = 6 AM) |
-| `tutorialStep` | int | Paso actual del tutorial (default 0 = tutorial no iniciado) |
+| `day` | int | Día actual (default 1) |
+| `minuteOfDay` | float | Minuto del día (default 360 = 6 AM) |
+| `tutorialStep` | int | Paso tutorial (default 0) |
+| `upgradeLevels` | Dictionary<string, int> | **(S138)** Nivel de cada mejora por ID |
 
 ## Propiedades Públicas
 
 | Propiedad | Tipo | Descripción |
 |-----------|------|-------------|
-| `Day` | int | Getter/setter para día |
-| `MinuteOfDay` | float | Getter/setter para minuto del día |
-| `TutorialStep` | int | Getter/setter para paso del tutorial |
+| `Day` | int | Getter/setter |
+| `MinuteOfDay` | float | Getter/setter |
+| `TutorialStep` | int | Getter/setter |
 
 ## Métodos Públicos
 
 | Método | Retorna | Descripción |
 |--------|---------|-------------|
-| `GetData()` | `WorldStateData` | Serializa estado actual a struct para persistencia |
-| `LoadFrom(WorldStateData data)` | `void` | Carga estado desde persistencia; null-safe (defaults: día=1, minuto=360, tutorial=0) |
+| `UpgradeLevel(string id)` | `int` | **(S138)** Lee nivel de mejora (default 0 si no existe) |
+| `SetUpgradeLevel(string id, int level)` | `void` | **(S138)** Escribe nivel de mejora |
+| `GetData()` | `WorldStateData` | Serializa a struct para persistencia |
+| `LoadFrom(WorldStateData data)` | `void` | Carga desde struct; null-safe |
 
 ## WorldStateData (Serializable)
 
@@ -40,43 +43,28 @@ public class WorldStateData
     public int   Day          = 1;
     public float MinuteOfDay  = 360f;
     public int   TutorialStep = 0;
+    public Dictionary<string, int> UpgradeLevels = new Dictionary<string, int>();
 }
 ```
 
-Struct ligero para transferencia de estado entre runtime (SO) y persistencia (SaveSystem).
+Struct para serialización JSON vía SaveSystem.
 
 ## Ciclo de Vida
 
-1. **Awake/Init (GameScene):** Inyectado en GameManager. `LoadWorldState()` cargado vía `SaveSystem.LoadWorldState()` en el bootstrap.
-2. **Runtime:** GameClock actualiza `MinuteOfDay` cada frame. Cambios mutuales disparan `GameEvents.WorldStateChanged()`.
-3. **Persistencia:** `GameManager.OnEnable()` suscribe `PersistWorldState()` a `OnWorldStateChanged` → dispara `SaveSystem.SaveWorldState()` + push a cloud.
-4. **Cloud Reload:** `CloudSyncService` dispara `GameEvents.OnWorldStateReloaded()` cuando se sincroniza desde cloud.
+1. **Init (GameScene):** Inyectado en GameManager. SaveSystem.LoadWorldState() lo carga.
+2. **Runtime:** GameClock actualiza MinuteOfDay. Cambios disparan GameEvents.WorldStateChanged().
+3. **Persistencia:** GameManager.OnEnable() suscribe PersistWorldState() → SaveSystem.SaveWorldState() + push cloud.
+4. **Cloud Reload:** CloudSyncService dispara OnWorldStateReloaded cuando sincroniza.
+
+## Integración S138
+
+- StoreManager.BuyUpgrade() llama `world.SetUpgradeLevel()` + dispara `GameEvents.WorldStateChanged()`
+- AutoPlayer.Step16_Upgrade() itera catálogo, llama BuyUpgrade()
+- WorldStateSO persiste automáticamente en SaveSystem
 
 ## Vinculado a
 
-- [[Index/09 - Active Context]]
-- [[GameManager]] — propietario, inyecta en GameClock
-- [[GameClock]] — lee/muta vía `Instance.state` en Update
-- [[SaveSystem]] — persistencia (SaveWorldState/LoadWorldState/Serialize/Deserialize)
-- [[GameEvents]] — OnWorldStateChanged, OnWorldStateReloaded
-- [[CloudSyncService]] — reload desde cloud
+- [[Index/28 - Currency & Monetization]] (mejoras)
+- [[Index/07 - Persistence & Identity]] (persistencia)
 
-## Conexiones
-
-**Entrada:**
-- Inyectado vía inspector en GameManager
-- `SaveSystem.LoadWorldState()` carga archivo persistente
-- `CloudSyncService` reload desde cloud
-
-**Salida:**
-- `GameEvents.WorldStateChanged()` cuando Day/MinuteOfDay/TutorialStep mutan
-- `GameEvents.WorldStateReloaded()` cuando se sincroniza desde cloud
-- Serializado a JSON vía `SaveSystem.SerializeWorldState()`
-
-## Notas (S131 HC-4)
-
-- **Introducido S131:** Nuevo SO para unificar estado de mundo (antes desacoplado).
-- **Default MinuteOfDay:** 360 = 6:00 AM (amanecer).
-- **TutorialStep:** Reservado para guía progresiva (no usado aún en S131).
-- **Persistencia scoped:** SaveSystem respeta user scope (archivo `world_state_[userID].json` si autenticado).
-- **Cloud first design:** Estado se sincroniza con cloud; local es caché.
+**Conexiones:** [[GameManager]], [[GameClock]], [[SaveSystem]], [[CloudSyncService]], [[GameEvents]], [[StoreManager]]

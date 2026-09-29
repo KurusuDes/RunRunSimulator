@@ -1,62 +1,42 @@
 ---
-tags: [script, world]
+tags: [script, world, container, store]
 ---
 
 # StoreContainer.cs
 
 **Ruta:** `World/Containers/StoreContainer.cs`
 
-**Responsabilidad:** Vitrina de tienda que exhibe MoriMonchis para venta. S137: Exhibe criaturas de cualquier Form (Egg/Slime/Adult). Hereda `MoriMochiContainer`, por lo que expone métodos públicos `AnchorKey`, `AnchorPosition()`, `TryReclaim()` para duck-typing con `AnchorRegistry` (sin interfaz formal tras S93): MoriMonchis colocados en estantes persisten `LocationKey` y se recolocan directo en carga. Restaura las 3 necesidades a `restoreRate/s`. Gestiona puntos de uso (use points) para NPCs clientes (patrón idéntico a `NeedStation`): navegación sin solapamiento, snappeo a NavMesh, reserva/libera slots.
+**Responsabilidad:** Vitrina de tienda exhibe criaturas. **S138:** Overridea Capacity para sumar bonus de mejora. Rechaza Eggs (Form=Egg). Restaura necesidades. Gestiona slots de NPCs para inspeccionar.
 
-## Cambios S137
+## S138 Cambios
 
-**Método Accepts() — hereda de MoriMochiContainer**
+**Capacidad dinámica:**
+```csharp
+protected override int Capacity => base.Capacity + (capacityUpgrade != null ? capacityUpgrade.CurrentBonus : 0);
+```
 
-StoreContainer acepta cualquier Form (default MoriMochiContainer.Accepts() retorna true). Eggs pueden estar en vitrina para exhibición o venta.
+**Accepts():**
+```csharp
+protected override bool Accepts(MoriMochiAgent agent) => agent.DNA == null || agent.DNA.Form != MonchiForm.Egg;
+```
 
-## Cambios S93
+Rechaza Eggs (solo Slime/Adult). Vitrina es para criaturas vendibles, no incubables.
 
-- Removida referencia a interfaz `IAnchorPlace`. La clase sigue heredando métodos de `MoriMochiContainer` (duck-typing).
-
-## Cambios en S21
-
-- No hay cambios lógicos en la clase. Hereda automáticamente la persistencia de ancla vía `MoriMochiContainer` (`LocationKey`/`LocationSlot` en DNA).
-- Array privado `usePointOccupants` (antes sin nombre específico o implícito en `usePoints`): gestiona ocupación de NPC por slot.
-
-## Campos principales
+## Campos
 
 | Campo | Tipo | Propósito |
 |-------|------|----------|
-| `restoreRate` | float | Necesidades (salud/energía/afecto) restauradas por segundo a ocupantes. |
-| `usePoints` | List<Transform> | Posiciones dónde se paran NPCs para examinar (snappeo a NavMesh). Si vacío → slot implícito en `transform.position`. |
-| `usePointOccupants` | NpcAgent[] | Censo de ocupación de slots (null = libre). |
+| `capacityUpgrade` | ShopUpgradeSO | Mejora que suma ocupantes (upgrade bonus) |
+| `restoreRate` | float | Necesidades restauradas/s |
+| `usePoints` | List<Transform> | Puntos donde NPCs inspeccionan |
 
-## API pública
+## API Pública
 
-| Método | Firma | Propósito |
-|--------|-------|----------|
-| `HasFreeUsePoint` { get; } | bool | True si hay un slot disponible. |
-| `TryReserveUsePoint(NpcAgent, Vector3, int, float, out Vector3)` | bool | Reserva el slot más cercano a `from`, snappea a NavMesh, retorna posición. Re-llamada con el mismo agente retorna el slot ya reservado. |
-| `ReleaseUsePoint(NpcAgent)` | void | Libera el slot del agente (tipicamente al salir de la tienda). |
-| `OnEnable()` | void | Auto-registra en `StoreDisplayRegistry`. |
-| `OnDisable()` | void | Auto-desregistra. |
-| `Update()` | void | Restaura necesidades a ocupantes cada frame. |
+- `Capacity` (virtual override) — base + upgrade.CurrentBonus
+- `HasFreeUsePoint` { get; } — hay slot disponible
+- `TryReserveUsePoint()` — reserva slot cercano, snappea NavMesh
+- `ReleaseUsePoint()` — libera slot
 
 ## Conexiones
 
-- **`MoriMochiContainer` (base)**: Hereda ancla, `Claim()`, `Occupants`, persistencia, `Accepts()` (S137). MoriMonchis para venta estampa `LocationKey` automáticamente.
-- **`AnchorRegistry`**: Registrado via `base.Start()` (del padre `MoriMochiContainer`).
-- **`CreatureDNA`**: `LocationKey`/`LocationSlot` persiste (estante donde el MoriMochi está en venta).
-- **`StoreDisplayRegistry`**: Se registra en `OnEnable()`, desregistra en `OnDisable()` (búsqueda de vitrinas por GameManager).
-- **`NpcAgent`**: Consulta `HasFreeUsePoint` y usa `TryReserveUsePoint()/ReleaseUsePoint()` para navegación de clientes.
-- **`MoriMochiSpawner`**: Consulta `AnchorRegistry` para colocar MoriMonchis en estantes en carga.
-
-## Notas de implementación
-
-- `SlotCount` → número de `usePoints` o 1 (implícito).
-- `SlotPosition(i)` → posición del punto i, o `transform.position` si no existe.
-- Gizmos: esferas amarillas (libres), rojas (ocupadas) + líneas al contenedor.
-- S21: MoriMonchis en venta ahora persisten su estante (`LocationKey = AnchorKey` del contenedor) sin API nueva.
-- **S137:** Puede exhibir criaturas de cualquier Form.
-
-**Vinculado a:** [[Index/06 - Player & World]]
+- [[MoriMochiContainer]] (base), [[ShopUpgradeSO]], [[NpcAgent]], [[AnchorRegistry]]

@@ -227,7 +227,9 @@ namespace MoriMonchiSimulator
                 navAgent.SetDestination(reservedQueueSlot);
             }
 
-            float dist = Vector3.Distance(transform.position, reservedQueueSlot);
+            Vector3 toSlot = reservedQueueSlot - transform.position;
+            toSlot.y = 0f;
+            float dist = toSlot.magnitude;
 
             if (register.IsFrontSlot(this) && dist < arriveDistance)
             {

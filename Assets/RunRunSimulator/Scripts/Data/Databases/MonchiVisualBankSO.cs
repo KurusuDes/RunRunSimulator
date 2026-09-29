@@ -36,6 +36,7 @@ public class MonchiVisualBankSO : SerializedScriptableObject
 
     [SerializeField] private GameObject eggModel;
     [SerializeField] private RuntimeAnimatorController eggAnimatorController;
+    [SerializeField] private float eggScale = 3.4f;
     [SerializeField] private float eggHeight = 1.15f;
 
     public RuntimeAnimatorController AnimatorController => animatorController;
@@ -45,6 +46,7 @@ public class MonchiVisualBankSO : SerializedScriptableObject
     public float SlimeScale => slimeScale;
     public GameObject EggModel => eggModel;
     public RuntimeAnimatorController EggAnimatorController => eggAnimatorController;
+    public float EggScale => eggScale;
     public float EggHeight => eggHeight;
 
     public GameObject GetBody(string bodyShapeId)

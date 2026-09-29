@@ -26,7 +26,8 @@ public class MoriMochiContainer : MonoBehaviour
 
     public Vector3 Center         => area.bounds.center;
     public Bounds  InteriorBounds => area.bounds;
-    public bool    IsFull         => occupants.Count >= capacity;
+    protected virtual int Capacity => capacity;
+    public bool    IsFull         => occupants.Count >= Capacity;
     public IReadOnlyList<MoriMochiAgent> Occupants => occupants;
 
     [ShowInInspector, ReadOnly, PropertyOrder(10)]
@@ -67,7 +68,7 @@ public class MoriMochiContainer : MonoBehaviour
     }
 
     public virtual Vector3 AnchorPosition(int slot) => Center;
-    public virtual bool    TryReclaim(MoriMochiAgent agent, int slot) => Claim(agent);
+    public virtual bool    TryReclaim(MoriMochiAgent agent, int slot) => Accepts(agent) && Claim(agent);
 
     protected virtual bool Accepts(MoriMochiAgent agent) => true;
 
@@ -98,7 +99,7 @@ public class MoriMochiContainer : MonoBehaviour
             Debug.LogWarning($"[{name}] '{agent.name}' NO admitido. ¿El piso del corral está pintado con el área de cría y horneado (bake)?");
             return;
         }
-        Debug.Log($"[{name}] Admitido \"{agent.DNA?.CustomName}\" — ocupantes: {occupants.Count}/{capacity}.");
+        Debug.Log($"[{name}] Admitido \"{agent.DNA?.CustomName}\" — ocupantes: {occupants.Count}/{Capacity}.");
 
         if (agent.DNA != null)
         {

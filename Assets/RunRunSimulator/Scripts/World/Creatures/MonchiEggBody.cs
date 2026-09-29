@@ -11,7 +11,7 @@ namespace MoriMonchiSimulator
 
             var instance = Object.Instantiate(bank.EggModel, parent);
             instance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            instance.transform.localScale = new Vector3(1f, bank.EggHeight, 1f);
+            instance.transform.localScale = new Vector3(bank.EggScale, bank.EggScale * bank.EggHeight, bank.EggScale);
 
             var bodyPrefab = bank.GetBody(dna.BodyShapeID);
             char bodyLetter = bodyPrefab != null && bodyPrefab.name.Length > 0

@@ -183,11 +183,14 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
         name.AddToClassList("store-row__name");
         el.Add(name);
 
-        el.Add(BuildPrice(row, discountActive));
-        el.Add(BuildStock(row.Shop));
+        bool maxed = row.Upgrade != null && row.Upgrade.IsMaxed(row.Upgrade.CurrentLevel);
 
-        bool canBuy = row.Shop == null || row.Shop.InStock;
-        var buy = new Button(() => Purchase(row)) { text = Loc.Tr("ui.store.buy") };
+        if (row.Upgrade != null) el.Add(BuildUpgradeLevel(row.Upgrade));
+        if (!maxed) el.Add(BuildPrice(row, discountActive));
+        if (row.Upgrade == null) el.Add(BuildStock(row.Shop));
+
+        bool canBuy = row.Upgrade != null ? !maxed : row.Shop == null || row.Shop.InStock;
+        var buy = new Button(() => Purchase(row)) { text = maxed ? "Max" : Loc.Tr("ui.store.buy") };
         buy.AddToClassList("store-row__buy");
         buy.SetEnabled(canBuy);
         if (!canBuy) buy.AddToClassList("store-row__buy--disabled");
@@ -205,18 +208,31 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
         bool discounted = !row.PriceOverride.HasValue && discountActive && shop?.DiscountBase > 0f;
         int  final      = row.PriceOverride ?? (shop != null ? shop.FinalPrice(discounted) : 0);
 
+        bool minerita = shop != null && shop.Currency == Currency.Minerita;
+
         if (discounted)
         {
-            var was = new Label(Loc.Tr("ui.store.price", shop.BasePrice));
+            var was = new Label(PriceText(shop.BasePrice, minerita));
             was.AddToClassList("store-price__was");
             box.Add(was);
         }
 
-        var now = new Label(Loc.Tr("ui.store.price", final));
+        var now = new Label(PriceText(final, minerita));
         now.AddToClassList(discounted ? "store-price__now--sale" : "store-price__now");
+        if (minerita) now.AddToClassList("store-price__now--minerita");
         box.Add(now);
 
         return box;
+    }
+
+    private static string PriceText(int amount, bool minerita) =>
+        minerita ? $"{amount} Minerita" : Loc.Tr("ui.store.price", amount);
+
+    private static Label BuildUpgradeLevel(ShopUpgradeSO upgrade)
+    {
+        var label = new Label($"Nv {upgrade.CurrentLevel}/{upgrade.MaxLevel}");
+        label.AddToClassList("store-row__stock");
+        return label;
     }
 
     private Label BuildStock(StoreShopData shop)

@@ -16,3 +16,4 @@ MonoBehaviour:
   Minerita: 30
   Furniture:
   - {fileID: 11400000, guid: 5fea8f899d708284cad0606639bcbd21, type: 2}
+  - {fileID: 11400000, guid: 97e15594ff740d84e942830aadb1f1f6, type: 2}

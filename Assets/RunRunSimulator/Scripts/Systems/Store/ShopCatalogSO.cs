@@ -66,6 +66,10 @@ public class ShopCatalogSO : SerializedScriptableObject
     [TableList(AlwaysExpanded = true)]
     [SerializeField] private List<CreatureBoxListing> creatureBoxListings = new List<CreatureBoxListing>();
 
+    [Title("Shop upgrades for sale")]
+    [SerializeField] private List<ShopUpgradeSO> upgradeListings = new List<ShopUpgradeSO>();
+
+    public IReadOnlyList<ShopUpgradeSO>       UpgradeListings      => upgradeListings;
     public IReadOnlyList<FurnitureListing>    FurnitureListings    => furnitureListings;
     public IReadOnlyList<ItemListing>         ItemListings         => itemListings;
     public IReadOnlyList<CreatureBoxListing>  CreatureBoxListings  => creatureBoxListings;

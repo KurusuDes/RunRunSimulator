@@ -46,9 +46,29 @@ public class FurnitureService : MonoBehaviour
         GameEvents.OnFurnitureChanged  -= OnFurnitureChanged;
     }
 
-    private void Start() => ScheduleRebake();
+    private void Start()
+    {
+        RebuildGridOccupancy();
+        ScheduleRebake();
+    }
 
-    private void OnFurnitureReloaded(FurnitureRegistrySO r) => ScheduleRebake();
+    private void OnFurnitureReloaded(FurnitureRegistrySO r)
+    {
+        RebuildGridOccupancy();
+        ScheduleRebake();
+    }
+
+    private void RebuildGridOccupancy()
+    {
+        grid.Clear();
+        foreach (var piece in registry.GetAll().Values)
+        {
+            var def = database.GetByID(piece.DefId);
+            Vector2Int footprint = def != null ? def.Footprint : Vector2Int.one;
+            grid.Occupy(new Vector2Int(piece.CellX, piece.CellY), footprint, piece.Rotation);
+        }
+    }
+
     private void OnFurnitureChanged(FurnitureRegistrySO r)  => ScheduleRebake();
 
     private void ScheduleRebake()
@@ -113,7 +133,6 @@ public class FurnitureService : MonoBehaviour
     {
         if (!Application.isPlaying) return;
         registry.LoadFrom(null);
-        grid.Clear();
         GameEvents.FurnitureReloaded(registry);
     }
 

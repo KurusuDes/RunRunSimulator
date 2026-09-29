@@ -1,92 +1,43 @@
 ---
-tags: [script, core, handoff, expedition]
+tags: [script, core, handoff, expedition, time-scale]
 ---
 
-# ExpeditionHandoff
+# ExpeditionHandoff.cs
 
 **Ruta:** `Core/ExpeditionHandoff.cs`
 
-**Responsabilidad:** Puente estático singleton entre escenas (tienda/arena) que encapsula traspaso de datos. Mantiene estado de navegación (CameFromStore), resultado de expedición (Result) y expone flujo: `GoToArena()` → arena → `ReturnToStore()`. Genera `RunSeed` por TickCount.
+**Responsabilidad:** Puente estático entre escenas (tienda/arena). Encapsula traspaso de datos, resultado. **S138:** Captura y restaura `fixedDeltaTime` para que MMTimeManager (que multiplica paso escalado) no distorsione physics en arena.
 
-## Estado Estático
+## Estado Estático (S138)
 
-| Campo | Tipo | Descripción |
-|-------|------|-------------|
-| `CameFromStore` | `bool` | True si se inició desde tienda; reset en SubsystemRegistration |
-| `HasResult` | `bool` | True si hay ExpeditionResult pendiente |
-| `Result` | `ExpeditionResult` | Struct con datos de la expedición |
-| `RunSeed` | `int` | Semilla raíz de bajada (generada en GoToArena) |
-| `SelectedIds` | `List<string>` | IDs del equipo elegido pre-expedición |
+- `CameFromStore`, `HasResult`, `Result`, `RunSeed`, `SelectedIds`
+- **S138:** `defaultFixedDeltaTime` — capturado en ResetState(), restaurado en ResetTime()
 
-## Struct ExpeditionResult (S129)
+## Métodos Clave
 
-| Campo | Tipo | Descripción |
-|-------|------|-------------|
-| `Seed` | `int` | Semilla raíz de bajada |
-| `Winner` | `ExpeditionTeam` | Equipo ganador (Player/Rival) |
-| `PlayerSecured` | `int` | Material asegurado jugador |
-| `RivalSecured` | `int` | Material rival (siempre 0 en v1) |
-| `Floors` | `int` | Pisos totales completados |
-| `Lost` | `bool` | True si rival ganó piso de Enemies |
-| `FallenIds` | `List<string>` | **S129:** IDs de criaturas caídas (health ≤ 0) |
-| `Fallen` | `int` | Criaturas con health <= 0 |
-| `TeamIds` | `List<string>` | **S129:** IDs del equipo del jugador que entró en la bajada |
+| Método | Descripción |
+|--------|-------------|
+| `GoToArena(ids)` | ResetTime(), genera RunSeed, LoadScene(ArenaScene) |
+| `ReturnToStore(result?)` | ResetTime(), LoadScene(GameScene) |
+| `ResetTime()` | **(S138 NUEVO)** timeScale=1f, restaura fixedDeltaTime |
 
-## Struct ExpeditionReturn (S129)
+## S138: Time Management
 
-| Campo | Tipo | Descripción |
-|-------|------|-------------|
-| `Seed` | `int` | Semilla de la run |
-| `Winner` | `ExpeditionTeam` | Equipo ganador |
-| `PlayerSecured` | `int` | Material asegurado jugador |
-| `RivalSecured` | `int` | Material rival |
-| `MineritaGained` | `int` | Minerita ingresada al inventario |
-| `Fallen` | `int` | Criaturas caídas |
-| `Floors` | `int` | Pisos completados |
-| `Lost` | `bool` | Derrota |
+**ResetState() — SubsystemRegistration:**
+```csharp
+defaultFixedDeltaTime = Time.fixedDeltaTime;
+```
 
-**S129:** Se removieron `HealthLost` y `Creatures`.
+**ResetTime() — Antes de cambiar escena:**
+```csharp
+Time.timeScale = 1f;
+if (defaultFixedDeltaTime > 0f) Time.fixedDeltaTime = defaultFixedDeltaTime;
+```
 
-## Métodos Públicos
-
-| Método | Retorna | Descripción |
-|--------|---------|-------------|
-| `GoToArena(IReadOnlyList<string> ids)` | `void` | Copia ids a SelectedIds, genera RunSeed, fija CameFromStore=true, carga ArenaSandbox |
-| `ReturnToStore(ExpeditionResult?)` | `void` | Fija Result si hay valor, timeScale=1, carga GameScene; sin valor → CameFromStore=false |
-| `TryConsumeResult(out ExpeditionResult)` | `bool` | Intenta consumir resultado; limpia SelectedIds, retorna true si había resultado |
-
-## Ciclo Tienda → Arena → Tienda
-
-1. **Tienda (GameScene):**
-   - Panel expedición: elegir equipo (IDs → SelectedIds)
-   - `ExpeditionBridge.RequestDeparture(ids)` → `GoToArena(ids)`
-   - RunSeed generado: `Environment.TickCount & 0x7fffffff`
-
-2. **Arena (ArenaSandbox):**
-   - `ArenaRunDirector` crea `ArenaRun(RunSeed, SelectedIds)`
-   - Ciclo piso: juega → decide Continuar/Retirarse
-   - Piso Buff cada 3: +30 vida a vivas
-   - Piso Enemies: si pierde → Lost=true, PlayerSecured=0
-   - `Retreat()` → `ReturnToStore(run.ToExpeditionResult())`
-   - `ToResult()` arma `FallenIds` (criaturas con health ≤ 0) y `TeamIds` (elenco original)
-
-3. **Retorno (GameScene):**
-   - `ExpeditionBridge` lee HasResult
-   - `ApplyResult()`: suma Minerita, aplica cambios, persiste
-
-## Invariantes S129
-
-- **RunSeed:** generado en GoToArena, no modificado
-- **SelectedIds:** limpiados al consumir resultado o volver sin resultado
-- **Lost:** anula PlayerSecured (material perdido)
-- **FallenIds:** lista de IDs con health ≤ 0 al retornar
-- **TeamIds:** copia del elenco original que entró (no cambia durante la bajada)
-- **Fallen:** criaturas health <= 0 (no permanencia, solo estado de piso)
-- **Moneda:** `MineritaGained` refleja ganancias de expedición
+Arena escala timeScale 4x. MMTimeManager multiplica fixedDeltaTime por timeScale. Restaurar ambos previene physics distorsionado al volver a tienda.
 
 ## Vinculado a
 
-[[Index/24 - Puente Tienda-Arena]]
-[[Index/26 - Plan H0 - Bajada por pisos]] (S124)
+- [[Index/23 - Arena Sandbox y Expedicion]]
 
-**Conexiones:** [[ExpeditionBridge]], [[ArenaRunDirector]], [[ArenaRun]], [[ArenaSandbox]], [[GameEvents]], [[GameManager]]
+**Conexiones:** [[ExpeditionBridge]], [[MMTimeManager]], [[ArenaRunDirector]]

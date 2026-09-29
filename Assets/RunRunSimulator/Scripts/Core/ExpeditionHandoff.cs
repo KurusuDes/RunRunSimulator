@@ -42,6 +42,8 @@ public static class ExpeditionHandoff
     private static readonly List<string> selectedIds = new();
     public static IReadOnlyList<string> SelectedIds => selectedIds;
 
+    private static float defaultFixedDeltaTime;
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetState()
     {
@@ -50,6 +52,13 @@ public static class ExpeditionHandoff
         Result = default;
         RunSeed = 0;
         selectedIds.Clear();
+        defaultFixedDeltaTime = Time.fixedDeltaTime;
+    }
+
+    private static void ResetTime()
+    {
+        Time.timeScale = 1f;
+        if (defaultFixedDeltaTime > 0f) Time.fixedDeltaTime = defaultFixedDeltaTime;
     }
 
     public static void GoToArena(IReadOnlyList<string> ids = null)
@@ -59,6 +68,7 @@ public static class ExpeditionHandoff
         CameFromStore = true;
         HasResult = false;
         RunSeed = System.Environment.TickCount & 0x7fffffff;
+        ResetTime();
         SceneManager.LoadScene(ArenaScene);
     }
 
@@ -74,7 +84,7 @@ public static class ExpeditionHandoff
             CameFromStore = false;
         }
         selectedIds.Clear();
-        Time.timeScale = 1f;
+        ResetTime();
         SceneManager.LoadScene(StoreScene);
     }
 

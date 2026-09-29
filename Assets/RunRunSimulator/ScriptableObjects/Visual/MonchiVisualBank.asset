@@ -1103,4 +1103,5 @@ MonoBehaviour:
   slimeScale: 3.4
   eggModel: {fileID: 919132149155446097, guid: fa7357ef6217c2e4bb28f01c26669555, type: 3}
   eggAnimatorController: {fileID: 9100000, guid: de66ac216c1950d46bbe8188de78bbbe, type: 2}
+  eggScale: 2.6
   eggHeight: 1.15

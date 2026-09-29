@@ -1,51 +1,29 @@
 ---
-tags: [script, visualization, genetics]
+tags: [script, visualization, genetics, egg-builder]
 ---
 
 # MonchiEggBody.cs
 
 **Ruta:** `World/Creatures/MonchiEggBody.cs`
 
-**Responsabilidad:** Clase estatica que arma el visual de un MoriMochi en forma Egg. `Build()` instancia el modelo base de huevo, escala altura según `bank.EggHeight`, elige variante de espalda según forma del cuerpo (BodyShapeID → Egg_Back_A/B), injerta la parte genética de espalda, y desactiva `Egg_Scales`. Retorna null si banco es null. Llamado por `MonchiVisualizer` al cambiar a Form.Egg.
+**Responsabilidad:** Constructor estático: arma visual huevo. **S138:** Escala huevo = `EggScale` en X/Z, multiplicado por `EggHeight` en Y.
 
-## Métodos Públicos
+## Build() — S138
 
-- `Build(CreatureDNA dna, MonchiVisualBankSO bank, Transform parent) → GameObject` — Instancia `bank.EggModel` bajo `parent`, escala a (1, bank.EggHeight, 1). Busca el body del BodyShapeID para determinar letra. Activa la variante Egg_Back_A/B (A si body es D, B si body es A/B/C). Injerta la malla custom del BackID (via `bank.GetPartMesh(dna.BackID, MonchiForm.Egg)`). Desactiva `Egg_Scales`. Devuelve el GameObject o null si falta el modelo.
+```csharp
+instance.transform.localScale = new Vector3(
+    bank.EggScale, 
+    bank.EggScale * bank.EggHeight, 
+    bank.EggScale
+);
+```
 
-## Estructura del Modelo Egg
+**Propósito:** Asset 2.6 usa eggScale=3.4 base, eggHeight=1.15. Escala XY separada para huevo oblongo.
 
-El prefab en `bank.EggModel` contiene:
-- Root (cuerpo de huevo)
-  - `Egg_Horn_*` — variantes no usadas en huevo (todas desactivadas)
-  - `Egg_Back_A`, `Egg_Back_B` — variantes de espalda (solo una activa según body)
-  - `Egg_Scales` — detalle visual (desactivado)
-  - `Body` — anchor para injertar la parte genética de espalda
+## Método
 
-## Lógica de Injerto
-
-1. Determina letra del body: `bodyPrefab = bank.GetBody(dna.BodyShapeID)`, extrae última char (e.g. "BodyShape_D" → 'D')
-2. Desactiva todos Egg_Horn_* (siempre)
-3. Elige variante de espalda: si body es D → Egg_Back_B, sino → Egg_Back_A
-4. Desactiva todas salvo la elegida
-5. Obtiene el part mesh: `bank.GetPartMesh(dna.BackID, MonchiForm.Egg)`
-6. Si existe, instancia bajo Body, resetea localTransform a identity, escala a 1
-7. Desactiva Egg_Scales
-
-## Métodos Privados
-
-- `ApplyPrefixVariant(Transform root, string prefix, string keep)` — recorre hijos, desactiva si comienzan con `prefix` y nombre ≠ keep
-- `GraftEggPart(Transform root, GameObject partMesh, string prefix)` — desactiva todos con `prefix`, instancia partMesh bajo Body, resetea transform
-- `FindChildByName(Transform root, string name) → Transform` — busca recursivamente por componente Transform exacto
-
-## Vinculado a
-
-- [[Index/10 - Visualization]]
-- [[Index/02 - Genetics & Breeding]] (partes genéticas)
+- `Build(dna, bank, parent)` — Instancia EggModel, aplica escala, injerta espalda genética, desactiva Egg_Scales
 
 ## Conexiones
 
-- [[MonchiVisualizer]] (llamador: `Build()` al cambiar a Form.Egg)
-- [[MonchiVisualBankSO]] (banco de modelos y partes)
-- [[CreatureDNA]] (DNA.BodyShapeID, DNA.BackID)
-- [[MonchiSlimeBody]] (análogo para slime)
-- [[MonchiForm]] (Enum)
+- [[MonchiVisualBankSO]], [[MonchiVisualizer]], [[CreatureDNA]]

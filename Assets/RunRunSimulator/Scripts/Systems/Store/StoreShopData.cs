@@ -8,6 +8,7 @@ namespace MoriMonchiSimulator
 public class StoreShopData
 {
     [MinValue(0)] public int BasePrice;
+    public Currency Currency = Currency.Dabloons;
 
     [Title("Discount")]
     [Tooltip("Fraction off the base price when the catalog's discount window is active (0.2 = 20% off). 0 = this item never goes on sale.")]

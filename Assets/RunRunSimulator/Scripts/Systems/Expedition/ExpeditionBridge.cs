@@ -12,6 +12,7 @@ public class ExpeditionBridge : MonoBehaviour
     [SerializeField, Min(1f)] private float syncTimeoutSeconds = 20f;
     [SerializeField, Min(0f)] private float departFlushTimeout = 5f;
     [SerializeField] private bool permadeathEnabled = false;
+    [SerializeField, Min(1)] private int mineritaPerMaterial = 5;
 
     private bool departing;
 
@@ -77,7 +78,8 @@ public class ExpeditionBridge : MonoBehaviour
         if (!ExpeditionHandoff.TryConsumeResult(out ExpeditionResult result)) yield break;
 
         int material = result.Lost ? 0 : result.PlayerSecured;
-        if (material > 0) Wallet.Add(Currency.Minerita, material, "expedition");
+        int minerita = material * mineritaPerMaterial;
+        if (minerita > 0) Wallet.Add(Currency.Minerita, minerita, "expedition");
 
         var registry = GameManager.Instance != null ? GameManager.Instance.Registry : null;
         bool touched = false;
@@ -139,13 +141,13 @@ public class ExpeditionBridge : MonoBehaviour
             Winner = result.Winner,
             PlayerSecured = material,
             RivalSecured = result.RivalSecured,
-            MineritaGained = material,
+            MineritaGained = minerita,
             Fallen = result.Fallen,
             Floors = result.Floors,
             Lost = result.Lost
         });
 
-        Debug.Log($"[ExpeditionBridge] run {result.Seed}: {result.Floors} pisos, perdida={result.Lost} → +{material} material, {result.Fallen} caídas, {evolved} evolucionan");
+        Debug.Log($"[ExpeditionBridge] run {result.Seed}: {result.Floors} pisos, perdida={result.Lost} → +{material} material, +{minerita} Minerita, {result.Fallen} caídas, {evolved} evolucionan");
     }
 }
 }

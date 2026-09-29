@@ -1,130 +1,85 @@
 ---
-tags: [script, dev, testing]
+tags: [script, dev, testing, autoplayer]
 ---
 
 # AutoPlayer.cs
 
 **Ruta:** `Systems/Dev/AutoPlayer.cs`
 
-**Responsabilidad:** Bot de testing automatizado (solo dev) que ejecuta un escenario de 11 pasos: partida nueva → comprar caja de huevos → abrir caja → colocar incubadora → meter huevos → eclosionar 3 → expedición (arena) → combate automático → retorno → eclosionar restantes → fin. Singleton `DontDestroyOnLoad`. Suscribe a `GameEvents.OnExpeditionReturned` para registrar resultado. Expone `Status` string (público) con estado actual. Timeout 60s por paso, 240s para piso arena (arenaTimeScale=4x). Si falla: Debug.Break() y registra `Status="FALLA paso X · motivo"`.
+**Responsabilidad:** Bot de testing automatizado (dev) ejecutor de 17 pasos: onboarding (compra caja, apertura) + 3 eclosiones + expedición arena + ciclo de cría/venta/mejora. Singleton `DontDestroyOnLoad`. Refactorizado S138: delegó pasos 1-10 a `AutoPlayerOpeningSteps`, pasos 11-17 a `AutoPlayerLoopSteps`. Orquestador delgado.
+
+**S138:** División en colaboradores; carga pasos internos en `Sequence()` vía `new AutoPlayerOpeningSteps(this)` + `new AutoPlayerLoopSteps(this)`.
 
 ## Singleton + Lifecycle
 
 - `Instance { get; private set; }` — singleton persistente
 - `DontDestroyOnLoad` en Awake
-- `Status { get; private set; } = "Idle"` — string público con estado actual paso (e.g., "OK paso 3 · Abrir caja · huevos=5")
+- `Status { get; set; }` — string con estado actual (pub escritura interna; lectura pública para dev/UI)
 
 ## Campos Serializados
 
-- `arenaTimeScale` (float, default 4) — aceleración de tiempo durante combate (step 8)
+- `arenaTimeScale` (float, default 4) — aceleración de tiempo durante combate (arena)
 - `stepTimeout` (float, default 60) — timeout por paso en segundos
 
-## Ciclo de Pasos (11 total)
+## Estado Interno (acceso `internal` para colaboradores)
 
-### Step 1: Arrival
-- Espera CloudSync.StartupSyncDone
-- Verifica TutorialStep >= 1 (kit aplicado)
-- Valida Minerita: balance >= 3 × hatchCost
-- Verifica incubadora en inventario
+- `CurrentStep` — paso actual
+- `Failed` — flag de falla
+- `EggIds`, `SlimeIds` — listas de IDs spawneados
+- `LastExpeditionReturn`, `LastRunMaterial`, `LastRunLost`, `TotalExpeditions`, `LostExpeditions` — resulados de expedición
+- `LastChild`, `LastSoldDna`, `LastSalePrice` — resultados de cría y venta
 
-### Step 2: BuyEggBox
-- Busca StoreManager + Catalog
-- Localiza caja de Form.Egg con precio=0 (gratis)
-- Ejecuta BuyCreatureBox()
+## Ciclo de 17 Pasos (vía Colaboradores)
 
-### Step 3: OpenBox
-- Espera DeliveryBox en escena
-- Registra IDs previos del registry
-- Interactúa con DeliveryBox
-- Espera 5 huevos nuevos spawneados + controllers spawned
+### Pasos 1-10: AutoPlayerOpeningSteps
+- Step 1: Arrival — CloudSync ready + TutorialStep >= 1
+- Step 2: BuyEggBox — compra caja Form.Egg (precio 0)
+- Step 3: OpenBox — abre caja, verifica 5 huevos
+- Step 4: PlaceIncubator — coloca incubadora en espiral
+- Step 5: EggsIntoIncubator — lanza 5 huevos hacia incubadora
+- Step 6: HatchThree — eclosiona 3 (verifica 3 slimes, 2 huevos)
+- Step 7-9: Expedition — inicia bajada, corre arena, valida retorno
+- Step 10: HatchRemaining — eclosiona los 2 restantes
 
-### Step 4: PlaceIncubator
-- Busca FurnitureService + PlacementGrid
-- Localiza mueble incubadora del kit
-- Intenta colocar en espiral desde (0,0) con radio 25
-- Espera IncubatorContainer en escena
-
-### Step 5: EggsIntoIncubator
-- Busca MoriMochiSpawner
-- Por cada huevo: lanza controller hacia incubadora (impulso hacia abajo)
-- Espera 5 ocupantes en incubadora
-
-### Step 6: HatchThree
-- Interactúa incubadora 3 veces (+ delay 0.3s)
-- Valida: 3 slimes + 2 huevos restantes
-- Interactúa 4ta vez, verifica que NO eclosione (límite UI/lógica)
-
-### Step 7: Departure
-- Filtra slimes en registry
-- Llama `ExpeditionBridge.RequestDeparture(slimeIds)`
-- Espera cambio de escena a ArenaScene
-
-### Step 8: ArenaRun
-- Time.timeScale = arenaTimeScale
-- Espera ArenaRound + ArenaRunDirector spawned
-- Lanza ronda si no corriendo
-- Espera director.FloorRecorded (timeout 240s)
-- Lee Run.Material y Run.Lost
-- Llama director.Retreat()
-- Restaura Time.timeScale = 1
-
-### Step 9: Return
-- Espera vuelta a StoreScene + OnExpeditionReturned disparado
-- Restaura Time.timeScale = 1
-- Valida: si no perdió, cada slime debe tener Explorations=1
-
-### Step 10: HatchRemaining
-- Filtra huevos restantes en registry
-- Espera incubadora persistida con esos huevos
-- Valida Minerita para 2 eclosiones
-- Interactúa 2 veces
-- Verifica 0 huevos restantes
-
-### Step 11: Fin
-- Status = "FIN tanda 1"
-- fin de secuencia
+### Pasos 11-17: AutoPlayerLoopSteps
+- Step 11: BuyBreedingRoom — compra corral de cría
+- Step 12: ExpeditionsUntilPair — bajadas hasta pareja adulta criable
+- Step 13: Breed — lanza padres, espera hijo (Form=Slime), eclosiona
+- Step 14: Showcase — coloca vitrina, lanza criatura vendible
+- Step 15: Sale — espera cliente, cierra venta, valida dinero
+- Step 16: Upgrade — compra mejora disponible en catálogo
+- Step 17: Fin — marca fin (Status="FIN tanda 2 · stats")
 
 ## Métodos Públicos
 
 - `Run()` — inicia secuencia si no está corriendo
-- `Status { get; }` — estado actual (lecture pública)
+- `Status { get; set; }` — acceso al string de estado
 
 ## Métodos Privados
 
-- `WaitFor(Func<bool> condition, float timeout, string what) → IEnumerator` — loop until condition true o timeout. Si timeout: Fail()
-- `Fail(string reason)` — asigna `failed=true`, `Status="FALLA paso X · reason"`, restaura Time.timeScale=1, Debug.Break()
-- `Ok(string name, string data)` — asigna Status="OK paso X · name · data", Debug.Log()
-- Helpers de búsqueda: `FindIncubatorFurnitureDefinition()`, `TryFindController()`, `AllControllersSpawned()`, `CountFormNotIn()`, `CountForm()`, `CountOccupantsAmong()`, `SpiralCells()`
+- `Sequence() → IEnumerator` — orquestador maestro; instancia colaboradores, ejecuta pasos en orden
+- `WaitFor(Func<bool> condition, float timeout, string what) → IEnumerator` — loop until condition o timeout; si falla: Fail()
+- `Fail(string reason)` — asigna `failed=true`, Status="FALLA paso X · reason", Debug.Break()
+- `Ok(string name, string data)` — Status="OK paso X · name · data", Debug.Log()
+- `ExpeditionsUntil(Func<bool> condition, int max, string why, List<string> occupyIds=null) → IEnumerator` — itera expediciones hasta lograr condición
+- `PlayExpedition(List<string> teamIds) → IEnumerator` — lanza expedición, espera resultado
 
 ## Suscripciones
 
-- `OnEnable()` suscribe a `GameEvents.OnExpeditionReturned` (registra último retorno)
+- `OnEnable()` suscribe: `GameEvents.OnExpeditionReturned`, `GameEvents.OnBreedingCompleted`, `GameEvents.OnCustomerSold`
 - `OnDisable()` desuscribe
 
 ## Invariantes
 
-- **Singleton + Persistent**: una sola instancia en escena, persiste entre escenas
-- **Falla en Debug.Break()**: desarrollo interactivo, permite inspeccionar estado
-- **Status público**: dev consola/UI puede leer progreso en vivo
-- **Timeouts grandes**: arena (240s) vs steps normales (60s)
-- **Time.timeScale 4x en arena**: acelera combate para testing rápido
+- **Singleton + Persistent:** una sola instancia, persiste entre escenas
+- **Falla en Debug.Break():** desarrollo interactivo
+- **Status público:** lectura de progreso en vivo
+- **ResumeFromStep static:** permite reiniciar desde paso N (hardcodeado)
+- **Colaboradores internos:** `AutoPlayerOpeningSteps` + `AutoPlayerLoopSteps` no son singletons, se instancian por ciclo
 
 ## Vinculado a
 
-- [[Index/09 - Active Context]] (S137: AutoPlayer en DevConsole)
-- [[Index/23 - Arena Sandbox y Expedicion]] (pasos 7-9)
+- [[Index/23 - Arena Sandbox y Expedicion]]
+- [[Index/28 - Currency & Monetization]] (mejoras)
 
-## Conexiones
-
-- [[CloudSyncService]] (sincronización)
-- [[GameManager]] (WorldState, Registry)
-- [[BreedingController]] (costo eclosión)
-- [[StoreManager]] (compra de caja)
-- [[DeliveryBox]] (abrir caja)
-- [[FurnitureService]] + [[PlacementGrid]] (colocar muebles)
-- [[IncubatorContainer]] (eclosionar)
-- [[MoriMochiSpawner]] (localizar controllers)
-- [[ExpeditionBridge]] (partir a arena)
-- [[ArenaRound]] + [[ArenaRunDirector]] (combate)
-- [[GameEvents]] (OnExpeditionReturned)
-- [[Wallet]] (validar Minerita)
+**Conexiones:** [[AutoPlayerOpeningSteps]], [[AutoPlayerLoopSteps]], [[AutoPlayerQuery]], [[GameEvents]], [[GameManager]], [[Wallet]], [[BreedingController]], [[StoreManager]], [[MoriMochiSpawner]], [[CloudSyncService]]

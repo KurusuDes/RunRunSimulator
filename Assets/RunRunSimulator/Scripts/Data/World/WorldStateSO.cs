@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 namespace MoriMonchiSimulator
@@ -10,6 +11,7 @@ public class WorldStateData
     public int   Day          = 1;
     public float MinuteOfDay  = 360f;
     public int   TutorialStep = 0;
+    public Dictionary<string, int> UpgradeLevels = new Dictionary<string, int>();
 }
 
 [CreateAssetMenu(fileName = "WorldState", menuName = "RunRunSimulator/World/World State")]
@@ -24,11 +26,23 @@ public class WorldStateSO : ScriptableObject
     public float MinuteOfDay  { get => minuteOfDay;  set => minuteOfDay = value; }
     public int   TutorialStep { get => tutorialStep; set => tutorialStep = value; }
 
+    [ShowInInspector, ReadOnly] private Dictionary<string, int> upgradeLevels = new Dictionary<string, int>();
+
+    public int UpgradeLevel(string id) =>
+        !string.IsNullOrEmpty(id) && upgradeLevels.TryGetValue(id, out var level) ? level : 0;
+
+    public void SetUpgradeLevel(string id, int level)
+    {
+        if (string.IsNullOrEmpty(id)) return;
+        upgradeLevels[id] = level;
+    }
+
     public WorldStateData GetData() => new WorldStateData
     {
-        Day          = day,
-        MinuteOfDay  = minuteOfDay,
-        TutorialStep = tutorialStep,
+        Day           = day,
+        MinuteOfDay   = minuteOfDay,
+        TutorialStep  = tutorialStep,
+        UpgradeLevels = new Dictionary<string, int>(upgradeLevels),
     };
 
     public void LoadFrom(WorldStateData data)
@@ -36,6 +50,9 @@ public class WorldStateSO : ScriptableObject
         day          = data?.Day ?? 1;
         minuteOfDay  = data?.MinuteOfDay ?? 360f;
         tutorialStep = data?.TutorialStep ?? 0;
+        upgradeLevels = data?.UpgradeLevels != null
+            ? new Dictionary<string, int>(data.UpgradeLevels)
+            : new Dictionary<string, int>();
     }
 }
 }

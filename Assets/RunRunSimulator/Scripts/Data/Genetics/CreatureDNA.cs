@@ -74,10 +74,13 @@ public class CreatureDNA
 
     public string UniqueID => Timestamp > 0 ? $"{ToStringID()}-{Timestamp}" : "";
 
+    private static long lastStamp;
+
     public void Stamp()
     {
         var now   = DateTime.UtcNow;
-        Timestamp = now.Ticks;
+        Timestamp = Math.Max(now.Ticks, lastStamp + 1);
+        lastStamp = Timestamp;
         BirthDate = now;
     }
 

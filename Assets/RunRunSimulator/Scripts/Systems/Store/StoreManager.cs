@@ -34,13 +34,13 @@ public class StoreManager : MonoBehaviour
         if (inventory.HasFurniture(def.Id)) return BuyResult.AlreadyOwned;
 
         int price = catalog.FinalPrice(shop, Today);
-        if (price > 0 && Wallet.Balance(Currency.Dabloons) < price) return BuyResult.InsufficientFunds;
+        if (price > 0 && Wallet.Balance(shop.Currency) < price) return BuyResult.InsufficientFunds;
 
         shop.TryConsume();
         inventory.AddFurniture(def.Id);
-        if (price > 0) Wallet.TrySpend(Currency.Dabloons, price, "store");
+        if (price > 0) Wallet.TrySpend(shop.Currency, price, "store");
         else           GameEvents.InventoryChanged(inventory);
-        Debug.Log($"[StoreManager] Bought furniture '{def.DisplayName}' ({def.Id}) for {price} Dabloons.");
+        Debug.Log($"[StoreManager] Bought furniture '{def.DisplayName}' ({def.Id}) for {price} {shop.Currency}.");
         return BuyResult.Success;
     }
 
@@ -65,7 +65,7 @@ public class StoreManager : MonoBehaviour
         if (inventory == null) { Debug.LogError("[StoreManager] No PlayerInventory available."); return BuyResult.OutOfStock; }
 
         int price = catalog.FinalPrice(shop, Today);
-        if (price > 0 && !Wallet.TrySpend(Currency.Dabloons, price, "store")) return BuyResult.InsufficientFunds;
+        if (price > 0 && !Wallet.TrySpend(shop.Currency, price, "store")) return BuyResult.InsufficientFunds;
 
         shop.TryConsume();
 
@@ -74,7 +74,7 @@ public class StoreManager : MonoBehaviour
 
         box.Configure(def);
         if (price <= 0) GameEvents.InventoryChanged(inventory);
-        Debug.Log($"[StoreManager] Ordered '{def.DisplayName}' ({def.Id}) for {price} Dabloons.");
+        Debug.Log($"[StoreManager] Ordered '{def.DisplayName}' ({def.Id}) for {price} {shop.Currency}.");
         return BuyResult.Success;
     }
 
@@ -99,7 +99,7 @@ public class StoreManager : MonoBehaviour
         if (inventory == null) { Debug.LogError("[StoreManager] No PlayerInventory available."); return BuyResult.OutOfStock; }
 
         int price = CreatureBoxPrice(box, shop);
-        if (price > 0 && !Wallet.TrySpend(Currency.Dabloons, price, "store")) return BuyResult.InsufficientFunds;
+        if (price > 0 && !Wallet.TrySpend(shop.Currency, price, "store")) return BuyResult.InsufficientFunds;
 
         shop.TryConsume();
 
@@ -108,7 +108,24 @@ public class StoreManager : MonoBehaviour
 
         deliveryBox.Configure(box);
         if (price <= 0) GameEvents.InventoryChanged(inventory);
-        Debug.Log($"[StoreManager] Ordered creature box '{box.DisplayName}' ({box.Id}) for {price} Dabloons.");
+        Debug.Log($"[StoreManager] Ordered creature box '{box.DisplayName}' ({box.Id}) for {price} {shop.Currency}.");
+        return BuyResult.Success;
+    }
+
+    public BuyResult BuyUpgrade(ShopUpgradeSO upgrade)
+    {
+        var world = GameManager.Instance != null ? GameManager.Instance.WorldState : null;
+        if (upgrade == null || world == null) { Debug.LogWarning("[StoreManager] BuyUpgrade: null arg."); return BuyResult.OutOfStock; }
+
+        int level = world.UpgradeLevel(upgrade.Id);
+        if (upgrade.IsMaxed(level)) return BuyResult.AlreadyOwned;
+
+        int price = upgrade.PriceFor(level);
+        if (price > 0 && !Wallet.TrySpend(Currency.Dabloons, price, "upgrade")) return BuyResult.InsufficientFunds;
+
+        world.SetUpgradeLevel(upgrade.Id, level + 1);
+        GameEvents.WorldStateChanged(world);
+        Debug.Log($"[StoreManager] Bought upgrade '{upgrade.DisplayName}' ({upgrade.Id}) level {level + 1}/{upgrade.MaxLevel} for {price} Dabloons.");
         return BuyResult.Success;
     }
 
@@ -139,7 +156,7 @@ public class StoreManager : MonoBehaviour
         {
             Debug.LogError("[StoreManager] deliveryBoxPrefab has no DeliveryBox component.");
             Destroy(go);
-            if (price > 0) { Wallet.Add(Currency.Dabloons, price, "store-refund"); shop.CurrentStock++; }
+            if (price > 0) { Wallet.Add(shop.Currency, price, "store-refund"); shop.CurrentStock++; }
             return null;
         }
         return box;

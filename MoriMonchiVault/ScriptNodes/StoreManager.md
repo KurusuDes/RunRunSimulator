@@ -1,70 +1,95 @@
 ---
-tags: [script, store, transactions]
+tags: [script, store, transactions, manager]
 ---
 
-# StoreManager
+# StoreManager.cs
 
 **Ruta:** `Systems/Store/StoreManager.cs`
 
-**Responsabilidad:** Orquestador de compras. Valida saldo vía [[Wallet]], stock, ownership. Muta inventario y dispara eventos. Crea `DeliveryBox` para entregas (props y cajas de criaturas). S137: `BuyCreatureBox()` ahora instancia criaturas con Form especificado (Egg/Slime/Adult via CreatureBoxSO). **S128:** ahora valida saldo con `Wallet.Balance()` y cobra con `Wallet.TrySpend()` (puerta única); orden de operaciones fija: comprueba saldo → concede mueble/prop → cobra al final (un solo evento de persistencia). **S130:** añade `BuyCreatureBox()` con flujo idéntico a props. **S137:** cajas de huevos (Form=Egg) son el entry point del ciclo de vida.
+**Responsabilidad:** Orquestador de compras. Valida saldo vía `Wallet`, stock, ownership. Muta inventario, dispara eventos. Crea `DeliveryBox` para entregas (props, cajas de criaturas). **S138:** añade `BuyUpgrade()` + `CreatureBoxPrice()`. Flujo invariante: comprueba saldo → aplica → cobra → un evento de persistencia.
 
 ## Métodos Públicos
 
 | Método | Retorna | Descripción |
 |--------|---------|-------------|
-| `BuyFurniture(FurnitureDefinitionSO def, StoreShopData shop)` | `BuyResult` | Compra mueble; valida stock/saldo/ownership, añade al inventario, cobra |
-| `BuyWorldProp(ItemDefinitionSO def, StoreShopData shop)` | `BuyResult` | Compra prop; instancia `DeliveryBox`, spawna en punto, cobra |
-| `BuyCreatureBox(CreatureBoxSO box, StoreShopData shop)` | `BuyResult` | **(S137)** Compra caja de criaturas con Form especificado; instancia `DeliveryBox`, configura caja, cobra. DeliveryBox mintea criaturas con Form=box.Form |
-| `CreatureBoxPrice(CreatureBoxSO box, StoreShopData shop)` | `int` | **(S137)** Calcula precio de caja de criaturas |
-| `RestockIfNeeded()` | `void` | Comprueba schedule en catálogo, recarga si aplica |
+| `BuyFurniture(FurnitureDefinitionSO def, StoreShopData shop)` | `BuyResult` | Valida stock/saldo/ownership, añade inventario, cobra |
+| `BuyWorldProp(ItemDefinitionSO def, StoreShopData shop)` | `BuyResult` | Instancia DeliveryBox, configura prop, cobra |
+| `BuyCreatureBox(CreatureBoxSO box, StoreShopData shop)` | `BuyResult` | **(S137)** Instancia DeliveryBox con criaturas Form=box.Form, cobra |
+| `BuyUpgrade(ShopUpgradeSO upgrade)` | `BuyResult` | **(S138)** Valida nivel < max, deduce Dabloons, eleva nivel en WorldState, dispara evento |
+| `CreatureBoxPrice(CreatureBoxSO box, StoreShopData shop)` | `int` | **(S138)** Precio de caja; 0 si `box.FreeWhileNoCreatures` y no hay criaturas vivas |
 
 ## BuyResult (enum)
 
-- `Success` — transacción completada
-- `OutOfStock` — no hay en stock o sistema no disponible
-- `AlreadyOwned` — mueble ya poseído (furniture solo)
+- `Success` — transacción completa
+- `OutOfStock` — sin stock o sistema no disponible
+- `AlreadyOwned` — mueble ya poseído (solo furniture) ó mejora maxeada (solo upgrades)
 - `InsufficientFunds` — saldo insuficiente
 
-## Flujo BuyCreatureBox (S130 + S137)
+## BuyUpgrade (S138) — Nueva API
 
+```csharp
+public BuyResult BuyUpgrade(ShopUpgradeSO upgrade)
+{
+    var world = GameManager.Instance != null ? GameManager.Instance.WorldState : null;
+    if (upgrade == null || world == null) return BuyResult.OutOfStock;
+
+    int level = world.UpgradeLevel(upgrade.Id);
+    if (upgrade.IsMaxed(level)) return BuyResult.AlreadyOwned;
+
+    int price = upgrade.PriceFor(level);
+    if (price > 0 && !Wallet.TrySpend(Currency.Dabloons, price, "upgrade")) 
+        return BuyResult.InsufficientFunds;
+
+    world.SetUpgradeLevel(upgrade.Id, level + 1);
+    GameEvents.WorldStateChanged(world);
+    return BuyResult.Success;
+}
 ```
-1. Valida args (box, shop)
-2. Valida stock (shop.InStock)
-3. Valida inventario no-nulo
-4. Calcula precio via CreatureBoxPrice()
-5. Cobra primero (BuyResult si insuficiente)
-6. TryConsume stock
-7. Instancia DeliveryBox via SpawnDeliveryBox()
-8. Configure(box) — box contiene Form (S137)
-9. Si price == 0: dispara InventoryChanged manualmente
+
+**Flujo:** Lee nivel actual (WorldState.UpgradeLevel) → comprueba max → deduce Dabloons → eleva nivel → dispara WorldStateChanged (persistencia automática vía GameManager).
+
+## CreatureBoxPrice (S138) — Nueva Lógica
+
+```csharp
+public int CreatureBoxPrice(CreatureBoxSO box, StoreShopData shop)
+{
+    if (box != null && box.FreeWhileNoCreatures)
+    {
+        var registry = GameManager.Instance?.Registry;
+        if (registry == null) return catalog.FinalPrice(shop, Today);
+
+        bool hasLivingCreature = false;
+        foreach (var dna in registry.GetAll().Values)
+        {
+            if (dna.IsDead || dna.IsSold) continue;
+            hasLivingCreature = true;
+            break;
+        }
+        if (!hasLivingCreature) return 0;
+    }
+    return catalog.FinalPrice(shop, Today);
+}
 ```
 
-**Invariante S137:** DeliveryBox.Interact() mintea criaturas con `dna.Form = box.Form`. Kit inicial contiene cajas Form=Egg (5 gratuitas).
+**Propósito:** Cajas gratuitas mientras el jugador no tenga criaturas vivas (onboarding). Kit inicial usa esto.
 
-## Referencias
+## Referencias Serializadas
 
 | Referencia | Tipo | Uso |
 |-----------|------|-----|
-| `catalog` | `ShopCatalogSO` | Catálogo, precios finales, cálculo restock |
-| `deliveryBoxPrefab` | `DeliveryBox` (prefab) | Instancia para props + cajas de criaturas |
-| `deliverySpawnPoint` | `Transform` | Punto de spawn de cajas |
+| `catalog` | `ShopCatalogSO` | Precios, restock |
+| `deliveryBoxPrefab` | `DeliveryBox` | Instancia para props + cajas |
+| `deliverySpawnPoint` | `Transform` | Punto spawn |
 
-## Integración S137
+## Integración S138
 
-- Ciclo de vida: cajas de huevos gratis en kit inicial. Kit inicial (S137) contiene 1 caja creatorBox con Form=Egg y Count=5.
-- AutoPlayer.Step2_BuyEggBox() filtra cajas por Form=Egg y precio=0
-
-## Integración S128
-
-- **Acceso a saldo:** `Wallet.Balance(Currency)` (no directo a SO)
-- **Gasto:** `Wallet.TrySpend()` (registra en log, dispara evento automático)
-- **Reembolsos:** `Wallet.Add()` si error post-gasto
+- AutoPlayer.Step16_Upgrade() itera `catalog.UpgradeListings`, filtra no-maxeados, llama `BuyUpgrade()`
+- Mejoras persisten en WorldStateSO automáticamente vía GameEvents.WorldStateChanged
 
 ## Vinculado a
 
+- [[Index/28 - Currency & Monetization]]
 - [[Index/04 - Store & Transactions]]
-- [[Index/02 - Genetics & Breeding]] (S137: ciclo de vida)
-- [[Index/09 - Active Context]] (S137: kit inicial)
-- [[Index/28 - Cimientos y camino a Game Ready]] (§3 · two currencies)
+- [[Index/02 - Genetics & Breeding]] (ciclo de vida cajas)
 
-**Conexiones:** [[Wallet]], [[GameManager]], [[PlayerInventorySO]], [[ShopCatalogSO]], [[StoreShopData]], [[DeliveryBox]], [[CreatureBoxSO]], [[StorePanelUITK]], [[GameEvents]]
+**Conexiones:** [[Wallet]], [[GameManager]], [[PlayerInventorySO]], [[ShopCatalogSO]], [[DeliveryBox]], [[CreatureBoxSO]], [[ShopUpgradeSO]], [[GameEvents]]

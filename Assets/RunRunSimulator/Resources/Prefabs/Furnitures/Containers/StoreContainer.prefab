@@ -89,6 +89,7 @@ MonoBehaviour:
   capacity: 2
   bounceOut: 5
   bounceUp: 4
+  capacityUpgrade: {fileID: 11400000, guid: 1a2166b2b7095ec4d9031ccdf89d94f2, type: 2}
   restoreRate: 25
   usePoints:
   - {fileID: 5081806064375714224}

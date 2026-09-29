@@ -140,6 +140,10 @@
     -unity-font-style: bold;
 }
 
+.store-price__now--minerita {
+    color: var(--mm-teal);
+}
+
 /* Original price shown atenuated when a discount is active. */
 .store-price__was {
     font-size: 17px;       /* 12 × 1.4 */

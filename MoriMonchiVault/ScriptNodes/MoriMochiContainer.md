@@ -1,89 +1,49 @@
 ---
-tags: [script, world, anchor]
+tags: [script, world, container, anchor]
 ---
 
-# MoriMochiContainer
+# MoriMochiContainer.cs
 
 **Ruta:** `World/Containers/MoriMochiContainer.cs`
 
-**Responsabilidad:** Corral base con `BoxCollider` trigger. S137: Acepta criaturas de cualquier Form (Egg/Slime/Adult), pero cada Form tiene comportamiento específico (Eggs inmóviles en incubadora, Slimes/Adultos con IA). Expone métodos públicos `AnchorKey`, `AnchorPosition()`, `TryReclaim()` para integración con `AnchorRegistry` (duck typing, sin interfaz formal tras S93). En `Start()` deriva el `AnchorKey` del `PlacedFurnitureMarker` y se auto-registra en `AnchorRegistry`. En `OnDestroy()` desregistra.
-
-Admite criaturas lanzadas (`OnTriggerEnter`) o soltadas dentro (`OnTriggerStay`) hasta `capacity`. Rebota si está lleno (`BounceOut`). `Admit()` es la entrada del jugador (lanzada): estampa `LocationKey`/`LocationSlot` en el DNA y persiste via `GameEvents.RegistryChanged`. `Release()` es el retiro del jugador (agarrada): limpia el ancla y persiste. `DetachOccupant()` es el ciclo de vida silencioso (pool/reinit): desregista del censo pero NO persiste.
-
-Expone `Occupants` (IReadOnlyList) y tabla `OccupantInfos` para inspector (nombre/género/**rol** S39). `Claim()` protegido es compartido por admisión y `BreedingContainer`. `EnterConfinement()` confina al agente (cambia areaMask).
-
-## Cambios S137
-
-**Método Accepts (S137 NUEVO):**
-```csharp
-protected virtual bool Accepts(MoriMochiAgent agent) => agent != null && agent.DNA != null;
-```
-
-Cambio: Introducido como virtual method. Default acepta cualquier criatura (cualquier Form). Subclases (BreedingContainer, IncubatorContainer) overridean para filtrar (BreedingContainer solo Adult, IncubatorContainer solo Egg).
-
-## Cambios S93
-
-**Método público nuevo:**
-- `SetAnchorKey(string key)` — setter público llamado por `FurnitureSpawner` tras colocar un mueble. Asigna la clave y auto-registra en `AnchorRegistry`. Permite que la clave se establezca dinámicamente sin derivarla siempre del marker.
-
-**Start() actualizado:**
-- Si `anchorKey` está vacío, intenta derivar del marker. Si `anchorKey` ya tiene valor (vía `SetAnchorKey()`), lo conserva.
-- Siempre llama `AnchorRegistry.Register(this)` en `Start()`.
-
-## Cambios S39
-
-**OccupantInfo struct:**
-- Antes: `{ Name, Gender, Personality }`
-- Ahora: `{ Name, Gender, Role }` — muestra el Role de combate, no Personality
+**Responsabilidad:** Corral base con BoxCollider trigger. Acepta criaturas hasta capacity. **S138:** `protected virtual int Capacity` permite subclases overridear (StoreContainer suma upgrade bonus). TryReclaim ahora valida `Accepts(agent)` antes de confinar.
 
 ## Campos Principales
 
 | Campo | Tipo | Propósito |
 |-------|------|----------|
-| `area` | BoxCollider | Trigger del corral (inspeccionado o auto-grabbed en Awake). |
-| `anchorKey` | string | Clave del lugar (furniture cell "x_y" o nombre si no hay marker). Derivada en Start, o seteada vía `SetAnchorKey()`. |
-| `capacity` | int | Máximo ocupantes. |
-| `occupants` | List<MoriMochiAgent> | Censo (agregado por Claim, removido por Release/DetachOccupant). |
+| `area` | BoxCollider | Trigger del corral |
+| `anchorKey` | string | Clave lugar ("x_y" o nombre) |
+| `capacity` | int | Máximo ocupantes (base) |
+| `occupants` | List<MoriMochiAgent> | Censo |
 
-## API pública (incluye duck-typing del contrato de anclaje)
+## Propiedades S138
 
-| Método | Firma | Propósito |
-|--------|-------|----------|
-| `AnchorKey` { get; } | string | Property: clave del lugar (duck-typing). |
-| `AnchorPosition(int slot)` | Vector3 | duck-typing: retorna `Center` (dónde el spawner deposita el cuerpo). |
-| `TryReclaim(MoriMochiAgent agent, int slot)` | bool | duck-typing: confina el agente via `Claim()`. Retorna false si lleno/ya dentro/confinement falla. |
-| `SetAnchorKey(string key)` | void (public) | **S93 NUEVO** Setter de anchor key llamado por FurnitureSpawner; evita derivar siempre de marker. Registra automáticamente. |
-| `Accepts(MoriMochiAgent agent)` | bool (protected virtual) | **(S137 NUEVO)** Determina si el contenedor acepta la criatura. Default true (acepta cualquier Form). Subclases overridean para filtrar. |
-| `Claim(MoriMochiAgent agent)` | bool (protected) | Confina y registra ocupante. Compartido por admisión (jugador) y reclaim (carga). Valida `Accepts()` primero. |
-| `Admit(MoriMochiAgent agent)` | void (private) | Admisión por lanzamiento: valida confinement, estampa LocationKey/-1, persiste. |
-| `Release(MoriMochiAgent agent)` | void (virtual) | Retiro por agarrada del jugador: limpia LocationKey/-1, persiste. Base para BreedingContainer. |
-| `DetachOccupant(MoriMochiAgent agent)` | void | Desacoplamiento silencioso (pool/reinit): remueve del censo sin persistir. |
-| `Occupants` { get; } | IReadOnlyList<MoriMochiAgent> | Censo actual. |
-| `OccupantInfos` { get; } | List<OccupantInfo> | Tabla Odin con nombre/género/**rol** (S39) |
-| `Center` { get; } | Vector3 | Centro del trigger (para acarreo/courtship/birth launch). |
-| `InteriorBounds` { get; } | Bounds | Bounds del trigger. |
-| `IsFull` { get; } | bool | `occupants.Count >= capacity`. |
+| Propiedad | Retorna | Descripción |
+|-----------|---------|-------------|
+| `Capacity` | int (virtual) | **(S138)** `protected virtual`, retorna `capacity`. StoreContainer overridea: `base.Capacity + upgrade.CurrentBonus` |
+| `IsFull` | bool | `occupants.Count >= Capacity` |
+| `AnchorKey` | string | Clave del lugar |
+| `AnchorPosition(slot)` | Vector3 | Centro (duck-typing) |
+| `TryReclaim(agent, slot)` | bool | **(S138)** `Accepts(agent) && Claim(agent)` — valida Form primero |
+
+## Métodos S138
+
+```csharp
+protected virtual int Capacity => capacity;
+
+public virtual bool TryReclaim(MoriMochiAgent agent, int slot) 
+    => Accepts(agent) && Claim(agent);
+```
+
+**Cambio:** TryReclaim ahora comprueba `Accepts()` (Form filter) antes de reclamar.
+
+## Subclases
+
+- **BreedingContainer:** Accepts solo Adult
+- **IncubatorContainer:** Accepts solo Egg
+- **StoreContainer:** Accepts Form != Egg; Capacity += upgrade.CurrentBonus
 
 ## Conexiones
 
-- **`AnchorRegistry`**: Se registra en `Start()`, desregistra en `OnDestroy()`.
-- **`PlacedFurnitureMarker`**: El contenedor lee su `AnchorCell` en `Start()` para derivar la clave (o usa la seteada por `SetAnchorKey()`).
-- **`MoriMochiAgent`**: Confina via `EnterConfinement()`. Agente llama `Release()` en `OnGrab`.
-- **`GameEvents`**: Dispara `RegistryChanged` en `Admit()`/`Release()` (persiste).
-- **`MoriMochiSpawner`**: Consulta registry para `TryReclaim()` en carga.
-- **`BreedingContainer`**: Hereda y llama `base.Start()/OnDestroy()` para ancla automática. Overridea `Accepts()` para solo Adult.
-- **`IncubatorContainer`** (S137): Hereda, overridea `Accepts()` para solo Egg.
-- **`StoreContainer`**: Hereda, gestiona ocupantes NPCs aparte (array `usePointOccupants`).
-- **`FurnitureSpawner`**: **S93** Llama `SetAnchorKey()` tras colocar un mueble nuevo.
-
-## Notas de Implementación
-
-- `LocationKey` = "" indica criatura suelta (no anclada).
-- Entrada por jugador (`Admit`) persiste; ciclo de vida (`DetachOccupant`) no. Retiro por jugador (`Release`) persiste.
-- Confinamiento falla si el piso del corral no está pintado con el área de cría y horneado (bake) — se devuelve a física.
-- Virtual `Release()` permite a subclases (BreedingContainer) cancelar breeding al retirar.
-- Virtual `Accepts()` permite a subclases filtrar por Form (S137).
-- **S39 cambio:** Tabla OccupantInfos ahora muestra Role en lugar de Personality.
-- **S93 cambio:** `SetAnchorKey()` público + `Start()` re-derivador permite que la clave sea seteada dinámicamente (antes siempre se derivaba del marker).
-
-**Vinculado a:** [[Index/02 - Genetics & Breeding]] (S137), [[Index/06 - Player & World]]
+- [[AnchorRegistry]], [[BreedingContainer]], [[IncubatorContainer]], [[StoreContainer]], [[FurnitureSpawner]]

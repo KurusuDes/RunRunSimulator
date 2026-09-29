@@ -4,6 +4,47 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-09-29 (Session 138 — **loop de apertura completo de punta a punta: balance, tienda por moneda, mejoras mínimas, bot tanda 2 y 5 bugs de estructura** — 4 `.cs` creados, 18 modificados; compila 0 errores; verificado en Play con el bot hasta `FIN tanda 2`)
+
+**Focus:** Juan pidió "toda la estructura lista y funcionando" antes de cambiar cómo impactan las partes al gameplay; balance delegado ("hacé los balanceos necesarios").
+
+1. **Hallazgos S137 cerrados:** (a) la bajada paga `mineritaPerMaterial` = 5 por material (`ExpeditionBridge`); (b) huevo a escala de mundo `MonchiVisualBankSO.eggScale` = 2,6 (a 3,4 quedaba más alto que el blobim: 1,0 vs 0,64 m); (c) `ArenaCastSource` excluye huevos; (d) el bot acelera la arena por `ArenaClockControl.Set`; (e) `CreatureDNA.Stamp` estrictamente creciente.
+2. **Cría por forma:** `BreedingContainer.IsAdult` = solo `Form == Adult` (se quitó el requisito de 7 días de edad, contradecía las 3 exploraciones). `Accepts` = solo adultos (antes aceptaba blobims y dos slimes llenaban el corral).
+3. **Tienda por moneda:** `StoreShopData.Currency`; `StoreManager` cobra en la moneda de la fila; precio en Minerita con clase `store-price__now--minerita` (teal). Catálogo: breeding room F3 = 20 Minerita. Kit inicial suma la vitrina F8.
+4. **Mejoras mínimas:** `ShopUpgradeSO` (niveles con precio en dabloons, bono por nivel), nivel en `WorldStateData.UpgradeLevels` (se guarda, sin migración), `ShopCatalogSO.UpgradeListings`, `StoreManager.BuyUpgrade`, fila en la pestaña Furniture. Primer contenido `Upgrade_VitrinaAmpliada` (+1 lugar por nivel, 20/50/100): `StoreContainer.capacityUpgrade` → `MoriMochiContainer.Capacity` virtual. Verificado: capacidad 3 y nivel guardado.
+5. **Bot partido por composición:** `AutoPlayer` (núcleo, `PlayExpedition`, `ExpeditionsUntil`, `ResumeFromStep` estático para reanudar sobre la partida actual, mínimo 12) + `AutoPlayerOpeningSteps` (1-10) + `AutoPlayerLoopSteps` (11-17: breeding room, bajadas hasta pareja adulta, criar, vitrina en zona de clientes a ≥7 m de la caja, venta, mejora) + `AutoPlayerQuery`. Reinicio de partida autorizado por Juan (local + nube, es escenario de prueba).
+6. **Bugs de estructura hallados por el bot (arreglados):** `MoriMochiContainer.TryReclaim` respeta `Accepts` (al recargar re-sentaba blobims en el corral); `FurnitureService.RebuildGridOccupancy` en Start y reload (la grilla olvidaba los muebles y se colocaban encima); `ExpeditionHandoff.ResetTime` restaura `timeScale` y `fixedDeltaTime` (MMTimeManager capturaba el paso escalado: ×4 por bajada acelerada, llegó a 5,12 s y la física de la tienda se congelaba); `NpcAgent.TickQueueing` mide distancia en el plano (0,83 m de offset vertical: ningún cliente llegaba a la caja, las ventas nunca cerraban).
+
+**Hallazgos para el feedback de Juan (sin tocar):** (1) bajada todo-o-nada: ~50 % perdidas, perder el piso da 0 Minerita aunque se junte material (10 vs 12 = nada); blobims contra rivales adultos; la primera pareja adulta costó 4-13 bajadas. (2) La grilla deja poner muebles sobre la caja/fila o en la trastienda (sin acceso de clientes) sin aviso. (3) La pareja vuelve a criar sola apenas eclosiona. (4) Primera venta de un blobim: 24 dabloons.
+
+**Siguiente paso:** feedback de Juan sobre el loop → cambios a cómo impactan las partes en el gameplay. Pendientes viejos: ojitos coloreables, rostros y animaciones de eclosión/evolución, volcar S137-S138 en `Index/30`/`Index/31`.
+
+**Archivos `.cs` creados (4) · modificados (18):**
+- `Assets/RunRunSimulator/Scripts/Data/Store/ShopUpgradeSO.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Systems/Dev/AutoPlayerLoopSteps.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Systems/Dev/AutoPlayerOpeningSteps.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Systems/Dev/AutoPlayerQuery.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Core/ExpeditionHandoff.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Databases/MonchiVisualBankSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Genetics/CreatureDNA.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/World/WorldStateSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Dev/AutoPlayer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Expedition/ExpeditionBridge.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Furniture/FurnitureService.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Store/ShopCatalogSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Store/StoreManager.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Store/StoreShopData.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/StorePanelUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/StoreRows.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Containers/BreedingContainer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Containers/MoriMochiContainer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Containers/StoreContainer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiEggBody.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Expedition/ArenaCastSource.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Npc/NpcAgent.cs` → MODIFICADO
+
+---
+
 **Session:** 2026-09-28/29 (Session 137 — **kit para la artista, ronda 5 cerrada, ciclo de vida huevo → blobim → adulto, partida nueva y bot de apertura** — 7 `.cs` creados, 22 modificados; compila 0 errores; verificado en editor y Play)
 
 **Focus:** ciclo de vida y loop de apertura (Juan lo definió en esta sesión). Diseño en [[Index/30 - Huevos y Slimes (pipeline Blender)]] (pendiente de volcar).

@@ -9,6 +9,10 @@ public class StoreContainer : MoriMochiContainer
 {
     protected override bool Accepts(MoriMochiAgent agent) => agent.DNA == null || agent.DNA.Form != MonchiForm.Egg;
 
+    [SerializeField] private ShopUpgradeSO capacityUpgrade;
+
+    protected override int Capacity => base.Capacity + (capacityUpgrade != null ? capacityUpgrade.CurrentBonus : 0);
+
     [SerializeField, Min(0f)]
     [Title("Store Display")]
     private float restoreRate = 25f;

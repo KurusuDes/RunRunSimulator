@@ -1,82 +1,37 @@
 ---
-tags: [script, world, npc, core]
+tags: [script, world, npc, core, queue]
 ---
 
 # NpcAgent.cs
 
 **Ruta:** `World/Npc/NpcAgent.cs`
 
-**Responsabilidad:** Componente MonoBehaviour que encarna un cliente NPC en la tienda: navega entre estantes inspeccionando criaturas, se posiciona en la fila de caja, negocia precio, compra o se va. Dueño de su máquina de estados (`NpcState`, 8 estados) y motivo de salida (`LeaveReason`, 4 valores). Genera "personalidad" per-instancia sorteando variación en velocidad, prioridad de colisión y delay de reacción. Se suscribe a `GameEvents.OnCustomerSold` para detectar si otro cliente le arrebató su objetivo (Outbid).
+**Responsabilidad:** Cliente NPC en tienda: navega estantes, espera fila, negocia, compra. **S138:** TickQueueing mide distancia al slot en plano XZ (antes 3D, offset Y=0.83 impedía llegar).
 
-**S129:** `AcceptCurrentOffer()` delega en `CreatureLifecycle.Adopt()` en lugar de escribir `BusyState`/`SaleDate` a mano. `BestPickFromContainer()` usa `CreatureAvailability.IsFree()` para validación.
+## S138: Queue Distance Fix
 
-**Datos públicos:**
-- `Archetype` (CustomerArchetypeSO): perfil del cliente (min/max inspecciones, duración inspección, timeout espera).
-- `DisplayName` (string): nombre generado al instanciar vía `NpcNameBank.GetRandomName()`, ej. "Carmen Pérez".
-- `ReactionDelay` (float): delay random (s) antes de que [[NpcThoughtTag]] muestre una frase nueva. Sorteado en `ApplyInstanceVariation()`.
-- `Reason` (LeaveReason): enum anidado `{ None, Purchased, Outbid, QueueFull }` que explica por qué se va: compró exitoso, otro le ganó el objetivo, o no entró a la fila.
-- `TargetMM` (CreatureDNA): criatura elegida al inspeccionar. Null si está vagando o sin decisión.
-- `InitialOffer` / `CurrentOffer` (int): precio estimado inicial y oferta actual (puede cambiar tras contraoferta).
-- `HasCounteredOnce` (bool): flag para permitir solo UNA contraoferta por compra.
-- `State` (NpcState): máquina de 8 estados (Spawned, Wandering, InspectingDisplay, ApproachingRegister, Queueing, WaitingAtRegister, Negotiating, Leaving).
-- `CurrentDisplay` (StoreContainer): estante donde está inspeccionando.
-- `AreaMask` (int, read-only): máscara de áreas de NavMesh por las que el agente puede caminar (`navAgent.areaMask`, o `NavMesh.AllAreas` si aún no inicializado). La consume [[CashRegister]] para muestrear la cola en las mismas áreas (single source of truth del cerco).
+**TickQueueing() — líneas 230-232:**
+```csharp
+Vector3 toSlot = reservedQueueSlot - transform.position;
+toSlot.y = 0f;  // Normaliza a plano horizontal (XZ)
+float dist = toSlot.magnitude;
+```
 
-**Enums públicos:**
-- `NpcState`: {Spawned, Wandering, InspectingDisplay, ApproachingRegister, Queueing, WaitingAtRegister, Negotiating, Leaving}.
-- `LeaveReason`: {None, Purchased, Outbid, QueueFull}.
+**Cambio:** Antes usaba 3D (includes Y), offset vertical 0.83 hacía imposible llegar. Ahora solo cuenta distancia XZ (plano suelo).
 
-**Métodos públicos:**
-- `Initialize(CustomerArchetypeSO archetype, IReadOnlyList<StoreContainer> shopDisplays, CashRegister cashRegister, NpcController owner)` — inicializa, genera nombre, obtiene NavMeshAgent, llama a `ApplyWalkableAreas()` + `ApplyInstanceVariation()`, transiciona a Wandering.
-- `AcceptCurrentOffer()` — **(S129)** delega en `CreatureLifecycle.Adopt(dna, this)` (escribe estado, persiste), setea `Reason = Purchased`, emite `GameEvents.CustomerSold`, suma dabloons, emite `RegistryChanged`/`InventoryChanged`, transiciona a Leaving.
-- `TryCounterOffer()` — si `!HasCounteredOnce`, estima y evalúa contraoferta. Si acepta, actualiza `CurrentOffer` y devuelve true. Si rechaza, transiciona a Leaving y devuelve false.
-- `RejectByPlayer()` — transiciona a Leaving.
-- `EnterNegotiating()` → Negotiating.
-- `ExitNegotiating()` → WaitingAtRegister si estaba en Negotiating.
+**Propósito:** NPC llega a caja cuando distancia XZ < arriveDistance.
 
-**Privados clave:**
-- `ApplyWalkableAreas()` — convierte `walkableAreaNames` a una máscara de bits vía `NavMesh.GetAreaFromName` (`1 << idx` por cada área válida) y la asigna a `navAgent.areaMask`. Fallback a `NavMesh.AllAreas` si la lista queda vacía o ningún nombre existe. Cerca el pathfinding: el NPC nunca rutea por el breeding room.
-- `EditorNavMeshAreaNames()` — helper estático editor-only (envuelto en `#if UNITY_EDITOR`, devuelve `NavMesh.GetAreaNames()`; array vacío en build). Alimenta el `[ValueDropdown]` de `walkableAreaNames`. Espejo del de [[MoriMochiAgent]].
-- `ApplyInstanceVariation()` — sorteea por cliente: `navAgent.speed/angularSpeed/acceleration` (±`moveVariation`), `avoidancePriority` (rango `avoidancePriorityRange`), `ReactionDelay` (rango `reactionDelayRange`). Cada cliente sale con "personalidad" de movimiento y reacción distintos.
-- `TransitionTo(NpcState next)` — centraliza lógica de cambio (limpia timers, libera slots, posiciona NavMesh).
-- `TickWandering()` — busca estantes con criaturas, intenta `TryReserveUsePoint()`, transiciona a InspectingDisplay o Leaving.
-- `TickInspecting()` — espera duración, elige mejor MM del estante (máximo precio estimado), emite `GameEvents.CustomerDecided`.
-- `TickApproachingRegister()` — solicita slot en fila. Si null, setea `Reason = QueueFull` y transiciona a Leaving.
-- `TickQueueing()` — mantiene posición (repolla `CurrentSlotOf()` para detectar cambios), detecta cuando es siguiente (IsFrontSlot).
-- `TickWaiting()` — espera respuesta del jugador (timeout → Leaving).
-- `TickLeaving()` — navega a ExitPoint, emite `GameEvents.CustomerLeft`, se despawatea.
-- `OnEnable()` — suscribe a `GameEvents.OnCustomerSold`.
-- `OnDisable()` — desuscribe, libera slots.
-- `OnSomeoneSold(buyer, mm, price)` — si otro cliente (≠ this) compró su `TargetMM`, setea `Reason = Outbid` y transiciona a Leaving.
-- `BestPickFromContainer(container)` — **(S129)** usa `CreatureAvailability.IsFree(dna)` en lugar de comprobaciones manuales de BusyState/IsDead/IsSold.
+## Métodos
 
-**Serialized (Odin Inspector):**
-- `[Title("Movement")]` `arriveDistance` (float, 0.5): tolerancia de distancia para "llegué".
-- `[Title("Walkable areas")]` `walkableAreaNames` (List<string>, default {"ShopFrontDesk","Outside"}): áreas de NavMesh por las que el NPC PUEDE caminar — su único cerco. `[ValueDropdown(nameof(EditorNavMeshAreaNames))]` alimenta el dropdown con los nombres reales de Navigation. Vacío o nombres inexistentes → sin restricción (AllAreas). La cola de [[CashRegister]] hereda esta máscara.
-- `[Title("Per-instance variation")]` `moveVariation` (float, 0.15): ±15% en velocidad/giro/aceleración.
-- `avoidancePriorityRange` (Vector2Int, 30-70): rango de prioridad de colisiones.
-- `reactionDelayRange` (Vector2, 0.2-1.2s): rango de delay antes de mostrar frase nueva.
+- `Initialize()` — Setup inicial
+- `AcceptCurrentOffer()` — Compra vía CreatureLifecycle.Adopt()
+- `TickQueueing()` — Mantiene posición en fila (S138: distancia XZ)
 
-**Cambios principales (Sesión 20):**
-- Reemplazó `QueueWasFull` (bool) por enum `LeaveReason` (4 estados del "porqué me voy").
-- Propiedades nuevas: `ReactionDelay`, `Reason` y `AreaMask`.
-- `Initialize()` ahora llama a `ApplyWalkableAreas()` + `ApplyInstanceVariation()`.
-- `AcceptCurrentOffer()` setea `Reason = Purchased` antes de disparar `CustomerSold`.
-- `TickApproachingRegister()` setea `Reason = QueueFull` si no hay slot.
-- Se suscribe a `GameEvents.OnCustomerSold` en `OnEnable()` / desuscribe en `OnDisable()` (handler `OnSomeoneSold`).
-- **Cerco de áreas caminables:** campo `walkableAreaNames` + `ApplyWalkableAreas()` construyen `navAgent.areaMask` desde nombres de Navigation. Nuevo `AreaMask` público lo expone para que [[CashRegister]] muestree la cola en las mismas áreas (single source of truth). El NPC nunca rutea por el breeding room.
+## Enums
 
-**Cambios S93:**
-- Ya NO dispara eventos `OnCustomerSpawned`, `OnCustomerDecided`, `OnCustomerArrivedAtRegister`, `OnCustomerLeft` a nivel de `GameEvents` (fueron removidos). Los únicos eventos son `OnCustomerSold`.
+- `NpcState`: Spawned, Wandering, InspectingDisplay, ApproachingRegister, Queueing, WaitingAtRegister, Negotiating, Leaving
+- `LeaveReason`: None, Purchased, Outbid, QueueFull
 
-**Cambios S129:**
-- `AcceptCurrentOffer()` delega en `CreatureLifecycle.Adopt(dna, this)` en lugar de escribir estado a mano.
-- `BestPickFromContainer()` usa `CreatureAvailability.IsFree()` para validación.
+## Conexiones
 
-**Eventos (solo OnCustomerSold):**
-- `GameEvents.OnCustomerSold(this, mm, offer)` — aceptó compra.
-- `GameEvents.OnCustomerSold` — escucha (suscrito en OnEnable): otro cliente compró su objetivo.
-
-**Vinculado a:** [[Index/04 - Customer System]]
-
-**Conexiones:** [[NpcController]], [[NpcNameBank]], [[NpcDialogueBank]], [[NpcThoughtTag]], [[StoreContainer]], [[CashRegister]] (lee `AreaMask` para la cola), [[CustomerArchetypeSO]], [[CustomerService]], [[CreatureDNA]], [[GameEvents]], [[GameManager]], [[MoriMochiAgent]] (mismo patrón de `walkableAreaNames` + dropdown editor), [[CreatureLifecycle]], [[CreatureAvailability]]
+- [[CashRegister]], [[StoreContainer]], [[CreatureLifecycle]], [[NpcNameBank]]

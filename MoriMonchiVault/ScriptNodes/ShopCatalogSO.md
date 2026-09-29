@@ -1,12 +1,12 @@
 ---
-tags: [script, store, data]
+tags: [script, store, data, catalog]
 ---
 
-# ShopCatalogSO
+# ShopCatalogSO.cs
 
 **Ruta:** `Systems/Store/ShopCatalogSO.cs`
 
-**Responsabilidad:** Catálogo unificado con descuentos y restock schedule por día de juego. Expone 3 tipos de listings: Furniture, WorldProps (ItemDefinitionSO), y Creature Boxes. S131: API cambió de DateTime → int day (GameClock.Instance.Day). Métodos: IsDiscountActive(int day), FinalPrice(StoreShopData, int day), NeedsRestock(int day), RestockAll(int day).
+**Responsabilidad:** Catálogo unificado: descuentos + restock schedule por día de juego. Expone 4 tipos de listings: Furniture, WorldProps, Creature Boxes, y Upgrades (S138). S131: API cambió DateTime → int day (GameClock.Instance.Day). Métodos: IsDiscountActive(int day), FinalPrice(StoreShopData, int day), NeedsRestock(int day), RestockAll(int day).
 
 ## Clases Internas
 
@@ -28,7 +28,7 @@ public class ItemListing
 }
 ```
 
-### CreatureBoxListing (S130)
+### CreatureBoxListing
 ```csharp
 public class CreatureBoxListing
 {
@@ -41,81 +41,51 @@ public class CreatureBoxListing
 
 | Propiedad | Retorna | Descripción |
 |-----------|---------|-------------|
-| `FurnitureListings` | `IReadOnlyList<FurnitureListing>` | Lista de muebles |
-| `ItemListings` | `IReadOnlyList<ItemListing>` | Lista de props |
-| `CreatureBoxListings` | `IReadOnlyList<CreatureBoxListing>` | Lista de cajas de criaturas |
-| `RestockEveryDays` | int | Intervalo de restock (default 3) |
-| `DiscountEveryDays` | int | Intervalo de descuento en días (default 7; 0=nunca) |
+| `FurnitureListings` | `IReadOnlyList<FurnitureListing>` | Muebles |
+| `ItemListings` | `IReadOnlyList<ItemListing>` | Props |
+| `CreatureBoxListings` | `IReadOnlyList<CreatureBoxListing>` | Cajas de criaturas |
+| `UpgradeListings` | `IReadOnlyList<ShopUpgradeSO>` | **(S138)** Mejoras compradas con Dabloons |
+| `RestockEveryDays` | int | Intervalo restock (default 3) |
+| `DiscountEveryDays` | int | Intervalo descuento (default 7; 0=nunca) |
 
 ## Métodos Públicos
 
 | Método | Retorna | Descripción |
 |--------|---------|-------------|
-| `IsDiscountActive(int day)` | `bool` | **(S131)** `day % DiscountEveryDays == 0` (si DiscountEveryDays > 0) |
-| `FinalPrice(StoreShopData shop, int day)` | `int` | Precio con descuento aplicado según IsDiscountActive(day) |
-| `NeedsRestock(int day)` | `bool` | `lastRestockDay <= 0 || day - lastRestockDay >= RestockEveryDays` |
-| `RestockAll(int day)` | `void` | Recarga stock de todas listings; actualiza lastRestockDay |
+| `IsDiscountActive(int day)` | `bool` | `day % DiscountEveryDays == 0` (módulo) |
+| `FinalPrice(StoreShopData shop, int day)` | `int` | Precio + descuento según IsDiscountActive(day) |
+| `NeedsRestock(int day)` | `bool` | `lastRestockDay <= 0 \|\| day - lastRestockDay >= RestockEveryDays` |
+| `RestockAll(int day)` | `void` | Recarga stock todas listings; guarda lastRestockDay |
 
-## Cambios S131
+## Cambios S138
 
-**Borrados:**
-- Enum `DiscountDay` (flags Monday-Sunday)
-- Enum `DiscountMonth` (flags January-December)
-- Enum `RestockPeriod` (EarlyMonth/MidMonth/EndOfMonth)
-- Métodos que usaban DateTime
-
-**Nuevos campos:**
+**Nuevo campo:**
 ```csharp
-[Min(1)] public int RestockEveryDays = 3;     // Intervalo días de juego
-[Min(0)] public int DiscountEveryDays = 7;    // Intervalo días de juego (0=nunca)
+[Title("Shop upgrades for sale")]
+[SerializeField] private List<ShopUpgradeSO> upgradeListings = new List<ShopUpgradeSO>();
 ```
 
-**Nueva API:**
-- `IsDiscountActive(int day)` — módulo aritmético simple
-- `FinalPrice(StoreShopData shop, int day)` — delega `shop.FinalPrice(IsDiscountActive(day))`
-- `NeedsRestock(int day)` — compara `lastRestockDay` (int)
-- `RestockAll(int day)` — simple loop, guarda `lastRestockDay = day`
+**Nueva propiedad:**
+```csharp
+public IReadOnlyList<ShopUpgradeSO> UpgradeListings => upgradeListings;
+```
 
-**Dev button:**
+Mejoras no tienen stock (no consumen), ni restock schedule. Cada mejora rastrean su nivel en `WorldStateSO.UpgradeLevel(id)`.
+
+## Dev Button
+
 ```csharp
 [Button("Force Restock All (DEV)")]
 private void DevForceRestock()
 {
     int day = GameClock.Instance != null ? GameClock.Instance.Day : 1;
     RestockAll(day);
-    Debug.Log("[ShopCatalog] Force restock fired");
 }
 ```
 
-## Flujo Restock (S131)
-
-1. `StoreManager.OnDayStarted(int day)` → `NeedsRestock(day)?`
-2. Si true: `RestockAll(day)` → recarga stock de todas listings (furniture, items, boxes)
-
-## Integración S130 + S131
-
-`CreatureBoxListings` se recarga en restock igual que furniture e items. `StoreRows.Collect(Tab.Creatures)` itera este array. `StoreManager.BuyCreatureBox()` valida vía `shop.InStock`.
-
 ## Vinculado a
 
+- [[Index/28 - Currency & Monetization]]
 - [[Index/04 - Store & Transactions]]
-- [[Index/28 - Cimientos y camino a Game Ready]]
-- [[Index/09 - Active Context]]
 
-## Conexiones
-
-**Datos:**
-- [[StoreShopData]] — consultas de precio/stock
-- [[FurnitureDefinitionSO]], [[ItemDefinitionSO]], [[CreatureBoxSO]]
-
-**Sistemas:**
-- [[StoreManager]] — llama IsDiscountActive, FinalPrice, NeedsRestock, RestockAll
-- [[GameClock]] — proporciona día actual
-- [[GameEvents]] — StoreManager escucha OnDayStarted
-
-## Notas (S131 HC-4)
-
-- **Simplificación:** DateTime → int day (calendar no existe; solo días de juego).
-- **Módulo:** IsDiscountActive usa `day % DiscountEveryDays == 0` (repetitivo cada N días).
-- **Restock tracking:** lastRestockDay (int, persistido en SerializedScriptableObject).
-- **Dev button:** lee GameClock.Instance.Day con fallback a 1.
+**Conexiones:** [[StoreShopData]], [[FurnitureDefinitionSO]], [[ItemDefinitionSO]], [[CreatureBoxSO]], [[ShopUpgradeSO]], [[StoreManager]], [[GameClock]]

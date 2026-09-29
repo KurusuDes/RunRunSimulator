@@ -1,28 +1,41 @@
 ---
-tags: [script, furniture, service]
+tags: [script, furniture, service, placement]
 ---
 
 # FurnitureService.cs
 
 **Ruta:** `Systems/Furniture/FurnitureService.cs`
 
-**Responsabilidad:** CRUD de muebles: place, remove, rotate. Modifica `FurnitureRegistrySO`, dispara `GameEvents.OnFurnitureChanged()` para persistencia automática. Resuelve definiciones via `FurnitureDefinitionSO.GetByID()`.
-
-**S93:** Usa `GetByID()` para lookups de definición.
+**Responsabilidad:** CRUD muebles: place, remove, rotate. Modifica `FurnitureRegistrySO`, dispara `GameEvents.OnFurnitureChanged()`. **S138:** Reconstruye ocupancy de grilla en Start() y OnFurnitureReloaded (reload escena olvida muebles).
 
 ## Métodos Principales
 
-- `Place(furnitureId, position, rotation, ...)` — Añade a registry
-- `Remove(furnitureId)` — Borra de registry
-- `Rotate(furnitureId, newRotation)` — Actualiza rotación
+- `Place()` — Añade a registry
+- `Remove()` — Borra de registry
+- `Rotate()` — Actualiza rotación
+- **S138:** `RebuildGridOccupancy()` — Recarga grilla con todas piezas de registry
 
-## Event Pattern
+## S138: Grid Rebuild
 
-Cada mutación → `GameEvents.OnFurnitureChanged(registry)` → GameManager persiste + cloud push
+**Start() + OnFurnitureReloaded()**
+```csharp
+RebuildGridOccupancy();
+ScheduleRebake();
+```
 
-## Vinculado a
+**RebuildGridOccupancy()** — Clear grid, re-ocupar todas piezas:
+```csharp
+grid.Clear();
+foreach (var piece in registry.GetAll().Values)
+{
+    var def = database.GetByID(piece.DefId);
+    Vector2Int footprint = def != null ? def.Footprint : Vector2Int.one;
+    grid.Occupy(new Vector2Int(piece.CellX, piece.CellY), footprint, piece.Rotation);
+}
+```
 
-- [[Index/10 - Furniture & Building]]
+**Propósito:** Reload escena (CloudSyncService.OnWorldStateReloaded) restaura registry pero grilla estaba vacía. Ahora se repuebla automáticamente.
 
-**Conexiones:** [[FurnitureRegistrySO]], [[FurnitureSpawner]], [[PlacementGrid]], [[GameEvents]], [[BuildModeController]], [[FurnitureDefinitionSO]]
+## Conexiones
 
+- [[FurnitureRegistrySO]], [[PlacementGrid]], [[GameEvents]], [[FurnitureSpawner]]

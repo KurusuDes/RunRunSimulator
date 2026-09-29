@@ -47,7 +47,7 @@ public static class ArenaCastSource
     {
         var result = new List<CreatureDNA>();
         foreach (var dna in data.Values)
-            if (dna != null && !dna.IsDead) result.Add(dna);
+            if (dna != null && !dna.IsDead && dna.Form != MonchiForm.Egg) result.Add(dna);
 
         result.Sort((a, b) => a.Timestamp.CompareTo(b.Timestamp));
         return result;

@@ -1,45 +1,48 @@
 ---
-tags: [script, ui, store]
+tags: [script, ui, store, panel]
 ---
 
-# StorePanelUITK
+# StorePanelUITK.cs
 
 **Ruta:** `UI/StorePanelUITK.cs`
 
-**Responsabilidad:** Panel de tienda (4 pestañas: Furniture/WorldProps/Consumables/Creatures). S137: Soporta compra de cajas de criaturas con Form específico (Egg/Slime/Adult). S131: Precio por día de juego (descuentos dinámicos via `ShopCatalogSO.IsDiscountActive(day)` + `FinalPrice(shop, day)`). Reemplazó `GameManager.Now` (UTC) → `GameClock.Instance.Day` (día de juego).
+**Responsabilidad:** Panel de tienda (4 pestañas: Furniture/WorldProps/Consumables/Creatures). **S138:** Furniture tab ahora incluye mejoras (visualmente al final de muebles). Soporta Form en cajas de criaturas (Egg/Slime/Adult). Precio dinámico por día de juego. Descuentos via `IsDiscountActive(day)`.
 
-## Cambio S131
+**S131:** Cambió DateTime (UTC) → int day (GameClock.Instance.Day).
 
-**Cálculo de precio dinámico:**
-```csharp
-int today = GameClock.Instance?.Day ?? 1;
-int price = ShopCatalogSO.Instance.FinalPrice(shop, today);
-priceLabel.text = price.ToString();
-```
+## Pestañas
 
-**Descuentos módulo:**
-- `IsDiscountActive(day)` → `day % DiscountEveryDays == 0`
-- `FinalPrice(shop, day)` → aplica descuento si activo
+| Tab | Contenido | Cambios |
+|-----|-----------|---------|
+| Furniture | Muebles + mejoras **(S138)** | Mejoras se listan al final de muebles; click dispara BuyUpgrade |
+| WorldProps | Props/naturales | Sin cambios |
+| Consumables | Items | Sin cambios |
+| Creatures | Cajas de criaturas (S137) | Form especificado (Egg/Slime/Adult); precio dinámico via CreatureBoxPrice |
 
-## Cambios S137
+## Integración S138
 
-**Creatures tab:** Ahora muestra cajas de criaturas con Form. AutoPlayer.Step2_BuyEggBox filtra cajas gratis (precio=0) con Form=Egg.
+**StoreRows.Collect(Tab.Furniture, ...)** ahora:
+1. Itera `catalog.FurnitureListings` (muebles normales)
+2. Itera `catalog.UpgradeListings` (mejoras) — sin Stock, con PriceOverride
+3. Construye Row con `Buy = () => store.BuyUpgrade(upgrade)`
 
-## Integración S137
+**Rendering:**
+- Las mejoras se renderizan como filas adicionales con nivel actual + precio para siguiente nivel
+- Click ejecuta BuyUpgrade (automático via Row.Buy)
+- IsSoldOut: nunca (siempre disponibles); IsMaxed: si nivel >= MaxLevel
 
-- Ciclo de vida: cajas de huevos gratis en kit inicial. UI filtra por disponibilidad.
-- StarterKitService aplica kit inicial al detectar partida nueva.
+## Conexiones (S131 + S137 + S138)
 
-## Conexiones (S131 + S137)
-
-- [[GameClock]] — proporciona Day (S131)
-- [[ShopCatalogSO]] — cálculo de precio
-- [[StoreManager]] — llamadas BuyFurniture/BuyCreatureBox (S137)
-- [[StoreRows]] — Collect(Tab, catalog, store, rows)
-- [[CreatureBoxSO]] — cajas con Form (S137)
+- [[GameClock]] — Day (S131)
+- [[ShopCatalogSO]] — Furniture/Items/CreatureBoxes/Upgrades (S138)
+- [[StoreManager]] — BuyFurniture/BuyWorldProp/BuyCreatureBox/BuyUpgrade (S138)
+- [[StoreRows]] — Collect() genera Row list (S138: con Upgrade field)
+- [[Wallet]] — Balance display
+- [[GameEvents]] — OnInventoryChanged/Reloaded refrescan UI
 
 ## Notas
 
-- Sin GameManager.Now (UTC).
-- Descuentos dinámicos cada N días (S131).
-- Form en CreatureBoxSO permite filtrar por tipo de criatura (S137).
+- Descuentos módulo: `day % DiscountEveryDays == 0`
+- FinalPrice dinámico en cada render
+- Mejoras persisten en WorldStateSO automáticamente
+- S138: UI neutral entre muebles y mejoras (ambos en Furniture tab)
