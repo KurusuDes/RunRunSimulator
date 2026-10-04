@@ -4,6 +4,23 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-04 (Session 141 — **sin Unity (MCP caído): animatic del poof, simulación de la bajada y experimento de combate 3v3 automático** — 0 `.cs` tocados; tooling Python en `Tools/Animatics/` y `Tools/Balance/`)
+
+**Focus:** el Unity MCP no conectaba (ECONNREFUSED) y no había editor abierto; Juan pidió trabajo seguro sin bajar la calidad de arte.
+
+1. **Animatic del poof ⭐ aprobado ("está perfecta, me encanta"):** `Tools/Animatics/poof_animatic.py` recorta huevo/blobim/adulto reales de `Recordings/promo/life_track` y anima en PIL. **Eclosión** 3,7 s: reposo 0,4 · sacudida ×3 (4,5°/8°/12°, la tercera con saltito) · anticipa (aplasta 0,2 s) · destello + nube con contorno de tinta + 16 pedazos de cáscara cortados del propio huevo · blobim sale con salto (pico 0,5 s) · rebote de resorte · saltito feliz. **Evolución** 3,9 s: brillo de rim que pulsa cada vez más rápido (1,1 s) + chispas · anticipa · destello + nube · adulto sale con salto corto y el brillo se apaga en 0,9 s. Video en `Tools/Trailer/renders/MoriMonchis_poof_animatic.mp4` (1× y 0,5×). **Es la referencia de tiempos para implementar el poof** con MMFeedbacks.
+2. **Simulación de la bajada** (`Tools/Balance/bajada_sim.py`, números reales del código: ×5 Minerita, eclosión 10, breeding room 20, 3 exploraciones): calibrada (pierde el piso 1 el 48 %, primera cría en 6 noches, p90 12 = el 4-13 del bot). **El cuello es la evolución, no la Minerita** (sobran ~220 al poder criar: no hay sumideros). **Decisiones de Juan ✅ (aplicar con Unity):** (a) la exploración cuenta aunque la bajada se pierda (primera cría 6 → 3 noches); (b) la caja `CB5` da huevos (hoy da 5 adultos por 50 dabloons y saltea el blobim); (c) la puerta de bajada deja de pedir afecto (arranca en 0 y la puerta pide ≥ 0: cae apenas decae). **Abierto:** sumidero de Minerita: adelantar subida de nivel de partes (E2) o subir precios (sugerí precios).
+3. **Partes dadas de alta hoy:** 17 cuernos, 16 espaldas, 6 alas, 4 cuerpos (6528 siluetas).
+4. **Experimento de combate 3v3 automático estilo Brawl Stars** (pedido de Juan: demo aparte, mismo generador de mapa, sin recolección, el ganador se lleva los cristales). `Tools/Balance/brawl_sim.py` (simulación 2D) + `brawl_render.py` (video desde arriba con HUD, telegrafías del color del equipo, números de daño, súper con cartel, KO con hit-stop, gas que se cierra). Reparto: **cuerno = ataque, espalda = súper (se carga por golpes), alas = truco de movimiento, cuerpo = vida/velocidad**. 6 al azar con kits únicos (Cornada en abanico, Latigazo, Tajo sangrante, Tapón rebotín, Embestida triple, Chorro · Lluvia de malvaviscos, Erizo, Coraza de púas, Cometitas, Muralla de placas, Nube de lana · Aleteo, Planeo, Cintas). Video `Recordings/brawl_demo_3v3.mp4` (partida pareja elegida a mano, 2-1). **Métricas (200 rondas):** ritmo bien (primer golpe 3 s, ~2 golpes/s, rondas de ~41 s, ~2 súper por criatura); **tensión floja**: 60 % de rondas el ganador termina sin bajas, 8 % remontadas, 12 % llegan a 1v1 (bola de nieve tras la primera baja); la composición decide 0-94 %; cuerpo a cuerpo débil (Trikoraza 34 %) y la curandera fuerte (66 %). Ajustes ya metidos: vida ×2, melé más rápida, súper por golpes, objetivo repartido, huida hacia aliados, "último en pie" (súper lleno + 50 % menos daño 3 s).
+
+**Siguiente paso (Juan: "lo probaremos cuando conecte el MCP"):** con Unity, llevar el experimento 3v3 a una escena demo aparte y probar las palancas anti-bola-de-nieve (reaparecer a los 5 s, cristal central en disputa, balance melé/rango); antes se pueden comparar en `brawl_sim.py`. También con Unity: aplicar (a)-(c) de la bajada e implementar el poof según el animatic. Pendiente de Juan: sumidero de Minerita.
+
+**Memoria:** `project-combate-v3-dragon-rps` corregida (Dragon RPS fallido en S96; experimento 3v3 de S141).
+
+**Archivos `.cs` creados (0) · modificados (0)** — solo tooling Python fuera de `Assets/`.
+
+---
+
 **Session:** 2026-10-04 (Session 140 — **promo en inglés de 30 s con motion graphics** — 0 `.cs` de juego tocados; tooling en `Tools/Trailer/`; video revisado cuadro por cuadro y entregado a Juan)
 
 **Focus:** Juan pidió "la dirección del motion graphics" (no estaba documentada: vive en los scripts de `Tools/Trailer/`) y después un video promocional en inglés.
