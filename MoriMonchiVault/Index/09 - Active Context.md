@@ -4,6 +4,21 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-04 (Session 140 — **promo en inglés de 30 s con motion graphics** — 0 `.cs` de juego tocados; tooling en `Tools/Trailer/`; video revisado cuadro por cuadro y entregado a Juan)
+
+**Focus:** Juan pidió "la dirección del motion graphics" (no estaba documentada: vive en los scripts de `Tools/Trailer/`) y después un video promocional en inglés.
+
+1. **Promo EN** `Tools/Trailer/renders/MoriMonchis_promo_EN.mp4` (30 s, 1080p, 12 MB; master de 129 MB y frames en `Recordings/promo/`, gitignored). Guion: HATCH THEM · RAISE THEM · BREED THEM · NO TWO ARE ALIKE (tarjetas con ADN real) · EGG → BLOBIM → ADULT · SEND THEM TO FIGHT · GRAB THE LOOT · OUTSMART RIVALS · strobe · "WHICH ONE WILL YOU RAISE?" · logo + COMING SOON. 30 s / 16:9 / textos elegidos por defecto (Juan no respondió esas decisiones). La tienda quedó afuera por estar en greybox.
+2. **Pipeline nuevo (versionado):** `promo_synth.py` (música 120 BPM con los samples de Feel), `promo_gfx.py` (títulos cinéticos, tarjetas de ADN, wipes, en PIL), `make_promo.sh` (montaje ffmpeg), `contact.py` (hojas de contacto), `promo_shots/` (plantilla de toma `_shot_template.cs` + `shot.sh`/`look.sh`, estudio en runtime `studio.cs`, choques forzados `clash_params.cs`). `logo.py` acepta tagline y duración por argumento.
+3. **Captura limpia:** `Time.captureFramerate = 30` + `cam.Render()` a RT 1920×1080 → JPG por `eval_file` del CLI (sin UI, ritmo exacto). Estudio = EggLab en Play con suelo durazno, fondo sólido + niebla, `MonchiVisualizer` con ADN aleatorio (adultos, slimes, pareja con huevo, ciclo huevo-blobim-adulto). Peleas = `ArenaClashDev.FireClosestPair` cada 40 frames con foco suavizado entre el par rival más cercano.
+4. **Quirks:** `capture_game_view` con `save_path` guarda dentro de `Assets/` (usar el RT propio); `eval` en Play cae en timeout de 5 s si Unity no está enfocado (`editor_focus`); la sustitución de proceso `<(...)` no sirve con ffmpeg en Git Bash.
+
+**Siguiente paso:** feedback de Juan sobre el promo (¿versión 9:16?); después lo pendiente de S139 (poof de eclosión/evolución). El Play volvió a ensuciar los 3 SO de runtime (van en el commit, quirk conocido).
+
+**Archivos `.cs` creados (0) · modificados (0)** — los `.cs` de `Tools/Trailer/promo_shots/` son scripts de `eval_file`, fuera de `Assets/`, sin ScriptNode.
+
+---
+
 **Session:** 2026-09-29 (Session 139 — **rostros: set hembra con pestañitas y transición animada entre caras de ánimo** — 1 `.cs` creado, 3 modificados + 1 shader; compila 0 errores; verificado en Play en `GameScene` por sonda de `_FaceT`)
 
 **Focus:** pendiente viejo de rostros y transiciones (el feedback del loop y el theorycrafting quedan para después, pedido de Juan).

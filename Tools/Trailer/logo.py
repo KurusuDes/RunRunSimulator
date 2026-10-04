@@ -3,6 +3,8 @@ import bpy, math, sys, os
 argv = sys.argv[sys.argv.index('--') + 1:]
 OUT = argv[0]
 FONT = argv[1]
+TAG = argv[2] if len(argv) > 2 else 'CRÍA  ·  EXPLORA  ·  VENDE'
+FRAMES = int(argv[3]) if len(argv) > 3 else 60
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 scn = bpy.context.scene
@@ -16,7 +18,7 @@ scn.render.resolution_x = 1920
 scn.render.resolution_y = 1080
 scn.render.fps = 30
 scn.frame_start = 1
-scn.frame_end = 60
+scn.frame_end = FRAMES
 scn.render.film_transparent = True
 scn.render.image_settings.file_format = 'PNG'
 scn.render.image_settings.color_mode = 'RGBA'
@@ -81,7 +83,7 @@ def text(body, size, extrude, bevel, mats):
 
 logo = text('MoriMonchis', 1.0, 0.11, 0.028, [gold, side])
 logo.data.materials[0] = gold
-tag = text('CRÍA  ·  EXPLORA  ·  VENDE', 0.34, 0.02, 0.004, [cream])
+tag = text(TAG, 0.34, 0.02, 0.004, [cream])
 tag.location = (0, -0.85, 0)
 
 bar = bpy.data.objects.new('Bar', bpy.data.meshes.new('Bar'))
@@ -135,7 +137,7 @@ logo.keyframe_insert('scale', frame=12)
 logo.scale = (1.0, 1.0, 1.0)
 logo.keyframe_insert('scale', frame=16)
 logo.scale = (1.04, 1.04, 1.04)
-logo.keyframe_insert('scale', frame=60)
+logo.keyframe_insert('scale', frame=FRAMES)
 
 logo.rotation_euler = (math.radians(-55), math.radians(-12), 0)
 logo.keyframe_insert('rotation_euler', frame=1)
@@ -144,7 +146,7 @@ logo.keyframe_insert('rotation_euler', frame=10)
 logo.rotation_euler = (0, 0, 0)
 logo.keyframe_insert('rotation_euler', frame=16)
 logo.rotation_euler = (math.radians(-4), math.radians(7), 0)
-logo.keyframe_insert('rotation_euler', frame=60)
+logo.keyframe_insert('rotation_euler', frame=FRAMES)
 
 bar.scale = (0.0, 1.0, 1.0)
 bar.keyframe_insert('scale', frame=10)
