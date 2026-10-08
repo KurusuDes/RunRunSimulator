@@ -91,6 +91,16 @@ Prefab `Resources/Prefabs/Brawl/BrawlFighter.prefab` (derivado de `MorimonchiAge
 - Con último en pie + rampa: 12 partidas, **40-66 s (media 51)**, cola final ~15 s, remontadas 2/12, azul 6 - rojo 6. Ninguna llegó a muerte súbita en esa tanda (sí en una de las anteriores).
 - Balance por ala (12 partidas, muestra chica): Colibrí ganó 6/6 (curación ~31 k por partida) → curación 320 → 250 y umbral 0,7 → 0,62; Bumerán 31 % → daño 400 → 460. Murciélago subido antes (560 × 2, salto cada 4,5 s).
 
+## 7b · Balance con datos (S143)
+
+**Arnés:** `BrawlBalanceDev` (corre la tanda) + `BrawlBalanceRecorder` (escucha los eventos de la partida y arma las filas), en `World/Brawl/`. Se crean en Play por código: `new GameObject("BrawlBalanceDev").AddComponent<BrawlBalanceDev>().Run(tanda, primeraSemilla, semillas, espejo, simHz, camarasOff)`. Cada semilla se juega dos veces con los lados cambiados (espejo). Salida en `Recordings/brawl_balance/<tanda>/`: `matches.csv`, `fighters.csv`, `progress.txt`, `done.txt`. **Reporte:** `py -3 Tools/Balance/brawl_report.py <carpeta> [--vs <base>]` → `report.md` por ala, familia, rol, habilidad, osadía, sociabilidad, cuerpo y sanadores por equipo.
+
+**Metas (Juan, S143):** alas y familias 40-60 % de victorias · habilidades 35-65 % · partidas 45-70 s · muerte súbita en 5-15 % · remontadas (gana el equipo del primer KO) ≥ 15 %. Un equipo sin sanador puede perder seguido (Juan ✅).
+
+**Cómo se mide:** paso fijo `Time.captureDeltaTime = 1/40` (los proyectiles chocan por punto-en-radio sin barrido; con `timeScale` alto atraviesan). Game view maximizado y cámara apagada: ~3× real. Mismas semillas entre tandas = comparación pareada.
+
+**Base (`s143_base`, 200 partidas):** 57,9 s de media (p90 89), muerte súbita 8,5 %, remontadas 18 %, 69 % de los espejos los gana la misma composición. Fuera: Colibrí 61 %, Lanza de cristal 67 %, Tapón rebotín 34 %; ágil 41 %, pesado 56 %; 0 sanadores → 29 %, 2 → 60 %. **Vuelta 1:** Colibrí 250 → 215 · Arcoíris sanador 2240 → 2050 · Plumitas 950 → 1040 · Cintas 600 → 640 · Lanza de cristal 1000 → 880 · Tapón rebotín 650 → 760 · ágil ×0,96 · pesado ×1,20. Resultado de la verificación en [[Index/09 - Active Context]].
+
 ## 8b · La bajada pasa a ser Brawl (decisiones de Juan ⭐, cierre de S142)
 
 **El Brawl reemplaza al combate de la bajada** ("me gusta más, es más legible y la gente puede conectar"). La bajada queda como **run de salas** al estilo *Another Door*:

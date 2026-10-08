@@ -18,6 +18,7 @@ MonoBehaviour:
   Description: Malvavisco que rebota tres veces.
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Family: 3
   Role: 0
   Target: 0
@@ -31,7 +32,7 @@ MonoBehaviour:
   Range: 10
   Radius: 0.55
   Angle: 90
-  Damage: 650
+  Damage: 760
   Heal: 0
   Shield: 0
   Duration: 0

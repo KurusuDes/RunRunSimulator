@@ -18,6 +18,7 @@ MonoBehaviour:
     n\xE9ctar que lo cura. Parpadeo corto."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 0.43137255, g: 0.90588236, b: 0.7176471, a: 1}
+  Signature: 0
   Locomotion: 1
   MoveSpeed: 4.4
   Attack: 4
@@ -35,7 +36,7 @@ MonoBehaviour:
   SlowSeconds: 0
   SpriteSize: 0.3
   AttackAnim: Fire
-  AllyHeal: 250
+  AllyHeal: 215
   HealBelow: 0.62
   Mobility: 4
   MobilityDistance: 5

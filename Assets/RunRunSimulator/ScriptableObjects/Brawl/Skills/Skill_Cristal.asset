@@ -18,6 +18,7 @@ MonoBehaviour:
   Description: "Lanza de cristal que atraviesa a todos en la l\xEDnea."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Family: 3
   Role: 0
   Target: 0
@@ -31,7 +32,7 @@ MonoBehaviour:
   Range: 12
   Radius: 0.5
   Angle: 90
-  Damage: 1000
+  Damage: 880
   Heal: 0
   Shield: 0
   Duration: 0

@@ -318,6 +318,13 @@ Lo que SÍ vale tal cual, independiente del server: la regla de **nunca editar a
 9. **Capa `MonchiFocus`** (índice 10) existe en el proyecto; la cámara principal la incluye (máscara −1), las cabinas del tornamesa a y = −500 quedan tapadas por el suelo.
 10. **Marcador de selección visto una vez sin dibujarse** (ronda 1, Tímida fijada, tarjeta levantada pero sin anillo); no se reprodujo en seis capturas posteriores con alphas medidos.
 
+## ⚠️ Quirks S143 (arnés de balance del Brawl)
+
+1. **Dos editores conectados** (`RunRunSimulator` y `AxieDarknessArise`): toda tool falla hasta `set_active_instance RunRunSimulator@a8b39199`.
+2. **Simulación rápida y fiel:** `Time.captureDeltaTime = 1/N` (paso fijo, `timeScale` 1) en vez de subir `timeScale`; con `ProfilerRecorder` (`PlayerLoop`/`EditorLoop`/`Main Thread`) se vio que el editor gastaba 9,4 ms por cuadro contra 3,7 del juego. Maximizar el Game view por reflexión (`EditorWindow.maximized = true` sobre `UnityEditor.GameView`) + apagar la cámara + `Selection.activeObject = null` → `EditorLoop` 2,3 ms, ~200 fps.
+3. **SO editados en Play** por `execute_code` y guardados con `AssetDatabase.SaveAssetIfDirty(obj)` sin bloqueo del clasificador; el guardado serializa también campos nuevos que el YAML no tenía.
+4. **Junction:** el editor abre el proyecto por `C:\Users\USUARIO\Documents\GitHub\RunRunSimulator` → `E:\GitHub\RunRunSimulator`; `Application.dataPath` devuelve la ruta de C:.
+
 ## Historial
 
 - **2026-09-05 (S102):** loop largo con el bridge vivo toda la sesión; cableado de escena por `SerializedObject` + `manage_scene save`; assets nuevos por YAML con GUID del `.meta`; corrutinas de captura para rondas de 90 s. Quirks 1-8 de la sección S102.

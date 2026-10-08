@@ -24,15 +24,20 @@ MonoBehaviour:
     SpeedMul: 0.93
   - BodyId: BS2
     Label: "\xE1gil"
-    HpMul: 0.9
+    HpMul: 0.96
     SpeedMul: 1.08
   - BodyId: BS3
     Label: pesado
-    HpMul: 1.25
+    HpMul: 1.2
     SpeedMul: 0.88
   CountdownSeconds: 3
   RoundSeconds: 90
   EndHoldSeconds: 6
+  LastStandShield: 0.25
+  LastStandBoost: 0.3
+  LastStandHaste: 0.2
+  LastStandSeconds: 5
+  KoDamageRamp: 0.15
   SuddenDeathStart: 0.02
   SuddenDeathRamp: 0.01
   SuddenDeathHealFactor: 0.5

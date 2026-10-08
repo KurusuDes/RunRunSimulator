@@ -33,7 +33,7 @@ MonoBehaviour:
   Radius: 2
   Angle: 90
   Damage: 0
-  Heal: 2240
+  Heal: 2050
   Shield: 0
   Duration: 2.5
   Delay: 0

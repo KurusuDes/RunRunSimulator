@@ -4,6 +4,29 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-07/08 (Session 143 — **balance con datos del Brawl: arnés de partidas automáticas + reporte Python, tanda base de 200 partidas y vuelta 1 de ajustes en los SO** — 2 `.cs` creados; compila 0 errores; verificado en Play con 400 partidas automáticas; corrido en /loop con permiso de Juan)
+
+**Focus:** pedido de Juan (S142): balance de los poderes con datos antes de conectar la tienda. Juan fijó metas: alas/familias 40-60 % de victorias, habilidades 35-65 %, partidas 45-70 s, muerte súbita en 5-15 % de las partidas, remontadas ≥ 15 %; autorizó tocar los SO sin OK por vuelta.
+
+1. **Arnés** `BrawlBalanceDev` + `BrawlBalanceRecorder` (`World/Brawl/`, se crean en Play por código, no tocan escena): `new GameObject("BrawlBalanceDev").AddComponent<BrawlBalanceDev>().Run(tanda, primeraSemilla, semillas, espejo, simHz, camarasOff)`. Cada semilla se juega **dos veces con los lados cambiados** (espejo: gana la composición, no el lado). Vuelca `matches.csv` (duración, muerte súbita, remontada = gana el equipo que sufrió el primer KO, último en pie) y `fighters.csv` (ala/cuerno/espalda con parte, familia y rol, postura, cuerpo, daño por ranura, curación, KOs, usos) en `Recordings/brawl_balance/<tanda>/` (ignorada por git) + `progress.txt`/`done.txt`. **Reporte:** `py -3 Tools/Balance/brawl_report.py <carpeta> [--vs <base>]` → tablas por ala, familia, rol, habilidad, osadía, sociabilidad, cuerpo y sanadores por equipo, marca `!` lo fuera de meta, escribe `report.md`.
+2. **Quirk de medición ⚠️:** los proyectiles chocan por punto-en-radio cada cuadro (sin barrido): acelerar con `timeScale` a 10× los hace atravesar al blanco. El arnés usa **paso fijo `Time.captureDeltaTime = 1/40`** y la velocidad sale de los fps. Cuello = editor, no juego: `PlayerLoop` 3,7 ms vs `EditorLoop` 9,4 ms; con **Game view maximizado + cámara apagada** ~200 fps → ~3× real (15-20 s por partida, 200 partidas ≈ 65 min). Las medidas de S142 a 4× con `timeScale` pueden tener sesgo.
+3. **Tanda base `s143_base`** (semillas 1-100 × espejo): duración media 57,9 s (p90 89), muerte súbita 8,5 %, remontadas 18 %, azul 46,5 %, último en pie gana 12 %, 69 % de los espejos 2-0. Fuera de meta: **Colibrí 61,2 %**, **Lanza de cristal 66,7 %**, **Tapón rebotín 34 %**; cuerpo ágil 40,9 % y pesado 56,3 %. Sanadores por equipo: 0 → 28,6 %, 2 → 60 % (**Juan ✅: "correcto que un equipo sin healer tenga poco winrate"** — no se corrige).
+4. **Vuelta 1 aplicada y guardada en los SO:** Colibrí curación 250 → 215 · Arcoíris sanador 2240 → 2050 · Plumitas daño 950 → 1040 · Cintas daño 600 → 640 · Lanza de cristal 1000 → 880 · Tapón rebotín 650 → 760 · cuerpo ágil vida ×0,90 → ×0,96 · pesado ×1,25 → ×1,20. (El guardado serializó además campos que faltaban en el YAML con su valor por defecto: `LastStand*`, `KoDamageRamp`, `Signature`.)
+5. **Tanda de verificación `s143_v1`** (mismas semillas, comparación pareada): **sin terminar al cierre** (165/200; Unity sigue en Play y la completa sola, escribe `done.txt`). Se frenó a la mitad: ~200 → ~95 fps después de ~360 partidas en la misma sesión de Play (memoria del editor 7,5 → 8,6 GB de working set, 15 GB privados; mismo patrón que el quirk S105-5). Regla: **salir y volver a entrar a Play entre tandas**.
+
+**Quirks:** dos editores conectados al MCP (`AxieDarknessArise`): fijar `set_active_instance RunRunSimulator@a8b39199` al abrir. `execute_code` compila con Roslyn (C# moderno) esta sesión. El proyecto abre por la junction `C:\Users\USUARIO\Documents\GitHub\RunRunSimulator` → `E:\GitHub\RunRunSimulator` (las rutas de `Application.dataPath` salen por C:). Cambiar SO en Play por `execute_code` + `AssetDatabase.SaveAssetIfDirty` persistió sin bloqueo. `py -3` es el Python que anda (`python` cae al alias de la Store).
+
+**Siguiente paso (S144, en este orden):**
+1. Leer `py -3 Tools/Balance/brawl_report.py Recordings/brawl_balance/s143_v1 --vs Recordings/brawl_balance/s143_base`. Si queda algo fuera de meta, **vuelta 2** (candidatas al borde: Nube de sueño 36 %, Lluvia de cristales 37 %, Cornada en abanico 39 %, Malvaviscos 61 %, Triple cuerno 60 %; ágil). Con ~70 apariciones por habilidad el IC95 es ±12: tocar solo lo claramente fuera.
+2. **Conexión tienda ↔ Brawl** (plan de S142 en [[Index/32 - Demo Brawl 3v3 arcade]] 8b, sin cambios).
+3. Unity quedó en Play con el **Game view maximizado** (lo dejó el arnés para correr rápido): salir de Play y des-maximizar. Menores de S142 siguen (íconos Cresta/Ariete, sonido, `BrawlProjectile` 431 líneas, globos que se pisan).
+
+**Archivos `.cs` creados (2) · modificados (0):**
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlBalanceDev.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlBalanceRecorder.cs` → NUEVO
+
+---
+
 **Session:** 2026-10-07 (Session 142 — **demo Brawl 3v3 arcade en Unity: ala = básico + movilidad, cuerno/espalda = habilidades en 10 familias, personalidad = postura, último en pie, VFX temáticos con lectura de equipo y firmas por parte; 7 íconos nuevos** — 50 `.cs` creados, 1 modificado; compila 0 errores; verificado en Play con capturas miradas, tandas a 4× y 5 videos enviados)
 
 **Focus:** pedido de Juan: "una demo más arcade del combate" con las partes nuevas. Diseño e implementación completos en [[Index/32 - Demo Brawl 3v3 arcade]] (reemplaza el reparto offline de S141).

@@ -18,11 +18,12 @@ MonoBehaviour:
     Salta hacia atr\xE1s para alejarse."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Locomotion: 0
   MoveSpeed: 3.9
   Attack: 3
   Range: 11
-  Damage: 950
+  Damage: 1040
   Windup: 0.45
   Reload: 2.4
   Count: 1

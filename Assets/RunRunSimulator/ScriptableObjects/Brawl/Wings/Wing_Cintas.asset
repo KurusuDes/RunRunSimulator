@@ -17,11 +17,12 @@ MonoBehaviour:
   Description: "Latigazo de cintas en l\xEDnea que frena. Carrera corta para cazar."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Locomotion: 0
   MoveSpeed: 4.3
   Attack: 1
   Range: 4.4
-  Damage: 600
+  Damage: 640
   Windup: 0.22
   Reload: 1.15
   Count: 1
