@@ -96,7 +96,7 @@ Prefab `Resources/Prefabs/Brawl/BrawlFighter.prefab` (derivado de `MorimonchiAge
 **El Brawl reemplaza al combate de la bajada** ("me gusta más, es más legible y la gente puede conectar"). La bajada queda como **run de salas** al estilo *Another Door*:
 
 - **El jugador elige el equipo** que desciende (hasta 3 MoriMonchis propios). **Bajar cuesta dabloons.**
-- **Antes de cada sala se muestra más o menos qué esperar** (vista previa del tipo de sala); **al terminar cada sala se elige si entrar a otra o salir** con lo juntado.
+- **La decisión es por tramo, no por sala** (aclaración de Juan): antes de bajar se muestra **la secuencia completa del tramo con íconos** (ej.: combate difícil → combate fácil → curación → combate → minerales) y el jugador decide si hace ese tramo. **Al terminarlo se muestra el tramo siguiente** y vuelve a elegir si lo enfrenta o sale con lo juntado.
 - **Tipos de sala** (lista abierta, "cosas así"):
   - **Combate** contra 1, 2 o 3 MoriMonchis rivales (el equipo propio puede quedar en superioridad o igualdad).
   - **Dummies**: muñecos que al pegarles curan al equipo (sala de recuperación).
