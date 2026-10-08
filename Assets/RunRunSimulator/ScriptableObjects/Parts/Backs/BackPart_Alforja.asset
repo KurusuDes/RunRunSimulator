@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 281c45759800a0b4582bf3fe742cd81c, type: 3}
   ID: BK0
   Name: Alforja
   Rarity: 0

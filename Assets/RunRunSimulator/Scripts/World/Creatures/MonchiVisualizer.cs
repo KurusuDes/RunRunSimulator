@@ -19,6 +19,7 @@ public class MonchiVisualizer : MonoBehaviour
     private static readonly int FaceModeId = Shader.PropertyToID("_FaceMode");
 
     [SerializeField] private MonchiFaceTransition faceTransition;
+    [SerializeField] private Material flashMaterial;
 
     private Texture currentFaceTexture;
     private MonchiVisualBankSO bank;
@@ -34,6 +35,8 @@ public class MonchiVisualizer : MonoBehaviour
     private Color rimOverrideColor;
     private float rimOverridePower;
     private float rimOverrideInsideMask;
+    private Material flashInstance;
+    private readonly List<Renderer> flashedRenderers = new();
 
     public Animator Animator => animator;
     public Transform ModelRoot => Root;
@@ -50,8 +53,16 @@ public class MonchiVisualizer : MonoBehaviour
         furDatabase = furDb;
     }
 
+    private void OnDestroy()
+    {
+        if (flashInstance != null)
+            Object.Destroy(flashInstance);
+    }
+
     public void Assemble(CreatureDNA dna)
     {
+        RemoveFlashLayer();
+
         for (int i = Root.childCount - 1; i >= 0; i--)
         {
             var child = Root.GetChild(i).gameObject;
@@ -205,6 +216,59 @@ public class MonchiVisualizer : MonoBehaviour
         ApplyLook();
     }
 
+    public void SetFlash(Color color, float alpha)
+    {
+        if (flashMaterial == null) return;
+
+        if (alpha <= 0.001f)
+        {
+            RemoveFlashLayer();
+            return;
+        }
+
+        if (flashInstance == null)
+            flashInstance = new Material(flashMaterial);
+        flashInstance.color = new Color(color.r, color.g, color.b, alpha);
+
+        if (flashedRenderers.Count == 0)
+            AddFlashLayer();
+    }
+
+    private void AddFlashLayer()
+    {
+        if (flashInstance == null) return;
+
+        foreach (var renderer in tintRenderers)
+            AddFlashTo(renderer);
+        AddFlashTo(faceRenderer);
+    }
+
+    private void AddFlashTo(Renderer renderer)
+    {
+        if (renderer == null || !renderer.enabled) return;
+
+        var materials = new List<Material>(renderer.sharedMaterials) { flashInstance };
+        renderer.sharedMaterials = materials.ToArray();
+        flashedRenderers.Add(renderer);
+    }
+
+    private void RemoveFlashLayer()
+    {
+        if (flashInstance != null)
+        {
+            foreach (var renderer in flashedRenderers)
+            {
+                if (renderer == null) continue;
+
+                var materials = new List<Material>(renderer.sharedMaterials);
+                if (materials.Remove(flashInstance))
+                    renderer.sharedMaterials = materials.ToArray();
+            }
+        }
+
+        flashedRenderers.Clear();
+    }
+
     public void SetMood(MonchiMood mood)
     {
         currentMood = mood;
@@ -244,6 +308,15 @@ public class MonchiVisualizer : MonoBehaviour
 
     private void ApplyLook()
     {
+        bool flashed = flashedRenderers.Count > 0;
+        RemoveFlashLayer();
+        ApplyMaterialsAndTint();
+        if (flashed)
+            AddFlashLayer();
+    }
+
+    private void ApplyMaterialsAndTint()
+    {
         if (currentDna == null || tintRenderers.Count == 0) return;
 
         if (currentDna.IsShiny)
@@ -271,8 +344,7 @@ public class MonchiVisualizer : MonoBehaviour
             if (furMat != null)
                 renderer.sharedMaterial = furMat;
 
-            var color = MonchiTint.ColorFor(partName, currentDna, wing, accent);
-            Tint(renderer, color);
+            Tint(renderer, MonchiTint.ColorFor(partName, currentDna, wing, accent));
         }
     }
 

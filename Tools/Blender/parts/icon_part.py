@@ -24,9 +24,12 @@ VIEWS = {
     "Wing": (0.8, -0.2, -0.4),
 }
 OVERRIDES = {
+    "Alforja": (1.0, 0.0, 0.0),
     "Antenas": (0.3, -1.0, 0.2),
+    "Ariete": LATERAL,
     "Astas": (0.8, 0.8, 0.4),
     "Cometa": LATERAL,
+    "Coraza": (1.0, -0.1, 0.5),
     "Cuernitos": (0.5, -1.0, 0.05),
     "Carnero": (1.0, -0.35, 0.05),
     "Senuelo": (1.0, -0.35, 0.05),
@@ -40,27 +43,28 @@ OVERRIDES = {
 SIDE = 0.06
 HORN_DIR = 135
 BURY = 0.02
-TRIM = {"Carnero"}
+TRIM = {"Carnero", "Ariete"}
 HORN_FIX = {"AletasCara": (45, False), "Cometa": (35, False), "Carnero": (-60, True)}
-RIGID_BASE = {"Abanico": "INNER", "Cometitas": "ICON_BASE"}
+RIGID_BASE = {"Abanico": "INNER", "Cometitas": "ICON_BASE", "Coraza": "ICON_BASE", "Alforja": "ICON_BASE", "Cola": "ICON_BASE"}
 BASE_ROW = 29.5
 UNITS = 3
 UNIT_GAP = (0.45, 1.0)
-KMAX = {"Placas": 2.2, "PuasGruesas": 3.0, "PuasFinas": 2.2, "PuasDobles": 2.2, "Cristales": 1.5, "Malvaviscos": 1.8, "Abanico": 2.0, "LomoLana": 1.9}
+KMAX = {"Placas": 2.2, "PuasGruesas": 3.0, "PuasFinas": 2.2, "PuasDobles": 2.2, "Cristales": 1.5, "Malvaviscos": 1.8, "Abanico": 2.0, "LomoLana": 1.9, "Cresta": 1.65, "Coraza": 1.9, "Alforja": 1.0}
 PUFFS = {"LomoLana": "R0"}
 WIDEN = {"PuasGruesas": 1.45, "Placas": 1.3, "Malvaviscos": 1.1}
 BACK_ASPECT = 0.85
 MID_FWD = 0.08
 LOBED = {}
 PAIRED_UNITS = {"PuasDobles": 2}
-WINDOW = {}
+WINDOW = {"Cresta": ("front", 3.0)}
 TUFT = {"Borla": ((2, 0, 4), 20.0)}
 THIN = 12
 PAIR = set()
-EXCLUDE = {"Unicornio": "mane"}
+EXCLUDE = {"Unicornio": "mane", "Cresta": "core", "Alforja": "strap"}
 OPTS = {
     "Placas": {"idlines": True},
     "PuasFinas": {"thin": 4},
+    "Ariete": {"idlines": True},
 }
 GROOVES = {"Unicornio": (0.2, 0.2)}
 STAGE = {

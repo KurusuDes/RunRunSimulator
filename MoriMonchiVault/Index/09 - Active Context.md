@@ -4,6 +4,28 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-07 (Session 142 — **demo Brawl 3v3 arcade en Unity: ala = básico + movilidad, cuerno/espalda = habilidades en 10 familias, personalidad = postura, último en pie, VFX temáticos con lectura de equipo y firmas por parte; 7 íconos nuevos** — 50 `.cs` creados, 1 modificado; compila 0 errores; verificado en Play con capturas miradas, tandas a 4× y 5 videos enviados)
+
+**Focus:** pedido de Juan: "una demo más arcade del combate" con las partes nuevas. Diseño e implementación completos en [[Index/32 - Demo Brawl 3v3 arcade]] (reemplaza el reparto offline de S141).
+
+1. **Demo jugable** en escena `Resources/Scenes/BrawlDemo.unity` (copia del mapa de la arena sin la bajada) + prefab `Prefabs/Brawl/BrawlFighter.prefab` (derivado del agente, sin IA de tienda). 6 alas = básico + movilidad (el Colibrí cura); 33 cuernos/espaldas en 10 familias con apoyo/tanque/control/daño (SOs en `ScriptableObjects/Brawl/`); personalidad = postura (`BrawlBrain` + `BrawlSkillJudge`); cuerpo = vida/velocidad; 90 s + muerte súbita; **último en pie** (escudo, daño, recarga) y **rampa +15 % de daño por KO** para matar la bola de nieve. Medido: 12 partidas a 4×, 40-66 s (media 51), remontadas 2/12, 6-6.
+2. **Feedback de golpe**: destello parejo por capa de material (`MonchiVisualizer.SetFlash`, rojo en los nuestros, blanco en los rivales), micro congelado del Animator, estrella + anillo de impacto, sacudida de cámara (impulso Cinemachine).
+3. **VFX**: íconos pixel art como partículas y proyectiles; barridos en el aire, estelas, lluvia de íconos en zonas; **lectura de equipo** (Juan ✅): lo rival lavado en rojo conservando forma e ícono, lo nuestro con su color, más grande y con halo; línea de mira durante la carga; burbuja, remolino, rayos con brillo; **firmas de partes estrella** (arcoíris, tormenta, nube, cometa, farol con luz real, placas). Plantillas más finas; cámara más cerca (FOV mínimo 18).
+4. **Íconos de las 7 partes originales** (no tienen malla): modeladas como `Tools/Blender/parts/p_{Ariete,Alforja,Coraza,Cresta,Cola,Vela,Colibri}.py` y renderizadas con `icon_part.py` (Blender 5.2); `BodyPart.Icon` asignado.
+
+**Quirks:** el Toon/Toon no tiñe el cuerpo por rim y la emisión suma luz (en cuerpos rosados no se nota): el destello va por capa de material extra. `eval_file`/`execute_code` en Play se cuelgan si Unity está desenfocado (`editor_focus` o reintentar por MCP; ojo con corrutinas duplicadas al reintentar). El grupo de cámara con zoom solo por FOV no se acerca si el mínimo es alto.
+
+**Siguiente paso:** feedback de Juan sobre las firmas; veredicto de íconos Cresta y Ariete (flojos); pantalla para que el jugador arme su equipo; sonido; balance por familia de habilidad. Pendientes de S141 siguen: decisiones (a)-(c) de la bajada y el poof.
+
+**Archivos `.cs` creados (50) · modificados (1):**
+- `Assets/RunRunSimulator/Scripts/World/Creatures/MonchiVisualizer.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/BrawlEnums.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/{BrawlKitDatabaseSO,BrawlSkillSO,BrawlTheme,BrawlTuningSO,BrawlVfxLibrarySO,BrawlWingKitSO}.cs` → NUEVOS (6)
+- `Assets/RunRunSimulator/Scripts/UI/{BrawlHud,BrawlHudCard,BrawlOverheads}.cs` → NUEVOS (3)
+- `Assets/RunRunSimulator/Scripts/World/Brawl/` → NUEVOS (40): BrawlAnimator, BrawlBody, BrawlBrain, BrawlBubbleFx, BrawlCamera, BrawlCloudPuffs, BrawlCometSparks, BrawlFighter, BrawlFx, BrawlGlowFlashFx, BrawlIconParticles, BrawlImpactFx, BrawlLightningBranches, BrawlLightningShapes, BrawlLineFx, BrawlLureLight, BrawlMatch, BrawlMotor, BrawlPlateOrbit, BrawlProjectile, BrawlProjectileTrail, BrawlQuery, BrawlRainFx, BrawlSignatureFx, BrawlSignatureSprites, BrawlSkillCaster, BrawlSkillEffects, BrawlSkillJudge, BrawlSkillOffense, BrawlSkillSupport, BrawlStormCrackle, BrawlSwooshFx, BrawlTeamLook, BrawlTelegraphs, BrawlTrailFx, BrawlVfx, BrawlVortexFx, BrawlWardFx, BrawlWing, BrawlZone
+
+---
+
 **Session:** 2026-10-04 (Session 141 — **sin Unity (MCP caído): animatic del poof, simulación de la bajada y experimento de combate 3v3 automático** — 0 `.cs` tocados; tooling Python en `Tools/Animatics/` y `Tools/Balance/`)
 
 **Focus:** el Unity MCP no conectaba (ECONNREFUSED) y no había editor abierto; Juan pidió trabajo seguro sin bajar la calidad de arte.

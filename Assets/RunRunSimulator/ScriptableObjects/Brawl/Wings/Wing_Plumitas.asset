@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ed6f0731499e4a48ba6af5c23b065cd, type: 3}
+  m_Name: Wing_Plumitas
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BrawlWingKitSO
+  PartId: W5
+  Title: Pluma certera
+  Description: "Francotirador: una pluma r\xE1pida de largo alcance con mira l\xE1ser.
+    Salta hacia atr\xE1s para alejarse."
+  IconOverride: {fileID: 0}
+  ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Locomotion: 0
+  MoveSpeed: 3.9
+  Attack: 3
+  Range: 11
+  Damage: 950
+  Windup: 0.45
+  Reload: 2.4
+  Count: 1
+  Spread: 0
+  Angle: 100
+  ProjectileSpeed: 30
+  HitRadius: 0.45
+  Knockback: 2
+  Slow: 0
+  SlowSeconds: 0
+  SpriteSize: 0.6
+  AttackAnim: Fire
+  AllyHeal: 0
+  HealBelow: 0.6
+  Mobility: 3
+  MobilityDistance: 5.5
+  MobilitySeconds: 0.4
+  MobilityCooldown: 6
+  MobilityDamage: 0

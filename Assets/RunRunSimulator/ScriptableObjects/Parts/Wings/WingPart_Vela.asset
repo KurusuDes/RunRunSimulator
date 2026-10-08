@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: f6acb7b0469ed69409eb9bda54abcce2, type: 3}
   ID: W0
   Name: Vela
   Rarity: 0

@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 04806b024ba04a8438a5ad020e645e91, type: 3}
   ID: BK3
   Name: Cola
   Rarity: 0

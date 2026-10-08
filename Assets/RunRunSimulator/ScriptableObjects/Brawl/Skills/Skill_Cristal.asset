@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70f1e8729657b5d4d88c43b4b9bde470, type: 3}
+  m_Name: Skill_Cristal
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BrawlSkillSO
+  PartId: H6
+  Slot: 0
+  Title: Lanza de cristal
+  Description: "Lanza de cristal que atraviesa a todos en la l\xEDnea."
+  IconOverride: {fileID: 0}
+  ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Family: 3
+  Role: 0
+  Target: 0
+  Windup: 0.55
+  Cooldown: 8
+  FirstDelay: 0.5
+  RootWhileCasting: 1
+  TracksTarget: 1
+  CastAnim: Roar
+  FireAnim: Fire
+  Range: 12
+  Radius: 0.5
+  Angle: 90
+  Damage: 1000
+  Heal: 0
+  Shield: 0
+  Duration: 0
+  Delay: 0
+  TickSeconds: 0.5
+  Count: 1
+  Speed: 26
+  Knockback: 0
+  Slow: 0
+  SlowSeconds: 0
+  StunSeconds: 0
+  Haste: 0
+  DamageBoost: 0
+  Thorns: 0
+  TauntSeconds: 0
+  Bounces: 0
+  Pierce: 1
+  ExplodeRadius: 0
+  SpriteSize: 0.9
+  FollowCaster: 0

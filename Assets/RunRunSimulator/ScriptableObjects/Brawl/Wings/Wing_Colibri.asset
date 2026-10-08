@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ed6f0731499e4a48ba6af5c23b065cd, type: 3}
+  m_Name: Wing_Colibri
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BrawlWingKitSO
+  PartId: W1
+  Title: "N\xE9ctar"
+  Description: "R\xE1faga de tres dardos; si un aliado est\xE1 bajo de vida, le dispara
+    n\xE9ctar que lo cura. Parpadeo corto."
+  IconOverride: {fileID: 0}
+  ColorOverride: {r: 0.43137255, g: 0.90588236, b: 0.7176471, a: 1}
+  Locomotion: 1
+  MoveSpeed: 4.4
+  Attack: 4
+  Range: 6.5
+  Damage: 170
+  Windup: 0.05
+  Reload: 1
+  Count: 3
+  Spread: 6
+  Angle: 100
+  ProjectileSpeed: 20
+  HitRadius: 0.3
+  Knockback: 0
+  Slow: 0
+  SlowSeconds: 0
+  SpriteSize: 0.3
+  AttackAnim: Fire
+  AllyHeal: 250
+  HealBelow: 0.62
+  Mobility: 4
+  MobilityDistance: 5
+  MobilitySeconds: 0.12
+  MobilityCooldown: 5
+  MobilityDamage: 0

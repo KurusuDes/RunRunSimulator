@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: d3e948cc3a35d2c448e91a5b6c7e1604, type: 3}
   ID: BK1
   Name: Coraza
   Rarity: 0

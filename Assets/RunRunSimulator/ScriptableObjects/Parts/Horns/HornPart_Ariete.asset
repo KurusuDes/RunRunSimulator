@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 09e113a0263d10445aa867c40c57addb, type: 3}
   ID: H0
   Name: Ariete
   Rarity: 0

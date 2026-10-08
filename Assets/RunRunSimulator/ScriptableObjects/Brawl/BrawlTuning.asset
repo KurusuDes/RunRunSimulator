@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d00e8b1d6ec6e4ea508a85027d0197, type: 3}
+  m_Name: BrawlTuning
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BrawlTuningSO
+  BaseHp: 14000
+  Bodies:
+  - BodyId: BS0
+    Label: equilibrado
+    HpMul: 1
+    SpeedMul: 1
+  - BodyId: BS1
+    Label: robusto
+    HpMul: 1.15
+    SpeedMul: 0.93
+  - BodyId: BS2
+    Label: "\xE1gil"
+    HpMul: 0.9
+    SpeedMul: 1.08
+  - BodyId: BS3
+    Label: pesado
+    HpMul: 1.25
+    SpeedMul: 0.88
+  CountdownSeconds: 3
+  RoundSeconds: 90
+  EndHoldSeconds: 6
+  SuddenDeathStart: 0.02
+  SuddenDeathRamp: 0.01
+  SuddenDeathHealFactor: 0.5
+  AllyColor: {r: 0.34, g: 0.55, b: 0.84, a: 1}
+  FoeColor: {r: 0.84, g: 0.36, b: 0.36, a: 1}
+  RetreatHp: {x: 0.5, y: 0.15}
+  PreferredRange: {x: 0.9, y: 0.55}
+  HealThreshold: {x: 0.55, y: 0.85}
+  StrafeAngle: 30
+  StrafeFlipSeconds: {x: 1.2, y: 2.6}
+  PatienceSeconds: 6

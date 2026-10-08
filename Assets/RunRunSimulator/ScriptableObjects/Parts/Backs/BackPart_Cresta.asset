@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: d892c085418b1ad41b0035f81b1c7337, type: 3}
   ID: BK2
   Name: Cresta
   Rarity: 0

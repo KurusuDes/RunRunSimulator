@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97f77c4c6a06c104eafc578645d60fc7, type: 3}
+  m_Name: BrawlVfxLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BrawlVfxLibrarySO
+  SpriteMaterial: {fileID: 2100000, guid: 4502547a5e29a2749ba4498520ac8411, type: 2}
+  ParticleMaterial: {fileID: 2100000, guid: 201861affad07244ca26b0ded4e2ce6d, type: 2}
+  ParticleAdditiveMaterial: {fileID: 2100000, guid: 2c2ffc717f74b294091c2e56d505de87, type: 2}
+  LineMaterial: {fileID: 2100000, guid: 25fd4db820fd02546a94ce426e9a0bb9, type: 2}
+  SparkSprite: {fileID: 21300000, guid: 991220ccdc471984f8000d7743cb0e7d, type: 3}
+  HitFx: {fileID: 6616448173872696983, guid: ca790bf95f966d74eb3db56fcbfe4cbc, type: 3}
+  KnockOutFx: {fileID: 6094242826611195299, guid: 3928a0b5ad37d5540ac04659125a2ed9, type: 3}
+  DustFx: {fileID: 3153516939943622108, guid: 64c63f3024474324ab369654e93bdd4b, type: 3}
+  ProjectileTrailTime: 0.25
+  FoeTint: {r: 1, g: 0.22, b: 0.18, a: 1}
+  FoeWash: 0.7
+  AllySaturation: 0.25
+  AllyMinValue: 0.85
+  AllySizeBoost: 1.2
+  GlowSprite: {fileID: 21300000, guid: 5d6ccfe1e58ad7544a499dc999f72b62, type: 3}

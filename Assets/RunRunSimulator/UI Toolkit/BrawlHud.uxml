@@ -1,0 +1,38 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Theme.uss" />
+    <Style src="BrawlHudStyle.uss" />
+    <ui:VisualElement name="brawl-root" class="mm-theme mm-theme--night brawl" picking-mode="Ignore">
+        <ui:VisualElement name="brawl-top" class="brawl-top" picking-mode="Ignore">
+            <ui:VisualElement name="brawl-bar" class="brawl-bar" picking-mode="Ignore">
+                <ui:VisualElement name="brawl-team-blue" class="brawl-team brawl-team--blue" picking-mode="Ignore">
+                    <ui:VisualElement class="brawl-bg" picking-mode="Ignore" />
+                    <ui:Label text="AZUL" class="brawl-team__title brawl-team__title--blue" picking-mode="Ignore" />
+                    <ui:VisualElement name="brawl-cards-blue" class="brawl-cards" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="brawl-center" class="brawl-center" picking-mode="Ignore">
+                    <ui:VisualElement class="brawl-bg" picking-mode="Ignore" />
+                    <ui:Label name="brawl-timer" text="1:30" class="brawl-timer" picking-mode="Ignore" />
+                    <ui:Label name="brawl-phase" text="" class="brawl-phase" picking-mode="Ignore" />
+                    <ui:Label name="brawl-match" text="" class="brawl-match" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="brawl-team-red" class="brawl-team brawl-team--red" picking-mode="Ignore">
+                    <ui:VisualElement class="brawl-bg" picking-mode="Ignore" />
+                    <ui:Label text="ROJO" class="brawl-team__title brawl-team__title--red" picking-mode="Ignore" />
+                    <ui:VisualElement name="brawl-cards-red" class="brawl-cards" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="brawl-feed" class="brawl-feed" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="brawl-banner-box" class="brawl-banner-box" picking-mode="Ignore">
+            <ui:Label name="brawl-banner" text="" class="brawl-banner" picking-mode="Ignore" />
+            <ui:Label name="brawl-banner-sub" text="" class="brawl-banner-sub" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement class="brawl-controls" picking-mode="Ignore">
+            <ui:Button name="brawl-new" text="Nueva partida" focusable="false" class="brawl-btn" />
+            <ui:Button name="brawl-rematch" text="Revancha" focusable="false" class="brawl-btn brawl-btn--group" />
+            <ui:Button name="brawl-speed-1" text="1×" focusable="false" class="brawl-btn brawl-btn--speed" />
+            <ui:Button name="brawl-speed-2" text="2×" focusable="false" class="brawl-btn brawl-btn--speed" />
+            <ui:Button name="brawl-speed-4" text="4×" focusable="false" class="brawl-btn brawl-btn--speed" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
