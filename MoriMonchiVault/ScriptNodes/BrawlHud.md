@@ -6,7 +6,7 @@ tags: [script, ui, component]
 
 **Ruta:** `UI/BrawlHud.cs`
 
-**Responsabilidad:** Hub de HUD para Brawl 3v3. Vincula UIDocument (BrawlHud.uxml), maneja fase y MVP, crea BrawlHudCard por fighter, feed de KOs y banners de evento. Delega el reloj y los botones de velocidad a `BrawlHudClock`. Oculta la columna roja mientras hay una sala de prueba activa. Oculta los botones Nueva Partida y Revancha cuando la partida es `Driven` (bajada). Singleton implícito vía MonoBehaviour.
+**Responsabilidad:** Hub de HUD para Brawl 3v3. Vincula UIDocument (BrawlHud.uxml), maneja fase y MVP, crea BrawlHudCard por fighter, feed de KOs y banners de evento. Delega el reloj y los botones de velocidad a `BrawlHudClock`. Oculta la columna roja mientras hay una sala de prueba activa. Oculta los botones Nueva Partida y Revancha cuando la partida es `Driven` (bajada). En partidas `Driven` no muestra el cartel de ganador ni el MVP: al terminar solo oculta el banner, y el resultado lo muestran `BrawlRunHud` y `BrawlRunPanel`. Singleton implícito vía MonoBehaviour.
 
 **Vinculado a:** [[Index/32 - Demo Brawl 3v3 arcade]]
 
@@ -44,7 +44,7 @@ Ninguno. Acceso vía eventos estáticos (`BrawlMatch.OnPhaseChanged`, etc.)
 |--------|-----------|-------------|
 | `BrawlMatch.OnRosterSpawned` | `HandleRoster()` | Reconstruye cards cuando aparecen fighters |
 | `BrawlMatch.OnPhaseChanged` | `HandlePhase()` | Muestra banners según fase |
-| `BrawlMatch.OnMatchEnded` | `HandleEnded()` | Muestra ganador + MVP |
+| `BrawlMatch.OnMatchEnded` | `HandleEnded()` | Muestra ganador + MVP; en `Driven` solo oculta el banner |
 | `BrawlMatch.OnLastStand` | `HandleLastStand()` | Muestra "¡ÚLTIMO EN PIE!" + nombre |
 | `BrawlFighter.OnKnockedOut` | `HandleKnockedOut()` | Agrega entry al feed |
 | `BrawlSkillCaster.OnCastFired` | `HandleCastFired()` | Pulse en card cuando skill castea |
@@ -76,19 +76,21 @@ El reloj y la velocidad ya no los actualiza `BrawlHud`: los refresca `hudClock.R
 6. **OnPhaseChanged (SuddenDeath):** Muestra "¡MUERTE SÚBITA!"
 7. **OnKnockedOut:** Agrega entry al feed (máx 5 visibles, auto-fade después 7s)
 8. **OnLastStand:** Muestra "¡ÚLTIMO EN PIE!" + nombre survivor
-9. **OnMatchEnded:** Muestra "¡GANA X!" (o "¡EMPATE!") + MVP con hold infinito (no se oculta solo)
+9. **OnMatchEnded:** En partida normal muestra "¡GANA X!" (o "¡EMPATE!") + MVP con hold infinito. En `Driven` oculta el banner y no muestra MVP
 10. **Próximo OnRosterSpawned o Countdown:** oculta el banner
 11. **OnDisable:** Desuscribe, unbind
 
 ## Constantes S142
 
 ```csharp
-private const int FeedMax = 5;              // Max entries visibles simultáneas
-private const long FeedLifeMs = 7000;       // Vida de entry en feed (7s)
-private const long PopReleaseMs = 60;       // Duración pop animation (60ms)
-private const float FightHold = 0.9f;       // Tiempo mostrar "¡A PELEAR!"
-private const float SuddenHold = 1.6f;      // Tiempo mostrar "¡MUERTE SÚBITA!"
+private const int FeedMax = 5;
+private const long FeedLifeMs = 7000;
+private const long PopReleaseMs = 60;
+private const float FightHold = 0.9f;
+private const float SuddenHold = 1.6f;
 ```
+
+Equivalen a: máximo de entradas en el feed, vida de cada entrada (7 s), duración del pop del banner (60 ms), tiempo de "¡A PELEAR!" y de "¡MUERTE SÚBITA!" / "¡ÚLTIMO EN PIE!".
 
 ## Referencia: Classes/Elements UXML S142
 
@@ -129,20 +131,27 @@ brawl-root
 - Llama `BrawlMatch.NewMatch()` / `Rematch()` vía botones
 - Renderiza cards, feed, banners, labels en UIDocument
 
-## Notas S144
+## Notas
 
-- En partidas `Driven` (bajada Brawl, dirigidas por `BrawlRunDirector`) los botones Nueva Partida y Revancha quedan ocultos. Se decide en `RebuildCards()`, que corre en cada roster.
 - TryBind() retorna false si documento no listo (permite esperar a inicialización de UXML)
 - Unbind() se llama en OnDisable y cuando documento cambia
 - lastCount/lastPhase/etc son optimizaciones para no recomputar si no cambió
 - Feed es auto-scrolling (últimas 5 entries visibles, más viejas fadean)
-- MVP calcula daño, curación, KOs (mostrado en ganador al fin)
+- MVP calcula daño, curación, KOs (mostrado en ganador al fin, solo en partidas no `Driven`)
 - Banner tiene pop animation (pequeño → normal en 60ms)
 - Colores de equipo vienen de tuning (editables sin modificar código)
 - Textos de banner y feed hardcodeados en español (no pasan por `Loc`)
+
+## Notas S144
+
+- En partidas `Driven` (bajada Brawl, dirigidas por `BrawlRunDirector`) los botones Nueva Partida y Revancha quedan ocultos. Se decide en `RebuildCards()`, que corre en cada roster.
 
 ## Notas S145
 
 - El reloj y los botones de velocidad salieron a `BrawlHudClock`; `BrawlHud` solo lo crea, lo une, lo desune y lo refresca.
 - `RefreshRivalCards` oculta la columna roja con `trial.Active` (salas de muñecos y minerales) y la restaura al terminar la prueba.
 - El banner de fin de partida muestra "¡EMPATE!" cuando el ganador es `None`. Para la bajada, ese empate cuenta como victoria en `BrawlRunDirector`.
+
+## Notas S146
+
+- En `Driven` el cierre de partida no muestra cartel ni MVP: `HandleEnded` solo oculta el banner. La bajada decide qué sigue (`BrawlRunDirector` pasa a `RoomResult` u `Over`), y lo muestran `BrawlRunHud` y `BrawlRunPanel`.

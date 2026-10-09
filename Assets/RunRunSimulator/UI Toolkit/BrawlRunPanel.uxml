@@ -2,12 +2,23 @@
     <Style src="Theme.uss" />
     <Style src="BrawlRunPanelStyle.uss" />
     <ui:VisualElement name="run-root" class="mm-theme mm-theme--night run" picking-mode="Ignore">
-        <ui:VisualElement name="run-strip" class="run-strip" picking-mode="Ignore">
-            <ui:VisualElement class="run-strip__box" picking-mode="Ignore">
-                <ui:VisualElement class="run-bg" picking-mode="Ignore" />
-                <ui:Label name="run-strip-title" text="" class="run-strip__title" picking-mode="Ignore" />
-                <ui:VisualElement name="run-strip-rooms" class="run-rooms run-rooms--strip" picking-mode="Ignore" />
-                <ui:Label name="run-strip-trial" text="" class="run-strip__trial" picking-mode="Ignore" />
+        <ui:VisualElement name="run-hud" class="run-hud" picking-mode="Ignore">
+            <ui:VisualElement name="run-bag" class="run-bag" picking-mode="Ignore">
+                <ui:VisualElement class="run-bag__icon" picking-mode="Ignore" />
+                <ui:Label name="run-bag-count" text="0" class="run-bag__count" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="run-left" class="run-left" picking-mode="Ignore">
+                <ui:VisualElement name="run-left-pips" class="run-pips" picking-mode="Ignore" />
+                <ui:Label name="run-left-text" text="" class="run-left__text" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Label name="run-trial" text="" class="run-trial" picking-mode="Ignore" />
+            <ui:VisualElement name="run-loot" class="run-loot" picking-mode="Ignore">
+                <ui:VisualElement name="run-gem-1" class="run-loot__gem" picking-mode="Ignore" />
+                <ui:VisualElement name="run-gem-2" class="run-loot__gem" picking-mode="Ignore" />
+                <ui:VisualElement name="run-gem-3" class="run-loot__gem" picking-mode="Ignore" />
+                <ui:VisualElement name="run-gem-4" class="run-loot__gem" picking-mode="Ignore" />
+                <ui:VisualElement name="run-gem-5" class="run-loot__gem" picking-mode="Ignore" />
+                <ui:VisualElement name="run-gem-6" class="run-loot__gem" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="run-card-wrap" class="run-card-wrap" picking-mode="Ignore">
@@ -21,6 +32,12 @@
                     <ui:Button name="run-leave" text="Volver a la tienda" focusable="false" class="run-btn" />
                 </ui:VisualElement>
             </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="run-veil" class="run-veil" picking-mode="Ignore">
+            <ui:VisualElement name="run-veil-glyph" class="run-veil__glyph" picking-mode="Ignore" />
+            <ui:Label name="run-veil-title" text="" class="run-veil__title" picking-mode="Ignore" />
+            <ui:VisualElement name="run-veil-pips" class="run-pips run-pips--big" picking-mode="Ignore" />
+            <ui:Label name="run-veil-left" text="" class="run-veil__left" picking-mode="Ignore" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

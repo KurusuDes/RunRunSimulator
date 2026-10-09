@@ -6,7 +6,7 @@ tags: [script, ui, brawl, run, uitk]
 
 **Ruta:** `UI/BrawlRunPanel.cs`
 
-**Responsabilidad:** Presentación UITK de la bajada Brawl. Muestra dos vistas sobre el mismo documento: una tira superior durante la pelea (tramo, sala, texto de la sala de prueba) y una tarjeta central entre salas (planificación, resultado, derrota). Dibuja un chip por sala (VS n, Muñecos, Minerales) con iconos. Expresa el botín en Minerita (botín × `BrawlRunRulesSO.MineritaPerLoot`). No decide reglas ni persiste nada: lee `BrawlRunDirector` y `BrawlTrialRoom` y reenvía los clicks.
+**Responsabilidad:** Tarjeta central de la bajada Brawl (UITK), con dos vistas: planificación del tramo (`Planning`) y derrota (`Over`). Dibuja un chip por sala con el glifo de `BrawlRoomGlyphsSO`, la salud de cada MoriMochi y el botín expresado en Minerita (botín × `BrawlRunRulesSO.MineritaPerLoot`). No decide reglas ni persiste nada: lee `BrawlRunDirector` y reenvía los clicks. La pelea y el velo entre salas salieron a `BrawlRunHud` y `BrawlRunVeil` en S146.
 
 ## Campos Serializados
 
@@ -14,35 +14,29 @@ tags: [script, ui, brawl, run, uitk]
 |-------|------|-------------|
 | `document` | `UIDocument` | Documento con el elemento `run-root` (Required) |
 | `director` | `BrawlRunDirector` | Estado de la bajada (Required) |
-| `trial` | `BrawlTrialRoom` | Estado de salas de prueba (opcional) |
-| `combatIcon`, `dummiesIcon`, `mineralsIcon` | `Sprite` | Iconos de los chips; si falta, se usa la clase `run-room__icon--empty` |
+| `glyphs` | `BrawlRoomGlyphsSO` | Glifos de los chips (Required; sin él no bindea) |
 
-## Elementos UXML (clases)
+## Elementos UXML
 
-- Raíz y vistas: `run-root`, `run-strip`, `run-strip-rooms`, `run-strip-title`, `run-strip-trial`, `run-card`, `run-rooms`, `run-title`, `run-info`, `run-go`, `run-leave`.
-- `run-minerita`: label creado en código e insertado antes de `run-info` (no está en el UXML).
-- Chips: `run-room` (+ `--small`, `--done`, `--current`, `--upcoming`, `--vs0` a `--vs3`), `run-room__icons`, `run-room__icon`, `run-room__label`.
+`run-root`, `run-card-wrap`, `run-rooms`, `run-title`, `run-info`, `run-go`, `run-leave`. El label `run-minerita` se crea en código y se inserta antes de `run-info`.
 
 ## Comportamiento por Estado
 
-| Estado | Vista | Título | Botón principal | Botón salir |
-|--------|-------|--------|-----------------|-------------|
-| `Planning` | tarjeta | "Tramo N · K salas" | "Enfrentar tramo" | "Volver a la tienda" si tramo 1 y Minerita 0; si no, "Salir con X Minerita" |
-| `Fighting` | tira | "Tramo N · Sala i/K" + chips | oculto | oculto |
-| `RoomResult` | tarjeta | `LastRoomSummary` | "Ver el próximo tramo" o "Siguiente sala" | oculto |
-| `Over` | tarjeta | "Perdiste el combate" | oculto | "Volver a la tienda" |
+La tarjeta solo se muestra si hay bajada activa, `Depth > 0` y el estado es `Planning` u `Over`. En `Fighting`, `RoomResult` y `Transition` queda oculta.
 
-- **Tira de prueba:** "Muñecos · pegales para curar al equipo"; minerales sin empezar: "Minerales · pegale al cristal para empezar"; minerales en curso: "Minerales · +X Minerita". Solo reconstruye el texto cuando cambian si está activa, si empezó o el material. No muestra segundos (el cronómetro está en `BrawlHud`).
-- **Tarjeta:** línea `run-minerita`: "Minerita: X" en `Planning` y `RoomResult`; en `Over`, "Se pierden X Minerita · te llevás Y" o "Sin botín que perder". Y una línea de salud por MoriMochi ("Nombre NN %") en `Planning` y `RoomResult`.
-- **Chips:** combate → `max(1, rivales)` iconos de combate y etiqueta "VS n"; muñecos y minerales → un icono y etiqueta propia.
-- Oculto si no hay bajada activa o `Depth == 0`.
+| Estado | Título | Línea Minerita | Línea de salud | Botón principal | Botón salir |
+|--------|--------|----------------|----------------|-----------------|-------------|
+| `Planning` | "Tramo N · K salas" | "Minerita: X" | Nombre y % de vida por MoriMochi | "Enfrentar tramo" | "Volver a la tienda" si es tramo 1 y Minerita 0; si no, "Salir con X Minerita" |
+| `Over` | "Perdiste el combate" | "Se pierden X Minerita · te llevas Y" o "Sin botín que perder" | oculta | oculto | "Volver a la tienda" |
+
+- **Chips:** uno por sala. Clase `run-room--done` (antes del índice), `--current` o `--upcoming`. El glifo (`run-room__glyph`) usa `glyphs.For(room)` y la clase `run-glyph--foe` (combate), `run-glyph--heal` (muñecos) o `run-glyph--mineral` (minerales).
 
 ## Flujo
 
-- `OnEnable` suscribe `director.Changed` y prueba el bind; `OnDisable` desuscribe.
-- El bind es perezoso: `TryBind()` se reintenta hasta que el UXML está listo.
-- `Update` refresca la tira de prueba cada frame (solo redibuja al cambiar).
-- Botón principal → `AcceptTramo()` en `Planning` o `NextRoom()` en `RoomResult`. Botón salir → `Leave()`.
+- `OnEnable` suscribe `director.Changed` y prueba el bind; `OnDisable` desuscribe y limpia los chips.
+- El bind es perezoso: `TryBind()` se reintenta hasta que el UXML y `glyphs` están listos.
+- No tiene `Update`: solo redibuja cuando el director dispara `Changed`.
+- Botón principal → `AcceptTramo()`, solo si el estado es `Planning`. Botón salir → `Leave()` (válido en `Planning` y `Over`).
 
 ## Vinculado a
 
@@ -50,15 +44,15 @@ tags: [script, ui, brawl, run, uitk]
 
 ## Conexiones
 
-- [[BrawlRunDirector]] — `Changed`, `State`, `Run`, `Team`, `LastRoomSummary`, `AcceptTramo`, `NextRoom`, `Leave`
+- [[BrawlRunDirector]] — `Changed`, `State`, `Run`, `Team`, `AcceptTramo`, `Leave`
 - [[BrawlRun]] — `Rooms`, `RoomIndex`, `Depth`, `Material`, `MaterialLost`, `Health01`
 - [[BrawlRunRulesSO]] — `MineritaPerLoot` vía `Current`
+- [[BrawlRoomGlyphsSO]] — glifo de cada chip
 - [[BrawlRoom]], [[BrawlEnums.cs]] — `BrawlRoomKind`
-- [[BrawlTrialRoom]] — `Active`, `Started`, `Kind`, `Material`
+- [[BrawlRunHud]] y [[BrawlRunVeil]] — vistas de pelea y velo sobre el mismo `run-root`
 - [[CreatureDNA]] — `CustomName`, `UniqueID`
 
 ## Notas
 
-- Textos en español hardcodeados (no pasan por `Loc`), igual que `BrawlHud`.
-- Las clases `run-room--vs0` se usan para salas no combate; los combates usan `vs1` a `vs3`.
-- S145: el botín crudo (`Material`) ya no se muestra en la tarjeta; se muestra la Minerita equivalente.
+- Textos en español hardcodeados (no pasan por `Loc`), igual que `BrawlHud` y `BrawlRunHud`.
+- S146: ya no tiene `trial`, ni iconos por tipo (`combatIcon`, `dummiesIcon`, `mineralsIcon`), ni muestra el estado `RoomResult`. El avance a la siguiente sala es automático.

@@ -197,6 +197,12 @@ public class BrawlHud : MonoBehaviour
     private void HandleEnded(ExpeditionTeam winner)
     {
         if (!TryBind()) return;
+        if (BrawlMatch.Current != null && BrawlMatch.Current.Driven)
+        {
+            HideBanner();
+            return;
+        }
+
         var (text, colorClass) = winner switch
         {
             ExpeditionTeam.Player => ("¡GANA AZUL!", "brawl-banner--blue"),

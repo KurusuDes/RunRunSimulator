@@ -21,5 +21,5 @@ public enum BrawlStatusKind { Slow, Stun, Haste, Boost, Thorns, Taunt, Shield }
 public enum BrawlFxKind { Slash, Lightning, Beam, Whip, Burst, Ring, Pulse, Ward, Dash, Pull, Throw, Muzzle, Spawn, KnockOut, Land }
 public enum BrawlSignature { None, Rainbow, Storm, Cloud, Comet, Lure, Plates }
 public enum BrawlRoomKind { Combat, Dummies, Minerals }
-public enum BrawlRunState { Planning, Fighting, RoomResult, Over }
+public enum BrawlRunState { Planning, Fighting, RoomResult, Over, Transition }
 }

@@ -43,6 +43,10 @@ public class BrawlRunRulesSO : ScriptableObject
     [Min(0)] public int MineralBaseLoot = 1;
     [Min(0f)] public float TrialStartGrace = 6f;
 
+    [Title("Ritmo")]
+    [Min(0f)] public float LootBeatSeconds = 1.6f;
+    [Min(0f)] public float VeilCoverSeconds = 1.1f;
+
     public float RivalPower(int depth) => Mathf.Min(RivalPowerMax, RivalPowerBase + RivalPowerPerDepth * Mathf.Max(0, depth - 1));
 }
 }

@@ -13,13 +13,15 @@ public static class ExpeditionCardBuilder
         public readonly BrawlSkillRole Role;
         public readonly string Title;
         public readonly string Description;
+        public readonly bool Locked;
 
-        public Power(BrawlTheme theme, BrawlSkillRole role, string title, string description)
+        public Power(BrawlTheme theme, BrawlSkillRole role, string title, string description, bool locked = false)
         {
             Theme = theme;
             Role = role;
             Title = title;
             Description = description;
+            Locked = locked;
         }
     }
 
@@ -131,7 +133,7 @@ public static class ExpeditionCardBuilder
 
         var title = new Label(power.Title);
         title.AddToClassList("exp-detail__title");
-        title.AddToClassList("mm-role-text--" + BrawlKitProfile.RoleClass(power.Role));
+        if (!power.Locked) title.AddToClassList("mm-role-text--" + BrawlKitProfile.RoleClass(power.Role));
         text.Add(title);
 
         var desc = new Label(power.Description);
@@ -153,6 +155,14 @@ public static class ExpeditionCardBuilder
     {
         var icon = new VisualElement();
         icon.AddToClassList(iconClass);
+        if (power.Locked)
+        {
+            icon.AddToClassList("exp-power--locked");
+            var lockMark = new Label("?");
+            lockMark.AddToClassList("exp-power__lock");
+            icon.Add(lockMark);
+            return icon;
+        }
         icon.AddToClassList("mm-role-ring--" + BrawlKitProfile.RoleClass(power.Role));
         if (power.Theme.Icon != null) icon.style.backgroundImage = new StyleBackground(power.Theme.Icon);
         else icon.style.backgroundColor = power.Theme.Color;
@@ -165,7 +175,9 @@ public static class ExpeditionCardBuilder
             ? new Power(profile.WingTheme, BrawlKitProfile.WingRole(profile.Wing), profile.Wing.Title, profile.Wing.Description)
             : new Power(profile.WingTheme, BrawlSkillRole.Offense, string.Empty, string.Empty),
         1 => SkillPower(profile.HornTheme, profile.Horn),
-        _ => SkillPower(profile.BackTheme, profile.Back),
+        _ => profile.BackLocked
+            ? new Power(default, BrawlSkillRole.Offense, Loc.Tr("ui.power.locked.title"), Loc.Tr("ui.power.locked.desc"), true)
+            : SkillPower(profile.BackTheme, profile.Back),
     };
 
     private static Power SkillPower(BrawlTheme theme, BrawlSkillSO skill) =>

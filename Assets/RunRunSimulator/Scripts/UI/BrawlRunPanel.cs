@@ -6,31 +6,19 @@ namespace MoriMonchiSimulator
 {
 public class BrawlRunPanel : MonoBehaviour
 {
-    private static readonly string[] RivalClasses = { "run-room--vs0", "run-room--vs1", "run-room--vs2", "run-room--vs3" };
-
     [Required, SerializeField] private UIDocument document;
     [Required, SerializeField] private BrawlRunDirector director;
-    [SerializeField] private BrawlTrialRoom trial;
-    [SerializeField] private Sprite combatIcon;
-    [SerializeField] private Sprite dummiesIcon;
-    [SerializeField] private Sprite mineralsIcon;
+    [Required, SerializeField] private BrawlRoomGlyphsSO glyphs;
 
     private VisualElement boundRoot;
     private VisualElement root;
-    private VisualElement strip;
-    private VisualElement stripRooms;
-    private VisualElement card;
+    private VisualElement cardWrap;
     private VisualElement cardRooms;
-    private Label stripTitle;
-    private Label stripTrial;
     private Label title;
     private Label info;
     private Label minerita;
     private Button goButton;
     private Button leaveButton;
-    private bool lastTrialActive;
-    private bool lastTrialStarted;
-    private int lastTrialMaterial = -1;
 
     private void OnEnable()
     {
@@ -47,7 +35,7 @@ public class BrawlRunPanel : MonoBehaviour
     private bool TryBind()
     {
         var docRoot = document != null ? document.rootVisualElement : null;
-        if (docRoot == null || director == null) return false;
+        if (docRoot == null || director == null || glyphs == null) return false;
         if (root != null && docRoot == boundRoot) return true;
 
         Unbind();
@@ -56,11 +44,7 @@ public class BrawlRunPanel : MonoBehaviour
 
         boundRoot = docRoot;
         root = found;
-        strip = root.Q("run-strip");
-        stripRooms = root.Q("run-strip-rooms");
-        stripTitle = root.Q<Label>("run-strip-title");
-        stripTrial = root.Q<Label>("run-strip-trial");
-        card = root.Q("run-card");
+        cardWrap = root.Q("run-card-wrap");
         cardRooms = root.Q("run-rooms");
         title = root.Q<Label>("run-title");
         info = root.Q<Label>("run-info");
@@ -82,7 +66,6 @@ public class BrawlRunPanel : MonoBehaviour
         {
             goButton.clicked -= OnGoClicked;
             leaveButton.clicked -= OnLeaveClicked;
-            stripRooms.Clear();
             cardRooms.Clear();
         }
 
@@ -98,65 +81,24 @@ public class BrawlRunPanel : MonoBehaviour
     private void OnGoClicked()
     {
         if (director.State == BrawlRunState.Planning) director.AcceptTramo();
-        else if (director.State == BrawlRunState.RoomResult) director.NextRoom();
     }
 
     private void OnLeaveClicked() => director.Leave();
 
-    private void Update()
-    {
-        if (!TryBind()) return;
-        RefreshTrial();
-    }
-
     private void Refresh()
     {
         var run = director.Active ? director.Run : null;
-        bool show = run != null && run.Depth > 0;
-        SetVisible(root, show);
+        var state = director.State;
+        bool show = run != null && run.Depth > 0 && (state == BrawlRunState.Planning || state == BrawlRunState.Over);
+        SetVisible(cardWrap, show);
         if (!show) return;
 
-        bool fighting = director.State == BrawlRunState.Fighting;
-        SetVisible(strip, fighting);
-        SetVisible(card, !fighting);
-        if (fighting) RefreshStrip(run);
-        else RefreshCard(run);
-    }
-
-    private void RefreshStrip(BrawlRun run)
-    {
-        int count = run.Rooms.Count;
-        int shown = Mathf.Clamp(run.RoomIndex + 1, 1, Mathf.Max(1, count));
-        stripTitle.text = "Tramo " + run.Depth + " · Sala " + shown + "/" + count;
-        BuildChips(stripRooms, run, true);
-
-        lastTrialMaterial = -1;
-        RefreshTrial();
-    }
-
-    private void RefreshTrial()
-    {
-        if (trial == null || !director.Active || director.State != BrawlRunState.Fighting) return;
-
-        bool active = trial.Active;
-        bool started = active && trial.Started;
-        int material = active && trial.Kind == BrawlRoomKind.Minerals ? trial.Material : 0;
-        if (active == lastTrialActive && started == lastTrialStarted && material == lastTrialMaterial) return;
-
-        lastTrialActive = active;
-        lastTrialStarted = started;
-        lastTrialMaterial = material;
-        SetVisible(stripTrial, active);
-        if (!active) return;
-
-        if (trial.Kind != BrawlRoomKind.Minerals) stripTrial.text = "Muñecos · pegales para curar al equipo";
-        else if (!started) stripTrial.text = "Minerales · pegale al cristal para empezar";
-        else stripTrial.text = "Minerales · +" + Minerita(material) + " Minerita";
+        RefreshCard(run);
     }
 
     private void RefreshCard(BrawlRun run)
     {
-        BuildChips(cardRooms, run, false);
+        BuildChips(cardRooms, run);
 
         switch (director.State)
         {
@@ -170,19 +112,10 @@ public class BrawlRunPanel : MonoBehaviour
                 SetVisible(goButton, true);
                 SetVisible(leaveButton, true);
                 break;
-            case BrawlRunState.RoomResult:
-                title.text = director.LastRoomSummary;
-                minerita.text = "Minerita: " + Minerita(run.Material);
-                info.text = HealthLine(run);
-                goButton.text = run.TramoDone ? "Ver el próximo tramo" : "Siguiente sala";
-                SetVisible(info, true);
-                SetVisible(goButton, true);
-                SetVisible(leaveButton, false);
-                break;
             default:
                 title.text = "Perdiste el combate";
                 minerita.text = run.MaterialLost > 0
-                    ? "Se pierden " + Minerita(run.MaterialLost) + " Minerita · te llevás " + Minerita(run.Material)
+                    ? "Se pierden " + Minerita(run.MaterialLost) + " Minerita · te llevas " + Minerita(run.Material)
                     : "Sin botín que perder";
                 leaveButton.text = "Volver a la tienda";
                 SetVisible(info, false);
@@ -215,54 +148,28 @@ public class BrawlRunPanel : MonoBehaviour
         return line;
     }
 
-    private void BuildChips(VisualElement container, BrawlRun run, bool small)
+    private void BuildChips(VisualElement container, BrawlRun run)
     {
         container.Clear();
         var rooms = run.Rooms;
         for (int i = 0; i < rooms.Count; i++)
         {
             var room = rooms[i];
-            bool combat = room.Kind == BrawlRoomKind.Combat;
 
             var chip = Element("run-room");
-            if (small) chip.AddToClassList("run-room--small");
             chip.AddToClassList(i < run.RoomIndex ? "run-room--done" : i == run.RoomIndex ? "run-room--current" : "run-room--upcoming");
-            chip.AddToClassList(RivalClasses[combat ? Mathf.Clamp(room.Rivals, 1, 3) : 0]);
 
-            var icons = Element("run-room__icons");
-            switch (room.Kind)
+            var glyph = Element("run-room__glyph");
+            var sprite = glyphs.For(room);
+            if (sprite != null) glyph.style.backgroundImage = new StyleBackground(sprite);
+            glyph.AddToClassList(room.Kind switch
             {
-                case BrawlRoomKind.Combat:
-                    AddIcons(icons, combatIcon, Mathf.Max(1, room.Rivals));
-                    break;
-                case BrawlRoomKind.Dummies:
-                    AddIcons(icons, dummiesIcon, 1);
-                    break;
-                default:
-                    AddIcons(icons, mineralsIcon, 1);
-                    break;
-            }
-            chip.Add(icons);
-
-            string label = room.Kind switch
-            {
-                BrawlRoomKind.Combat => "VS " + room.Rivals,
-                BrawlRoomKind.Dummies => "Muñecos",
-                _ => "Minerales"
-            };
-            chip.Add(MakeLabel(label, "run-room__label"));
+                BrawlRoomKind.Combat => "run-glyph--foe",
+                BrawlRoomKind.Dummies => "run-glyph--heal",
+                _ => "run-glyph--mineral"
+            });
+            chip.Add(glyph);
             container.Add(chip);
-        }
-    }
-
-    private static void AddIcons(VisualElement icons, Sprite sprite, int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            var icon = Element("run-room__icon");
-            if (sprite != null) icon.style.backgroundImage = new StyleBackground(sprite);
-            else icon.AddToClassList("run-room__icon--empty");
-            icons.Add(icon);
         }
     }
 

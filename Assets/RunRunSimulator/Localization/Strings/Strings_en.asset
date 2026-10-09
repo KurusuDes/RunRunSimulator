@@ -1526,6 +1526,18 @@ MonoBehaviour:
     m_Localized: Suggested role
     m_Metadata:
       m_Items: []
+  - m_Id: 27546364896927744
+    m_Localized: Hidden power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27546365014368256
+    m_Localized: Revealed when it grows up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27546365014368257
+    m_Localized: 'New power: {0}'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -10,6 +10,8 @@ public class ExpeditionReturnCardUITK : MonoBehaviour, IUINavigable
 {
     [SerializeField] private UIDocument document;
     [SerializeField] private UIPanelType panel = UIPanelType.ExpeditionReturn;
+    [SerializeField] private BrawlKitDatabaseSO kits;
+    [SerializeField] private CreatureDatabaseSO database;
 
     private Label titleLabel;
     private Label mineritaLabel;
@@ -127,6 +129,8 @@ public class ExpeditionReturnCardUITK : MonoBehaviour, IUINavigable
             var badge = new Label(Loc.Tr("ui.return.grew"));
             badge.AddToClassList("ret-badge");
             growth.Add(badge);
+            var newPower = BuildNewPower(dna);
+            if (newPower != null) growth.Add(newPower);
             card.Add(growth);
         }
         else if (dna.Form == MonchiForm.Slime)
@@ -138,6 +142,29 @@ public class ExpeditionReturnCardUITK : MonoBehaviour, IUINavigable
         }
 
         return card;
+    }
+
+    private VisualElement BuildNewPower(CreatureDNA dna)
+    {
+        if (kits == null || database == null) return null;
+
+        var profile = BrawlKitProfile.Of(dna, kits, database);
+        if (profile.Back == null) return null;
+
+        var row = new VisualElement();
+        row.AddToClassList("ret-newpower");
+
+        var icon = new VisualElement();
+        icon.AddToClassList("ret-newpower__icon");
+        if (profile.BackTheme.Icon != null) icon.style.backgroundImage = new StyleBackground(profile.BackTheme.Icon);
+        else icon.style.backgroundColor = profile.BackTheme.Color;
+        row.Add(icon);
+
+        var text = new Label(Loc.Tr("ui.return.newpower", profile.Back.Title));
+        text.AddToClassList("ret-newpower__text");
+        row.Add(text);
+
+        return row;
     }
 
     private static VisualElement BuildPips(int explorations, int explorationsToEvolve)

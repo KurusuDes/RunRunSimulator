@@ -13,8 +13,9 @@ public readonly struct BrawlKitProfile
     public readonly bool HasSecondary;
     public readonly BrawlSkillRole Secondary;
     public readonly bool Balanced;
+    public readonly bool BackLocked;
 
-    private BrawlKitProfile(BrawlWingKitSO wing, BrawlSkillSO horn, BrawlSkillSO back, BrawlTheme wingTheme, BrawlTheme hornTheme, BrawlTheme backTheme)
+    private BrawlKitProfile(BrawlWingKitSO wing, BrawlSkillSO horn, BrawlSkillSO back, BrawlTheme wingTheme, BrawlTheme hornTheme, BrawlTheme backTheme, bool backLocked)
     {
         Wing = wing;
         Horn = horn;
@@ -22,6 +23,7 @@ public readonly struct BrawlKitProfile
         WingTheme = wingTheme;
         HornTheme = hornTheme;
         BackTheme = backTheme;
+        BackLocked = backLocked;
 
         Resolve(
             horn != null ? horn.Role : (BrawlSkillRole?)null,
@@ -46,11 +48,13 @@ public readonly struct BrawlKitProfile
         BrawlWingKitSO wing = null;
         BrawlSkillSO horn = null;
         BrawlSkillSO back = null;
+        bool locked = dna != null && dna.Form != MonchiForm.Adult;
         if (dna != null && kits != null)
         {
             wing = kits.Wing(dna.WingID);
             horn = kits.Skill(dna.HornID, ClashSlot.Horn);
-            back = kits.Skill(dna.BackID, ClashSlot.Back);
+            if (!locked)
+                back = kits.Skill(dna.BackID, ClashSlot.Back);
         }
 
         BodyPart wingPart = dna != null && parts != null ? parts.GetWing(dna.WingID) : null;
@@ -63,11 +67,13 @@ public readonly struct BrawlKitProfile
         BrawlTheme hornTheme = horn != null
             ? BrawlTheme.Resolve(hornPart, horn.IconOverride, horn.ColorOverride, horn.Signature)
             : BrawlTheme.Resolve(hornPart, null, default);
-        BrawlTheme backTheme = back != null
-            ? BrawlTheme.Resolve(backPart, back.IconOverride, back.ColorOverride, back.Signature)
-            : BrawlTheme.Resolve(backPart, null, default);
+        BrawlTheme backTheme = locked
+            ? default
+            : back != null
+                ? BrawlTheme.Resolve(backPart, back.IconOverride, back.ColorOverride, back.Signature)
+                : BrawlTheme.Resolve(backPart, null, default);
 
-        return new BrawlKitProfile(wing, horn, back, wingTheme, hornTheme, backTheme);
+        return new BrawlKitProfile(wing, horn, back, wingTheme, hornTheme, backTheme, locked);
     }
 
     public static BrawlSkillRole WingRole(BrawlWingKitSO wing)

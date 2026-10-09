@@ -63,6 +63,7 @@ public class BrawlFighter : MonoBehaviour
     public BrawlTheme WingTheme { get; private set; }
     public BrawlTheme HornTheme { get; private set; }
     public BrawlTheme BackTheme { get; private set; }
+    public bool BackLocked { get; private set; }
     public string BodyLabel { get; private set; }
     public MonchiVisualizer Visualizer => visualizer;
     public BrawlMotor Motor => motor;
@@ -131,6 +132,7 @@ public class BrawlFighter : MonoBehaviour
         WingTheme = profile.WingTheme;
         HornTheme = profile.HornTheme;
         BackTheme = profile.BackTheme;
+        BackLocked = profile.BackLocked;
 
         var body = tuning.BodyFor(dna.BodyShapeID);
         MaxHp = tuning.BaseHp * body.HpMul;

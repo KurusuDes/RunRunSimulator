@@ -21,6 +21,9 @@ public class BrawlRunDirector : MonoBehaviour
     public BrawlRunState State { get; private set; }
     public IReadOnlyList<CreatureDNA> Team => team;
     public string LastRoomSummary { get; private set; }
+    public int LastRoomLoot { get; private set; }
+
+    private float stateUntil;
 
     public event Action Changed;
 
@@ -68,31 +71,46 @@ public class BrawlRunDirector : MonoBehaviour
         Changed?.Invoke();
     }
 
+    private void Update()
+    {
+        if (!Active || Time.time < stateUntil) return;
+
+        if (State == BrawlRunState.Transition)
+        {
+            StartRoom();
+        }
+        else if (State == BrawlRunState.RoomResult)
+        {
+            if (run.TramoDone)
+            {
+                run.PlanNextTramo();
+                State = BrawlRunState.Planning;
+                Changed?.Invoke();
+            }
+            else
+            {
+                EnterTransition();
+            }
+        }
+    }
+
     public void AcceptTramo()
     {
         if (!Active || State != BrawlRunState.Planning || run.Lost) return;
-        StartRoom();
-    }
-
-    public void NextRoom()
-    {
-        if (!Active || State != BrawlRunState.RoomResult) return;
-
-        if (run.TramoDone)
-        {
-            run.PlanNextTramo();
-            State = BrawlRunState.Planning;
-            Changed?.Invoke();
-            return;
-        }
-
-        StartRoom();
+        EnterTransition();
     }
 
     public void Leave()
     {
-        if (!Active || State == BrawlRunState.Fighting) return;
+        if (!Active || (State != BrawlRunState.Planning && State != BrawlRunState.Over)) return;
         ExpeditionHandoff.ReturnToStore(run.ToResult());
+    }
+
+    private void EnterTransition()
+    {
+        State = BrawlRunState.Transition;
+        stateUntil = Time.time + rules.VeilCoverSeconds;
+        Changed?.Invoke();
     }
 
     private void StartRoom()
@@ -159,8 +177,17 @@ public class BrawlRunDirector : MonoBehaviour
         }
 
         LastRoomSummary = result;
-        State = run.Lost ? BrawlRunState.Over : BrawlRunState.RoomResult;
-        Debug.Log($"[BrawlRunDirector] tramo {run.Depth} sala {room.Kind} ({run.RoomsCleared} superadas): {result} · llevás {run.Material}");
+        LastRoomLoot = run.Lost || room.Kind == BrawlRoomKind.Dummies ? 0 : Mathf.Max(0, run.Material - before);
+        if (run.Lost)
+        {
+            State = BrawlRunState.Over;
+        }
+        else
+        {
+            State = BrawlRunState.RoomResult;
+            stateUntil = Time.time + rules.LootBeatSeconds;
+        }
+        Debug.Log($"[BrawlRunDirector] tramo {run.Depth} sala {room.Kind} ({run.RoomsCleared} superadas): {result} · llevas {run.Material}");
         Changed?.Invoke();
     }
 }

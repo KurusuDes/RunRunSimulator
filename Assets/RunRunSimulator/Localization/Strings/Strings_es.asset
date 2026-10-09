@@ -1523,6 +1523,18 @@ MonoBehaviour:
     m_Localized: Rol sugerido
     m_Metadata:
       m_Items: []
+  - m_Id: 27546364896927744
+    m_Localized: Poder oculto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27546365014368256
+    m_Localized: Se descubre cuando crezca
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27546365014368257
+    m_Localized: 'Nuevo poder: {0}'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

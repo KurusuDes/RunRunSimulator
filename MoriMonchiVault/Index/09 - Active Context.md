@@ -4,6 +4,44 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-09 (Session 146 — **video de la bajada + blobims con la espalda bloqueada + glifos de sala estilo Another Door + flujo sin tarjeta entre salas (velo "Sala N de M", "Faltan N salas", Minerita que vuela a la mochila) + herramientas dev de adultos** — 3 `.cs` creados, 12 modificados; compila 0 errores; verificado en Play con bajadas autopilotadas y 2 videos enviados)
+
+**Focus:** Juan: "grabarme un pequeño gameplay desde escoger a los morimonchis hasta decidir el tramo... y después de regreso". Video 1 (`Recordings/S146_bajada/take1/`, 82,6 s) → feedback de Juan → lotes A-C → video 2 (`Recordings/S146_bajada/take2/S146_bajada2_720p.mp4`, 86,2 s). Juan: "está bastante bien".
+
+1. **Herramientas dev** (`DevToolsConsole`): grupo "MoriMonchis (DEV)" con Crear adultos (N, necesidades al 100 para que salgan aptos), Slimes → adultos y Cuidar a todos; "Ir a la noche" en Reloj (avanza bloques hasta `ExpeditionOpen`).
+2. **Blobims (decisión de Juan ⭐: "solo el ataque básico y el cuernito"):** `BrawlKitProfile.BackLocked` (no adulto → sin espalda; el rol sale de cuerno + ala). La espalda bloqueada se ve como "?" en la tarjeta de bajada, en la ficha ("Poder oculto · Se descubre cuando crezca") y en el HUD de pelea (ranura sin radial). La tarjeta de vuelta muestra "Nuevo poder: X" con el ícono para los que crecieron (compila; sin probar en vivo porque no creció ninguno).
+3. **Glifos de sala (estilo Another Door, referencia de Juan):** calavera que se afea con 1/2/3 rivales, mineral y corazón de cura; PNG 64 px blancos generados por `Tools/Icons/room_glyphs.py`, tinte por clase USS (`run-glyph--foe/heal/mineral`); `BrawlRoomGlyphsSO` elige el glifo por sala. Los chips de la tarjeta de tramo son solo glifos, sin texto.
+4. **Flujo Another Door (Juan: "una vez te comiteas al tramo no es necesario mostrarlo"):** estado nuevo `Transition`; Planning → Transition (`VeilCoverSeconds` 1,1) → Fighting → RoomResult (`LootBeatSeconds` 1,6) → Transition… o Planning al cerrar el tramo; derrota → Over con su tarjeta. Se borraron la tarjeta entre salas y `NextRoom()`. `BrawlRunVeil`: velo a pantalla completa con glifo, "Sala N de M", camino de puntos y "Quedan N más". `BrawlRunHud`: "Faltan N salas" + puntos arriba, mochila abajo a la derecha con el conteo de Minerita, y al ganar una sala 6 cristales vuelan a la mochila (Feel `OnLoot`) en vez de "¡GANA AZUL!" (`BrawlHud` no muestra el cartel en partidas dirigidas por la run). Los tres componentes comparten el documento de `BrawlRunPanel`; nadie oculta `run-root`.
+5. **Escenas y datos:** `BrawlDemo` (componentes nuevos + `Feedbacks/OnLoot`, `OnVeilShow`, `OnVeilHide`), `GameScene` (bases de kits y criaturas en la tarjeta de vuelta); 3 claves `Strings` (`ui.power.locked.title/desc`, `ui.return.newpower`); save tras las bajadas: 4 dabloons y ~295 Minerita.
+6. **Diseño:** lienzo con tres pantallas (principal, resultado, vuelta) en el artifact privado https://claude.ai/artifact/7TCGmnnmv6vvbz3AsP6ZcG, punto de partida para la sesión de UI.
+
+**Quirks ⚠️:** (1) Feel para UI Toolkit vive en `MoreMountains.FeedbacksForThirdParty` (`MMF_UIToolkitOpacity/Translate/Scale`), no en `MoreMountains.Feedbacks`. (2) Video por autopiloto: `Time.captureFramerate = 30` + corrutina `WaitForEndOfFrame` → `ScreenCapture.CaptureScreenshotAsTexture` → JPG (rinde ~12 fps reales); input sintético UITK (`ClickEvent`, `PointerEnterEvent`, `NavigationSubmitEvent` para `Button`); semilla forzada con el setter privado de `ExpeditionHandoff.RunSeed`. Los scripts quedaron en el scratchpad, no en el repo. (3) ffmpeg: `drawtext` revienta (segfault) → usar `ass=`; en tramos acelerados usar `trim=end_frame` antes de `setpts`, no `-frames:v`. (4) `.cs` creados por fuera del editor no se importan hasta `refresh_unity` force/all (CS0246).
+
+**Siguiente paso (S147, propuesta):**
+1. **Atmósfera de la arena (pedido de Juan al cierre ⭐: "procuremos no perderlos"):** en los videos no se ven las luciérnagas de noche, los halos de luz de día (prefab `LightShaft`), el polvo de hada ni el post proceso que tenía la arena (S113/S117, perfil `ArenaAtmosphere`). Revisar si `BrawlDemo` los perdió o si la captura no los registra, y recuperarlos según el momento del día.
+2. **Sesión de UI dedicada** (Juan: moderna, formas originales, menos recuadros redondeados) sobre tramo, velo, HUD de run y vuelta, partiendo del lienzo. Puntos flojos: "Faltan N salas" chico bajo el reloj, vuelo de cristales medido para 16:9, chips chicos.
+3. Confirmar con Juan los tiempos (velo 1,1 s, botín 1,6 s) y probar la revelación del poder de espalda con un blobim que crezca.
+4. Siguen de S145: gasto de Minerita en la ficha (E2.2), MVP del equipo ganador, localizar textos del Brawl, volcar S144-S146 en `Index/32`.
+
+**Archivos `.cs` creados (3) · modificados (12):**
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlRoomGlyphsSO.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlRunHud.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlRunVeil.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Core/DevToolsConsole.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/BrawlEnums.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlKitProfile.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlRunRulesSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlHud.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlHudCard.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlRunPanel.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/DetailInfoTabPresenter.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/ExpeditionCardBuilder.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/ExpeditionReturnCardUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlFighter.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlRunDirector.cs` → MODIFICADO
+
+---
+
 **Session:** 2026-10-09 (Session 145 — **conexión tienda ↔ Brawl con UI: rol sugerido por poderes, terminal para armar equipo, ficha con poderes, tarjeta de vuelta, run en Minerita, muñecos espantapájaros, minerales como bonus de daño, empate = victoria, retratos arreglados** — 8 `.cs` creados, 17 modificados; compila 0 errores; verificado en Play con 4 bajadas reales tienda → Brawl → tienda: ganada, perdida y dos con salas de prueba)
 
 **Focus:** Juan: "continuemos con los pendientes de conexión y levantar la UI necesaria para conectar los distintos sistemas; una vez termines me gustaría verlo". S144 estaba cerrada (commit `018d90ab`). Se le mandaron dos hojas de capturas por el chat.

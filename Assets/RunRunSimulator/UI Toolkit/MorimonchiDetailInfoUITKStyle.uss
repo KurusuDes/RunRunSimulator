@@ -337,6 +337,15 @@
     white-space: normal;
 }
 
+.part-power--locked .part-power__title {
+    color: var(--mm-ink-soft);
+    -unity-font-style: italic;
+}
+
+.part-power--locked .part-power__desc {
+    -unity-font-style: italic;
+}
+
 /* ── Combat tab: one card per finished fight, newest first ───────
    Turn-by-turn detail is not shown here — that replay lives in the
    Combat Visualizer. */

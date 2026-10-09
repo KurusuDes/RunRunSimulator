@@ -262,6 +262,25 @@
     height: 44px;
 }
 
+.brawl-slot--locked .brawl-slot__box {
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    background-color: var(--mm-bg-deep);
+}
+
+.brawl-slot__lock {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 22px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--mm-ink-soft);
+}
+
 .brawl-slot__icon {
     position: absolute;
     left: 5px;

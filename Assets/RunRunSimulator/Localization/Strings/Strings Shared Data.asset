@@ -1515,6 +1515,18 @@ MonoBehaviour:
     m_Key: ui.detail.combatrole.suggested
     m_Metadata:
       m_Items: []
+  - m_Id: 27546364896927744
+    m_Key: ui.power.locked.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27546365014368256
+    m_Key: ui.power.locked.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27546365014368257
+    m_Key: ui.return.newpower
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

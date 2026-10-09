@@ -121,6 +121,28 @@
     white-space: normal;
 }
 
+.ret-newpower {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.ret-newpower__icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    margin-right: 6px;
+    border-radius: 6px;
+}
+
+.ret-newpower__text {
+    flex-shrink: 1;
+    font-size: 13px;
+    color: var(--mm-teal);
+    white-space: normal;
+}
+
 .ret-pips {
     flex-direction: row;
     flex-wrap: wrap;

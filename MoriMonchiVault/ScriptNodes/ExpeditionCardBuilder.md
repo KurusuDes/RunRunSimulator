@@ -20,23 +20,25 @@ tags: [script, ui, expedition, builder, uitk]
 
 - Slot 0: ala, con rol `BrawlKitProfile.WingRole`.
 - Slot 1: cuerno (`BrawlSkillSO`).
-- Slot 2: espalda (`BrawlSkillSO`).
+- Slot 2: espalda (`BrawlSkillSO`). Si `BackLocked`, es un poder bloqueado: icono con clase `exp-power--locked` y "?" (`exp-power__lock`), título y descripción `ui.power.locked.title` / `ui.power.locked.desc`, sin anillo de rol. Aplica en la tarjeta y en el detalle.
 - Icono: `Theme.Icon` como fondo o `Theme.Color` si no hay icono. Clase `mm-role-ring--{rol}`.
 - Parte sin kit: poder vacío con rol Offense.
+- En el detalle, la fila bloqueada no lleva clase de color de rol en el título.
 
 ## Conexiones
 
 - [[ExpeditionPanelUITK]] — único consumidor
-- [[BrawlKitProfile]] — rol, temas y kits de cada poder
+- [[BrawlKitProfile]] — rol, temas, kits y `BackLocked` de cada poder
 - [[BrawlRolePill]] — píldora de rol
 - [[BrawlTheme]], [[BrawlSkillSO]], [[BrawlWingKitSO]] — iconos, colores, títulos y descripciones
 - [[CreatureAvailability]], [[CareGateSO]] — aptitud y necesidad más débil
 - [[NeedsDisplay]] — color y relleno de la barra
 - [[MonchiPortraitUI]] — retrato de la tarjeta
 - [[CreatureDNA]] — nombre, estado ocupado, necesidades
-- [[Loc]] — textos `ui.expedition.*`
+- [[Loc]] — textos `ui.expedition.*` y `ui.power.locked.*`
 
 ## Notas
 
 - Estático y sin estado: cada llamada reemplaza el contenido del contenedor que recibe.
-- Los nombres de los poderes salen de los SO de kit (`Title`, `Description`), no de `Loc`.
+- Los nombres de los poderes salen de los SO de kit (`Title`, `Description`), no de `Loc`. La excepción es el poder bloqueado, que sale de `Loc`.
+- S146: espalda bloqueada para formas no adultas, con el mismo criterio que la ficha y el HUD.

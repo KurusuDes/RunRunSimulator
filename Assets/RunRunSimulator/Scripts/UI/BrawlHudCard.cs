@@ -58,9 +58,9 @@ public class BrawlHudCard
         Root.Add(hp);
 
         var row = Element("brawl-card__slots");
-        AddSlot(row, 0, fighter.WingTheme, fighter.WingKit != null ? fighter.WingKit.Title : null, fighter.WingKit != null);
-        AddSlot(row, 1, fighter.HornTheme, fighter.HornSkill != null ? fighter.HornSkill.Title : null, fighter.HornSkill != null);
-        AddSlot(row, 2, fighter.BackTheme, fighter.BackSkill != null ? fighter.BackSkill.Title : null, fighter.BackSkill != null);
+        AddSlot(row, 0, fighter.WingTheme, fighter.WingKit != null ? fighter.WingKit.Title : null, fighter.WingKit != null, false);
+        AddSlot(row, 1, fighter.HornTheme, fighter.HornSkill != null ? fighter.HornSkill.Title : null, fighter.HornSkill != null, false);
+        AddSlot(row, 2, fighter.BackTheme, fighter.BackSkill != null ? fighter.BackSkill.Title : null, fighter.BackSkill != null, fighter.BackLocked);
         Root.Add(row);
 
         Refresh();
@@ -70,7 +70,7 @@ public class BrawlHudCard
     {
         int index = slot + 1;
         if (index < 1 || index >= SlotCount) return;
-        radials[index].Pulse();
+        radials[index]?.Pulse();
     }
 
     public void Refresh()
@@ -128,12 +128,25 @@ public class BrawlHudCard
         slots[index].EnableInClassList("brawl-slot--charging", isCharging);
     }
 
-    private void AddSlot(VisualElement row, int index, BrawlTheme theme, string title, bool active)
+    private void AddSlot(VisualElement row, int index, BrawlTheme theme, string title, bool active, bool locked)
     {
         var slot = Element("brawl-slot");
-        if (!active) slot.AddToClassList("brawl-slot--empty");
+        if (locked) slot.AddToClassList("brawl-slot--locked");
+        else if (!active) slot.AddToClassList("brawl-slot--empty");
 
         var box = Element("brawl-slot__box");
+
+        if (locked)
+        {
+            box.Add(MakeLabel("?", "brawl-slot__lock"));
+            slot.Add(box);
+            slot.Add(MakeLabel("—", "brawl-slot__label"));
+            row.Add(slot);
+
+            slots[index] = slot;
+            slotActive[index] = false;
+            return;
+        }
 
         var icon = new Image { sprite = theme.Icon, scaleMode = ScaleMode.ScaleToFit, tintColor = theme.Color, pickingMode = PickingMode.Ignore };
         icon.AddToClassList("brawl-slot__icon");

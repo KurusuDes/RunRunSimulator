@@ -79,6 +79,76 @@ public class DevToolsConsole : MonoBehaviour
         Debug.Log($"[DevToolsConsole] Rerolled potentials on {touched} creatures.");
     }
 
+    [BoxGroup("MoriMonchis (DEV)"), SerializeField, LabelText("Adultos a crear"), Min(1)]
+    private int devAdultCount = 3;
+
+    [Button("Crear adultos (DEV)", ButtonSizes.Medium), GUIColor(0.55f, 1f, 0.7f), BoxGroup("MoriMonchis (DEV)")]
+    private void DevCreateAdults()
+    {
+        if (!Application.isPlaying) { Debug.LogWarning("[DevToolsConsole] Solo en Play."); return; }
+        if (gameManager == null) { Debug.LogWarning("[DevToolsConsole] No GameManager assigned."); return; }
+        var registry = gameManager.Registry;
+        if (registry == null) { Debug.LogWarning("[DevToolsConsole] No registry assigned."); return; }
+        int created = 0;
+        for (int i = 0; i < devAdultCount; i++)
+        {
+            var dna = gameManager.MintCreature();
+            if (dna == null) continue;
+            dna.Form = MonchiForm.Adult;
+            if (dna.Needs != null)
+            {
+                dna.Needs.Health = 100f;
+                dna.Needs.Energy = 100f;
+                dna.Needs.Affect = 100f;
+            }
+            created++;
+        }
+        if (created == 0) return;
+        GameEvents.RegistryChanged(registry);
+        Debug.Log($"[DevToolsConsole] Created {created} adult creatures.");
+    }
+
+    [Button("Pasar Slimes a adultos (DEV)", ButtonSizes.Medium), GUIColor(0.9f, 0.75f, 0.2f), BoxGroup("MoriMonchis (DEV)")]
+    private void DevSlimesToAdults()
+    {
+        if (!Application.isPlaying) { Debug.LogWarning("[DevToolsConsole] Solo en Play."); return; }
+        if (gameManager == null) { Debug.LogWarning("[DevToolsConsole] No GameManager assigned."); return; }
+        var registry = gameManager.Registry;
+        if (registry == null) { Debug.LogWarning("[DevToolsConsole] No registry assigned."); return; }
+        int touched = 0;
+        foreach (var dna in registry.GetAll().Values)
+        {
+            if (dna.IsDead || dna.IsSold) continue;
+            if (dna.Form != MonchiForm.Slime) continue;
+            dna.Form = MonchiForm.Adult;
+            touched++;
+        }
+        if (touched == 0) return;
+        GameEvents.RegistryChanged(registry);
+        Debug.Log($"[DevToolsConsole] Slimes turned adult: {touched}.");
+    }
+
+    [Button("Cuidar a todos (DEV)", ButtonSizes.Medium), GUIColor(0.9f, 0.75f, 0.2f), BoxGroup("MoriMonchis (DEV)")]
+    private void DevCareForAll()
+    {
+        if (!Application.isPlaying) { Debug.LogWarning("[DevToolsConsole] Solo en Play."); return; }
+        if (gameManager == null) { Debug.LogWarning("[DevToolsConsole] No GameManager assigned."); return; }
+        var registry = gameManager.Registry;
+        if (registry == null) { Debug.LogWarning("[DevToolsConsole] No registry assigned."); return; }
+        int touched = 0;
+        foreach (var dna in registry.GetAll().Values)
+        {
+            if (dna.IsDead || dna.IsSold || dna.Needs == null) continue;
+            dna.Needs.Health = 100f;
+            dna.Needs.Energy = 100f;
+            dna.Needs.Affect = 100f;
+            touched++;
+        }
+        if (touched == 0) return;
+        GameEvents.RegistryChanged(registry);
+        Debug.Log($"[DevToolsConsole] Cared for {touched} creatures.");
+    }
+
     [Button("Salir de expedición (DEV)", ButtonSizes.Medium), GUIColor(0.6f, 0.9f, 1f), BoxGroup("Expedition (DEV)")]
     private void DevDepartExpedition()
     {
@@ -101,6 +171,25 @@ public class DevToolsConsole : MonoBehaviour
         if (!Application.isPlaying) { Debug.LogWarning("[DevToolsConsole] Solo en Play."); return; }
         if (GameClock.Instance == null) { Debug.LogWarning("[DevToolsConsole] No hay GameClock en la escena."); return; }
         GameClock.Instance.AdvanceToNextDay();
+    }
+
+    [Button("Ir a la noche (DEV)", ButtonSizes.Medium), GUIColor(0.6f, 0.9f, 1f), BoxGroup("Reloj (DEV)")]
+    private void DevGoToNight()
+    {
+        if (!Application.isPlaying) { Debug.LogWarning("[DevToolsConsole] Solo en Play."); return; }
+        if (GameClock.Instance == null) { Debug.LogWarning("[DevToolsConsole] No hay GameClock en la escena."); return; }
+        var clock = GameClock.Instance;
+        if (clock.Block != null && clock.Block.ExpeditionOpen) { Debug.Log("[DevToolsConsole] Ya es de noche."); return; }
+        for (int i = 0; i < 8; i++)
+        {
+            clock.AdvanceToNextBlock();
+            if (clock.Block != null && clock.Block.ExpeditionOpen)
+            {
+                Debug.Log($"[DevToolsConsole] Llegó la noche tras {i + 1} bloques.");
+                return;
+            }
+        }
+        Debug.LogWarning("[DevToolsConsole] No se llegó a un bloque con expedición abierta tras 8 avances.");
     }
 }
 }

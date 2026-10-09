@@ -17,44 +17,217 @@
     opacity: 0.82;
 }
 
-.run-strip {
+.run-hud {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.run-bag {
+    position: absolute;
+    bottom: 28px;
+    right: 32px;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px 8px 10px;
+    border-radius: 16px;
+    border-width: 2px;
+    border-color: rgba(51, 191, 166, 0.4);
+    background-color: rgba(14, 10, 9, 0.78);
+}
+
+.run-bag__icon {
+    width: 40px;
+    height: 40px;
+    background-image: resource("Sprites/Brawl/RoomGlyph_Mineral");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--mm-teal);
+}
+
+.run-bag__count {
+    margin-left: 8px;
+    font-size: 34px;
+    -unity-font-style: bold;
+    color: var(--mm-teal);
+}
+
+.run-left {
     position: absolute;
     left: 0;
     right: 0;
-    top: 248px;
+    top: 118px;
     align-items: center;
 }
 
-.run-strip__box {
+.run-left__text {
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--mm-ink);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.run-pips {
     flex-direction: row;
+    justify-content: center;
     align-items: center;
-    padding: 3px 12px;
-    border-radius: 10px;
+}
+
+.run-pip {
+    width: 12px;
+    height: 12px;
+    margin: 0 3px;
+    border-radius: 6px;
     border-width: 2px;
+}
+
+.run-pip--done {
+    background-color: var(--mm-teal);
+    border-color: var(--mm-teal);
+}
+
+.run-pip--current {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: var(--mm-gold);
+    border-color: var(--mm-gold);
+}
+
+.run-pip--upcoming {
     border-color: var(--mm-frame-soft);
 }
 
-.run-strip__title {
-    font-size: 14px;
+.run-pips--big .run-pip {
+    width: 24px;
+    height: 24px;
+    margin: 0 6px;
+    border-radius: 12px;
+    border-width: 4px;
+}
+
+.run-pips--big .run-pip--current {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+}
+
+.run-trial {
+    position: absolute;
+    left: 50%;
+    top: 174px;
+    translate: -50% 0;
+    padding: 4px 12px;
+    border-radius: 10px;
+    background-color: rgba(14, 10, 9, 0.78);
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--mm-ink);
+}
+
+.run-loot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.run-loot__gem {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 44px;
+    height: 44px;
+    margin-left: -22px;
+    margin-top: -22px;
+    opacity: 0;
+    background-image: resource("Sprites/Brawl/RoomGlyph_Mineral");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--mm-teal);
+}
+
+.run-veil {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    background-color: rgba(10, 7, 6, 0.94);
+}
+
+.run-veil__glyph {
+    width: 168px;
+    height: 168px;
+    margin-bottom: 14px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.run-veil__title {
+    margin-bottom: 14px;
+    font-size: 40px;
     -unity-font-style: bold;
     color: var(--mm-ink);
 }
 
-.run-strip__trial {
-    display: none;
-    font-size: 14px;
-    -unity-font-style: bold;
-    color: var(--mm-gold);
+.run-veil .run-pips {
+    margin-bottom: 14px;
+}
+
+.run-veil__left {
+    font-size: 18px;
+    color: var(--mm-ink-soft);
 }
 
 .run-rooms {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
 }
 
-.run-rooms--strip {
-    margin: 0 10px;
+.run-room {
+    width: 72px;
+    height: 72px;
+    margin: 0 5px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    background-color: rgba(14, 10, 9, 0.6);
+}
+
+.run-room--current {
+    border-width: 3px;
+    border-color: var(--mm-gold);
+}
+
+.run-room--done {
+    opacity: 0.35;
+}
+
+.run-room__glyph {
+    width: 52px;
+    height: 52px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.run-glyph--foe {
+    -unity-background-image-tint-color: var(--mm-foe);
+}
+
+.run-glyph--heal {
+    -unity-background-image-tint-color: var(--mm-good);
+}
+
+.run-glyph--mineral {
+    -unity-background-image-tint-color: var(--mm-teal);
 }
 
 .run-card-wrap {
@@ -138,95 +311,4 @@
 
 .run-btn--go:hover {
     border-color: var(--mm-ink);
-}
-
-.run-room {
-    align-items: center;
-    min-width: 64px;
-    margin: 10px 5px 0 5px;
-    padding: 6px 8px;
-    border-radius: 8px;
-    border-width: 3px;
-    border-color: var(--mm-frame-soft);
-    background-color: var(--mm-surface-2);
-    transition-property: opacity, scale;
-    transition-duration: 0.15s;
-}
-
-.run-room--small {
-    min-width: 40px;
-    margin: 0 3px;
-    padding: 2px 5px;
-    border-width: 2px;
-}
-
-.run-room--vs0 {
-    border-color: var(--mm-teal);
-}
-
-.run-room--vs1 {
-    border-color: var(--mm-warn);
-}
-
-.run-room--vs2 {
-    border-color: var(--mm-coral);
-}
-
-.run-room--vs3 {
-    border-color: var(--mm-crit);
-}
-
-.run-room--done {
-    opacity: 0.4;
-}
-
-.run-room--upcoming {
-    opacity: 0.85;
-}
-
-.run-room--current {
-    opacity: 1;
-    scale: 1.1 1.1;
-    background-color: var(--mm-surface);
-}
-
-.run-room__icons {
-    flex-direction: row;
-    justify-content: center;
-}
-
-.run-room__icon {
-    width: 28px;
-    height: 28px;
-    margin: 0 1px;
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.run-room--small .run-room__icon {
-    width: 16px;
-    height: 16px;
-}
-
-.run-room__icon--empty {
-    border-radius: 6px;
-    background-color: var(--mm-ink-soft);
-    opacity: 0.5;
-}
-
-.run-room__label {
-    margin-top: 3px;
-    font-size: 12px;
-    -unity-font-style: bold;
-    -unity-text-align: upper-center;
-    white-space: nowrap;
-    color: var(--mm-ink-soft);
-}
-
-.run-room--small .run-room__label {
-    margin-top: 1px;
-    font-size: 10px;
-}
-
-.run-room--current .run-room__label {
-    color: var(--mm-gold);
 }
