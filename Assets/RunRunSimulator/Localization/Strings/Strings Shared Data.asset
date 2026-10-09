@@ -1447,6 +1447,74 @@ MonoBehaviour:
     m_Key: ui.expedition.cost
     m_Metadata:
       m_Items: []
+  - m_Id: 27496607180709888
+    m_Key: ui.brawlrole.offense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178880
+    m_Key: ui.brawlrole.control
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178881
+    m_Key: ui.brawlrole.support
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178882
+    m_Key: ui.brawlrole.tank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178883
+    m_Key: ui.expedition.team
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178884
+    m_Key: ui.expedition.nosupport
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178885
+    m_Key: ui.detail.combatrole
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178886
+    m_Key: ui.return.title.ok
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178887
+    m_Key: ui.return.title.lost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178888
+    m_Key: ui.return.minerita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178889
+    m_Key: ui.return.rooms
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178890
+    m_Key: ui.return.lost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178891
+    m_Key: ui.return.grew
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178892
+    m_Key: ui.return.noexploration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178893
+    m_Key: ui.return.continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27515873984569344
+    m_Key: ui.brawlrole.balanced
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27515875616153600
+    m_Key: ui.detail.combatrole.suggested
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

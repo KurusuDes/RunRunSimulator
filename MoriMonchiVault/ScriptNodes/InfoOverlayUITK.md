@@ -6,7 +6,7 @@ tags: [script, ui, overlay]
 
 **Ruta:** `UI/InfoOverlayUITK.cs`
 
-**Responsabilidad:** Overlay siempre visible. Muestra el reloj (día, hora y bloque), el saldo de Dabloons y de Minerita, un toast de retorno de expedición o de salida/adopción de criaturas, la leyenda de controles (`hints`) y el selector de idioma EN/ES. Solo presenta: lee `GameClock`, `GameManager.CurrentInventory` y los payloads de eventos.
+**Responsabilidad:** Overlay siempre visible. Muestra el reloj (día, hora y bloque), el saldo de Dabloons y de Minerita, un toast de salida o adopción de criaturas, la leyenda de controles (`hints`) y el selector de idioma EN/ES. Solo presenta: lee `GameClock`, `GameManager.CurrentInventory` y los payloads de eventos. El toast de retorno de expedición ya no vive aquí (S145): lo muestra `ExpeditionReturnCardUITK`.
 
 ## Campos Serializados
 
@@ -18,14 +18,13 @@ tags: [script, ui, overlay]
 
 ## Elementos UXML
 
-`date`, `dabloons`, `material`, `expedition-toast`, `hints` (contenedor de la leyenda).
+`date`, `dabloons`, `material` (saldo de Minerita), `expedition-toast`, `hints` (contenedor de la leyenda).
 
 ## Eventos Suscritos (OnEnable / OnDisable)
 
 | Evento | Manejador | Efecto |
 |--------|-----------|--------|
 | `GameEvents.OnInventoryChanged` / `OnInventoryReloaded` | `RefreshDabloons` | Actualiza Dabloons y Minerita |
-| `GameEvents.OnExpeditionReturned` | `HandleExpeditionReturned` | Toast de retorno; si el label aún no existe, queda pendiente |
 | `GameEvents.OnCreatureDeparted` | `HandleCreatureDeparted` | Toast "adoptada" si `IsSold`, si no "perdida" |
 | `GameEvents.OnDayBlockChanged` / `OnDayStarted` | `RefreshClock(force)` | Reloj |
 | `LocalizationSettings.SelectedLocaleChanged` | `HandleLocaleChanged` | Reconstruye leyenda, reloj y saldos |
@@ -33,8 +32,7 @@ tags: [script, ui, overlay]
 ## Comportamiento
 
 - **Reloj:** refresco cada 1 s (tiempo unscaled). Texto localizado (`ui.overlay.clock`) con día, hora, minuto y nombre del bloque.
-- **Toast de retorno:** si `Lost`, clase `toast--lose` y texto `ui.overlay.expedition.lost` (pisos, minerita). Si no, texto `ui.overlay.expedition.return` (pisos, minerita, caídos) con clase según `Winner` (win, lose o draw).
-- **Toast de criatura:** `ui.overlay.creature.adopted` o `ui.overlay.creature.lost`.
+- **Toast de criatura:** `ui.overlay.creature.adopted` o `ui.overlay.creature.lost`. Antes de mostrarlo quita las clases `toast--win`, `toast--lose` y `toast--draw`, que ya no se agregan.
 - **Duración:** el toast se oculta a los `toastSeconds`, con timer en `Update`.
 - **Saldos:** Dabloons con `ui.overlay.dabloons`; Minerita en el label "material" con `ui.overlay.material`.
 - **Leyenda e idioma:** una fila por hint más los botones EN y ES (`Loc.SetLocale`). El idioma activo lleva `lang-btn--active`.
@@ -49,12 +47,13 @@ tags: [script, ui, overlay]
 - [[GameEvents]] — eventos de la tabla
 - [[GameManager]] — `CurrentInventory`
 - [[PlayerInventorySO]] — `Balance(Dabloons)`, `Balance(Minerita)`
+- [[CreatureDNA]] — `CustomName`, `IsSold`, `ToStringID`
 - [[Loc]] — `Tr`, `SetLocale`, `ApplySavedLocale`, `CurrentCode`
-- [[ExpeditionBridge]] — origen de `ExpeditionReturned`
+- [[ExpeditionReturnCardUITK]] — tarjeta que reemplaza el toast de retorno
 - [[UiPanels]] — `RootOf`
 
 ## Notas
 
-- Si `ExpeditionReturned` llega antes de que exista el label del toast (antes de `Start`), se guarda en `pendingToast` y se muestra al arrancar.
 - `Start` llama `Loc.ApplySavedLocale()` antes de leer los labels.
 - Antes de asignar un toast se quitan las clases de resultado anteriores.
+- S145: `OnExpeditionReturned` y el toast de retorno salieron de este script; el toast solo cubre salida y adopción de criaturas.

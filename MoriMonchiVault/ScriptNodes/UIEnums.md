@@ -8,7 +8,7 @@ tags: [enum, ui, state]
 
 **Responsabilidad:** Enumeraciones para sistema de UI y estados del jugador. Contiene: `UIPanelType` (9 valores con hueco en 4), `PlayerStateType` (4 estados de jugador).
 
-**S128:** `Combat = 4` permanece **como hueco** (se borró todo combate RPS pero no se renumera). Otros paneles: None/CreatureGrid/MorimonchiDetail/Breeding/Storage/Store/Transaction/Expedition.
+**S128:** `Combat = 4` permanece **como hueco** (se borró todo combate RPS pero no se renumera). Otros paneles: None/CreatureGrid/MorimonchiDetail/Breeding/Storage/Store/Transaction/Expedition/ExpeditionReturn.
 
 ## Enumeraciones
 
@@ -25,6 +25,7 @@ tags: [enum, ui, state]
 | `Store = 6` | Tienda de compras |
 | `Transaction = 7` | Historial/transacciones |
 | `Expedition = 8` | Selección de equipo |
+| `ExpeditionReturn = 9` | Resultado al volver de la bajada (`ExpeditionReturnCardUITK`) |
 
 ### PlayerStateType
 
@@ -45,6 +46,7 @@ tags: [enum, ui, state]
 **S95:** Combat = 4 agregado (Dragon RPS).
 **S120:** Expedition = 8 agregado (panel bajada).
 **S128:** Combat eliminado (RPS demolido); valor 4 queda como hueco, no se renumera (evita serialización breaks).
+**S145:** ExpeditionReturn = 9 agregado (tarjeta de retorno de bajada; reemplaza el toast de InfoOverlay).
 
 ## Nota de Diseño
 
@@ -56,5 +58,4 @@ El hueco en 4 es intencional. Renumerar causaría breakage de:
 
 [[Index/05 - UI System]]
 
-**Conexiones:** [[UIManager]], [[BuildModeController]], [[PlayerInputs]], [[ExpeditionPanelUITK]]
-
+**Conexiones:** [[UIManager]], [[BuildModeController]], [[PlayerInputs]], [[ExpeditionPanelUITK]], [[ExpeditionReturnCardUITK]]

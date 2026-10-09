@@ -1,4 +1,3 @@
-using System.Globalization;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,7 +7,6 @@ namespace MoriMonchiSimulator
 public class BrawlRunPanel : MonoBehaviour
 {
     private static readonly string[] RivalClasses = { "run-room--vs0", "run-room--vs1", "run-room--vs2", "run-room--vs3" };
-    private static readonly NumberFormatInfo GroupFormat = new NumberFormatInfo { NumberGroupSeparator = "." };
 
     [Required, SerializeField] private UIDocument document;
     [Required, SerializeField] private BrawlRunDirector director;
@@ -27,11 +25,12 @@ public class BrawlRunPanel : MonoBehaviour
     private Label stripTrial;
     private Label title;
     private Label info;
+    private Label minerita;
     private Button goButton;
     private Button leaveButton;
     private bool lastTrialActive;
-    private int lastTrialSeconds = -1;
-    private int lastTrialDamage = -1;
+    private bool lastTrialStarted;
+    private int lastTrialMaterial = -1;
 
     private void OnEnable()
     {
@@ -65,6 +64,8 @@ public class BrawlRunPanel : MonoBehaviour
         cardRooms = root.Q("run-rooms");
         title = root.Q<Label>("run-title");
         info = root.Q<Label>("run-info");
+        minerita = MakeLabel("", "run-minerita");
+        info.parent.Insert(info.parent.IndexOf(info), minerita);
         goButton = root.Q<Button>("run-go");
         leaveButton = root.Q<Button>("run-leave");
 
@@ -129,7 +130,7 @@ public class BrawlRunPanel : MonoBehaviour
         stripTitle.text = "Tramo " + run.Depth + " · Sala " + shown + "/" + count;
         BuildChips(stripRooms, run, true);
 
-        lastTrialSeconds = -1;
+        lastTrialMaterial = -1;
         RefreshTrial();
     }
 
@@ -138,19 +139,19 @@ public class BrawlRunPanel : MonoBehaviour
         if (trial == null || !director.Active || director.State != BrawlRunState.Fighting) return;
 
         bool active = trial.Active;
-        int seconds = active ? Mathf.CeilToInt(trial.TimeLeft) : 0;
-        int damage = active && trial.Kind == BrawlRoomKind.Minerals ? Mathf.RoundToInt(trial.Damage) : 0;
-        if (active == lastTrialActive && seconds == lastTrialSeconds && damage == lastTrialDamage) return;
+        bool started = active && trial.Started;
+        int material = active && trial.Kind == BrawlRoomKind.Minerals ? trial.Material : 0;
+        if (active == lastTrialActive && started == lastTrialStarted && material == lastTrialMaterial) return;
 
         lastTrialActive = active;
-        lastTrialSeconds = seconds;
-        lastTrialDamage = damage;
+        lastTrialStarted = started;
+        lastTrialMaterial = material;
         SetVisible(stripTrial, active);
         if (!active) return;
 
-        stripTrial.text = trial.Kind == BrawlRoomKind.Minerals
-            ? "Minerales: " + seconds + " s · daño " + damage.ToString("N0", GroupFormat)
-            : "Muñecos: " + seconds + " s";
+        if (trial.Kind != BrawlRoomKind.Minerals) stripTrial.text = "Muñecos · pegales para curar al equipo";
+        else if (!started) stripTrial.text = "Minerales · pegale al cristal para empezar";
+        else stripTrial.text = "Minerales · +" + Minerita(material) + " Minerita";
     }
 
     private void RefreshCard(BrawlRun run)
@@ -161,27 +162,40 @@ public class BrawlRunPanel : MonoBehaviour
         {
             case BrawlRunState.Planning:
                 title.text = "Tramo " + run.Depth + " · " + run.Rooms.Count + " salas";
-                info.text = "Botín: " + run.Material + "\n" + HealthLine(run);
+                minerita.text = "Minerita: " + Minerita(run.Material);
+                info.text = HealthLine(run);
                 goButton.text = "Enfrentar tramo";
-                leaveButton.text = run.Depth == 1 && run.Material == 0 ? "Volver a la tienda" : "Salir con " + run.Material + " de botín";
+                leaveButton.text = run.Depth == 1 && run.Material == 0 ? "Volver a la tienda" : "Salir con " + Minerita(run.Material) + " Minerita";
+                SetVisible(info, true);
                 SetVisible(goButton, true);
                 SetVisible(leaveButton, true);
                 break;
             case BrawlRunState.RoomResult:
                 title.text = director.LastRoomSummary;
-                info.text = "Botín: " + run.Material + "\n" + HealthLine(run);
+                minerita.text = "Minerita: " + Minerita(run.Material);
+                info.text = HealthLine(run);
                 goButton.text = run.TramoDone ? "Ver el próximo tramo" : "Siguiente sala";
+                SetVisible(info, true);
                 SetVisible(goButton, true);
                 SetVisible(leaveButton, false);
                 break;
             default:
                 title.text = "Perdiste el combate";
-                info.text = "Se pierden " + run.MaterialLost + " de botín · te llevás " + run.Material;
+                minerita.text = run.MaterialLost > 0
+                    ? "Se pierden " + Minerita(run.MaterialLost) + " Minerita · te llevás " + Minerita(run.Material)
+                    : "Sin botín que perder";
                 leaveButton.text = "Volver a la tienda";
+                SetVisible(info, false);
                 SetVisible(goButton, false);
                 SetVisible(leaveButton, true);
                 break;
         }
+    }
+
+    private static int Minerita(int loot)
+    {
+        var rules = BrawlRunRulesSO.Current;
+        return loot * (rules != null ? rules.MineritaPerLoot : 1);
     }
 
     private string HealthLine(BrawlRun run)

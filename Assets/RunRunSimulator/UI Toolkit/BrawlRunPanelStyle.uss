@@ -87,9 +87,19 @@
     color: var(--mm-ink);
 }
 
-.run-info {
+.run-minerita {
     max-width: 100%;
     margin-top: 10px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    white-space: normal;
+    color: var(--mm-teal);
+}
+
+.run-info {
+    max-width: 100%;
+    margin-top: 6px;
     font-size: 15px;
     -unity-text-align: upper-center;
     white-space: normal;

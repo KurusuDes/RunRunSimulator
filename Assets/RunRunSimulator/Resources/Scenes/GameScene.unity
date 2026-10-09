@@ -23060,7 +23060,6 @@ MonoBehaviour:
   syncTimeoutSeconds: 20
   departFlushTimeout: 5
   permadeathEnabled: 0
-  mineritaPerMaterial: 5
   runRules: {fileID: 11400000, guid: aeed90b68c55acf4bb3028e2a5c88ea0, type: 2}
 --- !u!4 &1038142491
 Transform:
@@ -26487,6 +26486,7 @@ Transform:
   - {fileID: 1023503745}
   - {fileID: 464847835}
   - {fileID: 1887204491}
+  - {fileID: 1327615439}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1218711424
@@ -26512,6 +26512,7 @@ MonoBehaviour:
     - {fileID: 1828995157}
     - {fileID: 464847833}
     - {fileID: 1887204488}
+    - {fileID: 1327615436}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -26536,7 +26537,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 7
+      Data: 8
     - Name: 
       Entry: 7
       Data: 
@@ -26622,6 +26623,18 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 9
+    - Name: $v
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -26659,6 +26672,7 @@ MonoBehaviour:
   panel: 2
   database: {fileID: 11400000, guid: cd17ebdc5dc5d1b49b91eaadaa267809, type: 2}
   careGate: {fileID: 11400000, guid: fa022355e5f7d0f42ad25fd7ca3e41f3, type: 2}
+  kits: {fileID: 11400000, guid: b3e882c48389c194d8da8d162b61f72a, type: 2}
   sortingOrder: 100
 --- !u!114 &1218711427
 MonoBehaviour:
@@ -28016,6 +28030,76 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1327615436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1327615439}
+  - component: {fileID: 1327615438}
+  - component: {fileID: 1327615437}
+  m_Layer: 0
+  m_Name: ExpeditionReturnCardUITK
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1327615437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327615436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7298920ab975f074bb1807716a9aaa90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.ExpeditionReturnCardUITK
+  document: {fileID: 1327615438}
+  panel: 9
+--- !u!114 &1327615438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327615436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 3c8a8da8175b6d54a907634fef6a08f4, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 3d574e4ebfb4a534eacd33a9b01f8533, type: 3}
+  m_SortingOrder: 5
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!4 &1327615439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327615436}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1218711423}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1347452321
 GameObject:
   m_ObjectHideFlags: 0
@@ -34263,6 +34347,8 @@ MonoBehaviour:
   panel: 8
   maxPick: 3
   careGate: {fileID: 11400000, guid: fa022355e5f7d0f42ad25fd7ca3e41f3, type: 2}
+  database: {fileID: 11400000, guid: cd17ebdc5dc5d1b49b91eaadaa267809, type: 2}
+  kits: {fileID: 11400000, guid: b3e882c48389c194d8da8d162b61f72a, type: 2}
 --- !u!114 &1887204490
 MonoBehaviour:
   m_ObjectHideFlags: 0

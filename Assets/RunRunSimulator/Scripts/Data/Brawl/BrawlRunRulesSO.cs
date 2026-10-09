@@ -17,6 +17,7 @@ public class BrawlRunRulesSO : ScriptableObject
 
     [Title("Bajada")]
     [Min(0)] public int DescentCost = 10;
+    [Min(1)] public int MineritaPerLoot = 5;
     [Range(0f, 1f)] public float LossFraction = 0.5f;
     [Range(0f, 1f)] public float HealAfterCombat = 0.4f;
 
@@ -39,6 +40,8 @@ public class BrawlRunRulesSO : ScriptableObject
     [Min(0.05f)] public float DummyPower = 2f;
     [Range(0f, 1f)] public float DummyHealFraction = 0.3f;
     [Min(1f)] public float MineralDamagePerMaterial = 4000f;
+    [Min(0)] public int MineralBaseLoot = 1;
+    [Min(0f)] public float TrialStartGrace = 6f;
 
     public float RivalPower(int depth) => Mathf.Min(RivalPowerMax, RivalPowerBase + RivalPowerPerDepth * Mathf.Max(0, depth - 1));
 }

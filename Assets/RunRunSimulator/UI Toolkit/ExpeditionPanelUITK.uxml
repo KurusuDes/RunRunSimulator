@@ -11,6 +11,8 @@
                 <ui:Label name="exp-subtitle" text="" class="exp-subtitle" />
                 <ui:Label name="exp-empty" text="" class="exp-empty" />
                 <ui:ScrollView name="exp-list" class="exp-list" mode="Vertical" />
+                <ui:VisualElement name="exp-detail" class="exp-detail" />
+                <ui:VisualElement name="exp-team" class="exp-team" />
                 <ui:VisualElement class="actions exp-actions">
                     <ui:Button name="exp-close" text="" class="action action--cancel" />
                     <ui:Button name="exp-go" text="" class="action action--accept" />

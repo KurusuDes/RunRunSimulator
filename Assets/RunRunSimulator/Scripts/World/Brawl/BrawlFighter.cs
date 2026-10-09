@@ -124,19 +124,13 @@ public class BrawlFighter : MonoBehaviour
         visualizer.SetFurDatabase(fur);
         visualizer.Assemble(dna);
 
-        WingKit = kits.Wing(dna.WingID);
-        HornSkill = kits.Skill(dna.HornID, ClashSlot.Horn);
-        BackSkill = kits.Skill(dna.BackID, ClashSlot.Back);
-
-        WingTheme = BrawlTheme.Resolve(parts.GetWing(dna.WingID), WingKit.IconOverride, WingKit.ColorOverride, WingKit.Signature);
-        var horn = parts.GetHorn(dna.HornID);
-        HornTheme = HornSkill != null
-            ? BrawlTheme.Resolve(horn, HornSkill.IconOverride, HornSkill.ColorOverride, HornSkill.Signature)
-            : BrawlTheme.Resolve(horn, null, default);
-        var back = parts.GetBack(dna.BackID);
-        BackTheme = BackSkill != null
-            ? BrawlTheme.Resolve(back, BackSkill.IconOverride, BackSkill.ColorOverride, BackSkill.Signature)
-            : BrawlTheme.Resolve(back, null, default);
+        var profile = BrawlKitProfile.Of(dna, kits, parts);
+        WingKit = profile.Wing;
+        HornSkill = profile.Horn;
+        BackSkill = profile.Back;
+        WingTheme = profile.WingTheme;
+        HornTheme = profile.HornTheme;
+        BackTheme = profile.BackTheme;
 
         var body = tuning.BodyFor(dna.BodyShapeID);
         MaxHp = tuning.BaseHp * body.HpMul;

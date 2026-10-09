@@ -8,14 +8,18 @@ public class BrawlTrialRoom : MonoBehaviour
     [Required, SerializeField] private BrawlMatch match;
 
     private BrawlRunRulesSO rules;
+    private float graceLeft;
 
     public bool Active { get; private set; }
+    public bool Started { get; private set; }
     public BrawlRoomKind Kind { get; private set; }
     public float TimeLeft { get; private set; }
     public float Damage { get; private set; }
     public int Material => Kind == BrawlRoomKind.Minerals && rules != null && rules.MineralDamagePerMaterial > 0f
-        ? Mathf.FloorToInt(Damage / rules.MineralDamagePerMaterial)
+        ? rules.MineralBaseLoot + Mathf.FloorToInt(Damage / rules.MineralDamagePerMaterial)
         : 0;
+
+    public event System.Action Began;
 
     private void OnEnable()
     {
@@ -31,6 +35,13 @@ public class BrawlTrialRoom : MonoBehaviour
     {
         if (!Active || match.Phase != BrawlMatchPhase.Fight) return;
 
+        if (!Started)
+        {
+            graceLeft -= Time.deltaTime;
+            if (graceLeft <= 0f) Started = true;
+            return;
+        }
+
         TimeLeft -= Time.deltaTime;
         if (TimeLeft > 0f) return;
 
@@ -44,7 +55,10 @@ public class BrawlTrialRoom : MonoBehaviour
         Kind = kind;
         Damage = 0f;
         TimeLeft = runRules.TrialSeconds;
+        graceLeft = runRules.TrialStartGrace;
+        Started = false;
         Active = true;
+        Began?.Invoke();
     }
 
     public int End()
@@ -58,6 +72,7 @@ public class BrawlTrialRoom : MonoBehaviour
         if (!Active || victim.Team != ExpeditionTeam.Rival) return;
         if (hit.Source == null || hit.Source.Team != ExpeditionTeam.Player || hit.IsDrain) return;
 
+        Started = true;
         Damage += hit.Amount;
         if (Kind != BrawlRoomKind.Dummies) return;
 

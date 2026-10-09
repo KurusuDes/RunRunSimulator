@@ -18,6 +18,9 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
     [Tooltip("Umbral de necesidades para poder bajar (marca de apta en la ficha).")]
     [SerializeField] private CareGateSO careGate;
 
+    [Tooltip("Poderes del Brawl por parte y rol de combate de la ficha.")]
+    [SerializeField] private BrawlKitDatabaseSO kits;
+
     [Tooltip("Draw order; higher keeps this modal above the grid panel.")]
     [SerializeField] private int sortingOrder = 100;
 
@@ -93,7 +96,7 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
 
         WireStaticLabels(root);
 
-        info   = new DetailInfoTabPresenter(root, database, careGate);
+        info   = new DetailInfoTabPresenter(root, database, careGate, kits);
         trees  = new DetailTreesPresenter(root, database, () => registry);
         relations = new DetailRelationsPresenter(root, () => registry);
 

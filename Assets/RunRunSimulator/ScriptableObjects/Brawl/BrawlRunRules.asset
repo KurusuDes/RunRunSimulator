@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BrawlRunRules
   m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BrawlRunRulesSO
   DescentCost: 10
+  MineritaPerLoot: 5
   LossFraction: 0.5
   HealAfterCombat: 0.4
   MinRooms: 2
@@ -29,3 +30,5 @@ MonoBehaviour:
   DummyPower: 2
   DummyHealFraction: 0.3
   MineralDamagePerMaterial: 10000
+  MineralBaseLoot: 1
+  TrialStartGrace: 15

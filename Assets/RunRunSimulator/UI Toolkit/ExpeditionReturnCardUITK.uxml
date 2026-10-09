@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Theme.uss" />
+    <Style src="TransactionPanel.uss" />
+    <Style src="ExpeditionReturnCardUITKStyle.uss" />
+    <ui:VisualElement name="ret-root" class="mm-theme mm-theme--night ret">
+        <ui:VisualElement name="ret-backdrop" class="tx-backdrop">
+            <ui:VisualElement name="ret-panel" class="panel ret-panel">
+                <ui:VisualElement class="panel__header">
+                    <ui:Label name="ret-title" text="" class="panel__title" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ret-body">
+                    <ui:Label name="ret-minerita" text="" class="ret-minerita" />
+                    <ui:Label name="ret-rooms" text="" class="ret-rooms" />
+                    <ui:Label name="ret-lost" text="" class="ret-lost" />
+                    <ui:VisualElement name="ret-team" class="ret-team" />
+                    <ui:Label name="ret-noexploration" text="" class="ret-note" />
+                </ui:VisualElement>
+                <ui:VisualElement class="actions ret-actions">
+                    <ui:Button name="ret-continue" text="" class="action action--accept" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

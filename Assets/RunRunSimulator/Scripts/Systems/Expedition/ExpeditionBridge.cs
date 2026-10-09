@@ -12,7 +12,6 @@ public class ExpeditionBridge : MonoBehaviour
     [SerializeField, Min(1f)] private float syncTimeoutSeconds = 20f;
     [SerializeField, Min(0f)] private float departFlushTimeout = 5f;
     [SerializeField] private bool permadeathEnabled = false;
-    [SerializeField, Min(1)] private int mineritaPerMaterial = 5;
     [SerializeField] private BrawlRunRulesSO runRules;
 
     private bool departing;
@@ -86,8 +85,12 @@ public class ExpeditionBridge : MonoBehaviour
 
         if (!ExpeditionHandoff.TryConsumeResult(out ExpeditionResult result)) yield break;
 
+        int rate = 1;
+        if (runRules != null) rate = runRules.MineritaPerLoot;
+        else Debug.LogWarning("[ExpeditionBridge] runRules sin asignar: tasa de Minerita = 1");
+
         int material = result.PlayerSecured;
-        int minerita = material * mineritaPerMaterial;
+        int minerita = material * rate;
         if (minerita > 0) Wallet.Add(Currency.Minerita, minerita, "expedition");
 
         var registry = GameManager.Instance != null ? GameManager.Instance.Registry : null;
@@ -118,16 +121,20 @@ public class ExpeditionBridge : MonoBehaviour
 
         int evolved = 0;
         var evolvedDnas = new List<CreatureDNA>();
+        var team = new List<CreatureDNA>();
 
-        if (registry != null && !result.Lost && result.TeamIds != null)
+        int toEvolve = BreedingController.Instance != null && BreedingController.Instance.LifeStageTable != null
+            ? BreedingController.Instance.LifeStageTable.ExplorationsToEvolve
+            : 3;
+
+        if (registry != null && result.TeamIds != null)
         {
-            int toEvolve = BreedingController.Instance != null && BreedingController.Instance.LifeStageTable != null
-                ? BreedingController.Instance.LifeStageTable.ExplorationsToEvolve
-                : 3;
-
             foreach (var id in result.TeamIds)
             {
                 if (!registry.TryGet(id, out var dna) || dna == null || dna.IsDead) continue;
+                team.Add(dna);
+
+                if (result.Lost) continue;
                 if (result.FallenIds != null && result.FallenIds.Contains(id)) continue;
 
                 bool wasSlime = dna.Form == MonchiForm.Slime;
@@ -140,6 +147,9 @@ public class ExpeditionBridge : MonoBehaviour
             }
         }
 
+        var evolvedIds = new List<string>(evolvedDnas.Count);
+        foreach (var dna in evolvedDnas) evolvedIds.Add(dna.UniqueID);
+
         if (touched) GameEvents.RegistryChanged(registry);
 
         foreach (var dna in evolvedDnas) GameEvents.CreatureFormChanged(dna);
@@ -151,9 +161,13 @@ public class ExpeditionBridge : MonoBehaviour
             PlayerSecured = material,
             RivalSecured = result.RivalSecured,
             MineritaGained = minerita,
+            MineritaLost = result.MaterialLost * rate,
             Fallen = result.Fallen,
             Floors = result.Floors,
-            Lost = result.Lost
+            Lost = result.Lost,
+            Team = team,
+            EvolvedIds = evolvedIds,
+            ExplorationsToEvolve = toEvolve
         });
 
         Debug.Log($"[ExpeditionBridge] run {result.Seed}: {result.Floors} pisos, perdida={result.Lost} → +{material} material, +{minerita} Minerita, {result.Fallen} caídas, {evolved} evolucionan");

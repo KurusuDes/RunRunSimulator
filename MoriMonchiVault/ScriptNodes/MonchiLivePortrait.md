@@ -6,7 +6,7 @@ tags: [script, ui, service, singleton, graphics, camera]
 
 **Ruta:** `UI/MonchiLivePortrait.cs`
 
-**Responsabilidad (S57d):** Singleton runtime cámara live para retrato en vivo de MoriMochis spawneados en el mundo. Hermano de MonchiPortraitService dentro de GameScene (GO `MonchiPortraitStudio`). **Aislamiento por capas (S57d):** Filma la criatura **EN VIVO** cuando su carta de detalle está abierta mediante la técnica de layer culling — comienza (Begin) moviendo todo el subtree del ModelRoot de la criatura a la capa dedicada `MonchiFocus` (slot 10), guardando los layers originales transform-por-transform, y al finalizar (End) restaura exactamente cada layer original. La LiveCamera tiene culling mask solo-`MonchiFocus` y clear color SolidColor con alpha 0 → retrato = solo la criatura animándose sobre fondo transparente, sin oclusores ni fondo del mundo. La Main Camera también renderiza MonchiFocus así que en el mundo se ve la criatura normal en simultáneo. **Evasión de oclusores eliminada (S57d):** la técnica de layer aislamiento hace innecesaria la revisión de líneas de visión (la cámara no renderiza oclusores, ve a través de todo). Búsqueda de criatura por UniqueID en `MoriMochiSpawner.Instance.SpawnedEntries` mediante la propiedad **`MoriMonchiController.Visualizer`** (nueva en S57d) para acceder al ModelRoot sin GetComponentInChildren. Autogestionada via LateUpdate: desactiva cámara y repinta foto estática vía `MonchiPortraitUI.Apply` si el elemento fue removido, está oculto (helper `IsHidden` que camina ancestros mirando `resolvedStyle.display == None`), o la criatura despawneó — cero acople con los caminos de cierre del panel. Representación pura, sin persistencia ni GameEvents. **S93:** Singleton compacto (sin cambios de responsabilidad).
+**Responsabilidad (S57d):** Singleton runtime cámara live para retrato en vivo de MoriMochis spawneados en el mundo. Hermano de MonchiPortraitService dentro de GameScene (GO `MonchiPortraitStudio`). **Aislamiento por capas (S57d):** Filma la criatura **EN VIVO** cuando su carta de detalle está abierta mediante la técnica de layer culling — comienza (Begin) moviendo todo el subtree del ModelRoot de la criatura a la capa dedicada `MonchiFocus` (slot 10), guardando los layers originales transform-por-transform, y al finalizar (End) restaura exactamente cada layer original. La LiveCamera tiene culling mask solo-`MonchiFocus` y clear color SolidColor con alpha 0 → retrato = solo la criatura animándose sobre fondo transparente, sin oclusores ni fondo del mundo. La Main Camera también renderiza MonchiFocus así que en el mundo se ve la criatura normal en simultáneo. **Evasión de oclusores eliminada (S57d):** la técnica de layer aislamiento hace innecesaria la revisión de líneas de visión (la cámara no renderiza oclusores, ve a través de todo). Búsqueda de criatura por UniqueID en `MoriMochiSpawner.Instance.SpawnedEntries` mediante la propiedad **`MoriMonchiController.Visualizer`** (nueva en S57d) para acceder al ModelRoot sin GetComponentInChildren. Autogestionada via LateUpdate: desactiva cámara y repinta foto estática vía `MonchiPortraitUI.Apply` si el elemento fue removido, está oculto (helper `IsHidden` que camina ancestros mirando `resolvedStyle.display == None`), o la criatura despawneó — cero acople con los caminos de cierre del panel. Representación pura, sin persistencia ni GameEvents. **S93:** Singleton compacto (sin cambios de responsabilidad). **S145:** el encuadre sale de `MonchiFraming.TryWorldBounds` sobre el ModelRoot (ver Encuadre).
 
 ## Campos Serializados
 
@@ -31,12 +31,15 @@ tags: [script, ui, service, singleton, graphics, camera]
 | `modelRoot` | `Transform` | Transform del ModelRoot de la criatura (obtenido vía `controller.Visualizer.ModelRoot`) |
 | `focusLayer` | `int` | Layer ID de "MonchiFocus" (cached en Awake) |
 | `originalLayers` | `List<(Transform t, int layer)>` | Capas originales de cada transform en el subtree, restauradas en End/auto-cierre |
+| `bakedMesh` | `Mesh` | Malla de trabajo para `MonchiFraming`; se crea en Awake y se destruye en OnDestroy (S145) |
+| `frameRadius` | `float` | Radio de los bounds de la criatura; base del encuadre (S145) |
+| `frameOffset` | `Vector3` | Centro de los bounds en espacio local del target (S145) |
 
 ## Métodos Públicos
 
 ### `Begin(VisualElement portraitElement, CreatureDNA portraitDna) → bool`
 
-Inicia captura live: busca criatura en spawner, aísla layers via MonchiFocus, wirea cámara al VisualElement, renderiza a rt.
+Inicia captura live: busca criatura en spawner, aísla layers via MonchiFocus, calcula el encuadre, wirea cámara al VisualElement, renderiza a rt.
 
 **Precondiciones validadas:**
 - `portraitElement != null` (nodo UITK válido)
@@ -51,16 +54,24 @@ Inicia captura live: busca criatura en spawner, aísla layers via MonchiFocus, w
 - Obtiene ModelRoot vía `kv.Value.Visualizer.ModelRoot` (S57d)
 - Retorna false si no encuentra o criatura está inactiva
 
+**Orden:** aislamiento de layers → `CaptureFrame()` → cámara encendida y `UpdateCameraTransform(1)` → fondo del VisualElement con `Background.FromRenderTexture(rt)`.
+
 ### `End() → void`
 
 Desactiva cámara, repinta VisualElement con foto estática vía `MonchiPortraitUI.Apply`, restaura layers originales, limpia estado live.
+
+## Encuadre (S145)
+
+- **`CaptureFrame()`:** `MonchiFraming.TryWorldBounds(modelRoot ?? target, bakedMesh)`. Si falla, usa un cubo de tamaño 1 centrado en `target.position + up × 0.5`. `frameRadius` = magnitud de los extents; `frameOffset` = `Inverse(target.rotation) × (center − target.position)`.
+- **`UpdateCameraTransform(lerpT)`:** centro = `target.position + target.rotation × frameOffset`; distancia = `(frameRadius × framePadding) / sin(fov/2)`; dirección = `target.rotation × Euler(cameraPitch, cameraYaw, 0) × forward`. La cámara se interpola hacia `centro − dirección × distancia` y mira al centro.
+- **LateUpdate:** llama `UpdateCameraTransform(Time.deltaTime × followDamp)`.
 
 ## Lifecycle
 
 **Awake:**
 - Singleton pattern: si Instance ya existe (y ≠ this), Destroy(gameObject) y retorna
 - Asigna `Instance = this`
-- Crea RenderTexture(textureSize, textureSize, 16, ARGB32)
+- Crea `bakedMesh` y RenderTexture(textureSize, textureSize, 16, ARGB32)
 - Asigna `liveCamera.targetTexture = rt`
 - Deshabilita `liveCamera.enabled = false` (activada solo en Begin)
 - Cachea `focusLayer = LayerMask.NameToLayer("MonchiFocus")` (S57d)
@@ -68,6 +79,9 @@ Desactiva cámara, repinta VisualElement con foto estática vía `MonchiPortrait
 **LateUpdate:**
 - Valida estado live; si alguna precondición falla, llama `End()` (transición a foto estática)
 - Si todo válido: llama `UpdateCameraTransform(Time.deltaTime * followDamp)` — seguimiento suave
+
+**OnDestroy:**
+- Libera `rt` y destruye `bakedMesh`; limpia `Instance` si es este.
 
 ## Vinculado a
 
@@ -84,6 +98,7 @@ Desactiva cámara, repinta VisualElement con foto estática vía `MonchiPortrait
 **Entrada:**
 - `Begin(VisualElement, CreatureDNA)` desde `MonchiPortraitUI.ApplyLive`
 - Lookup criatura + visualizer en `MoriMochiSpawner.Instance.SpawnedEntries` y `controller.Visualizer`
+- `MonchiFraming.TryWorldBounds` para el encuadre (S145)
 
 **Salida:**
 - RenderTexture rt → backgroundImage VisualElement

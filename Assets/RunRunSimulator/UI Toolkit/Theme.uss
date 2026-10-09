@@ -41,3 +41,88 @@
     --mm-ally: rgb(150, 200, 255);
     --mm-foe: rgb(255, 150, 140);
 }
+
+.mm-role {
+    font-size: 13px;
+    -unity-font-style: bold;
+    padding: 2px 10px;
+    border-radius: 10px;
+    color: rgb(40, 26, 18);
+    -unity-text-align: middle-center;
+}
+
+.mm-role--offense {
+    background-color: var(--mm-coral);
+}
+
+.mm-role--control {
+    background-color: var(--mm-plum);
+}
+
+.mm-role--support {
+    background-color: var(--mm-good);
+}
+
+.mm-role--tank {
+    background-color: var(--mm-gold);
+}
+
+.mm-role-ring--offense {
+    border-color: var(--mm-coral);
+}
+
+.mm-role-ring--control {
+    border-color: var(--mm-plum);
+}
+
+.mm-role-ring--support {
+    border-color: var(--mm-good);
+}
+
+.mm-role-ring--tank {
+    border-color: var(--mm-gold);
+}
+
+.mm-role-text--offense {
+    color: var(--mm-coral);
+}
+
+.mm-role-text--control {
+    color: var(--mm-plum);
+}
+
+.mm-role-text--support {
+    color: var(--mm-good);
+}
+
+.mm-role-text--tank {
+    color: var(--mm-gold);
+}
+
+.mm-rolepill {
+    flex-direction: row;
+    align-items: stretch;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.mm-rolepill__seg {
+    margin: 0;
+    padding: 2px 8px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    color: rgb(40, 26, 18);
+}
+
+.mm-rolepill__seg--minor {
+    padding: 2px 7px;
+    font-size: 11px;
+}
+
+.mm-role--balanced {
+    background-color: var(--mm-frame-soft);
+    color: var(--mm-ink);
+}

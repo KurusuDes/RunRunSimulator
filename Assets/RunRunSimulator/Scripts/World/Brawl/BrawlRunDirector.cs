@@ -140,20 +140,22 @@ public class BrawlRunDirector : MonoBehaviour
         }
 
         int before = run.Material;
+        int rate = rules.MineritaPerLoot;
         string result;
         if (room.Kind == BrawlRoomKind.Combat)
         {
-            run.RecordCombat(winner == ExpeditionTeam.Player, health, defeated);
-            result = run.Lost
-                ? $"Perdiste: se pierden {run.MaterialLost} de botín"
-                : $"Ganaste: +{run.Material - before} de botín";
+            bool won = winner == ExpeditionTeam.Player || winner == ExpeditionTeam.None;
+            run.RecordCombat(won, health, defeated);
+            if (run.Lost) result = $"Perdiste: se pierden {run.MaterialLost * rate} Minerita";
+            else if (winner == ExpeditionTeam.None) result = $"Empate: cuenta como victoria · +{(run.Material - before) * rate} Minerita";
+            else result = $"Ganaste: +{(run.Material - before) * rate} Minerita";
         }
         else
         {
             run.RecordTrial(health, trial.End());
             result = room.Kind == BrawlRoomKind.Dummies
                 ? "Muñecos: el equipo se curó"
-                : $"Minerales: +{run.Material - before} de botín";
+                : $"Minerales: +{(run.Material - before) * rate} Minerita";
         }
 
         LastRoomSummary = result;

@@ -6,7 +6,7 @@ tags: [script, world, brawl, core, fighter, state]
 
 **Ruta:** `World/Brawl/BrawlFighter.cs`
 
-**Responsabilidad:** Núcleo de estado de combatiente: vida, escudo, velocidad, daño. Mantiene referencias a componentes (Motor, Wing, SkillCaster, Brain). Punto de unión de entrada de daño y curación. Emite eventos estáticos para inscripción de presentación. Aplica modificadores de estado (slow, stun, haste, boost, espinas, provocación). Registra combatientes en lista estática `BrawlFighter.All`. Recibe el poder y la vida de la bajada vía `Prime` y puede marcarse como muñeco (`Dummy`).
+**Responsabilidad:** Núcleo de estado de combatiente: vida, escudo, velocidad, daño. Mantiene referencias a componentes (Motor, Wing, SkillCaster, Brain). Punto de unión de entrada de daño y curación. Emite eventos estáticos para inscripción de presentación. Aplica modificadores de estado (slow, stun, haste, boost, espinas, provocación). Registra combatientes en lista estática `BrawlFighter.All`. Recibe el poder y la vida de la bajada vía `Prime` y puede marcarse como muñeco (`Dummy`). `Bind` resuelve el kit y los temas con `BrawlKitProfile.Of`.
 
 ## Estructura
 
@@ -25,6 +25,8 @@ tags: [script, world, brawl, core, fighter, state]
 |-----------|------|-------------|
 | `DNA` | `CreatureDNA` | Datos vivos (leer después de Bind) |
 | `Team` | `ExpeditionTeam` | Player o Rival |
+| `DisplayName` | string | `CustomName` del DNA o nombre del GameObject |
+| `BodyLabel` | string | Etiqueta de cuerpo desde `BrawlTuningSO.BodyFor` |
 | `MaxHp`, `Hp`, `Hp01` | float | Vida y ratio |
 | `Shield` | float | Escudo activo (decrece por tiempo) |
 | `IsAlive` | bool | `Hp > 0` |
@@ -43,12 +45,26 @@ tags: [script, world, brawl, core, fighter, state]
 | `WingKit`, `HornSkill`, `BackSkill` | SO | Kits y habilidades |
 | `WingTheme`, `HornTheme`, `BackTheme` | `BrawlTheme` | Color e ícono de VFX |
 | `DamageDealt`, `HealingDone`, `KOs` | float/int | Estadísticas de ronda |
+| `LastAttacker`, `LastHurtAt` | BrawlFighter / float | Crédito de KO y última herida |
+
+## Struct `BrawlHit`
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `Amount` | float | Daño o curación. `TakeDamage` lo reescribe a daño aplicado + absorbido |
+| `Source` | BrawlFighter | Atacante (null si no hay) |
+| `Point` | Vector3 | Punto de impacto (los floats de daño lo usan) |
+| `KnockDir`, `Knockback` | Vector3, float | Dirección y magnitud del empuje |
+| `Theme` | `BrawlTheme` | Tema VFX del golpe |
+| `FromSkill` | bool | Viene de una habilidad |
+| `Melee` | bool | Cuerpo a cuerpo; activa espinas |
+| `IsDrain` | bool | Drenaje: no cuenta para `LastAttacker` ni `DamageDealt` |
 
 ## Métodos Públicos
 
 | Método | Descripción |
 |--------|-------------|
-| `Bind(dna, team, kits, tuning, parts, bank, fur)` | Inicialización completa; visualiza, carga habilidades, máxima vida. Resetea `Power = 1` y `Dummy = false` |
+| `Bind(dna, team, kits, tuning, parts, bank, fur)` | Inicialización completa: visualiza el DNA, resuelve kit y temas con `BrawlKitProfile.Of`, toma `MaxHp`, `BaseSpeed` y `BodyLabel` de `tuning.BodyFor(BodyShapeID)`, resetea estado, registra en `All` e inicia motor, ala, caster y brain. Resetea `Power = 1` y `Dummy = false` |
 | `Prime(power, health01)` | Escala la vida máxima por `power` (mín 0,05) y fija la vida actual a `MaxHp × health01` (mín 1). Usado por la bajada |
 | `Despawn()` | Retira de `All` |
 | `TakeDamage(hit)` | Aplica daño (absorbe escudo primero), knockback, espinas, event |
@@ -91,6 +107,7 @@ tags: [script, world, brawl, core, fighter, state]
 **Datos:**
 - [[CreatureDNA]] — estadísticas
 - [[BrawlWingKitSO]], [[BrawlSkillSO]] — kit de combate
+- [[BrawlKitProfile]] — resuelve kit, temas y rol desde el DNA
 - [[BrawlTheme]] — tema VFX
 - [[BrawlTuningSO]] — parámetros globales
 
@@ -98,10 +115,13 @@ tags: [script, world, brawl, core, fighter, state]
 - [[BrawlAnimator]] — anima estado
 - [[BrawlBody]] — pulso y flash
 - [[BrawlCamera]] — sigue e impulsiona
+- [[BrawlHud]], [[BrawlOverheads]] — leen eventos y propiedades para cards y plates
+- [[BrawlTrialRoom]] — escucha `OnDamaged` para medir daño en salas de prueba
+- [[BrawlPropHit]] — escucha `OnDamaged` para el feedback del prop del muñeco
 
 **Bajada Brawl:**
 - [[BrawlRunDirector]] — llama `Prime` y marca `Dummy`; lee `Hp01` al terminar la sala
-- [[BrawlTrialRoom]] — escucha `OnDamaged` para medir daño en salas de prueba
+- [[BrawlTrialProps]] — lee `Team`, `Position` y `Visualizer` para colocar el prop del rival
 
 ## Notas
 

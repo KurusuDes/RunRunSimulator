@@ -50,10 +50,11 @@ tags: [script, data, brawl, run, state]
 - **Combate perdido:** `Lost = true`; `MaterialLost = ceil(Material × LossFraction)`; `Material -= MaterialLost`. La salud se actualiza sin curación extra.
 - **Sala de prueba:** actualiza salud sin curación extra; `Material += max(0, material)`; `RoomsCleared++`; `RoomIndex++`. Nunca marca derrota.
 - `RecordCombat`, `RecordTrial` y `PlanNextTramo` no hacen nada si `Lost`.
+- El empate no existe aquí: `BrawlRunDirector` lo convierte en victoria antes de llamar `RecordCombat(won: true)`.
 
 ## Conversión a Resultado (`ToResult`)
 
-- `Seed = BaseSeed`; `Winner = Lost ? Rival : Player`; `PlayerSecured = Material`; `RivalSecured = 0`; `Floors = RoomsCleared`; `Lost`; `TeamIds` copiado.
+- `Seed = BaseSeed`; `Winner = Lost ? Rival : Player`; `PlayerSecured = Material`; `MaterialLost` copiado; `RivalSecured = 0`; `Floors = RoomsCleared`; `Lost`; `TeamIds` copiado.
 - `FallenIds` vacío y `Fallen = 0`: la derrota marca al equipo entero vía `TeamIds`, no por caídos (ver `ExpeditionBridge`).
 
 ## Vinculado a
@@ -64,7 +65,8 @@ tags: [script, data, brawl, run, state]
 
 - [[BrawlRunRulesSO]] — todos los números de la bajada
 - [[BrawlRoom]] — salas del tramo
-- [[BrawlRunDirector]] — único consumidor: `PlanNextTramo`, `RecordCombat`, `RecordTrial`, `ToResult`
+- [[BrawlRunDirector]] — único consumidor de escritura: `PlanNextTramo`, `RecordCombat`, `RecordTrial`, `ToResult`
+- [[BrawlRunPanel]] — lectura de `Rooms`, `RoomIndex`, `Depth`, `Material`, `MaterialLost`, `Health01`
 - [[ArenaRun]] — `FloorSeedOf` (semilla determinista)
 - [[ExpeditionHandoff]] — tipo `ExpeditionResult`
 
@@ -73,3 +75,4 @@ tags: [script, data, brawl, run, state]
 - La salud de un MoriMochi caído queda en 0 en el snapshot, pero la curación post-victoria le suma `HealAfterCombat` igual: vuelve a la siguiente sala con esa fracción.
 - `RoomSeed()` asume menos de 16 salas por tramo (multiplicador 16 en la semilla).
 - `Health01` por ID es la única memoria entre salas además del botín.
+- S145: `MaterialLost` viaja en `ExpeditionResult`; `ExpeditionBridge` lo convierte a `MineritaLost` con `BrawlRunRulesSO.MineritaPerLoot`.

@@ -7,16 +7,18 @@ public class DetailInfoTabPresenter
 {
     private readonly CreatureDatabaseSO database;
     private readonly CareGateSO careGate;
+    private readonly BrawlKitDatabaseSO kits;
 
     private readonly VisualElement needHealthFill, needEnergyFill, needAffectFill;
     private readonly VisualElement needHealthRow, needEnergyRow, needAffectRow;
-    private readonly Label exploreStatus, identityLabel, roleElementLabel, progressionLabel;
-    private readonly VisualElement partsContainer;
+    private readonly Label exploreStatus, combatRoleTitle, identityLabel, roleElementLabel, progressionLabel;
+    private readonly VisualElement partsContainer, combatRole, combatRolePill;
 
-    public DetailInfoTabPresenter(VisualElement root, CreatureDatabaseSO database, CareGateSO careGate)
+    public DetailInfoTabPresenter(VisualElement root, CreatureDatabaseSO database, CareGateSO careGate, BrawlKitDatabaseSO kits)
     {
         this.database = database;
         this.careGate = careGate;
+        this.kits = kits;
 
         needHealthRow    = root.Q<VisualElement>("need-health");
         needEnergyRow    = root.Q<VisualElement>("need-energy");
@@ -25,7 +27,10 @@ public class DetailInfoTabPresenter
         needEnergyFill   = root.Q<VisualElement>("need-energy-fill");
         needAffectFill   = root.Q<VisualElement>("need-affect-fill");
         exploreStatus    = root.Q<Label>("explore-status");
-        identityLabel    = root.Q<Label>("identity");
+        combatRole       = root.Q<VisualElement>("combat-role");
+        combatRoleTitle  = root.Q<Label>("combat-role-title");
+        combatRolePill   = root.Q<VisualElement>("combat-role-pill");
+        identityLabel   = root.Q<Label>("identity");
         roleElementLabel = root.Q<Label>("role-element");
         partsContainer   = root.Q<VisualElement>("parts");
         progressionLabel = root.Q<Label>("progression");
@@ -59,7 +64,10 @@ public class DetailInfoTabPresenter
         if (roleElementLabel != null)
             roleElementLabel.text = Loc.Tr("ui.detail.roleline", LocEnumMaps.RoleName(dna.Role), LocEnumMaps.ElementName(dna.Element), RoleDesc(dna.Role));
 
-        BuildParts(dna);
+        var profile = BrawlKitProfile.Of(dna, kits, database);
+
+        SetCombatRole(profile);
+        BuildParts(dna, profile);
 
         if (progressionLabel != null)
             progressionLabel.text = Loc.Tr("ui.detail.progression", dna.BreedCount);
@@ -78,59 +86,108 @@ public class DetailInfoTabPresenter
     private static void SetNeedHighlight(VisualElement row, bool highlight) =>
         row?.EnableInClassList("detail-need--blocked", highlight);
 
-    private void BuildParts(CreatureDNA dna)
+    private void SetCombatRole(in BrawlKitProfile profile)
+    {
+        if (combatRole == null) return;
+
+        if (combatRoleTitle != null) combatRoleTitle.text = Loc.Tr("ui.detail.combatrole.suggested");
+        if (combatRolePill != null)
+        {
+            combatRolePill.Clear();
+            combatRolePill.Add(BrawlRolePill.Build(profile));
+        }
+        combatRole.style.display = kits != null ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    private void BuildParts(CreatureDNA dna, BrawlKitProfile profile)
     {
         if (partsContainer == null) return;
         partsContainer.Clear();
         if (database == null) return;
 
         AddPartRow(PartRole.Body, database.GetBodyShape(dna.BodyShapeID));
-        AddEvolvablePartRow(PartRole.Horn, database.GetHorn(dna.HornID), dna.HornTier, dna.HornPotential);
-        AddEvolvablePartRow(PartRole.Back, database.GetBack(dna.BackID), dna.BackTier, dna.BackPotential);
-        AddEvolvablePartRow(PartRole.Wing, database.GetWing(dna.WingID), dna.WingTier, dna.WingPotential);
+        AddSkillRow(PartRole.Horn, database.GetHorn(dna.HornID), profile.Horn);
+        AddSkillRow(PartRole.Back, database.GetBack(dna.BackID), profile.Back);
+        AddWingRow(PartRole.Wing, database.GetWing(dna.WingID), profile.Wing);
         AddPartRow(PartRole.Face, database.GetFace(dna.FaceID));
+    }
+
+    private void AddSkillRow(PartRole slot, BodyPart part, BrawlSkillSO skill)
+    {
+        if (skill != null) AddPowerPartRow(slot, part, skill.Title, skill.Description, skill.Role);
+        else AddPowerPartRow(slot, part, null, null, null);
+    }
+
+    private void AddWingRow(PartRole slot, BodyPart part, BrawlWingKitSO wing)
+    {
+        if (wing != null) AddPowerPartRow(slot, part, wing.Title, wing.Description, BrawlKitProfile.WingRole(wing));
+        else AddPowerPartRow(slot, part, null, null, null);
     }
 
     private void AddPartRow(PartRole slot, BodyPart part)
     {
         var row = new VisualElement();
         row.AddToClassList("part-row");
-        row.Add(BuildPartSwatch(part));
+        row.Add(BuildPartSwatch(part, null));
 
         var text = new Label();
         text.AddToClassList("part-text");
-        text.text = part != null
-            ? Loc.Tr("ui.detail.partrow", SlotName(slot), part.Name, SetName(part), LocEnumMaps.RarityName(part.Rarity))
-            : Loc.Tr("ui.detail.partrow.empty", SlotName(slot));
+        text.text = PartLine(slot, part);
         row.Add(text);
 
         partsContainer.Add(row);
     }
 
-    private void AddEvolvablePartRow(PartRole slot, BodyPart part, Tier tier, int potential)
+    private void AddPowerPartRow(PartRole slot, BodyPart part, string powerTitle, string powerDescription, BrawlSkillRole? powerRole)
     {
         var row = new VisualElement();
         row.AddToClassList("part-row");
-        row.Add(BuildPartSwatch(part));
+        row.Add(BuildPartSwatch(part, powerRole));
+
+        var body = new VisualElement();
+        body.AddToClassList("part-body");
 
         var text = new Label();
         text.AddToClassList("part-text");
-        text.text = part != null
-            ? Loc.Tr("ui.detail.partrow.level", SlotName(slot), part.Name, SetName(part), LocEnumMaps.RarityName(part.Rarity), (int)tier, potential)
-            : Loc.Tr("ui.detail.partrow.level.empty", SlotName(slot), (int)tier, potential);
-        row.Add(text);
+        text.text = PartLine(slot, part);
+        body.Add(text);
 
-        var action = new VisualElement();
-        action.AddToClassList("part-action");
-        row.Add(action);
+        if (powerRole.HasValue)
+        {
+            var power = new VisualElement();
+            power.AddToClassList("part-power");
 
+            var title = new Label(powerTitle);
+            title.AddToClassList("part-power__title");
+            title.AddToClassList("mm-role-text--" + BrawlKitProfile.RoleClass(powerRole.Value));
+            power.Add(title);
+
+            var description = new Label(powerDescription);
+            description.AddToClassList("part-power__desc");
+            power.Add(description);
+
+            body.Add(power);
+        }
+
+        row.Add(body);
         partsContainer.Add(row);
     }
 
-    private static VisualElement BuildPartSwatch(BodyPart part)
+    private static string PartLine(PartRole slot, BodyPart part) =>
+        part != null
+            ? Loc.Tr("ui.detail.partrow", SlotName(slot), part.Name, SetName(part), LocEnumMaps.RarityName(part.Rarity))
+            : Loc.Tr("ui.detail.partrow.empty", SlotName(slot));
+
+    private static VisualElement BuildPartSwatch(BodyPart part, BrawlSkillRole? ringRole)
     {
         var swatch = new VisualElement();
         swatch.AddToClassList("part-swatch");
+
+        if (ringRole.HasValue)
+        {
+            swatch.AddToClassList("part-swatch--ring");
+            swatch.AddToClassList("mm-role-ring--" + BrawlKitProfile.RoleClass(ringRole.Value));
+        }
 
         Color setColor = part?.Set != null ? part.Set.Color : Color.gray;
 

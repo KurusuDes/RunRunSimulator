@@ -22,6 +22,7 @@ public class MonchiPortraitService : MonoBehaviour
     private readonly Dictionary<string, Texture2D> cache = new();
     private readonly Dictionary<string, Sprite> spriteCache = new();
     private RenderTexture rt;
+    private Mesh bakedMesh;
 
     private void Awake()
     {
@@ -46,6 +47,9 @@ public class MonchiPortraitService : MonoBehaviour
             rt.Release();
             Destroy(rt);
         }
+
+        if (bakedMesh != null)
+            Destroy(bakedMesh);
 
         foreach (var texture in cache.Values)
         {
@@ -108,16 +112,14 @@ public class MonchiPortraitService : MonoBehaviour
             anim.Update(0f);
         }
 
-        var renderers = boothVisualizer.ModelRoot.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-        if (renderers.Length == 0)
+        if (bakedMesh == null)
+            bakedMesh = new Mesh();
+
+        if (!MonchiFraming.TryWorldBounds(boothVisualizer.ModelRoot, bakedMesh, out var bounds))
         {
             boothRoot.SetActive(false);
             return null;
         }
-
-        var bounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
-            bounds.Encapsulate(renderers[i].bounds);
 
         float radius = bounds.extents.magnitude * framePadding;
         float dist = radius / Mathf.Sin(boothCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);

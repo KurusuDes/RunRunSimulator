@@ -36,8 +36,8 @@
 }
 
 .exp-list {
-    min-height: 300px;
-    max-height: 420px;
+    min-height: 236px;
+    max-height: 320px;
     margin: 0 10px;
 }
 
@@ -49,7 +49,7 @@
 
 .exp-card {
     width: 150px;
-    height: 254px;
+    height: 220px;
     margin: 6px;
     padding: 5px;
     border-radius: 14px;
@@ -72,8 +72,12 @@
 }
 
 .exp-card--on {
-    border-color: var(--mm-good);
+    border-color: var(--mm-ally);
     background-color: var(--mm-bg-deep);
+}
+
+.exp-card--on:hover {
+    border-color: var(--mm-ally);
 }
 
 .exp-card--off {
@@ -81,8 +85,8 @@
 }
 
 .exp-card__icon {
-    height: 52%;
-    width: 80%;
+    height: 108px;
+    width: 84%;
     border-radius: 8px;
     border-width: 2px;
     border-color: var(--mm-frame-soft);
@@ -90,8 +94,9 @@
 }
 
 .exp-card__name {
-    height: 16%;
+    height: 24px;
     width: 100%;
+    margin-top: 2px;
     -unity-text-generator: advanced;
     -unity-text-auto-size: best-fit 8px 20px;
     -unity-font-style: bold;
@@ -101,7 +106,7 @@
 }
 
 .exp-card__state {
-    height: 16%;
+    height: 22px;
     width: 100%;
     -unity-text-generator: advanced;
     -unity-text-auto-size: best-fit 8px 16px;
@@ -114,6 +119,59 @@
 .exp-card--off .exp-card__state {
     color: var(--mm-ink-soft);
     -unity-font-style: normal;
+}
+
+.exp-card__role {
+    height: 20px;
+    max-width: 100%;
+    margin-top: 2px;
+}
+
+.exp-card__role .mm-rolepill__seg {
+    padding: 0 8px;
+}
+
+.exp-card__role .mm-rolepill__seg--minor {
+    padding: 0 7px;
+}
+
+.exp-card__powers {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.exp-power {
+    width: 34px;
+    height: 34px;
+    margin: 0 3px;
+    border-width: 3px;
+    border-radius: 8px;
+    background-color: var(--mm-bg-deep);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.exp-card__check {
+    display: none;
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: var(--mm-bg-deep);
+    background-color: var(--mm-ally);
+    color: rgb(40, 26, 18);
+    font-size: 15px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    padding: 0;
+    margin: 0;
+}
+
+.exp-card--on .exp-card__check {
+    display: flex;
 }
 
 .exp-card__bars {
@@ -154,6 +212,106 @@
     background-color: var(--mm-crit);
 }
 
+.exp-detail {
+    height: 206px;
+    margin: 8px 16px 0 16px;
+    padding: 8px 14px;
+    border-width: 2px;
+    border-radius: 12px;
+    border-color: var(--mm-frame-soft);
+    background-color: var(--mm-bg-deep);
+    overflow: hidden;
+}
+
+.exp-detail__head {
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+}
+
+.exp-detail__name {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: var(--mm-ink);
+    margin-right: 10px;
+    flex-shrink: 1;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.exp-detail__role {
+    flex-shrink: 0;
+}
+
+.exp-detail__row {
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    margin-top: 2px;
+}
+
+.exp-detail__icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    border-width: 2px;
+    border-radius: 8px;
+    background-color: var(--mm-surface-2);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.exp-detail__text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    height: 100%;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.exp-detail__title {
+    font-size: 15px;
+    -unity-font-style: bold;
+    white-space: nowrap;
+}
+
+.exp-detail__desc {
+    font-size: 12px;
+    color: var(--mm-ink-soft);
+    white-space: normal;
+}
+
+.exp-team {
+    height: 52px;
+    margin: 6px 16px 0 16px;
+}
+
+.exp-team__row {
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+}
+
+.exp-team__title {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--mm-ink-soft);
+    margin-right: 10px;
+}
+
+.exp-team__pill {
+    height: 22px;
+    margin-right: 6px;
+}
+
+.exp-team__warn {
+    height: 20px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--mm-warn);
+    white-space: nowrap;
+}
+
 .exp-actions {
-    padding-top: 12px;
+    padding-top: 6px;
 }

@@ -9,6 +9,7 @@ public struct ExpeditionResult
     public int Seed;
     public ExpeditionTeam Winner;
     public int PlayerSecured;
+    public int MaterialLost;
     public int RivalSecured;
     public int Floors;
     public bool Lost;
@@ -24,9 +25,13 @@ public struct ExpeditionReturn
     public int PlayerSecured;
     public int RivalSecured;
     public int MineritaGained;
+    public int MineritaLost;
     public int Fallen;
     public int Floors;
     public bool Lost;
+    public List<CreatureDNA> Team;
+    public List<string> EvolvedIds;
+    public int ExplorationsToEvolve;
 }
 
 public static class ExpeditionHandoff

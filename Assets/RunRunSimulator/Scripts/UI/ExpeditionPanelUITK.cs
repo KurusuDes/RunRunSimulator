@@ -11,15 +11,20 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
     [SerializeField] private UIPanelType panel = UIPanelType.Expedition;
     [SerializeField, Min(1)] private int maxPick = 3;
     [SerializeField] private CareGateSO careGate;
+    [SerializeField] private CreatureDatabaseSO database;
+    [SerializeField] private BrawlKitDatabaseSO kits;
 
     private Label emptyLabel;
     private Label subtitleLabel;
     private ScrollView list;
+    private VisualElement detail;
+    private VisualElement team;
     private Button closeButton;
     private Button goButton;
 
     private readonly List<VisualElement> cards = new List<VisualElement>();
     private readonly List<CreatureDNA> dnas = new List<CreatureDNA>();
+    private readonly List<BrawlKitProfile> profiles = new List<BrawlKitProfile>();
     private readonly List<bool> eligible = new List<bool>();
     private readonly List<bool> picked = new List<bool>();
     private int focused = -1;
@@ -54,6 +59,8 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
 
         emptyLabel = root.Q<Label>("exp-empty");
         list = root.Q<ScrollView>("exp-list");
+        detail = root.Q<VisualElement>("exp-detail");
+        team = root.Q<VisualElement>("exp-team");
 
         closeButton = root.Q<Button>("exp-close");
         if (closeButton != null)
@@ -94,6 +101,7 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         list?.Clear();
         cards.Clear();
         dnas.Clear();
+        profiles.Clear();
         eligible.Clear();
         picked.Clear();
 
@@ -115,13 +123,16 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         foreach (var dna in entries)
         {
             bool ok = CreatureAvailability.CanExplore(dna, careGate);
-            var card = BuildCard(dna, ok);
+            var profile = BrawlKitProfile.Of(dna, kits, database);
+            var card = ExpeditionCardBuilder.BuildCard(dna, ok, profile, careGate);
 
             int index = cards.Count;
             card.RegisterCallback<ClickEvent>(_ => ToggleAt(index));
+            card.RegisterCallback<PointerEnterEvent>(_ => HoverAt(index));
 
             cards.Add(card);
             dnas.Add(dna);
+            profiles.Add(profile);
             eligible.Add(ok);
             picked.Add(false);
             list?.Add(card);
@@ -134,6 +145,7 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         }
 
         SetFocus(cards.Count == 0 ? -1 : FirstEligible());
+        RefreshTeam();
         RefreshScheduleUI();
     }
 
@@ -159,64 +171,9 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         return 0;
     }
 
-    private VisualElement BuildCard(CreatureDNA dna, bool ok)
+    private void HoverAt(int index)
     {
-        var card = new VisualElement();
-        card.AddToClassList("exp-card");
-        if (!ok) card.AddToClassList("exp-card--off");
-
-        var icon = new VisualElement();
-        icon.AddToClassList("exp-card__icon");
-        MonchiPortraitUI.Apply(icon, dna);
-        card.Add(icon);
-
-        var name = new Label(dna.CustomName);
-        name.AddToClassList("exp-card__name");
-        card.Add(name);
-
-        var state = new Label(StateTextFor(dna, ok));
-        state.AddToClassList("exp-card__state");
-        card.Add(state);
-
-        var bars = new VisualElement();
-        bars.AddToClassList("exp-card__bars");
-        NeedType? weak = ok ? null : CreatureAvailability.WeakestNeed(dna, careGate);
-        bars.Add(BuildBar(NeedType.Health, dna.Needs.Health, weak));
-        bars.Add(BuildBar(NeedType.Energy, dna.Needs.Energy, weak));
-        bars.Add(BuildBar(NeedType.Affect, dna.Needs.Affect, weak));
-        card.Add(bars);
-
-        return card;
-    }
-
-    private VisualElement BuildBar(NeedType need, float value, NeedType? weak)
-    {
-        var track = new VisualElement();
-        track.AddToClassList("exp-card__bar-track");
-        track.tooltip = Loc.Tr(NeedsLabelKey(need));
-        if (weak.HasValue && weak.Value == need) track.AddToClassList("exp-card__bar-track--weak");
-
-        var fill = new VisualElement();
-        fill.AddToClassList("exp-card__bar-fill");
-        fill.AddToClassList(NeedsDisplay.ColorClass(need, value));
-        fill.style.width = new StyleLength(new Length(NeedsDisplay.Fill01(need, value) * 100f, LengthUnit.Percent));
-        track.Add(fill);
-
-        return track;
-    }
-
-    private static string NeedsLabelKey(NeedType need) => need switch
-    {
-        NeedType.Health => "ui.expedition.needs.health",
-        NeedType.Energy => "ui.expedition.needs.energy",
-        _ => "ui.expedition.needs.affect",
-    };
-
-    private string StateTextFor(CreatureDNA dna, bool ok)
-    {
-        if (dna.IsBusy) return Loc.Tr("ui.expedition.busy");
-        if (!ok) return Loc.Tr("ui.expedition.notready");
-        return string.Empty;
+        if (index != focused) SetFocus(index, false);
     }
 
     private void ToggleAt(int index)
@@ -227,6 +184,7 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         picked[index] = !picked[index];
         cards[index].EnableInClassList("exp-card--on", picked[index]);
         UpdateGoButton();
+        RefreshTeam();
     }
 
     private int CountPicked()
@@ -237,11 +195,24 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         return n;
     }
 
-    private void SetFocus(int index)
+    private void SetFocus(int index, bool scroll = true)
     {
         focused = UiPanels.ClampSelection(cards.Count, index);
         UiPanels.SetActiveIndex(cards, focused, "exp-card--focus");
-        if (focused >= 0) list?.ScrollTo(cards[focused]);
+        if (scroll && focused >= 0) list?.ScrollTo(cards[focused]);
+        RefreshDetail();
+    }
+
+    private void RefreshDetail()
+    {
+        if (detail == null) return;
+        detail.style.display = focused >= 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        if (focused >= 0) ExpeditionCardBuilder.FillDetail(detail, dnas[focused], profiles[focused]);
+    }
+
+    private void RefreshTeam()
+    {
+        if (team != null) ExpeditionCardBuilder.FillTeam(team, profiles, picked);
     }
 
     private void UpdateGoButton()

@@ -23,12 +23,16 @@ public class MonchiLivePortrait : MonoBehaviour
     private Transform modelRoot;
     private readonly List<(Transform t, int layer)> originalLayers = new();
     private int focusLayer = -1;
+    private Mesh bakedMesh;
+    private float frameRadius = 1f;
+    private Vector3 frameOffset;
 
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
 
+        bakedMesh = new Mesh();
         rt = new RenderTexture(textureSize, textureSize, 16, RenderTextureFormat.ARGB32);
         liveCamera.targetTexture = rt;
         liveCamera.enabled = false;
@@ -46,6 +50,9 @@ public class MonchiLivePortrait : MonoBehaviour
             rt.Release();
             Destroy(rt);
         }
+
+        if (bakedMesh != null)
+            Destroy(bakedMesh);
     }
 
     public bool Begin(VisualElement portraitElement, CreatureDNA portraitDna)
@@ -90,6 +97,8 @@ public class MonchiLivePortrait : MonoBehaviour
                 t.gameObject.layer = focusLayer;
             }
         }
+
+        CaptureFrame();
 
         liveCamera.enabled = true;
         UpdateCameraTransform(1f);
@@ -152,28 +161,26 @@ public class MonchiLivePortrait : MonoBehaviour
         return false;
     }
 
+    private void CaptureFrame()
+    {
+        var root = modelRoot != null ? modelRoot : target;
+        if (!MonchiFraming.TryWorldBounds(root, bakedMesh, out var bounds))
+            bounds = new Bounds(target.position + Vector3.up * 0.5f, Vector3.one);
+
+        frameRadius = bounds.extents.magnitude;
+        frameOffset = Quaternion.Inverse(target.rotation) * (bounds.center - target.position);
+    }
+
     private void UpdateCameraTransform(float lerpT)
     {
-        var renderers = target.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-        Bounds bounds;
-        if (renderers.Length > 0)
-        {
-            bounds = renderers[0].bounds;
-            for (int i = 1; i < renderers.Length; i++)
-                bounds.Encapsulate(renderers[i].bounds);
-        }
-        else
-        {
-            bounds = new Bounds(target.position + Vector3.up * 0.5f, Vector3.one);
-        }
-
-        float radius = bounds.extents.magnitude * framePadding;
+        Vector3 center = target.position + target.rotation * frameOffset;
+        float radius = frameRadius * framePadding;
         float dist = radius / Mathf.Sin(liveCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
         Vector3 dir = target.rotation * Quaternion.Euler(cameraPitch, cameraYaw, 0f) * Vector3.forward;
-        Vector3 wanted = bounds.center - dir * dist;
+        Vector3 wanted = center - dir * dist;
 
         liveCamera.transform.position = Vector3.Lerp(liveCamera.transform.position, wanted, lerpT);
-        liveCamera.transform.rotation = Quaternion.LookRotation(bounds.center - liveCamera.transform.position, Vector3.up);
+        liveCamera.transform.rotation = Quaternion.LookRotation(center - liveCamera.transform.position, Vector3.up);
     }
 }
 }

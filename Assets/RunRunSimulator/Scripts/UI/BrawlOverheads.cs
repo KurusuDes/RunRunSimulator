@@ -153,9 +153,12 @@ public class BrawlOverheads : MonoBehaviour
         plate.Anchor.visible = false;
         plate.Body = Element("brawl-plate");
 
-        var name = MakeLabel(fighter.DisplayName, "brawl-plate__name");
-        name.style.color = team;
-        plate.Body.Add(name);
+        if (!fighter.Dummy)
+        {
+            var name = MakeLabel(fighter.DisplayName, "brawl-plate__name");
+            name.style.color = team;
+            plate.Body.Add(name);
+        }
 
         var bar = Element("brawl-obar");
         plate.Fill = Element("brawl-obar__fill");

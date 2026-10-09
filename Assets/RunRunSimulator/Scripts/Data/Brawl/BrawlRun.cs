@@ -116,6 +116,7 @@ public class BrawlRun
             Seed = BaseSeed,
             Winner = Lost ? ExpeditionTeam.Rival : ExpeditionTeam.Player,
             PlayerSecured = Material,
+            MaterialLost = MaterialLost,
             RivalSecured = 0,
             Floors = RoomsCleared,
             Lost = Lost,

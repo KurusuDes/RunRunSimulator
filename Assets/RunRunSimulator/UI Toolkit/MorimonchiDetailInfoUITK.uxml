@@ -43,6 +43,10 @@
                                 </ui:VisualElement>
                             </ui:VisualElement>
                             <ui:Label name="explore-status" text="Apta para bajar" class="explore-status" />
+                            <ui:VisualElement name="combat-role" class="combat-role">
+                                <ui:Label name="combat-role-title" text="Rol sugerido" class="combat-role__title" />
+                                <ui:VisualElement name="combat-role-pill" class="combat-role__pill" />
+                            </ui:VisualElement>
                         </ui:VisualElement>
 
                         <ui:ScrollView name="info-right" class="info-right" mode="Vertical">

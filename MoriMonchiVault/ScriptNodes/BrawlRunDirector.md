@@ -6,7 +6,7 @@ tags: [script, world, brawl, run, director, orchestrator]
 
 **Ruta:** `World/Brawl/BrawlRunDirector.cs`
 
-**Responsabilidad:** Orquestador de la bajada Brawl en la escena de arena. Crea el `BrawlRun` desde `ExpeditionHandoff`, pide tramos y salas, arranca partidas en `BrawlMatch` (modo `Driven`), prepara a cada combatiente (poder y vida), traduce el resultado de cada sala a `BrawlRun` y decide cuándo volver a la tienda. Ejecuta con `[DefaultExecutionOrder(-50)]`.
+**Responsabilidad:** Orquestador de la bajada Brawl en la escena de arena. Crea el `BrawlRun` desde `ExpeditionHandoff`, pide tramos y salas, arranca partidas en `BrawlMatch` (modo `Driven`), prepara a cada combatiente (poder y vida), traduce el resultado de cada sala a `BrawlRun` y decide cuándo volver a la tienda. Ejecuta con `[DefaultExecutionOrder(-50)]`. El empate en combate cuenta como victoria.
 
 ## Campos Serializados
 
@@ -40,9 +40,13 @@ tags: [script, world, brawl, run, director, orchestrator]
 
 1. **Awake:** si `ExpeditionHandoff.CameFromStore`, activa `rules`, crea `BrawlRun(RunSeed, SelectedIds, rules)` y fija `match.Driven = true`.
 2. **Start:** resuelve los DNA del equipo en `ArenaCastSource.LoadLocal()` por `UniqueID`. Si no encuentra ninguno, avisa y llama `ReturnToStore(null)`. Si hay equipo: `PlanNextTramo()` y estado `Planning`.
-3. **StartRoom:** `match.StartMatch(run.RoomSeed(), team, rivales)`, con rivales = `Rivals` en combate o 3 en salas de prueba. En sala de prueba además `trial.Begin(kind, rules)`.
+3. **StartRoom:** `match.StartMatch(run.RoomSeed(), team, rivales)`, con rivales = `Rivals` en combate o 3 en salas de prueba. En sala de prueba además `trial.Begin(kind, rules)`, que dispara el inicio de los props (`BrawlTrialProps`).
 4. **HandleRoster** (`OnRosterSpawned`, solo en `Fighting`): jugadores `Prime(1, Health01)`; rivales de combate `Prime(RivalPower, 1)`; rivales de sala de prueba `Dummy = true` y `Prime(DummyPower, 1)`.
-5. **HandleEnded** (`OnMatchEnded`, solo en `Fighting`): toma la salud (`Hp01`) de los jugadores y cuenta los rivales caídos. Combate → `RecordCombat`; prueba → `RecordTrial(health, trial.End())`. Estado `Over` si `Lost`, si no `RoomResult`. Log con tramo, sala, resultado y botín.
+5. **HandleEnded** (`OnMatchEnded`, solo en `Fighting`): toma la salud (`Hp01`) de los jugadores y cuenta los rivales caídos.
+   - Combate: `won = winner == Player || winner == None` (el empate cuenta como victoria) → `RecordCombat(won, health, defeated)`.
+   - Prueba: `RecordTrial(health, trial.End())`.
+   - Texto de resultado (`LastRoomSummary`): "Perdiste: se pierden X Minerita", "Empate: cuenta como victoria · +X Minerita", "Ganaste: +X Minerita", "Muñecos: el equipo se curó" o "Minerales: +X Minerita". X = botín × `rules.MineritaPerLoot`.
+   - Estado `Over` si `Lost`; si no, `RoomResult`. Log con tramo, sala, resultado y botín.
 
 ## Eventos Suscritos
 
@@ -61,8 +65,9 @@ tags: [script, world, brawl, run, director, orchestrator]
 
 - [[BrawlMatch]] — `StartMatch`, `Driven`, eventos de roster y fin
 - [[BrawlRun]] — estado de la bajada
-- [[BrawlRunRulesSO]] — números; `Activate`/`Deactivate`
+- [[BrawlRunRulesSO]] — números; `Activate`/`Deactivate`; `MineritaPerLoot` para los textos
 - [[BrawlTrialRoom]] — `Begin` / `End`
+- [[BrawlTrialProps]] — props de sala de prueba que arrancan con `trial.Began`
 - [[BrawlFighter]] — `Prime`, `Dummy`, `Hp01`, `Team`
 - [[BrawlRunPanel]] — lee `State`, `Run`, `Team`, `LastRoomSummary`; escucha `Changed`; llama `AcceptTramo`, `NextRoom`, `Leave`
 - [[ExpeditionHandoff]] — `CameFromStore`, `RunSeed`, `SelectedIds`, `ReturnToStore`
@@ -75,3 +80,4 @@ tags: [script, world, brawl, run, director, orchestrator]
 - Una derrota en combate termina la bajada (`Over`); no hay reintentos.
 - Sin equipo válido en el save, vuelve a la tienda sin resultado (`CameFromStore` queda en false).
 - Sin IDs de equipo (por ejemplo, `Depart(null)` desde el botón de debug), la arena vuelve a la tienda por el mismo camino.
+- S145: empate = victoria (`won = winner == Player || winner == None`). Los textos de Minerita usan `MineritaPerLoot`.

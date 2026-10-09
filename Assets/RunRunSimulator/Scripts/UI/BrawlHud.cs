@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Sirenix.OdinInspector;
@@ -15,8 +14,6 @@ public class BrawlHud : MonoBehaviour
     private const float FightHold = 0.9f;
     private const float SuddenHold = 1.6f;
 
-    private static readonly float[] SpeedValues = { 1f, 2f, 4f };
-    private static readonly string[] SpeedNames = { "brawl-speed-1", "brawl-speed-2", "brawl-speed-4" };
     private static readonly string[] BannerClasses = { "brawl-banner--ink", "brawl-banner--blue", "brawl-banner--red", "brawl-banner--coral" };
     private static readonly NumberFormatInfo GroupFormat = new NumberFormatInfo { NumberGroupSeparator = "." };
 
@@ -24,18 +21,17 @@ public class BrawlHud : MonoBehaviour
     [Required, SerializeField] private BrawlTuningSO tuning;
     [SerializeField] private ArenaClockControl clock;
     [SerializeField] private ArenaPaletteApplier palette;
+    [SerializeField] private BrawlTrialRoom trial;
 
     private readonly Dictionary<BrawlFighter, BrawlHudCard> cards = new();
-    private readonly Button[] speedButtons = new Button[3];
-    private readonly Action[] speedHandlers = new Action[3];
 
+    private BrawlHudClock hudClock;
     private VisualElement boundRoot;
     private VisualElement root;
     private VisualElement blueCards;
     private VisualElement redCards;
     private VisualElement feed;
     private VisualElement bannerBox;
-    private Label timerLabel;
     private Label phaseLabel;
     private Label matchLabel;
     private Label banner;
@@ -44,14 +40,12 @@ public class BrawlHud : MonoBehaviour
     private Button rematchButton;
     private IVisualElementScheduledItem popRelease;
     private float bannerHideAt = float.PositiveInfinity;
+    private bool rivalHidden;
     private int lastCount = -1;
-    private int lastSeconds = -1;
-    private bool lastSudden;
     private int lastPhase = -1;
     private int lastMatchIndex = -1;
     private int lastSeed;
     private int lastPalette = -2;
-    private int lastSpeed = -1;
 
     private void OnEnable()
     {
@@ -91,7 +85,6 @@ public class BrawlHud : MonoBehaviour
         redCards = root.Q("brawl-cards-red");
         feed = root.Q("brawl-feed");
         bannerBox = root.Q("brawl-banner-box");
-        timerLabel = root.Q<Label>("brawl-timer");
         phaseLabel = root.Q<Label>("brawl-phase");
         matchLabel = root.Q<Label>("brawl-match");
         banner = root.Q<Label>("brawl-banner");
@@ -101,22 +94,14 @@ public class BrawlHud : MonoBehaviour
 
         newButton.clicked += OnNewClicked;
         rematchButton.clicked += OnRematchClicked;
-        for (int i = 0; i < speedButtons.Length; i++)
-        {
-            speedButtons[i] = root.Q<Button>(SpeedNames[i]);
-            if (clock == null)
-            {
-                speedButtons[i].style.display = DisplayStyle.None;
-                continue;
-            }
-            float value = SpeedValues[i];
-            speedHandlers[i] = () => clock.Set(value);
-            speedButtons[i].clicked += speedHandlers[i];
-        }
 
-        lastCount = lastSeconds = lastPhase = lastMatchIndex = lastSpeed = -1;
+        hudClock = new BrawlHudClock(clock, trial);
+        hudClock.Bind(root);
+
+        redCards.style.display = DisplayStyle.Flex;
+        rivalHidden = false;
+        lastCount = lastPhase = lastMatchIndex = -1;
         lastPalette = -2;
-        lastSudden = false;
         bannerHideAt = float.PositiveInfinity;
 
         var match = BrawlMatch.Current;
@@ -130,11 +115,7 @@ public class BrawlHud : MonoBehaviour
         {
             newButton.clicked -= OnNewClicked;
             rematchButton.clicked -= OnRematchClicked;
-            for (int i = 0; i < speedButtons.Length; i++)
-            {
-                if (speedButtons[i] != null && speedHandlers[i] != null) speedButtons[i].clicked -= speedHandlers[i];
-                speedHandlers[i] = null;
-            }
+            hudClock?.Unbind();
             blueCards.Clear();
             redCards.Clear();
             feed.Clear();
@@ -142,6 +123,7 @@ public class BrawlHud : MonoBehaviour
 
         popRelease?.Pause();
         popRelease = null;
+        hudClock = null;
         cards.Clear();
         boundRoot = null;
         root = null;
@@ -274,31 +256,23 @@ public class BrawlHud : MonoBehaviour
         var match = BrawlMatch.Current;
         if (match == null) return;
 
-        RefreshClock(match);
+        hudClock.Refresh(match);
+        RefreshRivalCards();
         RefreshPhase(match);
         RefreshMatch(match);
         RefreshCountdown(match);
-        RefreshSpeed();
 
         if (Time.unscaledTime >= bannerHideAt) HideBanner();
 
         foreach (var card in cards.Values) card.Refresh();
     }
 
-    private void RefreshClock(BrawlMatch match)
+    private void RefreshRivalCards()
     {
-        bool sudden = match.Phase == BrawlMatchPhase.SuddenDeath || (match.Phase == BrawlMatchPhase.Ended && match.TimeLeft <= 0f);
-        if (sudden != lastSudden)
-        {
-            lastSudden = sudden;
-            lastSeconds = -1;
-            timerLabel.EnableInClassList("brawl-timer--sudden", sudden);
-        }
-
-        int seconds = sudden ? Mathf.FloorToInt(match.SuddenDeathElapsed) : Mathf.CeilToInt(Mathf.Max(0f, match.TimeLeft));
-        if (seconds == lastSeconds) return;
-        lastSeconds = seconds;
-        timerLabel.text = (sudden ? "+" : "") + seconds / 60 + ":" + (seconds % 60).ToString("00");
+        bool hidden = trial != null && trial.Active;
+        if (hidden == rivalHidden) return;
+        rivalHidden = hidden;
+        redCards.style.display = hidden ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
     private void RefreshPhase(BrawlMatch match)
@@ -338,16 +312,6 @@ public class BrawlHud : MonoBehaviour
         if (count == lastCount) return;
         lastCount = count;
         ShowBanner(count.ToString(), "", "brawl-banner--ink", float.PositiveInfinity);
-    }
-
-    private void RefreshSpeed()
-    {
-        if (clock == null) return;
-        int active = Mathf.RoundToInt(ArenaClockControl.Speed);
-        if (active == lastSpeed) return;
-        lastSpeed = active;
-        for (int i = 0; i < speedButtons.Length; i++)
-            speedButtons[i].EnableInClassList("brawl-btn--on", Mathf.RoundToInt(SpeedValues[i]) == active);
     }
 
     private void ShowBanner(string text, string sub, string colorClass, float holdSeconds)

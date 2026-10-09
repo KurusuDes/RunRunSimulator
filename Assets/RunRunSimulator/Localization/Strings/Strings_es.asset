@@ -403,17 +403,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282626
-    m_Localized: "Guardi\xE1n calmo; escuda a sus aliados y vive tranquilo cerca
-      del almac\xE9n."
+    m_Localized: "Guardi\xE1n calmo; vive tranquilo cerca del almac\xE9n."
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282627
-    m_Localized: Territorial; caza la retaguardia enemiga y vive en el bullicio del
-      mostrador.
+    m_Localized: Territorial; vive en el bullicio del mostrador.
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282628
-    m_Localized: Sociable; cura a sus aliados y sigue al jugador por el mostrador.
+    m_Localized: Sociable; sigue al jugador por el mostrador.
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282629
@@ -549,7 +547,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282667
-    m_Localized: Rol y Elemento
+    m_Localized: Personalidad y elemento
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282668
@@ -1455,6 +1453,74 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 27292319110955008
     m_Localized: '{0} dabloons'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607180709888
+    m_Localized: "Da\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178880
+    m_Localized: Control
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178881
+    m_Localized: Apoyo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178882
+    m_Localized: Tanque
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178883
+    m_Localized: Tu equipo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178884
+    m_Localized: 'Sin apoyo: nadie cura ni protege al equipo'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178885
+    m_Localized: 'Rol en combate: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178886
+    m_Localized: "\xA1De vuelta en la tienda!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178887
+    m_Localized: Perdieron un combate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178888
+    m_Localized: +{0} Minerita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178889
+    m_Localized: 'Salas superadas: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178890
+    m_Localized: "Se perdieron {0} de Minerita del bot\xEDn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178891
+    m_Localized: "\xA1Creci\xF3! Ahora es adulto"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178892
+    m_Localized: "Una derrota no cuenta como exploraci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178893
+    m_Localized: Seguir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27515873984569344
+    m_Localized: Equilibrado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27515875616153600
+    m_Localized: Rol sugerido
     m_Metadata:
       m_Items: []
   references:

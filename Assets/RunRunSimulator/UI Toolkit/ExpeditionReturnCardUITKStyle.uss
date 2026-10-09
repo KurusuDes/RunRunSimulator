@@ -1,0 +1,155 @@
+.ret {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ret-panel {
+    width: 620px;
+    max-width: 94%;
+    max-height: 92%;
+    border-width: 3px;
+    border-color: var(--mm-frame);
+    border-radius: 22px;
+}
+
+.ret-panel .panel__header {
+    border-top-left-radius: 19px;
+    border-top-right-radius: 19px;
+}
+
+.ret-panel .panel__title {
+    font-size: 20px;
+}
+
+.ret-title--lost {
+    color: var(--mm-crit);
+}
+
+.ret-body {
+    align-items: center;
+    padding: 22px 16px 8px 16px;
+}
+
+.ret-minerita {
+    font-size: 52px;
+    -unity-font-style: bold;
+    color: var(--mm-teal);
+}
+
+.ret-rooms {
+    font-size: 15px;
+    color: var(--mm-ink-soft);
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.ret-lost {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--mm-crit);
+    margin-top: 10px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.ret-team {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.ret-card {
+    width: 176px;
+    margin: 6px;
+    padding: 8px;
+    align-items: center;
+    border-radius: 14px;
+    border-width: 3px;
+    border-color: var(--mm-frame-soft);
+    background-color: var(--mm-surface-2);
+}
+
+.ret-card--grew {
+    border-color: var(--mm-gold);
+    background-color: var(--mm-bg-deep);
+}
+
+.ret-card__icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    background-color: rgb(120, 120, 120);
+}
+
+.ret-card--grew .ret-card__icon {
+    border-color: var(--mm-gold);
+}
+
+.ret-card__name {
+    width: 100%;
+    margin-top: 6px;
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--mm-ink);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.ret-card__growth {
+    width: 100%;
+    min-height: 22px;
+    margin-top: 6px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ret-badge {
+    padding: 4px 8px;
+    border-radius: 10px;
+    background-color: var(--mm-gold);
+    color: var(--mm-bg-deep);
+    font-size: 13px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.ret-pips {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ret-pip {
+    width: 14px;
+    height: 14px;
+    margin: 3px;
+    border-radius: 7px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    background-color: var(--mm-bg-deep);
+}
+
+.ret-pip--on {
+    border-color: var(--mm-teal);
+    background-color: var(--mm-teal);
+}
+
+.ret-note {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--mm-ink-soft);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.ret-actions {
+    padding-top: 14px;
+}

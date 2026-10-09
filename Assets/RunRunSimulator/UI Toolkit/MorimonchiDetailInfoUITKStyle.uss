@@ -216,6 +216,32 @@
 .explore-status--ready { background-color: var(--mm-good); }
 .explore-status--blocked { background-color: var(--mm-crit); }
 
+.combat-role {
+    margin-top: 6px;
+    align-items: center;
+}
+
+.combat-role__title {
+    font-size: 13px;
+    color: var(--mm-ink-soft);
+    margin-bottom: 3px;
+    -unity-text-align: middle-center;
+}
+
+.combat-role__pill {
+    align-items: center;
+}
+
+.combat-role__pill .mm-rolepill__seg {
+    font-size: 16px;
+    padding: 4px 12px;
+}
+
+.combat-role__pill .mm-rolepill__seg--minor {
+    font-size: 13px;
+    padding: 4px 9px;
+}
+
 .info-right {
     flex-grow: 1;
 }
@@ -275,9 +301,40 @@
     white-space: normal;
 }
 
-.part-action {
-    width: 64px;
+.part-swatch--ring {
+    border-width: 2px;
+    border-radius: 6px;
+}
+
+.part-body {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: column;
+}
+
+.part-body > .part-text {
+    flex-grow: 0;
+}
+
+.part-power {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-top: 1px;
+}
+
+.part-power__title {
     flex-shrink: 0;
+    margin-right: 8px;
+    font-size: 20px;
+    -unity-font-style: bold;
+}
+
+.part-power__desc {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 18px;
+    color: var(--mm-ink-soft);
+    white-space: normal;
 }
 
 /* ── Combat tab: one card per finished fight, newest first ───────

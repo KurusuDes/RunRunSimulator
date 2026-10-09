@@ -4,6 +4,58 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-09 (Session 145 — **conexión tienda ↔ Brawl con UI: rol sugerido por poderes, terminal para armar equipo, ficha con poderes, tarjeta de vuelta, run en Minerita, muñecos espantapájaros, minerales como bonus de daño, empate = victoria, retratos arreglados** — 8 `.cs` creados, 17 modificados; compila 0 errores; verificado en Play con 4 bajadas reales tienda → Brawl → tienda: ganada, perdida y dos con salas de prueba)
+
+**Focus:** Juan: "continuemos con los pendientes de conexión y levantar la UI necesaria para conectar los distintos sistemas; una vez termines me gustaría verlo". S144 estaba cerrada (commit `018d90ab`). Se le mandaron dos hojas de capturas por el chat.
+
+1. **Rol sugerido (decisión de Juan ⭐: "el rol es una guía para balancear el equipo, no un rol cerrado"):** sale de los 3 poderes (ala = Apoyo si cura —Colibrí—, si no Daño; cuerno y espalda = `BrawlSkillSO.Role`). Los 3 iguales → rol único; 2 + 1 → doble mayoría/minoría ("Daño/Apoyo"); los 3 distintos → **Equilibrado**. `BrawlKitProfile` (Data, puro: kit + temas + `Primary/Secondary/Balanced/HasRole`; `BrawlFighter.Bind` también lo usa) y `BrawlRolePill` (UI, píldora de 1-2 colores). Colores: Daño coral, Control plum, Apoyo verde, Tanque gold, Equilibrado frame-soft (clases `mm-role*`/`mm-rolepill*` en `Theme.uss`). Con el save actual: Daño/Control, Daño/Apoyo ×3, Daño/Tanque, Equilibrado ×2.
+2. **Terminal de bajada = armar equipo:** tarjeta con retrato, nombre, píldora y los 3 poderes (ícono con anillo del color de su rol); las no aptas muestran solo la barra de la necesidad más débil; elegida = borde azul de equipo + ✓; detalle del enfocado (título + descripción de cada poder) y resumen "Tu equipo" con aviso "Sin apoyo" si ningún elegido tiene un poder de apoyo. `ExpeditionCardBuilder` (UI estática) parte el panel.
+3. **Ficha:** "Rol sugerido" + píldora bajo "Apta"; cuerno/espalda/ala con su poder (título en color del rol + descripción); se quitaron nivel y potencial (tiers muertos). Coherencia (Juan): sección "Rol y Elemento" → **"Personalidad y elemento"** y las 3 descripciones del rol genético sin promesas de combate (solo tienda).
+4. **Vuelta:** `ExpeditionReturnCardUITK` (panel `UIPanelType.ExpeditionReturn = 9`, GO en `UIManager` de `GameScene`, mapeado en el diccionario Odin): título, "+N Minerita" en teal, salas superadas, lo perdido (solo si > 0), cada miembro con pips de exploración (blobim) o "¡Creció!", aviso "una derrota no cuenta como exploración". Se muestra 2 cuadros después del evento (puede llegar antes del `Start` de `UIManager`). `ExpeditionReturn` ahora lleva `Team` (DNA), `EvolvedIds`, `ExplorationsToEvolve`, `MineritaLost`; `ExpeditionResult` lleva `MaterialLost`. El toast de expedición de `InfoOverlayUITK` se quitó.
+5. **Run en Minerita:** la tasa vive en `BrawlRunRulesSO.MineritaPerLoot = 5` (se borró `ExpeditionBridge.mineritaPerMaterial`); panel de tramo y resúmenes en Minerita ("Salir con N Minerita"; "Sin botín que perder").
+6. **Salas de prueba:** muñecos = **espantapájaros sonrientes con casco blanco y cruz verde** (Juan) — modelo Blender `Tools/Blender/props/scarecrow.py` → `Resources/Models/Brawl/BrawlScarecrow.fbx`, materiales Toon `Materials/Brawl/Scarecrow/SC_*`, prefab `Prefabs/Brawl/BrawlScarecrowProp.prefab` con `Feedbacks/OnHit` (MMF squash) + `BrawlPropHit`; minerales = `BrawlMineralProp.prefab` (cristal de la arena vieja sin lógica). `BrawlTrialProps` (en el GO `BrawlRun` de `BrawlDemo`, escala 1.25) oculta el visual del luchador muñeco y lo viste. Ícono pixel art `Sprites/Brawl/Icon_Scarecrow.png` (`icon_scarecrow.py`) en el chip "Muñecos". El reloj del HUD muestra el de la prueba (`BrawlHudClock`, partido de `BrawlHud`) y la columna rival se oculta; sin nombre sobre los muñecos.
+7. **Minerales = bonus de daño (Juan):** la prueba arranca con el primer golpe o a los `TrialStartGrace = 15` s; piso `MineralBaseLoot = 1` (= 5 Minerita); la tira muestra "+N Minerita" en vivo. **Empate = victoria** y la run sigue (Juan).
+8. **Retratos:** salían diminutos por dos causas: renderers inactivos de un armado anterior y `SkinnedMeshRenderer.bounds` falsos en partes injertadas (`Horn_Mechon` 5,6 m vs 0,8 real). `MonchiFraming.TryWorldBounds` hornea las mallas activas; lo usan `MonchiPortraitService` y `MonchiLivePortrait` (este calcula el encuadre una vez y sigue al target).
+9. **Datos:** +50 dabloons al save (Juan ✅, local + nube; quedan 24 tras 3 bajadas); 17 claves nuevas en `Strings` (`ui.brawlrole.*`, `ui.expedition.team/nosupport`, `ui.detail.combatrole.suggested`, `ui.return.*`); huérfanas: `ui.detail.combatrole`, `ui.detail.partrow.level(.empty)`, `ui.overlay.expedition.return/lost`.
+
+**Quirks ⚠️:** (1) **`BakeMesh(mesh, false)` en este Unity devuelve vértices YA escalados** (relativos a posición/rotación del renderer): a mundo con `pos + rot * v`; `TransformPoint` escala dos veces y `BakeMesh(true)` divide por la escala. (2) Se abrió el editor de **AxieDarknessArise** a mitad de sesión: Unity desenfocado no compila ni recarga, el MCP pierde la instancia en cada recarga y una orden cayó en el otro editor (sin efecto). Rutina: `set_active_instance RunRunSimulator@<hash>` antes de cada lote, chequear `Application.dataPath` en `execute_code`, esperar `~/.unity-mcp/unity-mcp-status-<hash>.json` con `"reason":"ready"`, y `AppActivate` al proceso para destrabar. (3) Dos `.cs` nuevos no entraban a `Assembly-CSharp` (MonoImporter sin registrar): se resolvió sacándolos de `Assets/`, refrescando y devolviéndolos. (4) `BrawlDemo` se ensucia sola al abrirla (scripts de editor): guardar antes de cambiar y descartar al salir.
+
+**Hallazgos sin tocar:** el MVP del cartel puede ser un rival aunque gane azul; textos de la escena Brawl sin localizar; con 1-2 blobims la sala de minerales rinde casi solo el piso (balance); títulos de paneles que no se re-traducen al cambiar idioma en caliente.
+
+**Siguiente paso (S146, propuesta):**
+1. **Juan juega la bajada completa** desde la tienda (≥ 10 dabloons, hay 24) y da feedback de ritmo, rol sugerido y tarjetas.
+2. **Primer gasto de Minerita ligado al Brawl (E2.2 de `Index/28`):** en la ficha, pagar Minerita para cambiar/rerollear el poder de una parte → cambia el rol sugerido → se balancea el equipo. Cierra el loop tienda ↔ cría ↔ Brawl (hoy la Minerita se acumula: 230). Decisiones previas de Juan: precio, si el cambio se hereda, cuántas opciones por parte.
+3. Pendientes chicos: MVP del equipo ganador, localizar textos del Brawl, volcar S144-S145 en `Index/32` (8d).
+
+**Archivos `.cs` creados (8) · modificados (17):**
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlKitProfile.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlRolePill.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/ExpeditionCardBuilder.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/ExpeditionReturnCardUITK.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlHudClock.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/MonchiFraming.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlTrialProps.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlPropHit.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/UIEnums.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/ExpeditionHandoff.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlRun.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlRunRulesSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Expedition/ExpeditionBridge.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlHud.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlOverheads.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlRunPanel.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/DetailInfoTabPresenter.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/ExpeditionPanelUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/InfoOverlayUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/MonchiLivePortrait.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/MonchiPortraitService.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/MorimonchiDetailInfoUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlFighter.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlRunDirector.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlTrialRoom.cs` → MODIFICADO
+
+---
+
 **Session:** 2026-10-08/09 (Session 144 — **balance del Brawl cerrado (vuelta 2: todo en meta) + la bajada pasa a ser una run de Brawl por tramos (lotes A-D: puente con costo, run, panel de tramo, salas de muñecos y minerales)** — 6 `.cs` creados, 8 modificados; compila 0 errores; verificado en Play con una run completa tienda → Brawl → tienda y 200 partidas del arnés)
 
 **Focus:** S143 dejó la verificación de la vuelta 1 cortada. Juan: "continuemos" con el balance y después la conexión tienda ↔ Brawl; "los números de economía decidilos vos y anotalos" (memoria `feedback-numeros-provisorios-los-decido-yo`); tramos de 2-5 salas al azar, más profundo = combates más duros; la arena vieja queda de dev.

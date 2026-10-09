@@ -407,17 +407,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282626
-    m_Localized: Calm guardian; shields its allies and lives peacefully near the
-      storeroom.
+    m_Localized: Calm guardian; lives peacefully near the storeroom.
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282627
-    m_Localized: Territorial; hunts the enemy backline and lives in the bustle of
-      the counter.
+    m_Localized: Territorial; lives in the bustle of the counter.
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282628
-    m_Localized: Sociable; heals its allies and follows the player around the counter.
+    m_Localized: Sociable; follows the player around the counter.
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282629
@@ -553,7 +551,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282667
-    m_Localized: Role and Element
+    m_Localized: Personality and Element
     m_Metadata:
       m_Items: []
   - m_Id: 4172480282668
@@ -1458,6 +1456,74 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 27292319110955008
     m_Localized: '{0} dabloons'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607180709888
+    m_Localized: Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178880
+    m_Localized: Control
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178881
+    m_Localized: Support
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178882
+    m_Localized: Tank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178883
+    m_Localized: Your team
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178884
+    m_Localized: 'No support: nobody heals or shields the team'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178885
+    m_Localized: 'Combat role: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178886
+    m_Localized: Back at the shop!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178887
+    m_Localized: Your team lost a fight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178888
+    m_Localized: +{0} Minerita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178889
+    m_Localized: 'Rooms cleared: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178890
+    m_Localized: '{0} Minerita of the loot was lost'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178891
+    m_Localized: Grown up! Now an adult
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178892
+    m_Localized: A defeat doesn't count as an exploration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27496607277178893
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27515873984569344
+    m_Localized: Balanced
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27515875616153600
+    m_Localized: Suggested role
     m_Metadata:
       m_Items: []
   references:

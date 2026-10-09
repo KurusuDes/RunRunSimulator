@@ -6,67 +6,66 @@ tags: [script, ui, presenter]
 
 **Ruta:** `UI/DetailInfoTabPresenter.cs`
 
-**Responsabilidad:** Presenter UITK para tab "Detalle" (muestra genética, necesidades, estado). Renderiza 5 filas de partes (BodyShape, Horn, Back, Wing, Face) con tier y potencial, 3 barras de necesidades (Health/Energy/Affect), badge de apta para exploración, y conteo de crianzas. **S129:** Eliminadas filas de stats operacionales. **S135:** Actualizado para partes modulares; BuildParts() invoca AddPartRow() y AddEvolvablePartRow() con acceso a BodyPart.Ability.
-
-## Contenido del Tab
-
-| Elemento | Descripción |
-|----------|-------------|
-| 5 filas de partes | BodyShape, Horn, Back, Wing, Face con tier/potencial |
-| 3 barras de necesidades | Health/Energy/Affect con relleno + color |
-| Badge apta | ✓ si CreatureAvailability.CanExplore(dna, careGate) |
-| BreedCount | Contador de crianzas previas |
-
-## Métodos Clave
-
-| Método | Descripción |
-|--------|-------------|
-| `Rebuild(CreatureDNA dna)` | Punto de entrada: actualiza tab completo |
-| `BuildParts(CreatureDNA dna)` | Itera slots y crea filas vía AddPartRow/AddEvolvablePartRow |
-| `AddPartRow(PartRole slot, BodyPart part)` | Crea fila simple (BodyShape, Face) |
-| `AddEvolvablePartRow(PartRole slot, BodyPart part, Tier tier, float potential)` | Crea fila con tier/potencial (Horn, Back, Wing) |
-| `SetNeedBar(VisualElement fill, NeedType need, float value)` | Actualiza barra de necesidad |
-| `SetNeedHighlight(VisualElement row, bool highlight)` | Resalta fila si necesidad crítica |
-| `BuildPartSwatch(BodyPart part)` | [Privado] Crea icono+sprite de parte |
+**Responsabilidad:** Presenter UITK de la pestaña Info de la ficha de MoriMochi. Muestra las tres barras de necesidades (Health, Energy, Affect) con la más débil resaltada, el badge de apta para explorar, la identidad (género, estado, nacimiento), rol y elemento, el rol de combate sugerido (píldora de `BrawlKitProfile`), las cinco partes genéticas con el poder de su kit y el contador de crianzas. Es presentación pura: no escribe fuera de su root ni persiste.
 
 ## Campos Privados
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `database` | `CreatureDatabaseSO` | Acceso a PartDatabases (Horn, Back, Wing, Face, Body) |
-| `careGate` | `CareGateSO` | Verificación de disponibilidad para exploración |
-| `partsContainer` | `VisualElement` | Contenedor dinámico de filas de partes |
-| `needHealthFill` / `needEnergyFill` / `needAffectFill` | `VisualElement` | Barras de relleno |
+| `database` | `CreatureDatabaseSO` | Acceso a las partes (cuerpo, cuerno, espalda, ala, cara) |
+| `careGate` | `CareGateSO` | Umbral de necesidades para exploración |
+| `kits` | `BrawlKitDatabaseSO` | Kits de combate por ID de parte |
+| `needHealthFill`, `needEnergyFill`, `needAffectFill` | `VisualElement` | Barras de relleno |
+| `needHealthRow`, `needEnergyRow`, `needAffectRow` | `VisualElement` | Filas, para resaltar la necesidad más débil |
 | `exploreStatus` | `Label` | Badge "Apta" o "Bloqueada" |
-| `roleElementLabel` | `Label` | Rol + Elemento genético |
-| `progressionLabel` | `Label` | Contador BreedCount |
+| `identityLabel` | `Label` | Género, estado y nacimiento |
+| `roleElementLabel` | `Label` | Rol + elemento + descripción del rol |
+| `combatRole`, `combatRoleTitle`, `combatRolePill` | `VisualElement`, `Label`, `VisualElement` | Bloque de rol de combate sugerido |
+| `partsContainer` | `VisualElement` | Contenedor dinámico de filas de partes |
+| `progressionLabel` | `Label` | Contador de crianzas (`BreedCount`) |
 
-## Cambios S135
+## Métodos
 
-**BuildParts() actualizado:**
-- Ahora llama `database.GetHorn(dna.HornID)` → retorna BodyPart modular (S135)
-- AddEvolvablePartRow() recibe BodyPart con `part.Ability` asignada
-- Renderiza habilidad junto a parte (icono/nombre)
+| Método | Descripción |
+|--------|-------------|
+| `DetailInfoTabPresenter(root, database, careGate, kits)` | Constructor: busca por nombre los elementos del tab (`need-*`, `explore-status`, `combat-role*`, `identity`, `role-element`, `parts`, `progression`) |
+| `Rebuild(dna)` | Punto de entrada: actualiza todo el tab. Retorna si `dna` es null |
+| `SetNeedBar(fill, need, value)` | Ancho y clase de color (`good`, `warn`, `crit`) de la barra |
+| `SetNeedHighlight(row, highlight)` | Clase `detail-need--blocked` en la fila de la necesidad más débil |
+| `SetCombatRole(profile)` | Título `ui.detail.combatrole.suggested` y píldora con `BrawlRolePill.Build`. Visible solo si hay `kits` |
+| `BuildParts(dna, profile)` | Limpia el contenedor y agrega: Body (`AddPartRow`), Horn (`AddSkillRow`), Back (`AddSkillRow`), Wing (`AddWingRow`), Face (`AddPartRow`) |
+| `AddPartRow(slot, part)` | Fila con swatch y texto de la parte |
+| `AddSkillRow(slot, part, skill)` | Fila con poder del `BrawlSkillSO` (título, descripción, rol) |
+| `AddWingRow(slot, part, wing)` | Fila con poder del ala; rol por `BrawlKitProfile.WingRole` |
+| `AddPowerPartRow(...)` | Fila base: swatch, texto y, si hay rol, bloque de poder (`part-power`) |
+| `BuildPartSwatch(part, ringRole)` | Swatch con anillo de rol (`mm-role-ring--…`), icono de parte o color del set |
 
-**Acceso a Ability:**
-```csharp
-AddEvolvablePartRow(PartRole.Horn, database.GetHorn(dna.HornID), dna.HornTier, dna.HornPotential);
-// BodyPart.Ability ahora visible en UI si asignada en inspector (S135)
-```
+## Textos de Fila de Parte
 
-## Integración
-
-- Referenciado en `MorimonchiDetailInfoUITK` (instancia presenter)
-- Constructor inyecta `database`, `careGate`, y referencias UI
-- `Rebuild()` llamado desde panel al seleccionar criatura
-- NeedsDisplay determina colores (good/warn/crit)
-- CreatureAvailability verifica CareGateSO para apta
+- Con parte: `ui.detail.partrow` con slot, nombre, set y rareza (`LocEnumMaps.RarityName`).
+- Sin parte: `ui.detail.partrow.empty` con el slot.
+- No hay tier ni potencial en este código: la fila muestra nombre, set y rareza.
 
 ## Vinculado a
 
 - [[Index/05 - UI System]]
 - [[Index/28 - Cimientos y camino a Game Ready]]
+- [[Index/32 - Demo Brawl 3v3 arcade]]
 
 ## Conexiones
 
-[[BodyPart]], [[CreatureDatabaseSO]], [[CreatureDNA]], [[NeedsDisplay]], [[CreatureAvailability]], [[CareGateSO]], [[MorimonchiDetailInfoUITK]]
+- [[MorimonchiDetailInfoUITK]] — crea el presenter en `Wire()` y llama `Rebuild`
+- [[BrawlKitProfile]] — rol sugerido, poderes y temas por parte
+- [[BrawlRolePill]] — píldora del rol sugerido
+- [[BrawlKitDatabaseSO]] — kits por ID (para el perfil)
+- [[CreatureDatabaseSO]], [[BodyPart]] — partes, sets, rareza
+- [[CreatureDNA]] — necesidades, género, rol, elemento, `BirthDate`, `BreedCount`
+- [[NeedsDisplay]] — color y relleno de barras
+- [[CreatureAvailability]], [[CareGateSO]] — apta y necesidad más débil
+- [[CreatureDisplay]] — `StateOf`
+- [[LocEnumMaps]] — nombres de género, rol, elemento y rareza
+
+## Notas
+
+- El poder de cada parte sale del kit (`BrawlKitProfile`), no de un campo de la parte.
+- Si no hay `careGate`, no se resalta ninguna necesidad ni se marca apta.
