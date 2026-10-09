@@ -6,7 +6,7 @@ tags: [script, ui, component]
 
 **Ruta:** `UI/BrawlHud.cs`
 
-**Responsabilidad:** Hub de HUD para Brawl 3v3. Vincula UIDocument (BrawlHud.uxml), maneja fase/reloj/MVP, crea BrawlHudCard por fighter, feed de KOs, banners de evento, speedup buttons. Singleton implícito vía MonoBehaviour.
+**Responsabilidad:** Hub de HUD para Brawl 3v3. Vincula UIDocument (BrawlHud.uxml), maneja fase/reloj/MVP, crea BrawlHudCard por fighter, feed de KOs, banners de evento, speedup buttons. Oculta los botones Nueva Partida y Revancha cuando la partida es `Driven` (bajada). Singleton implícito vía MonoBehaviour.
 
 **Vinculado a:** [[Index/32 - Demo Brawl 3v3 arcade]]
 
@@ -55,7 +55,7 @@ Ninguno. Acceso vía eventos estáticos (`BrawlMatch.OnPhaseChanged`, etc.)
 |--------|-------------|
 | `TryBind()` | Busca elementos en doc; retorna false si no está listo |
 | `Unbind()` | Limpia referencias y suscripciones |
-| `RebuildCards()` | Crea BrawlHudCard por fighter (azul/rojo según equipo) |
+| `RebuildCards()` | Crea BrawlHudCard por fighter (azul/rojo según equipo); muestra u oculta Nueva/Revancha según `Driven` |
 | `RefreshClock()` | Actualiza timer (mm:ss, invierte a muerte súbita) |
 | `RefreshPhase()` | Actualiza label de fase + rampa KO |
 | `RefreshMatch()` | Actualiza número partida + semilla + bioma |
@@ -68,15 +68,15 @@ Ninguno. Acceso vía eventos estáticos (`BrawlMatch.OnPhaseChanged`, etc.)
 ## Flujo de Partida
 
 1. **OnEnable:** Suscribe eventos, intenta bind
-2. **OnRosterSpawned:** Crea cards por fighter
-3. **OnPhaseChanged (Countdown):** Oculta banner anterior
+2. **OnRosterSpawned:** Oculta banner, crea cards por fighter
+3. **OnPhaseChanged (Countdown):** Oculta banner anterior; luego RefreshCountdown muestra 3, 2, 1
 4. **OnPhaseChanged (Fight):** Muestra "¡A PELEAR!"
 5. **Update (cada frame):** RefreshClock, RefreshPhase, RefreshMatch, RefreshCountdown, RefreshSpeed
 6. **OnPhaseChanged (SuddenDeath):** Muestra "¡MUERTE SÚBITA!"
 7. **OnKnockedOut:** Agrega entry al feed (máx 5 visibles, auto-fade después 7s)
 8. **OnLastStand:** Muestra "¡ÚLTIMO EN PIE!" + nombre survivor
-9. **OnMatchEnded:** Muestra "¡GANA X!" + MVP
-10. **Update:** Si 6s desde fin, oculta banner
+9. **OnMatchEnded:** Muestra "¡GANA X!" + MVP con hold infinito (no se oculta solo)
+10. **Próximo OnRosterSpawned o Countdown:** oculta el banner
 11. **OnDisable:** Desuscribe, unbind
 
 ## Constantes S142
@@ -109,8 +109,8 @@ brawl-root
 │   └── brawl-cards-red       (columna roja)
 ├── brawl-feed                (log de KOs)
 └── brawl-actions
-    ├── brawl-new             (Nueva Partida)
-    └── brawl-rematch         (Revancha)
+    ├── brawl-new             (Nueva Partida; oculto si Driven)
+    └── brawl-rematch         (Revancha; oculto si Driven)
 ```
 
 ## Dependencias
@@ -120,14 +120,16 @@ brawl-root
 - `ArenaClockControl` (optional, speedup)
 - `ArenaPaletteApplier` (optional, nombre mapa)
 - Eventos estáticos de `BrawlMatch`, `BrawlFighter`, `BrawlSkillCaster`
+- `BrawlMatch.Current` (para `Driven` y MVP)
 
 **Salida:**
 - Crea `BrawlHudCard` (uno por fighter)
 - Llama `BrawlMatch.NewMatch()` / `Rematch()` vía botones
 - Renderiza cards, feed, banners, labels en UIDocument
 
-## Notas S142
+## Notas S144
 
+- En partidas `Driven` (bajada Brawl, dirigidas por `BrawlRunDirector`) los botones Nueva Partida y Revancha quedan ocultos. Se decide en `RebuildCards()`, que corre en cada roster.
 - TryBind() retorna false si documento no listo (permite esperar a inicialización de UXML)
 - Unbind() se llama en OnDisable y cuando documento cambia
 - lastCount/lastSeconds/etc son optimizaciones para no recomputar si no cambió
@@ -136,3 +138,4 @@ brawl-root
 - Speedup buttons solo visibles si ArenaClockControl presente (desarrollo)
 - Banner tiene pop animation (pequeño → normal en 60ms)
 - Colores de equipo vienen de tuning (editables sin modificar código)
+- Textos de banner y feed hardcodeados en español (no pasan por `Loc`)

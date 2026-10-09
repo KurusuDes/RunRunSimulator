@@ -4,6 +4,39 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-08/09 (Session 144 — **balance del Brawl cerrado (vuelta 2: todo en meta) + la bajada pasa a ser una run de Brawl por tramos (lotes A-D: puente con costo, run, panel de tramo, salas de muñecos y minerales)** — 6 `.cs` creados, 8 modificados; compila 0 errores; verificado en Play con una run completa tienda → Brawl → tienda y 200 partidas del arnés)
+
+**Focus:** S143 dejó la verificación de la vuelta 1 cortada. Juan: "continuemos" con el balance y después la conexión tienda ↔ Brawl; "los números de economía decidilos vos y anotalos" (memoria `feedback-numeros-provisorios-los-decido-yo`); tramos de 2-5 salas al azar, más profundo = combates más duros; la arena vieja queda de dev.
+
+1. **Balance:** `s143_v1` se completó (semillas 87-100 en `s143_v1b`, unidas en `s143_v1_full`): la vuelta 1 funcionó, solo quedaban fuera **Plumitas 38,7 %** (subirle daño no movía nada: mucho daño y KOs, muere tarde y queda último en pie) y **Erizo (Espinas) 31 %**. **Vuelta 2:** Plumitas recarga 2,4 → 2,15 s · Erizo daño 330 → 370. Verificación `s144_v2_full` (semillas 1-48 de `s144_v2` + 49-100 de `s144_v2b`, porque la PC se apagó a mitad): **cero partes fuera de meta**; Plumitas 45,8 %, Erizo 40 %, Colibrí 54,6 %, Bumerán 57,3 %; 59,3 s de media, muerte súbita 10,5 %, remontadas 18 %. El refactor de `BrawlMatch` conserva el orden de azar del arnés (las tandas siguen siendo pareadas).
+2. **Bajada = run de Brawl por tramos** (detalle en [[Index/32 - Demo Brawl 3v3 arcade]] 8c): `ExpeditionHandoff.ArenaScene = "BrawlDemo"` (agregada a build settings); `ExpeditionBridge` cobra `DescentCost` en dabloons al bajar y ya no pone el botín a 0 al perder; el panel de expedición muestra el costo y se deshabilita si no alcanza. En `BrawlDemo`, `BrawlRunDirector` (dueño de la run, solo si `CameFromStore`) carga la terna del save, pone `BrawlMatch.Driven` (sin partida automática ni revancha) y juega salas: combate contra 1-3 rivales con poder por tramo, muñecos (quietos, curan al equipo al pegarles) y minerales (daño → botín), 20 s las de prueba (`BrawlTrialRoom`). Vida arrastrada con +40 % tras cada combate, KO sin penalidad, perder = −50 % del botín y fin. `BrawlRunPanel` (UITK): tarjeta del tramo con chips de salas (íconos de Astas/Alforja/Cristales) y tira chica durante la pelea. Números en `ScriptableObjects/Brawl/BrawlRunRules.asset`. Textos del aviso de vuelta en la tienda ahora en salas y con la Minerita también al perder.
+3. **Verificado:** con 0 dabloons la bajada se bloquea; run real con los 3 Slimes del save: tramo 1 (VS 2, muñecos, VS 2, VS 2) ganado, tramo 2 (minerales, VS 3, VS 3 a ×0,95) perdido → 3 de botín → **+15 Minerita en el save (8 → 23)** y el reloj de la tienda saltó al día siguiente (efecto normal de volver). 0 errores de Brawl en consola (los `Animator.GotoState` son de los slimes/huevos de la tienda al cargar `GameScene`, previos).
+
+**Quirks:** con Unity en Play y "Recompile And Continue Playing", escribir `.cs` corta una tanda del arnés: los sub-agentes escribieron en un staging del scratchpad y se copió al terminar. `execute_code` con Unity desenfocado puede dar timeout y ejecutarse igual después (revisar estado antes de reintentar acciones no idempotentes). La PC se apagó a mitad de la tanda: se retomó con `Run(tanda, primeraSemilla, …)` y se unieron los CSV quitando la semilla a medias.
+
+**Siguiente paso (S145):**
+1. Juan juega la bajada desde la tienda (necesita ≥ 10 dabloons) y da feedback del ritmo de tramos y la dificultad.
+2. Pendientes chicos de la run: el reloj del HUD marca 90 s en salas de prueba (mostrar el de la prueba); textos del panel sin localizar; mostrar el botín en Minerita; muñecos con aspecto propio (hoy son MoriMonchis quietos); `BrawlHud` 408 líneas (partir).
+3. Menores de S142 siguen (íconos Cresta/Ariete, sonido, `BrawlProjectile` 431 líneas, globos que se pisan).
+
+**Archivos `.cs` creados (6) · modificados (8):**
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlRoom.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlRun.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlRunRulesSO.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlRunDirector.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlTrialRoom.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlRunPanel.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/BrawlEnums.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/ExpeditionHandoff.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Expedition/ExpeditionBridge.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/ExpeditionPanelUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/InfoOverlayUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlHud.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlFighter.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlMatch.cs` → MODIFICADO
+
+---
+
 **Session:** 2026-10-07/08 (Session 143 — **balance con datos del Brawl: arnés de partidas automáticas + reporte Python, tanda base de 200 partidas y vuelta 1 de ajustes en los SO** — 2 `.cs` creados; compila 0 errores; verificado en Play con 400 partidas automáticas; corrido en /loop con permiso de Juan)
 
 **Focus:** pedido de Juan (S142): balance de los poderes con datos antes de conectar la tienda. Juan fijó metas: alas/familias 40-60 % de victorias, habilidades 35-65 %, partidas 45-70 s, muerte súbita en 5-15 % de las partidas, remontadas ≥ 15 %; autorizó tocar los SO sin OK por vuelta.

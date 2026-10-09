@@ -18,6 +18,7 @@ MonoBehaviour:
   Description: Diez espinas en todas direcciones que frenan.
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Family: 4
   Role: 0
   Target: 0
@@ -31,7 +32,7 @@ MonoBehaviour:
   Range: 6
   Radius: 2
   Angle: 90
-  Damage: 330
+  Damage: 370
   Heal: 0
   Shield: 0
   Duration: 0

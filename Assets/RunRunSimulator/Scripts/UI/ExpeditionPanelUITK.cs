@@ -249,8 +249,9 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         int count = CountPicked();
         if (goButton != null)
         {
-            goButton.text = Loc.Tr("ui.expedition.go", count, maxPick);
-            goButton.SetEnabled(count >= 1 && ExpeditionOpen);
+            int cost = BrawlRunRulesSO.Current != null ? BrawlRunRulesSO.Current.DescentCost : 0;
+            goButton.text = Loc.Tr("ui.expedition.go", count, maxPick) + (cost > 0 ? " · " + Loc.Tr("ui.expedition.cost", cost) : "");
+            goButton.SetEnabled(count >= 1 && ExpeditionOpen && Wallet.Balance(Currency.Dabloons) >= cost);
         }
     }
 

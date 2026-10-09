@@ -169,7 +169,7 @@ public class InfoOverlayUITK : MonoBehaviour
 
         if (r.Lost)
         {
-            expeditionToastLabel.text = Loc.Tr(ExpeditionLostKey, r.Floors, r.Fallen);
+            expeditionToastLabel.text = Loc.Tr(ExpeditionLostKey, r.Floors, r.MineritaGained);
             expeditionToastLabel.AddToClassList("toast--lose");
         }
         else

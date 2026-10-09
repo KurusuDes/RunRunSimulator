@@ -99,7 +99,9 @@ Prefab `Resources/Prefabs/Brawl/BrawlFighter.prefab` (derivado de `MorimonchiAge
 
 **Cómo se mide:** paso fijo `Time.captureDeltaTime = 1/40` (los proyectiles chocan por punto-en-radio sin barrido; con `timeScale` alto atraviesan). Game view maximizado y cámara apagada: ~3× real. Mismas semillas entre tandas = comparación pareada.
 
-**Base (`s143_base`, 200 partidas):** 57,9 s de media (p90 89), muerte súbita 8,5 %, remontadas 18 %, 69 % de los espejos los gana la misma composición. Fuera: Colibrí 61 %, Lanza de cristal 67 %, Tapón rebotín 34 %; ágil 41 %, pesado 56 %; 0 sanadores → 29 %, 2 → 60 %. **Vuelta 1:** Colibrí 250 → 215 · Arcoíris sanador 2240 → 2050 · Plumitas 950 → 1040 · Cintas 600 → 640 · Lanza de cristal 1000 → 880 · Tapón rebotín 650 → 760 · ágil ×0,96 · pesado ×1,20. Resultado de la verificación en [[Index/09 - Active Context]].
+**Base (`s143_base`, 200 partidas):** 57,9 s de media (p90 89), muerte súbita 8,5 %, remontadas 18 %, 69 % de los espejos los gana la misma composición. Fuera: Colibrí 61 %, Lanza de cristal 67 %, Tapón rebotín 34 %; ágil 41 %, pesado 56 %; 0 sanadores → 29 %, 2 → 60 %. **Vuelta 1:** Colibrí 250 → 215 · Arcoíris sanador 2240 → 2050 · Plumitas 950 → 1040 · Cintas 600 → 640 · Lanza de cristal 1000 → 880 · Tapón rebotín 650 → 760 · ágil ×0,96 · pesado ×1,20.
+
+**Vuelta 1 verificada (`s143_v1_full`) y vuelta 2 (S144):** quedaban fuera Plumitas 38,7 % (más daño no servía: es el que más daña y más KOs saca, pero muere tarde y queda último en pie) y Erizo 31 %. Vuelta 2: Plumitas recarga 2,4 → 2,15 s · Erizo daño 330 → 370. **`s144_v2_full`: ninguna parte fuera de meta** (Plumitas 45,8 %, Erizo 40 %, Colibrí 54,6 %, Bumerán 57,3 %; 59,3 s de media, muerte súbita 10,5 %, remontadas 18 %). Balance cerrado hasta que cambien las partes.
 
 ## 8b · La bajada pasa a ser Brawl (decisiones de Juan ⭐, cierre de S142)
 
@@ -113,7 +115,18 @@ Prefab `Resources/Prefabs/Brawl/BrawlFighter.prefab` (derivado de `MorimonchiAge
   - **Minerales**: prueba de daño por tiempo: cuanto más daño en el tiempo fijo, más Minerita.
 - **Perder un combate** = perder un **porcentaje** de lo juntado en la run (valor a calibrar).
 - **KO sin penalidad** por ahora. **Al terminar cada combate el equipo se cura el 40 % de su vida** (a regular); la vida se arrastra entre salas de la misma run.
+- **Provisorios que fijó la IA (S144, Juan: "decidilo vos, anotalo; falta toda la economía")** — viven en `ScriptableObjects/Brawl/BrawlRunRules.asset`: bajar cuesta **10 dabloons** · perder un combate = perder el **50 %** del botín y termina la run · **2-5 salas por tramo** al azar (Juan), la última siempre combate con el máximo de rivales · rivales: tramo 1 de 1 a 2, desde el tramo 3 de 2 a 3 · poder del rival ×0,85 en el tramo 1, +0,1 por tramo, tope ×1,5 (vida y daño) · botín = 1 por rival vencido × número de tramo (el puente lo paga ×5 en Minerita) · salas de prueba 15 % muñecos y 15 % minerales, 20 s; los muñecos curan al equipo el 30 % del daño que reciben; minerales: 1 de botín cada 4000 de daño. La arena vieja (`ArenaSandbox`) queda como escena de dev, desconectada de la bajada (Juan).
 - Base existente a reusar: la run por pisos (`ArenaRun`, `ArenaRunDirector`, `ArenaFloorPanel` — `Index/26`, `Index/22` Parte 9) y el puente tienda ↔ arena (`ExpeditionHandoff`, `ExpeditionBridge`, `ExpeditionPanelUITK` — `Index/24`). `BrawlMatch.StartMatch(seed, roster)` ya acepta el ADN del equipo.
+
+## 8c · Run de Brawl por tramos (implementada S144)
+
+**Flujo:** terminal de expedición en la tienda → elegir hasta 3 → `ExpeditionBridge` cobra `DescentCost` dabloons (si no alcanza, no baja; el panel lo muestra y deshabilita el botón) → `ExpeditionHandoff.GoToArena` carga `BrawlDemo` → `BrawlRunDirector` (solo si `CameFromStore`; si no, la demo sigue igual) arma la run → al salir `ReturnToStore(run.ToResult())` → el puente paga `PlayerSecured × 5` Minerita (ya no lo pone a 0 al perder: la run aplica la pérdida).
+
+**Piezas:** `BrawlRun` (Data, pura: tramos con 2-5 salas por semilla, vida 0-1 por id, botín, pérdida, `ToResult`) · `BrawlRoom` + `BrawlRoomKind {Combat, Dummies, Minerals}` + `BrawlRunState {Planning, Fighting, RoomResult, Over}` · `BrawlRunRulesSO` (todos los números; activo por `Activate/Current`, lo activan el puente en la tienda y el director en el Brawl) · `BrawlRunDirector` (World, único dueño; `AcceptTramo`/`NextRoom`/`Leave`, evento `Changed`) · `BrawlTrialRoom` (World: reloj de las salas de prueba, cura por golpe a muñecos, daño → botín) · `BrawlRunPanel` (UI, `BrawlRunPanel.uxml`/`BrawlRunPanelStyle.uss`).
+
+**Cambios al Brawl:** `BrawlMatch.Driven` (sin partida al arrancar ni revancha automática; el HUD oculta Nueva/Revancha), `StartMatch(seed, players, rivalCount)` (equipo propio de 1-3 + rivales minteados), `EndNow(winner)`; `BrawlFighter.Prime(power, health01)` (escala vida y daño, fija la vida inicial), `Dummy` (siempre congelado). El `StartMatch(seed, roster)` del arnés conserva el orden de azar.
+
+**Reglas:** se decide por tramo (no se sale a mitad); entre salas, resultado + "Siguiente sala"; al cerrar el tramo se muestra el siguiente con "Enfrentar" o "Salir con X". Vida arrastrada, +40 % tras cada combate ganado, KO sin penalidad. Perder un combate termina la run y quita el 50 % del botín. Números provisorios en 8b.
 
 ## 8 · Pendientes
 

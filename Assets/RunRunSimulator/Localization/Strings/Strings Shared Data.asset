@@ -1443,6 +1443,10 @@ MonoBehaviour:
     m_Key: ui.breeding.time.estimate.hours
     m_Metadata:
       m_Items: []
+  - m_Id: 27292319110955008
+    m_Key: ui.expedition.cost
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

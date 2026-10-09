@@ -6,29 +6,59 @@ tags: [script, system, expedition, bridge, monetization]
 
 **Ruta:** `Systems/Expedition/ExpeditionBridge.cs`
 
-**Responsabilidad:** Orquestador transiciones tienda↔arena. Aplica rewards: **S138** `mineritaPerMaterial=5`, MineritaGained = material × tasa.
+**Responsabilidad:** Orquestador de las transiciones tienda↔arena de la bajada. Cobra el costo de bajada en Dabloons, espera el flush a la nube antes de cambiar de escena y, al volver, aplica el resultado: Minerita por material, bajas (si permadeath), evolución por exploración y el evento `ExpeditionReturned`.
 
-## S138: Monetización
+## Campos Serializados
 
-**Campo:**
-```csharp
-[SerializeField, Min(1)] private int mineritaPerMaterial = 5;
-```
+| Campo | Tipo | Default | Descripción |
+|-------|------|---------|-------------|
+| `cloudSync` | `CloudSyncService` | — | Espera `StartupSyncDone` al volver |
+| `syncTimeoutSeconds` | `float` | 20 | Tope de espera de sync al volver |
+| `departFlushTimeout` | `float` | 5 | Tope de espera del flush antes de bajar |
+| `permadeathEnabled` | `bool` | false | Si true, mata caídos y, si se perdió, a todo el equipo |
+| `mineritaPerMaterial` | `int` | 5 | Tasa de Minerita por material |
+| `runRules` | `BrawlRunRulesSO` | — | `DescentCost` y activación de `Current` |
 
-**ApplyResult() — línea 81:**
-```csharp
-int minerita = result.Lost ? 0 : result.PlayerSecured * mineritaPerMaterial;
-```
+## Eventos y Métodos
 
-**Cambio:** Material del resultado (integer) se multiplica por tasa fija. PlayerSecured sigue siendo material (no se convierte).
+| Miembro | Descripción |
+|---------|-------------|
+| `OnDepartureRequested` (static) | `Action<IReadOnlyList<string>>`; lo dispara `RequestDeparture` |
+| `RequestDeparture(ids)` (static) | Dispara el evento; lo llama `ExpeditionPanelUITK` |
+| `Depart(ids)` | Cobra `DescentCost` con `Wallet.TrySpend(Dabloons)`. Si falla, avisa y no baja. Si pasa, inicia `DepartRoutine` |
+| `Depart()` | Botón Odin "Salir de expedición" (solo en Play); llama `Depart(null)` |
 
-**Ejemplo:** Aseguras 10 material → 10 × 5 = 50 Minerita.
+## Flujo de Bajada (`DepartRoutine`)
 
-## Métodos
+1. Si existe `GameManager.Instance`, espera `FlushToCloudAsync()` hasta `departFlushTimeout` (tiempo unscaled).
+2. Libera el cursor.
+3. `ExpeditionHandoff.GoToArena(ids)`.
 
-- `Depart(ids)` — Inicia bajada
-- `ApplyResult()` — Suma Minerita, mata caídos, registra exploraciones
+## Flujo de Vuelta (`ApplyResult`, desde `Start` si hay resultado)
+
+1. Espera `cloudSync.StartupSyncDone` hasta `syncTimeoutSeconds`.
+2. `TryConsumeResult`. Si no hay resultado, sale.
+3. Material = `PlayerSecured` (ya descontada la pérdida de la derrota). `Minerita += material × mineritaPerMaterial` con `Wallet.Add`.
+4. Si `permadeathEnabled`: `CreatureLifecycle.Kill` a los `FallenIds`; si `Lost`, a todo `TeamIds`. IDs no encontrados o ya muertos se ignoran.
+5. Si no hay derrota: `CreatureGrowth.RecordExploration` por cada miembro no caído. El umbral sale de `BreedingController.LifeStageTable.ExplorationsToEvolve` (3 si no hay tabla). Los que estaban en Slime marcan `touched`.
+6. Si `touched`: `GameEvents.RegistryChanged(registry)`. Por cada evolucionado: `GameEvents.CreatureFormChanged(dna)`.
+7. `GameEvents.ExpeditionReturned(ExpeditionReturn{...})`.
+
+## Notas
+
+- El cobro del costo ocurre en `Depart`, antes del flush: si el flush falla, el costo ya está cobrado.
+- `BrawlRunRulesSO.Current` se activa en `OnEnable` (tienda) y se desactiva en `OnDisable`, para que el panel pueda mostrar el costo antes de entrar a la arena.
+- `Depart` no revisa el horario: esa guarda vive solo en el botón de `ExpeditionPanelUITK`.
+- Con derrota, la Minerita se paga sobre el botín que quedó tras la pérdida.
 
 ## Conexiones
 
-- [[ExpeditionHandoff]], [[Wallet]], [[CreatureLifecycle]], [[GameEvents]]
+- [[ExpeditionHandoff]] — `GoToArena`, `TryConsumeResult`
+- [[ExpeditionPanelUITK]] — llama `RequestDeparture`
+- [[BrawlRunDirector]] — vuelve con `ReturnToStore(run.ToResult())`
+- [[BrawlRunRulesSO]] — `DescentCost`, `Activate`/`Deactivate`
+- [[GameManager]] — `FlushToCloudAsync`, `Registry`
+- [[CloudSyncService]] — `StartupSyncDone`
+- [[Wallet]] — `TrySpend(Dabloons)`, `Add(Minerita)`
+- [[CreatureLifecycle]], [[CreatureGrowth]], [[BreedingController]] — muerte, exploración, tabla de etapas
+- [[GameEvents]] — `RegistryChanged`, `CreatureFormChanged`, `ExpeditionReturned`

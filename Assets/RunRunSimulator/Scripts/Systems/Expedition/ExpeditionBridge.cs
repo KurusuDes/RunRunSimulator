@@ -13,6 +13,7 @@ public class ExpeditionBridge : MonoBehaviour
     [SerializeField, Min(0f)] private float departFlushTimeout = 5f;
     [SerializeField] private bool permadeathEnabled = false;
     [SerializeField, Min(1)] private int mineritaPerMaterial = 5;
+    [SerializeField] private BrawlRunRulesSO runRules;
 
     private bool departing;
 
@@ -22,11 +23,13 @@ public class ExpeditionBridge : MonoBehaviour
     private void OnEnable()
     {
         OnDepartureRequested += Depart;
+        if (runRules != null) BrawlRunRulesSO.Activate(runRules);
     }
 
     private void OnDisable()
     {
         OnDepartureRequested -= Depart;
+        BrawlRunRulesSO.Deactivate(runRules);
     }
 
     private void Start()
@@ -43,6 +46,12 @@ public class ExpeditionBridge : MonoBehaviour
     public void Depart(IReadOnlyList<string> ids)
     {
         if (departing) return;
+        int cost = runRules != null ? runRules.DescentCost : 0;
+        if (cost > 0 && !Wallet.TrySpend(Currency.Dabloons, cost, "expedition"))
+        {
+            Debug.LogWarning($"[ExpeditionBridge] Dabloons insuficientes para bajar ({cost})");
+            return;
+        }
         departing = true;
         StartCoroutine(DepartRoutine(ids));
     }
@@ -77,7 +86,7 @@ public class ExpeditionBridge : MonoBehaviour
 
         if (!ExpeditionHandoff.TryConsumeResult(out ExpeditionResult result)) yield break;
 
-        int material = result.Lost ? 0 : result.PlayerSecured;
+        int material = result.PlayerSecured;
         int minerita = material * mineritaPerMaterial;
         if (minerita > 0) Wallet.Add(Currency.Minerita, minerita, "expedition");
 

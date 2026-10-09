@@ -32,7 +32,7 @@ public struct ExpeditionReturn
 public static class ExpeditionHandoff
 {
     public const string StoreScene = "GameScene";
-    public const string ArenaScene = "ArenaSandbox";
+    public const string ArenaScene = "BrawlDemo";
 
     public static bool CameFromStore { get; private set; }
     public static bool HasResult { get; private set; }

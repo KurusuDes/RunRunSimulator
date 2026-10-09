@@ -38,6 +38,7 @@ public class BrawlMatch : MonoBehaviour
     public static event System.Action<IReadOnlyList<BrawlFighter>> OnRosterSpawned;
     public static event System.Action<BrawlFighter> OnLastStand;
 
+    public bool Driven { get; set; }
     public BrawlMatchPhase Phase { get; private set; }
     public float PhaseTime => Time.time - phaseStartedAt;
     public float TimeLeft { get; private set; }
@@ -78,7 +79,7 @@ public class BrawlMatch : MonoBehaviour
 
         foreach (var survivor in fighters)
         {
-            if (survivor == null || survivor.Team != team || !survivor.IsAlive || lastStanders.Contains(survivor)) continue;
+            if (survivor == null || survivor.Team != team || survivor.Dummy || !survivor.IsAlive || lastStanders.Contains(survivor)) continue;
             lastStanders.Add(survivor);
             survivor.AddShield(survivor.MaxHp * tuning.LastStandShield, tuning.LastStandSeconds);
             survivor.ApplyDamageBoost(tuning.LastStandBoost, tuning.LastStandSeconds);
@@ -92,6 +93,7 @@ public class BrawlMatch : MonoBehaviour
     private void Start()
     {
         Application.runInBackground = true;
+        if (Driven) return;
         StartMatch(randomizeEachPlay ? System.Environment.TickCount : seed);
     }
 
@@ -109,7 +111,7 @@ public class BrawlMatch : MonoBehaviour
                 UpdateSuddenDeath();
                 break;
             case BrawlMatchPhase.Ended:
-                if (autoRestart && PhaseTime >= tuning.EndHoldSeconds) NewMatch();
+                if (autoRestart && !Driven && PhaseTime >= tuning.EndHoldSeconds) NewMatch();
                 break;
         }
     }
@@ -123,6 +125,22 @@ public class BrawlMatch : MonoBehaviour
     }
 
     public void StartMatch(int matchSeed, IReadOnlyList<CreatureDNA> roster = null)
+    {
+        var filter = PrepareArena(matchSeed);
+        var dnas = roster != null ? new List<CreatureDNA>(roster) : MintRoster();
+        SpawnRoster(dnas, Mathf.Min(teamSize, dnas.Count), teamSize, Mathf.Clamp(dnas.Count - teamSize, 0, teamSize), filter);
+    }
+
+    public void StartMatch(int matchSeed, IReadOnlyList<CreatureDNA> players, int rivalCount)
+    {
+        var filter = PrepareArena(matchSeed);
+        rivalCount = Mathf.Clamp(rivalCount, 0, teamSize);
+        var dnas = new List<CreatureDNA>(players);
+        dnas.AddRange(MintTeam(rivalCount));
+        SpawnRoster(dnas, players.Count, players.Count, rivalCount, filter);
+    }
+
+    private NavMeshQueryFilter PrepareArena(int matchSeed)
     {
         ClearFighters();
         BrawlProjectile.ClearAll();
@@ -139,8 +157,11 @@ public class BrawlMatch : MonoBehaviour
             palette.ApplyIndex(palette.IndexForSeed(Seed));
             palette.SetArenaCenter(layout.Center);
         }
+        return filter;
+    }
 
-        var dnas = roster != null ? new List<CreatureDNA>(roster) : MintRoster();
+    private void SpawnRoster(List<CreatureDNA> dnas, int playerCount, int rivalStart, int rivalCount, NavMeshQueryFilter filter)
+    {
         lastRoster = dnas;
 
         TimeLeft = tuning.RoundSeconds;
@@ -151,8 +172,8 @@ public class BrawlMatch : MonoBehaviour
         KnockOuts = 0;
         Winner = ExpeditionTeam.None;
 
-        SpawnTeam(dnas, 0, Mathf.Min(teamSize, dnas.Count), ExpeditionTeam.Player, filter);
-        SpawnTeam(dnas, teamSize, Mathf.Clamp(dnas.Count - teamSize, 0, teamSize), ExpeditionTeam.Rival, filter);
+        SpawnTeam(dnas, 0, playerCount, ExpeditionTeam.Player, filter);
+        SpawnTeam(dnas, rivalStart, rivalCount, ExpeditionTeam.Rival, filter);
 
         LogStart();
         OnRosterSpawned?.Invoke(fighters);
@@ -172,18 +193,22 @@ public class BrawlMatch : MonoBehaviour
 
     private List<CreatureDNA> MintRoster()
     {
+        var result = MintTeam(teamSize);
+        result.AddRange(MintTeam(teamSize));
+        return result;
+    }
+
+    private List<CreatureDNA> MintTeam(int count)
+    {
         var result = new List<CreatureDNA>();
-        for (int team = 0; team < 2; team++)
+        var wings = new HashSet<string>();
+        for (int i = 0; i < count; i++)
         {
-            var wings = new HashSet<string>();
-            for (int i = 0; i < teamSize; i++)
-            {
-                var dna = MintRandom();
-                for (int retry = 0; retry < MaxWingRerolls && wings.Contains(dna.WingID); retry++)
-                    dna = MintRandom();
-                wings.Add(dna.WingID);
-                result.Add(dna);
-            }
+            var dna = MintRandom();
+            for (int retry = 0; retry < MaxWingRerolls && wings.Contains(dna.WingID); retry++)
+                dna = MintRandom();
+            wings.Add(dna.WingID);
+            result.Add(dna);
         }
         return result;
     }
@@ -285,14 +310,25 @@ public class BrawlMatch : MonoBehaviour
         int red = AliveOf(ExpeditionTeam.Rival);
         if (blue > 0 && red > 0) return false;
 
-        Winner = blue > 0 ? ExpeditionTeam.Player : red > 0 ? ExpeditionTeam.Rival : ExpeditionTeam.None;
+        Conclude(blue > 0 ? ExpeditionTeam.Player : red > 0 ? ExpeditionTeam.Rival : ExpeditionTeam.None, blue, red);
+        return true;
+    }
+
+    public void EndNow(ExpeditionTeam winner)
+    {
+        if (Phase == BrawlMatchPhase.Idle || Phase == BrawlMatchPhase.Ended) return;
+        Conclude(winner, AliveOf(ExpeditionTeam.Player), AliveOf(ExpeditionTeam.Rival));
+    }
+
+    private void Conclude(ExpeditionTeam winner, int blue, int red)
+    {
+        Winner = winner;
         foreach (var fighter in fighters)
             if (fighter != null) fighter.Frozen = true;
 
         SetPhase(BrawlMatchPhase.Ended);
         LogEnd(blue, red);
         OnMatchEnded?.Invoke(Winner);
-        return true;
     }
 
     private int AliveOf(ExpeditionTeam team)

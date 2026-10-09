@@ -1413,11 +1413,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 19177877371674631
-    m_Localized: "Back from floor {0} \xB7 +{1} Minerita \xB7 {2} down"
+    m_Localized: "Back after {0} rooms \xB7 +{1} Minerita"
     m_Metadata:
       m_Items: []
   - m_Id: 19241043774464000
-    m_Localized: "Lost on floor {0} \xB7 no loot \xB7 {1} down"
+    m_Localized: "Lost after {0} rooms \xB7 kept {1} Minerita"
     m_Metadata:
       m_Items: []
   - m_Id: 21057648338722816
@@ -1454,6 +1454,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 21463665564246022
     m_Localized: Ready in ~{0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27292319110955008
+    m_Localized: '{0} dabloons'
     m_Metadata:
       m_Items: []
   references:

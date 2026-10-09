@@ -44,6 +44,7 @@ public class BrawlFighter : MonoBehaviour
     private float stunUntil;
     private BrawlFighter taunter;
     private float tauntUntil;
+    private bool frozen;
 
     public static IReadOnlyList<BrawlFighter> All => all;
     public static event Action<BrawlFighter> OnBound;
@@ -81,7 +82,9 @@ public class BrawlFighter : MonoBehaviour
     public float BaseSpeed { get; private set; }
     public float HealFactor { get; set; } = 1f;
     public float RoundDamageFactor { get; set; } = 1f;
-    public bool Frozen { get; set; }
+    public bool Frozen { get => frozen || Dummy; set => frozen = value; }
+    public bool Dummy { get; set; }
+    public float Power { get; private set; } = 1f;
     public BrawlFighter LastAttacker { get; private set; }
     public float LastHurtAt { get; private set; } = -1000f;
     public float DamageDealt { get; private set; }
@@ -101,7 +104,7 @@ public class BrawlFighter : MonoBehaviour
         }
     }
 
-    public float DamageMultiplier => (1f + (Time.time < boostUntil ? boostValue : 0f)) * RoundDamageFactor;
+    public float DamageMultiplier => (1f + (Time.time < boostUntil ? boostValue : 0f)) * RoundDamageFactor * Power;
 
     public BrawlFighter Taunter => Time.time < tauntUntil && taunter != null && taunter.IsAlive ? taunter : null;
 
@@ -114,6 +117,8 @@ public class BrawlFighter : MonoBehaviour
     {
         DNA = dna;
         Team = team;
+        Power = 1f;
+        Dummy = false;
 
         visualizer.SetBank(bank);
         visualizer.SetFurDatabase(fur);
@@ -150,6 +155,13 @@ public class BrawlFighter : MonoBehaviour
         brain.Init(this, tuning);
 
         OnBound?.Invoke(this);
+    }
+
+    public void Prime(float power, float health01)
+    {
+        Power = Mathf.Max(0.05f, power);
+        MaxHp *= Power;
+        Hp = Mathf.Clamp(MaxHp * Mathf.Clamp01(health01), 1f, MaxHp);
     }
 
     public void Despawn()

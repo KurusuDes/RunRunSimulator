@@ -161,6 +161,9 @@ public class BrawlHud : MonoBehaviour
 
     private void RebuildCards(IReadOnlyList<BrawlFighter> fighters)
     {
+        var buttons = BrawlMatch.Current != null && BrawlMatch.Current.Driven ? DisplayStyle.None : DisplayStyle.Flex;
+        newButton.style.display = buttons;
+        rematchButton.style.display = buttons;
         cards.Clear();
         blueCards.Clear();
         redCards.Clear();

@@ -1410,11 +1410,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 19177877371674631
-    m_Localized: "Volviste del piso {0} \xB7 +{1} Minerita \xB7 {2} ca\xEDdas"
+    m_Localized: "Volviste tras {0} salas \xB7 +{1} Minerita"
     m_Metadata:
       m_Items: []
   - m_Id: 19241043774464000
-    m_Localized: "Perdiste en el piso {0} \xB7 sin bot\xEDn \xB7 {1} ca\xEDdas"
+    m_Localized: "Perdiste tras {0} salas \xB7 te llev\xE1s {1} Minerita"
     m_Metadata:
       m_Items: []
   - m_Id: 21057648338722816
@@ -1451,6 +1451,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 21463665564246022
     m_Localized: Listo en ~{0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27292319110955008
+    m_Localized: '{0} dabloons'
     m_Metadata:
       m_Items: []
   references:

@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Theme.uss" />
+    <Style src="BrawlRunPanelStyle.uss" />
+    <ui:VisualElement name="run-root" class="mm-theme mm-theme--night run" picking-mode="Ignore">
+        <ui:VisualElement name="run-strip" class="run-strip" picking-mode="Ignore">
+            <ui:VisualElement class="run-strip__box" picking-mode="Ignore">
+                <ui:VisualElement class="run-bg" picking-mode="Ignore" />
+                <ui:Label name="run-strip-title" text="" class="run-strip__title" picking-mode="Ignore" />
+                <ui:VisualElement name="run-strip-rooms" class="run-rooms run-rooms--strip" picking-mode="Ignore" />
+                <ui:Label name="run-strip-trial" text="" class="run-strip__trial" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="run-card-wrap" class="run-card-wrap" picking-mode="Ignore">
+            <ui:VisualElement name="run-card" class="run-card">
+                <ui:VisualElement class="run-bg" picking-mode="Ignore" />
+                <ui:Label name="run-title" text="" class="run-title" picking-mode="Ignore" />
+                <ui:VisualElement name="run-rooms" class="run-rooms" picking-mode="Ignore" />
+                <ui:Label name="run-info" text="" class="run-info" picking-mode="Ignore" />
+                <ui:VisualElement class="run-buttons" picking-mode="Ignore">
+                    <ui:Button name="run-go" text="Enfrentar tramo" focusable="false" class="run-btn run-btn--go" />
+                    <ui:Button name="run-leave" text="Volver a la tienda" focusable="false" class="run-btn" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

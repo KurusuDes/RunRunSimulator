@@ -22792,6 +22792,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.MonchiVisualizer
   modelRoot: {fileID: 1756866069}
+  faceTransition: {fileID: 0}
+  flashMaterial: {fileID: 0}
 --- !u!43 &965420620
 Mesh:
   m_ObjectHideFlags: 0
@@ -23058,6 +23060,8 @@ MonoBehaviour:
   syncTimeoutSeconds: 20
   departFlushTimeout: 5
   permadeathEnabled: 0
+  mineritaPerMaterial: 5
+  runRules: {fileID: 11400000, guid: aeed90b68c55acf4bb3028e2a5c88ea0, type: 2}
 --- !u!4 &1038142491
 Transform:
   m_ObjectHideFlags: 0

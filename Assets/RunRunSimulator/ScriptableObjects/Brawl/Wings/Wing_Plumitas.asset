@@ -25,7 +25,7 @@ MonoBehaviour:
   Range: 11
   Damage: 1040
   Windup: 0.45
-  Reload: 2.4
+  Reload: 2.15
   Count: 1
   Spread: 0
   Angle: 100
