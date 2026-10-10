@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -42,6 +43,8 @@ public class ArenaPaletteApplier : MonoBehaviour
     private readonly Dictionary<(ArenaPaletteSlot Slot, int Variant), Texture2D> ramps = new();
     private Vector3? explicitArenaCenter;
 
+    public event Action<ArenaPaletteSO> Applied;
+
     public IReadOnlyList<ArenaPaletteSO> Palettes => palettes;
     public ArenaPaletteSO Current { get; private set; }
     public int CurrentIndex { get; private set; } = -1;
@@ -72,6 +75,7 @@ public class ArenaPaletteApplier : MonoBehaviour
 
         ApplyEnvironment(palette);
         PushArenaFog(palette);
+        Applied?.Invoke(palette);
     }
 
     public void SetArenaCenter(Vector3 center)

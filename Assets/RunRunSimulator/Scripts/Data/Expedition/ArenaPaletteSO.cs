@@ -63,6 +63,12 @@ public class ArenaPaletteSO : SerializedScriptableObject
     [Range(0f, 1f)] public float ArenaFogStrength = 0.95f;
     [Range(0f, 1f)] public float ArenaFogDim = 0.75f;
 
+    [Title("Ambiente")]
+    public bool Fireflies;
+    public bool LightShafts = true;
+    public bool FairyDust = true;
+    public Color DustColor = new Color(1f, 0.86f, 0.55f);
+
     public Ramp RampFor(ArenaPaletteSlot slot)
     {
         switch (slot)

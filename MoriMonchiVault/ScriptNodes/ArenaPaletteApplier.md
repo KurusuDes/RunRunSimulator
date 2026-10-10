@@ -6,7 +6,7 @@ tags: [script, world, expedition, graphics, material, palette]
 
 **Ruta:** `World/Expedition/ArenaPaletteApplier.cs`
 
-**Responsabilidad:** Gestor de paletas de arena que compila rampas a texturas, remapea materiales de la escena vía substitución de paleta, y aplica globales de shader para niebla radial. Instancia materiales por original (cacheo), clasifica renderer materials por nombre, aplica sol/ambient/fog/cielo. S111: soporte para material de agua. S113: niebla radial (ArenaFog) empujada a shaders globales por paleta, centro configurable. S114: variantes de follaje (rampas alternativas por índice procedural para pasto y árboles). **S117:** conserva shader propio del material de pasto (_TrampleBend), fuerza variante 0 para ese material, clasifica "Blades" como Ground, marca _SnowReceiver en instancias de Ground, publica _ArenaSnowAmount.
+**Responsabilidad:** Gestor de paletas de arena que compila rampas a texturas, remapea materiales de la escena vía substitución de paleta, y aplica globales de shader para niebla radial. Instancia materiales por original (cacheo), clasifica renderer materials por nombre, aplica sol/ambient/fog/cielo. S111: soporte para material de agua. S113: niebla radial (ArenaFog) empujada a shaders globales por paleta, centro configurable. S114: variantes de follaje (rampas alternativas por índice procedural para pasto y árboles). **S117:** conserva shader propio del material de pasto (_TrampleBend), fuerza variante 0 para ese material, clasifica "Blades" como Ground, marca _SnowReceiver en instancias de Ground, publica _ArenaSnowAmount. **S147:** evento `Applied` disparado al final de `Apply`, para que el ambiente (`ArenaAmbience`) reaccione sin que este script lo conozca.
 
 ## Campos Serializados
 
@@ -27,6 +27,10 @@ tags: [script, world, expedition, graphics, material, palette]
 - `Current → ArenaPaletteSO` — paleta activa (o null)
 - `CurrentIndex → int` — índice de Current (init -1)
 
+## Eventos Públicos
+
+- **S147:** `event Action<ArenaPaletteSO> Applied` — se dispara al final de `Apply(palette)` con la paleta aplicada. Lo consume `ArenaAmbience`.
+
 ## Métodos Públicos
 
 - `IndexForSeed(int seed) → int` — retorna `Abs(seed) % palettes.Count` (-1 si vacío)
@@ -37,6 +41,7 @@ tags: [script, world, expedition, graphics, material, palette]
   3. Itera roots → Renderers → Remap(renderer)
   4. ApplyEnvironment(palette) — RenderSettings + Sun + Sky + **S117:** _ArenaSnowAmount
   5. PushArenaFog(palette) — **S113:** push globales de niebla radial
+  6. **S147:** `Applied?.Invoke(palette)` — notifica el cambio de paleta
   
 - **S113:** `SetArenaCenter(Vector3 center) → void` — fija centro explícito para niebla, actualiza PushArenaFog
 
@@ -116,7 +121,7 @@ tags: [script, world, expedition, graphics, material, palette]
 **OnDisable (S113):**
 - Setea ArenaFogStrength, Dim, Outer → 0f para desactivar niebla
 
-## Invariantes S102+S111+S113+S114+S117
+## Invariantes S102+S111+S113+S114+S117+S147
 
 - **Cacheo por original:** cada material original → una instancia per slot
 - **Rampas 256x1:** evaluadas en Evaluate() para suavidad
@@ -130,10 +135,12 @@ tags: [script, world, expedition, graphics, material, palette]
 - **Pares siempre (S114):** variante pares en lista → índice procedural % VariantCount siempre retorna válido
 - **Pasto trampled (S117):** material con _TrampleBend conserva shader, fuerza variant=0, se marca _SnowReceiver
 - **Nieve global (S117):** _ArenaSnowAmount = 1.0 si paleta.Snow=true, 0.0 sino
+- **Applied al final (S147):** `Applied` se dispara después de Remap, ApplyEnvironment y PushArenaFog; los suscriptores ven la paleta ya aplicada
 
 ## Conexiones
 
 - [[ArenaPaletteSO]] (lee paletas, rampas, ArenaFog*, Snow, FoliageVariants)
+- [[ArenaAmbience]] (S147: suscribe `Applied` para luciérnagas, polvo de hada y rayos)
 - [[ArenaSandbox]] (llama ApplyIndex en BuildRoom)
 - [[WorldEnums]] (ArenaPaletteSlot enum)
 - [[ArenaPalette.mat]], [[ArenaPaletteWater.mat]] (template materials)
@@ -142,4 +149,4 @@ tags: [script, world, expedition, graphics, material, palette]
 
 ## Vinculado a
 
-[[Index/20 - MVP Combate]], [[Index/22 - Arena (S103-S104)]], [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]], S114, S117
+[[Index/20 - MVP Combate]], [[Index/22 - Arena (S103-S104)]], [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]], [[Index/32 - Demo Brawl 3v3 arcade]] (8f), S114, S117, S147

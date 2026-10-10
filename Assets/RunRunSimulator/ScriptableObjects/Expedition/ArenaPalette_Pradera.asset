@@ -22,6 +22,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   DisplayName: Pradera
+  Snow: 0
   Ground:
     Dark: {r: 0.22, g: 0.42, b: 0.16, a: 1}
     Mid: {r: 0.45, g: 0.66, b: 0.28, a: 1}
@@ -77,3 +78,7 @@ MonoBehaviour:
   ArenaFogTint: {r: 0.0325, g: 0.051999997, b: 0.049, a: 1}
   ArenaFogStrength: 0.92
   ArenaFogDim: 0.88
+  Fireflies: 0
+  LightShafts: 1
+  FairyDust: 1
+  DustColor: {r: 1, g: 0.88, b: 0.55, a: 1}

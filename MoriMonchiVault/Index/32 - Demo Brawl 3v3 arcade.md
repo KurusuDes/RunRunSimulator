@@ -126,7 +126,26 @@ Prefab `Resources/Prefabs/Brawl/BrawlFighter.prefab` (derivado de `MorimonchiAge
 
 **Cambios al Brawl:** `BrawlMatch.Driven` (sin partida al arrancar ni revancha automática; el HUD oculta Nueva/Revancha), `StartMatch(seed, players, rivalCount)` (equipo propio de 1-3 + rivales minteados), `EndNow(winner)`; `BrawlFighter.Prime(power, health01)` (escala vida y daño, fija la vida inicial), `Dummy` (siempre congelado). El `StartMatch(seed, roster)` del arnés conserva el orden de azar.
 
-**Reglas:** se decide por tramo (no se sale a mitad); entre salas, resultado + "Siguiente sala"; al cerrar el tramo se muestra el siguiente con "Enfrentar" o "Salir con X". Vida arrastrada, +40 % tras cada combate ganado, KO sin penalidad. Perder un combate termina la run y quita el 50 % del botín. Números provisorios en 8b.
+**Reglas:** se decide por tramo (no se sale a mitad); al cerrar el tramo se muestra el siguiente con "Enfrentar" o "Salir con X". Vida arrastrada, +40 % tras cada combate ganado, KO sin penalidad. Perder un combate termina la run y quita el 50 % del botín. Números provisorios en 8b. (Entre salas ya no hay tarjeta: ver 8e.)
+
+## 8d · Tienda ↔ Brawl con UI (S145)
+
+- **Rol sugerido** (Juan ⭐: "una guía para balancear el equipo, no un rol cerrado"): sale de los 3 poderes. Ala = Apoyo si cura (Colibrí), si no Daño; cuerno y espalda = `BrawlSkillSO.Role`. 3 iguales → rol único; 2 + 1 → "Mayoría/Minoría"; 3 distintos → **Equilibrado**. Dueño: `BrawlKitProfile` (Data, puro); píldora `BrawlRolePill`.
+- **Terminal de bajada = armar equipo** (`ExpeditionCardBuilder`): tarjeta con retrato, rol y 3 poderes; aviso "Sin apoyo" si nadie cura. **Ficha**: rol sugerido + poder de cada parte. **Vuelta**: `ExpeditionReturnCardUITK` (panel `ExpeditionReturn = 9`), Minerita ganada/perdida, salas, pips de exploración de cada blobim o "¡Creció!".
+- **Salas de prueba**: muñecos = espantapájaros (`BrawlScarecrowProp`, `BrawlTrialProps`); minerales = bonus de daño, la prueba arranca con el primer golpe o a los 15 s, piso 1 de botín. **Empate = victoria.** Tasa `MineritaPerLoot = 5` en `BrawlRunRulesSO`.
+
+## 8e · Flujo estilo Another Door (S146)
+
+- **Blobims** (Juan ⭐: "solo el ataque básico y el cuernito"): `BrawlKitProfile.BackLocked` → sin espalda hasta crecer; "?" en tarjeta, ficha y HUD; la vuelta muestra "Nuevo poder: X" al que creció (verificado en S147).
+- **Sin tarjeta entre salas** (Juan: "una vez te comiteas al tramo no es necesario mostrarlo"): estado `Transition`; Planning → Transition (`VeilCoverSeconds` 1,1) → Fighting → RoomResult (`LootBeatSeconds` 1,6) → Transition… → Planning al cerrar el tramo; derrota → Over. `BrawlRunVeil` (velo "Sala N de M" con glifo) y `BrawlRunHud` ("Faltan N salas", mochila con Minerita, cristales que vuelan al ganar). Glifos por sala: `BrawlRoomGlyphsSO` (calavera 1/2/3 rivales, mineral, corazón).
+- Los tiempos 1,1 s y 1,6 s quedan como provisorios de la IA (S147).
+
+## 8f · Atmósfera por paleta (S147)
+
+**Regla:** la paleta de la sala decide el ambiente. Pradera y Otoño = día con halos de sol y polvo de hada dorado/ámbar; **Crepúsculo = noche con luciérnagas** (sin halos ni polvo); Nevado = halos y polvo helado. Flags en `ArenaPaletteSO` (sección Ambiente: `Fireflies`, `LightShafts`, `FairyDust`, `DustColor`); `ArenaPaletteApplier.Applied` avisa; `ArenaAmbience` (en `Environment/ArenaPalette` de `BrawlDemo`) prende/apaga y hace que luciérnagas y polvo sigan a `ArenaTargetGroup` (la cámara del Brawl encuadra ~15-25 m, el anillo viejo de 16-44 m nunca entraba en cuadro).
+
+- **Luciérnagas**: círculo r 14 lleno, 20/s, máx 220, tamaño 0,2-0,4, prewarm. **Polvo de hada** (Juan: "cúmulos de brillitos"): `Environment/FairyDust` = emisor invisible (caja 26×2,2×26, 2,4/s, vida 6-9 s) con sub-emisor de nacimiento `Sparkles` (22/s, esfera 0,45, tamaño 0,12-0,26, titila) y material `ArenaFirefly`. **Halos**: `ArenaShapeShafts` en las 5 formas con 3-5 rayos, escala 0,45-0,7, margen 4.
+- **Post proceso "triple A"** (perfil compartido `ArenaAtmosphere`, Juan: mantenerlo): DOF **Bokeh** foco 30 m, focal 80, f/3,2 (miniatura: primer plano y fondo suaves, la pelea nítida); bloom umbral 0,9, intensidad 0,75, tinte cálido; contraste 12, saturación 8, viñeta 0,3; **Shadows/Midtones/Highlights** nuevo (sombras frías, luces cálidas). Ya había SSAO y sombras suaves en `PC_Renderer`.
 
 ## 8 · Pendientes
 
@@ -134,4 +153,6 @@ Prefab `Resources/Prefabs/Brawl/BrawlFighter.prefab` (derivado de `MorimonchiAge
 - `BrawlProjectile.cs` quedó en 431 líneas (sobre el tope de ~400): partir la parte visual si vuelve a crecer.
 - Plantillas aún más finas cuando los VFX estén validados; globos de habilidad que se pisan cuando dos luchadores están pegados.
 - Sonido; más tandas de balance por familia de habilidad (hoy solo por ala); pantalla para que el jugador arme su equipo.
-- Árboles altos tapan a veces (se ve la silueta).
+- Árboles altos tapan a veces (se ve la silueta); en Pradera la copa tapó la pelea en una captura de S147.
+- Halos amarillos en todas las paletas (el material es compartido); teñirlos con `SunColor` si en Nevado se ven fuera de tono.
+- Textos del Brawl sin localizar: se posterga hasta que entre la UI comprada (Juan, S147: la UI actual es temporal).

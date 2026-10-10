@@ -78,3 +78,7 @@ MonoBehaviour:
   ArenaFogTint: {r: 0.038999997, g: 0.051999997, b: 0.077, a: 1}
   ArenaFogStrength: 0.92
   ArenaFogDim: 0.88
+  Fireflies: 0
+  LightShafts: 1
+  FairyDust: 1
+  DustColor: {r: 0.78, g: 0.9, b: 1, a: 1}

@@ -62,7 +62,7 @@ Ninguno. Acceso vía eventos estáticos (`BrawlMatch.OnPhaseChanged`, etc.)
 | `RefreshCountdown()` | Muestra countdown (3, 2, 1) |
 | `ShowBanner()` | Muestra banner con animación pop |
 | `HideBanner()` | Oculta banner |
-| `MvpText()` | Calcula texto MVP (daño máx, curaciones, KOs) |
+| `MvpText(BrawlMatch, ExpeditionTeam winner)` | Calcula texto MVP. **S147:** solo elige entre los fighters del equipo ganador; si el resultado es empate (`None`), considera a todos |
 
 El reloj y la velocidad ya no los actualiza `BrawlHud`: los refresca `hudClock.Refresh(match)` (ver `BrawlHudClock`).
 
@@ -155,3 +155,7 @@ brawl-root
 ## Notas S146
 
 - En `Driven` el cierre de partida no muestra cartel ni MVP: `HandleEnded` solo oculta el banner. La bajada decide qué sigue (`BrawlRunDirector` pasa a `RoomResult` u `Over`), y lo muestran `BrawlRunHud` y `BrawlRunPanel`.
+
+## Notas S147
+
+- El MVP del banner de fin sale solo del equipo ganador (`MvpText` filtra por `Team == winner`). En empate (`None`) se evalúan todos los fighters. Antes el MVP era global.

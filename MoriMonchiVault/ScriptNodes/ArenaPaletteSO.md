@@ -6,7 +6,7 @@ tags: [script, data, scriptableobject, expedition, palette]
 
 **Ruta:** `Data/Expedition/ArenaPaletteSO.cs`
 
-**Responsabilidad:** Asset ScriptableObject que define una paleta de color para una escena de arena. Contiene rampas de colores (Dark/Mid/Light) por tipo de material, tuning de iluminación/ambiente/fog/cielo, y parámetros de niebla radial. Serializado vía Odin para edición en Inspector. S113: niebla radial (ArenaFog*) configurable por paleta. S114: variantes de follaje (rampas alternativas para árboles y pasto). **S117:** flag de nieve para escenas nevadas (Nevado).
+**Responsabilidad:** Asset ScriptableObject que define una paleta de color para una escena de arena. Contiene rampas de colores (Dark/Mid/Light) por tipo de material, tuning de iluminación/ambiente/fog/cielo, y parámetros de niebla radial. Serializado vía Odin para edición en Inspector. S113: niebla radial (ArenaFog*) configurable por paleta. S114: variantes de follaje (rampas alternativas para árboles y pasto). **S117:** flag de nieve para escenas nevadas (Nevado). **S147:** sección Ambiente (luciérnagas, rayos de luz, polvo de hada y su color).
 
 ## Struct Ramp
 
@@ -58,6 +58,12 @@ Cada ramp está pre-cargada con colores específicos por escena (pradera, desier
 - `ArenaFogStrength` (float, [0-1], default 0.95) — intensidad del efecto
 - `ArenaFogDim` (float, [0-1], default 0.75) — dimming de periféricos (Border/Surround)
 
+**Ambiente (S147):**
+- `Fireflies` (bool, default false) — prende las luciérnagas (`ArenaAmbience.fireflies`)
+- `LightShafts` (bool, default true) — habilita los rayos de luz (`ArenaShapeShafts.enabled`)
+- `FairyDust` (bool, default true) — prende el polvo de hada (`ArenaAmbience.fairyDust`)
+- `DustColor` (Color, default 1, 0.86, 0.55 ámbar) — tiñe los brillitos del polvo de hada
+
 ## Métodos Públicos
 
 | Método | Retorna | Descripción |
@@ -66,7 +72,7 @@ Cada ramp está pre-cargada con colores específicos por escena (pradera, desier
 | `RampFor(ArenaPaletteSlot slot, int variant)` | `Ramp` | **S114:** Ramp con variante para Foliage/Grass; otros slots ignoran variant |
 | `VariantCount` | `int` | Cantidad de variantes disponibles (length de FoliageVariants) |
 
-## Invariantes S102+S111+S113+S114+S117
+## Invariantes S102+S111+S113+S114+S117+S147
 
 - **7 slots de material:** correspondencia 1:1 con enum ArenaPaletteSlot
 - **Colores precargados:** valores RGB editables en Inspector (no procedurales)
@@ -74,11 +80,13 @@ Cada ramp está pre-cargada con colores específicos por escena (pradera, desier
 - **ArenaFog:** parámetros globales de niebla radial (aplicados por ArenaPaletteApplier.PushArenaFog)
 - **FoliageVariants:** pares de folaje siempre indexados módulo a VariantCount
 - **Snow flag (S117):** true solo en Nevado; publica _ArenaSnowAmount=1.0; shader lee para aplicar efecto de nieve
+- **Ambiente (S147):** los flags Fireflies/LightShafts/FairyDust y DustColor son data pura; los aplica `ArenaAmbience` al recibir `ArenaPaletteApplier.Applied`
 - **No instancia:** es un asset de data, no prefab
 
 ## Conexiones
 
-- [[ArenaPaletteApplier]] (lee paleta, compila rampas a Texture2D 256x1, push ArenaFog globales, publica _ArenaSnowAmount según Snow)
+- [[ArenaPaletteApplier]] (lee paleta, compila rampas a Texture2D 256x1, push ArenaFog globales, publica _ArenaSnowAmount según Snow, dispara `Applied`)
+- [[ArenaAmbience]] (S147: lee Fireflies, LightShafts, FairyDust, DustColor al recibir `Applied`)
 - [[WorldEnums]] (ArenaPaletteSlot enum)
 - [[ArenaSandbox]] (lista de palettes, selección por semilla o índice)
 - [[ArenaShapeDressing]] (usa variantes procedurales para pasto de borde)
@@ -86,4 +94,4 @@ Cada ramp está pre-cargada con colores específicos por escena (pradera, desier
 
 ## Vinculado a
 
-[[Index/20 - MVP Combate]], [[Index/22 - Arena (S103-S104)]], [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]], S114, S117
+[[Index/20 - MVP Combate]], [[Index/22 - Arena (S103-S104)]], [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]], [[Index/32 - Demo Brawl 3v3 arcade]] (8f), S114, S117, S147

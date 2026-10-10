@@ -4,6 +4,34 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-10 (Session 147 — **atmósfera del Brawl por paleta (luciérnagas de noche, halos de sol y polvo de hada de día, post proceso "triple A") + MVP del ganador + revelación del poder de espalda verificada + lista de contenido para el core loop (`Index/33`)** — 1 `.cs` creado, 3 modificados; compila 0 errores; verificado en Play con capturas de las 4 paletas enviadas a Juan)
+
+**Focus:** Juan: "la UI la vamos a comprar, no te preocupes por la UI" (memoria `project-ui-se-compra`). Se atacó la atmósfera que no aparecía en los videos de S146.
+
+1. **Diagnóstico (con evidencia):** nada se había perdido; `BrawlDemo` tenía luciérnagas, halo y post, pero armados para la cámara lejana de la arena vieja. Las luciérnagas nacían en un anillo de 16-44 m (0 de 419 en cuadro con la cámara del Brawl), salía un solo halo de 45 m y el DOF empezaba a 45 m.
+2. **Ambiente por paleta (decisión de Juan ⭐ "por paleta"):** `ArenaPaletteSO` sección Ambiente (`Fireflies`, `LightShafts`, `FairyDust`, `DustColor`); `ArenaPaletteApplier.Applied`; `ArenaAmbience` nuevo (en `Environment/ArenaPalette`) prende/apaga y hace que los emisores sigan a `ArenaTargetGroup`. Pradera/Otoño = halos + polvo dorado/ámbar, Crepúsculo = luciérnagas, Nevado = halos + polvo helado.
+3. **Polvo de hada (Juan: "cúmulos de brillitos"):** `Environment/FairyDust` (emisor invisible + sub-emisor de nacimiento `Sparkles`). Luciérnagas en círculo r 14 lleno, 20/s, prewarm. Halos en las 5 formas: 3-5 rayos, escala 0,45-0,7.
+4. **Post proceso (Juan: mantenerlo, "look triple A"):** `ArenaAtmosphere` con DOF Bokeh (foco 30, focal 80, f/3,2: miniatura), bloom 0,9/0,75 cálido, contraste 12, saturación 8, viñeta 0,3 y Shadows/Midtones/Highlights nuevo (agregado como sub-asset). Lámina `Recordings/S147_atmos/S147_atmosfera.jpg`.
+5. **Pendientes ejecutados:** MVP del cartel solo del equipo ganador (`BrawlHud`); "Nuevo poder: Coletazo" verificado en la tarjeta de vuelta (invocando `Show` por reflexión en `GameScene`); tiempos 1,1 s/1,6 s quedan como provisorios de la IA; S144-S147 volcadas en `Index/32` (8d-8f).
+6. **Lista de contenido para el core loop:** `Index/33` (inventario + P0/P1/P2 + 5 decisiones), con fila en `00 - Index`. Juan pidió que se la explique en la próxima sesión.
+
+**Quirks ⚠️:** (1) `VolumeProfile.Add` desde código no guarda el componente nuevo: hay que `AssetDatabase.AddObjectToAsset`. (2) El editor corre sobre `C:\Users\USUARIO\Documents\GitHub\RunRunSimulator`, que es una junction a `E:\GitHub\RunRunSimulator` (mismo repo). (3) La escena se guarda binaria (no YAML): inspeccionar por MCP, no con grep.
+
+**Hallazgos sin tocar:** ⚠️ **el save cambió**: al abrir la tienda se bajó de la nube un estado con 0 dabloons, 23 Minerita, día 3 y 8 criaturas (S146 cerró con 4 dabloons y ~295 Minerita). ¿Lo pisó la otra PC? Sin respaldo local posterior a S137. Con 0 dabloons no se puede bajar (cuesta 10). En Pradera la copa de un árbol tapó la pelea. Los halos son amarillos en todas las paletas (material compartido).
+
+**Siguiente paso (S148, propuesta):**
+1. **Explicarle a Juan `Index/33`** y que decida sus 5 puntos (herencia del cambio de poder y opciones por parte, cuándo se eligen las bendiciones, jefes, audio, las 7 partes sin malla).
+2. Revisar con Juan el save (¿otra PC?) y reponer dabloons si quiere jugar la bajada.
+3. Arrancar P0.1 + P0.2 (gastar Minerita en poderes y evolución de partes en la ficha).
+
+**Archivos `.cs` creados (1) · modificados (3):**
+- `Assets/RunRunSimulator/Scripts/World/Expedition/ArenaAmbience.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Expedition/ArenaPaletteSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Expedition/ArenaPaletteApplier.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlHud.cs` → MODIFICADO
+
+---
+
 **Session:** 2026-10-09 (Session 146 — **video de la bajada + blobims con la espalda bloqueada + glifos de sala estilo Another Door + flujo sin tarjeta entre salas (velo "Sala N de M", "Faltan N salas", Minerita que vuela a la mochila) + herramientas dev de adultos** — 3 `.cs` creados, 12 modificados; compila 0 errores; verificado en Play con bajadas autopilotadas y 2 videos enviados)
 
 **Focus:** Juan: "grabarme un pequeño gameplay desde escoger a los morimonchis hasta decidir el tramo... y después de regreso". Video 1 (`Recordings/S146_bajada/take1/`, 82,6 s) → feedback de Juan → lotes A-C → video 2 (`Recordings/S146_bajada/take2/S146_bajada2_720p.mp4`, 86,2 s). Juan: "está bastante bien".

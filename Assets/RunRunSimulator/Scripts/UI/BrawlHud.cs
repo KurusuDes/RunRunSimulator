@@ -209,7 +209,7 @@ public class BrawlHud : MonoBehaviour
             ExpeditionTeam.Rival => ("¡GANA ROJO!", "brawl-banner--red"),
             _ => ("¡EMPATE!", "brawl-banner--ink")
         };
-        ShowBanner(text, MvpText(BrawlMatch.Current), colorClass, float.PositiveInfinity);
+        ShowBanner(text, MvpText(BrawlMatch.Current, winner), colorClass, float.PositiveInfinity);
     }
 
     private void HandleKnockedOut(BrawlFighter victim, BrawlFighter killer)
@@ -342,7 +342,7 @@ public class BrawlHud : MonoBehaviour
         if (bannerBox != null) bannerBox.RemoveFromClassList("brawl-banner-box--show");
     }
 
-    private static string MvpText(BrawlMatch match)
+    private static string MvpText(BrawlMatch match, ExpeditionTeam winner)
     {
         if (match == null) return "";
 
@@ -352,6 +352,7 @@ public class BrawlHud : MonoBehaviour
         {
             var fighter = fighters[i];
             if (fighter == null) continue;
+            if (winner != ExpeditionTeam.None && fighter.Team != winner) continue;
             if (best == null || fighter.DamageDealt > best.DamageDealt) best = fighter;
         }
         if (best == null) return "";
