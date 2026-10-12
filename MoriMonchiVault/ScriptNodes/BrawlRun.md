@@ -6,7 +6,7 @@ tags: [script, data, brawl, run, state]
 
 **Ruta:** `Data/Brawl/BrawlRun.cs`
 
-**Responsabilidad:** Modelo de datos de una bajada Brawl (run). Estado puro, sin MonoBehaviour: tramo y sala actuales, botín (`Material`), derrota, y salud por MoriMochi entre salas. Genera tramos de forma determinista a partir de la semilla. No toca escena, UI ni persistencia.
+**Responsabilidad:** Modelo de datos de una bajada Brawl (run). Estado puro, sin MonoBehaviour: tramo y sala actuales, botín (`Material`), derrota, combates resueltos y salud por MoriMochi entre salas. Genera tramos de forma determinista a partir de la semilla. No toca escena, UI ni persistencia.
 
 ## Propiedades Públicas
 
@@ -24,6 +24,7 @@ tags: [script, data, brawl, run, state]
 | `MaterialLost` | `int` | Botín perdido en la derrota: `ceil(Material × LossFraction)` |
 | `Lost` | `bool` | Derrota definitiva de la bajada |
 | `RoomsCleared` | `int` | Salas superadas |
+| `Combats` | `int` | Combates resueltos en la bajada, ganados y perdidos. No cuenta salas de prueba |
 
 ## Métodos Públicos
 
@@ -40,21 +41,21 @@ tags: [script, data, brawl, run, state]
 
 - Cantidad de salas: entre `MinRooms` y `MaxRooms`.
 - Rivales máximos: Depth 1 → `FirstTramoMaxRivals`; Depth ≥ 2 → 3 (clamp 1..3).
-- Rivales mínimos: 1, o 2 desde `HardFromDepth`.
+- Rivales mínimos: 1, o 2 desde `HardFromDepth`, sin superar el máximo.
 - La última sala es siempre combate con el máximo de rivales.
 - Resto de salas: muñecos (`DummiesChance`), minerales (`MineralsChance`) o combate con rivales aleatorios entre mín y máx.
 
 ## Reglas de Resolución
 
-- **Combate ganado:** `Material += rivalsDefeated × MaterialPerRival × Depth`; `RoomsCleared++`; `RoomIndex++`. Todos los IDs del equipo reciben `HealAfterCombat` (tope 1).
-- **Combate perdido:** `Lost = true`; `MaterialLost = ceil(Material × LossFraction)`; `Material -= MaterialLost`. La salud se actualiza sin curación extra.
-- **Sala de prueba:** actualiza salud sin curación extra; `Material += max(0, material)`; `RoomsCleared++`; `RoomIndex++`. Nunca marca derrota.
+- **Combate ganado:** `Combats++`; `Material += rivalsDefeated × MaterialPerRival × Depth`; `RoomsCleared++`; `RoomIndex++`. Todos los IDs del equipo reciben `HealAfterCombat` (tope 1).
+- **Combate perdido:** `Combats++`; `Lost = true`; `MaterialLost = ceil(Material × LossFraction)`; `Material -= MaterialLost`. La salud se actualiza sin curación extra.
+- **Sala de prueba:** actualiza salud sin curación extra; `Material += max(0, material)`; `RoomsCleared++`; `RoomIndex++`. Nunca marca derrota y no suma `Combats`.
 - `RecordCombat`, `RecordTrial` y `PlanNextTramo` no hacen nada si `Lost`.
 - El empate no existe aquí: `BrawlRunDirector` lo convierte en victoria antes de llamar `RecordCombat(won: true)`.
 
 ## Conversión a Resultado (`ToResult`)
 
-- `Seed = BaseSeed`; `Winner = Lost ? Rival : Player`; `PlayerSecured = Material`; `MaterialLost` copiado; `RivalSecured = 0`; `Floors = RoomsCleared`; `Lost`; `TeamIds` copiado.
+- `Seed = BaseSeed`; `Winner = Lost ? Rival : Player`; `PlayerSecured = Material`; `MaterialLost` copiado; `RivalSecured = 0`; `Floors = RoomsCleared`; `Lost`; `TeamIds` copiado; `Combats` copiado.
 - `FallenIds` vacío y `Fallen = 0`: la derrota marca al equipo entero vía `TeamIds`, no por caídos (ver `ExpeditionBridge`).
 
 ## Vinculado a
@@ -69,6 +70,7 @@ tags: [script, data, brawl, run, state]
 - [[BrawlRunPanel]] — lectura de `Rooms`, `RoomIndex`, `Depth`, `Material`, `MaterialLost`, `Health01`
 - [[ArenaRun]] — `FloorSeedOf` (semilla determinista)
 - [[ExpeditionHandoff]] — tipo `ExpeditionResult`
+- [[ExpeditionBridge]] — suma `Combats` a `CreatureDNA.Battles` al volver
 
 ## Notas
 
@@ -76,3 +78,4 @@ tags: [script, data, brawl, run, state]
 - `RoomSeed()` asume menos de 16 salas por tramo (multiplicador 16 en la semilla).
 - `Health01` por ID es la única memoria entre salas además del botín.
 - S145: `MaterialLost` viaja en `ExpeditionResult`; `ExpeditionBridge` lo convierte a `MineritaLost` con `BrawlRunRulesSO.MineritaPerLoot`.
+- S148: `Combats` nuevo. Cuenta combates ganados y perdidos, y `ToResult` lo entrega en el `ExpeditionResult`.

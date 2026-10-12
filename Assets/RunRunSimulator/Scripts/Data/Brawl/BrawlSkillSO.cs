@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 namespace MoriMonchiSimulator
@@ -60,5 +61,8 @@ public class BrawlSkillSO : ScriptableObject
     [Min(0f)] public float ExplodeRadius = 0f;
     [Min(0f)] public float SpriteSize = 0.8f;
     public bool FollowCaster = false;
+
+    [Title("Evolución")]
+    public List<BrawlUpgradeStep> Upgrades = new();
 }
 }

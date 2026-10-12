@@ -18,6 +18,7 @@ MonoBehaviour:
   Description: Grito que apura y potencia a los aliados cercanos.
   IconOverride: {fileID: 0}
   ColorOverride: {r: 0.9098039, g: 0.3529412, b: 0.30980393, a: 1}
+  Signature: 0
   Family: 9
   Role: 2
   Target: 4
@@ -52,3 +53,16 @@ MonoBehaviour:
   ExplodeRadius: 0
   SpriteSize: 0.8
   FollowCaster: 0
+  Upgrades:
+  - Mods:
+    - Stat: 3
+      Op: 0
+      Value: 1.5
+  - Mods:
+    - Stat: 14
+      Op: 0
+      Value: 0.15
+  - Mods:
+    - Stat: 1
+      Op: 0
+      Value: 600

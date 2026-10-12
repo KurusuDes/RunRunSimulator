@@ -16,6 +16,7 @@ public struct ExpeditionResult
     public List<string> FallenIds;
     public int Fallen;
     public List<string> TeamIds;
+    public int Combats;
 }
 
 public struct ExpeditionReturn

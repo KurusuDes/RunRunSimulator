@@ -18,6 +18,7 @@ MonoBehaviour:
   Description: "Envuelve al aliado m\xE1s herido en una burbuja que absorbe da\xF1o."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Family: 8
   Role: 2
   Target: 3
@@ -52,3 +53,16 @@ MonoBehaviour:
   ExplodeRadius: 0
   SpriteSize: 0.8
   FollowCaster: 0
+  Upgrades:
+  - Mods:
+    - Stat: 2
+      Op: 1
+      Value: 1.25
+  - Mods:
+    - Stat: 13
+      Op: 0
+      Value: 0.25
+  - Mods:
+    - Stat: 8
+      Op: 0
+      Value: 1

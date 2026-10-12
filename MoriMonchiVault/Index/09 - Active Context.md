@@ -4,6 +4,53 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-12 (Session 148 — **evolución de partes con Minerita y experiencia en batalla (P0.1 + P0.2 de `Index/33`, rediseñados por Juan)** — 7 `.cs` creados, 13 modificados; compila 0 errores; verificado en Play (ficha, bandas, Brawl con partes al nivel 4, guardado local + nube) con capturas enviadas)
+
+**Focus:** se le explicó a Juan `Index/33` y se cerró el primer gasto de Minerita ligado al Brawl. Juan rediseñó la propuesta en tres pasos (el cambio de poder E2.2 murió):
+
+1. **Evolucionar = sumar un efecto al poder que la parte ya tiene** (Juan: "variaciones o potencia"). Escalera **fija** de 3 mejoras por parte (Juan: "por el momento fija, después mini variaciones de una misma parte"). Evolucionan cuerpo, cuerno, espalda y ala; la cara no. El nivel es el `Tier` del ADN (se agregó `Tier4`); no se hereda (las crías nacen en Tier1). El potencial deja de ser techo y queda sin uso (Juan ✅).
+2. **Un solo botón por criatura, la parte sale al azar** (Juan: "tú eliges evolucionar una parte pero no escoges cuál"). Bandas: ninguna parte pasa a nivel N+1 hasta que todas tengan N. **Solo un MoriMochi adulto evoluciona** (Juan: "un blobim primero debe evolucionar a MoriMochi").
+3. **Experiencia en batalla** (Juan: "ciertos números de combates con el MoriMochi"): `CreatureDNA.Battles` acumula los combates jugados en la bajada (ganados o perdidos; muñecos y minerales no cuentan; `BrawlRun.Combats` → `ExpeditionResult.Combats` → `ExpeditionBridge`). Los combates no se gastan.
+
+**Datos (provisorios de la IA):** escaleras de 3 pasos para las 33 habilidades, las 6 alas y el cuerpo (`BodyUpgrades` en `BrawlKitDatabase`), armadas con campos que el Brawl ya lee (paso 2 casi siempre +20 % de potencia; pasos 1 y 3 variación: rebote, salto, púas, aturde, ralentiza, área, enfriamiento). Precio 30/60/100 Minerita por banda (`PartLevelUpEffect.asset`, `CostPerLevel`); combates pedidos = 2 × (evoluciones hechas + 1) (`BattlesPerEvolution`). `CustomerPricing` Tier4 = 4 (la escala del asset es 1/2/3, no la del código). La tabla de escaleras se aplicó con un script de editor (scratchpad), no quedó en el repo: el dato vive en los assets.
+
+**Arquitectura:** `EvolutionEffectSO` (contrato por criatura: `CanApply`, `Cost`, `RequiredBattles`, `IsCandidate`, `Apply → PartRole?`) + `PartLevelUpEffectSO` + `EvolutionService.Evolve` (Wallet → Apply → `RegistryChanged`). El Brawl pelea con copias instanciadas de los SO con las mejoras aplicadas (`BrawlUpgrades`, las libera `BrawlFighter` al re-bindear y en `OnDestroy`); los assets no se tocan. Ficha: `DetailEvolutionBlock` (botón general con experiencia, resultado "¡Evolucionó X: …!", fila resaltada, ★ en las candidatas) + `BrawlUpgradeText` (texto de cada mejora por `Loc`). 43 claves nuevas en `Strings` (`ui.evo.*`, `ui.upgrade.stat.*`).
+
+**Quirks ⚠️:** (1) **El save guarda los tiers como texto (`"Tier3"`)**: un save con `"Tier4"` rompe versiones viejas del juego → la otra PC tiene que pullear este código antes de abrir el juego. (2) Un refresh de assets en Play recrea los `UIDocument` ("UI was recreated…") y deja paneles abiertos: refrescar USS fuera de Play. (3) En `execute_code`, `JsonConvert` es ambiguo (Localization trae su copia): usar `JsonUtility`.
+
+**Hallazgo sin resolver ⚠️:** al entrar a Play el save local tenía 14 dabloons / 265 Minerita y la nube lo pisó con 0 dabloons / 23 Minerita / 5 criaturas (3 blobims, 2 huevos, ningún adulto). Algo sigue escribiendo la nube (¿otra PC?). Se dejaron +500 Minerita de prueba (quedan 43 tras las pruebas); a Itchy Grub se le devolvió Tier1 en todo (lo había evolucionado la primera prueba).
+
+**Siguiente paso (S149, propuesta):**
+1. **Resolver el save** con Juan antes de jugar: quién pisa la nube y reponer dabloons para poder bajar (cuesta 10).
+2. **Run con decisiones (P0.3-P0.5):** bendiciones 1 de 3 al cerrar cada tramo (decisión de Juan S148 ✅), sala de descanso y élites con modificador; los rivales tienen que subir de nivel con la profundidad, porque hoy no evolucionan y la run se facilita con equipos evolucionados.
+3. Pendiente chico: mostrar nivel y combates en la tarjeta de bajada y en la vuelta ("+N combates").
+
+**Decisiones de Juan S148 (de `Index/33` §4):** bendiciones al cerrar tramo ✅ · jefes = MoriMonchis gigantes con partes propias ✅ · audio = comprar pack ✅ · las 7 partes sin malla salen del pool hasta modelarlas ✅ (todavía no ejecutado).
+
+**Archivos `.cs` creados (7) · modificados (13):**
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlUpgradeStep.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlUpgrades.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Evolution/EvolutionEffectSO.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Data/Evolution/PartLevelUpEffectSO.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Systems/Evolution/EvolutionService.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/DetailEvolutionBlock.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/UI/BrawlUpgradeText.cs` → NUEVO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/BrawlEnums.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/Enums/CreatureEnums.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Core/ExpeditionHandoff.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlKitDatabaseSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlRun.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlSkillSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Brawl/BrawlWingKitSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Customers/CustomerPricingSO.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Data/Genetics/CreatureDNA.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/Systems/Expedition/ExpeditionBridge.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/DetailInfoTabPresenter.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/UI/MorimonchiDetailInfoUITK.cs` → MODIFICADO
+- `Assets/RunRunSimulator/Scripts/World/Brawl/BrawlFighter.cs` → MODIFICADO
+
+---
+
 **Session:** 2026-10-10 (Session 147 — **atmósfera del Brawl por paleta (luciérnagas de noche, halos de sol y polvo de hada de día, post proceso "triple A") + MVP del ganador + revelación del poder de espalda verificada + lista de contenido para el core loop (`Index/33`)** — 1 `.cs` creado, 3 modificados; compila 0 errores; verificado en Play con capturas de las 4 paletas enviadas a Juan)
 
 **Focus:** Juan: "la UI la vamos a comprar, no te preocupes por la UI" (memoria `project-ui-se-compra`). Se atacó la atmósfera que no aparecía en los videos de S146.

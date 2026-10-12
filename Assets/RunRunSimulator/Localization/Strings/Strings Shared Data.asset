@@ -1527,6 +1527,174 @@ MonoBehaviour:
     m_Key: ui.return.newpower
     m_Metadata:
       m_Items: []
+  - m_Id: 28413998327431168
+    m_Key: ui.evo.level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151424
+    m_Key: ui.evo.done
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151425
+    m_Key: ui.evo.next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151427
+    m_Key: ui.evo.max
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151428
+    m_Key: ui.upgrade.stat.damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151429
+    m_Key: ui.upgrade.stat.heal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151430
+    m_Key: ui.upgrade.stat.shield
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151431
+    m_Key: ui.upgrade.stat.duration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151432
+    m_Key: ui.upgrade.stat.cooldown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151433
+    m_Key: ui.upgrade.stat.range
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151434
+    m_Key: ui.upgrade.stat.radius
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151435
+    m_Key: ui.upgrade.stat.angle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151436
+    m_Key: ui.upgrade.stat.count
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151437
+    m_Key: ui.upgrade.stat.count.chain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151438
+    m_Key: ui.upgrade.stat.count.nova
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151439
+    m_Key: ui.upgrade.stat.count.ward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151440
+    m_Key: ui.upgrade.stat.knockback
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151441
+    m_Key: ui.upgrade.stat.slow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151442
+    m_Key: ui.upgrade.stat.slowseconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151443
+    m_Key: ui.upgrade.stat.stunseconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151444
+    m_Key: ui.upgrade.stat.haste
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151445
+    m_Key: ui.upgrade.stat.damageboost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151446
+    m_Key: ui.upgrade.stat.thorns
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151447
+    m_Key: ui.upgrade.stat.tauntseconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151448
+    m_Key: ui.upgrade.stat.bounces
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151449
+    m_Key: ui.upgrade.stat.pierce
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151450
+    m_Key: ui.upgrade.stat.exploderadius
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151451
+    m_Key: ui.upgrade.stat.allyheal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151452
+    m_Key: ui.upgrade.stat.reload
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151453
+    m_Key: ui.upgrade.stat.hitradius
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151454
+    m_Key: ui.upgrade.stat.movespeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151455
+    m_Key: ui.upgrade.stat.mobilitycooldown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151456
+    m_Key: ui.upgrade.stat.mobilitydamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151457
+    m_Key: ui.upgrade.stat.mobilitydistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151458
+    m_Key: ui.upgrade.stat.hp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417373404168192
+    m_Key: ui.evo.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422656
+    m_Key: ui.evo.action.hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422657
+    m_Key: ui.evo.result
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422658
+    m_Key: ui.evo.allmax
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422659
+    m_Key: ui.evo.needsadult
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417769224830976
+    m_Key: ui.evo.xp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417769224830977
+    m_Key: ui.evo.needbattles
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

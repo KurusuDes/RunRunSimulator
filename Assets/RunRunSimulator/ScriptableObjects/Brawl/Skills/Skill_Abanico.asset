@@ -18,6 +18,7 @@ MonoBehaviour:
   Description: "R\xE1faga de viento que empuja lejos y frena."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Family: 2
   Role: 1
   Target: 0
@@ -52,3 +53,16 @@ MonoBehaviour:
   ExplodeRadius: 0
   SpriteSize: 0.8
   FollowCaster: 0
+  Upgrades:
+  - Mods:
+    - Stat: 5
+      Op: 1
+      Value: 1.25
+  - Mods:
+    - Stat: 10
+      Op: 0
+      Value: 0.15
+  - Mods:
+    - Stat: 12
+      Op: 0
+      Value: 0.4

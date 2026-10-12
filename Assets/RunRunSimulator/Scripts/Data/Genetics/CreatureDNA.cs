@@ -56,6 +56,7 @@ public class CreatureDNA
 
     public MonchiForm Form        = MonchiForm.Adult;
     public int         Explorations = 0;
+    public int         Battles = 0;
 
     public NeedsState Needs = new NeedsState();
 
@@ -71,6 +72,29 @@ public class CreatureDNA
     public int    LocationSlot = -1;
 
     public int AgeDays(int today) => Mathf.Max(0, today - BirthDay);
+
+    public Tier TierOf(PartRole role)
+    {
+        switch (role)
+        {
+            case PartRole.Body: return BodyTier;
+            case PartRole.Horn: return HornTier;
+            case PartRole.Back: return BackTier;
+            case PartRole.Wing: return WingTier;
+            default: return Tier.Tier1;
+        }
+    }
+
+    public void SetTier(PartRole role, Tier tier)
+    {
+        switch (role)
+        {
+            case PartRole.Body: BodyTier = tier; break;
+            case PartRole.Horn: HornTier = tier; break;
+            case PartRole.Back: BackTier = tier; break;
+            case PartRole.Wing: WingTier = tier; break;
+        }
+    }
 
     public string UniqueID => Timestamp > 0 ? $"{ToStringID()}-{Timestamp}" : "";
 

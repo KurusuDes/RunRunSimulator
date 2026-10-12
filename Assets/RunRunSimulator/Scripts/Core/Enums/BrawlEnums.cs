@@ -22,4 +22,38 @@ public enum BrawlFxKind { Slash, Lightning, Beam, Whip, Burst, Ring, Pulse, Ward
 public enum BrawlSignature { None, Rainbow, Storm, Cloud, Comet, Lure, Plates }
 public enum BrawlRoomKind { Combat, Dummies, Minerals }
 public enum BrawlRunState { Planning, Fighting, RoomResult, Over, Transition }
+
+public enum BrawlUpgradeOp { Add = 0, Multiply = 1 }
+
+public enum BrawlUpgradeStat
+{
+    Damage = 0,
+    Heal = 1,
+    Shield = 2,
+    Duration = 3,
+    Cooldown = 4,
+    Range = 5,
+    Radius = 6,
+    Angle = 7,
+    Count = 8,
+    Knockback = 9,
+    Slow = 10,
+    SlowSeconds = 11,
+    StunSeconds = 12,
+    Haste = 13,
+    DamageBoost = 14,
+    Thorns = 15,
+    TauntSeconds = 16,
+    Bounces = 17,
+    Pierce = 18,
+    ExplodeRadius = 19,
+    AllyHeal = 20,
+    Reload = 21,
+    HitRadius = 22,
+    MoveSpeed = 23,
+    MobilityCooldown = 24,
+    MobilityDamage = 25,
+    MobilityDistance = 26,
+    Hp = 27
+}
 }

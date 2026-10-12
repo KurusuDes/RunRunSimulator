@@ -6,7 +6,7 @@ tags: [script, enum, core]
 
 **Ruta:** `Core/Enums/BrawlEnums.cs`
 
-**Responsabilidad:** Enumeraciones de batalla 3v3 arcade y de la bajada Brawl. Clasifican ataque, movilidad, locomoción, familia de habilidad, rol, target, fase, intención, estado, tipo de VFX, firmas visuales, tipo de sala y estado de la bajada.
+**Responsabilidad:** Enumeraciones de batalla 3v3 arcade, de la bajada Brawl y de los escalones de mejora. Clasifican ataque, movilidad, locomoción, familia de habilidad, rol, target, fase, intención, estado, tipo de VFX, firmas visuales, tipo de sala, estado de la bajada, operación y estadística de mejora.
 
 **Vinculado a:** [[Index/32 - Demo Brawl 3v3 arcade]]
 
@@ -27,6 +27,8 @@ tags: [script, enum, core]
 | `BrawlSignature` | None, Rainbow, Storm, Cloud, Comet, Lure, Plates | Firma visual especial de partes estrella. Réplicas en VFX, rayos, etc. |
 | `BrawlRoomKind` | Combat, Dummies, Minerals | Tipo de sala de la bajada: combate contra rivales o sala de prueba (muñecos / minerales). |
 | `BrawlRunState` | Planning, Fighting, RoomResult, Over, Transition | Estado de la bajada (`BrawlRunDirector`). Decide qué vista muestra cada HUD: `BrawlRunPanel` en `Planning` y `Over`; `BrawlRunVeil` en `Transition`; `BrawlRunHud` en `Fighting` y `RoomResult`. |
+| `BrawlUpgradeOp` | Add (0), Multiply (1) | Operación de un modificador de mejora: suma o factor. |
+| `BrawlUpgradeStat` | Damage (0) ... Hp (27) | Estadística que modifica un escalón de mejora. Valores: Damage, Heal, Shield, Duration, Cooldown, Range, Radius, Angle, Count, Knockback, Slow, SlowSeconds, StunSeconds, Haste, DamageBoost, Thorns, TauntSeconds, Bounces, Pierce, ExplodeRadius, AllyHeal, Reload, HitRadius, MoveSpeed, MobilityCooldown, MobilityDamage, MobilityDistance, Hp. |
 
 ## Dependencias
 
@@ -37,6 +39,7 @@ tags: [script, enum, core]
 - Usadas en `BrawlMatch` (BrawlMatchPhase) y `BrawlTrialRoom` (BrawlMatchPhase, BrawlRoomKind)
 - Usadas en `BrawlFighter`/`BrawlBrain` (BrawlIntent, BrawlLocomotion)
 - Usadas en `BrawlRoom`, `BrawlRun`, `BrawlRunDirector`, `BrawlRunPanel`, `BrawlRunHud`, `BrawlRunVeil` y `BrawlRoomGlyphsSO` (BrawlRoomKind, BrawlRunState)
+- Usadas en `BrawlUpgradeStep` (BrawlUpgradeOp, BrawlUpgradeStat), `BrawlUpgrades` y `BrawlUpgradeText`
 
 **Salida:**
 - Ninguna (puramente definitorio)
@@ -49,3 +52,4 @@ tags: [script, enum, core]
 - BrawlIntent es legible en HUD card para feedback de IA.
 - S144: se agregan `BrawlRoomKind` y `BrawlRunState` para la bajada Brawl (run de salas).
 - S146: `BrawlRunState` suma `Transition` (velo entre salas). Las vistas de la bajada se reparten entre `BrawlRunPanel`, `BrawlRunHud` y `BrawlRunVeil`.
+- S148: se agregan `BrawlUpgradeOp` y `BrawlUpgradeStat` para los escalones de mejora por tier. `BrawlUpgradeStat.Hp` solo lo usa el cuerpo.

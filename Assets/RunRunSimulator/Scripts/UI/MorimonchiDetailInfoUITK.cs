@@ -21,6 +21,9 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
     [Tooltip("Poderes del Brawl por parte y rol de combate de la ficha.")]
     [SerializeField] private BrawlKitDatabaseSO kits;
 
+    [Tooltip("Efecto de evolucion de partes con Minerita (boton Evolucionar de la ficha).")]
+    [SerializeField] private EvolutionEffectSO evolution;
+
     [Tooltip("Draw order; higher keeps this modal above the grid panel.")]
     [SerializeField] private int sortingOrder = 100;
 
@@ -47,12 +50,14 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
     {
         UIManager.OnCreatureSelected += Show;
         GameEvents.OnRegistryChanged += OnRegistryChanged;
+        GameEvents.OnInventoryChanged += OnInventoryChanged;
     }
 
     private void OnDisable()
     {
         UIManager.OnCreatureSelected -= Show;
         GameEvents.OnRegistryChanged -= OnRegistryChanged;
+        GameEvents.OnInventoryChanged -= OnInventoryChanged;
     }
 
     private void Start()
@@ -96,7 +101,7 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
 
         WireStaticLabels(root);
 
-        info   = new DetailInfoTabPresenter(root, database, careGate, kits);
+        info   = new DetailInfoTabPresenter(root, database, careGate, kits, evolution, () => registry);
         trees  = new DetailTreesPresenter(root, database, () => registry);
         relations = new DetailRelationsPresenter(root, () => registry);
 
@@ -159,7 +164,11 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
         UIManager.RequestPanelSet(panel, false);
     }
 
-    private void OnRegistryChanged(CreatureRegistrySO _)
+    private void OnRegistryChanged(CreatureRegistrySO _) => RepopulateIfVisible();
+
+    private void OnInventoryChanged(PlayerInventorySO _) => RepopulateIfVisible();
+
+    private void RepopulateIfVisible()
     {
         if (current == null || !wired) return;
         var root = UiPanels.RootOf(document);

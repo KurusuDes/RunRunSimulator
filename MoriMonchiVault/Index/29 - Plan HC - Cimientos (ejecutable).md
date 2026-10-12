@@ -315,6 +315,7 @@ public abstract class EvolutionEffectSO : SerializedScriptableObject
 - Primer efecto: `PartLevelUpEffectSO` → sube `HornTier`/`WingTier`/`BackTier` hasta `Tier3` (campos que ya existen y hoy nunca se escriben); costo por nivel en una tabla del asset.
 - `EvolutionService.Evolve(dna, slot, effect)`: `CanApply` → `Wallet.TrySpend(Minerita, Cost, "evolution")` → `Apply` → `RegistryChanged`. Cambiar la regla de diseño = otro asset (`SwapPartEffectSO`, reroll de habilidad), sin tocar el servicio ni la pantalla.
 - Falta decidir en E2 qué mejora el nivel dentro de la bajada (la habilidad de esa parte).
+- **Ejecutado en S148 con contrato cambiado:** el efecto trabaja sobre la criatura entera (`CanApply(dna)`, `Cost(dna)`, `RequiredBattles(dna)`, `IsCandidate(dna, PartRole)`, `Apply(dna) → PartRole?`), porque Juan decidió que la parte sale al azar entre las del nivel más bajo. Cada nivel aplica un paso de la escalera `Upgrades` del kit de esa parte (`BrawlUpgrades`). El potencial ya no es techo. Ver [[Index/09 - Active Context]] (S148).
 
 ---
 

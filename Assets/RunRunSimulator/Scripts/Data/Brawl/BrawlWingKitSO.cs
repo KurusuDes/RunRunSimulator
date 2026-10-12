@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 namespace MoriMonchiSimulator
@@ -45,5 +46,8 @@ public class BrawlWingKitSO : ScriptableObject
     [Min(0.05f)] public float MobilitySeconds = 0.4f;
     [Min(0f)] public float MobilityCooldown = 7f;
     [Min(0f)] public float MobilityDamage = 0f;
+
+    [Title("Evolución")]
+    public List<BrawlUpgradeStep> Upgrades = new();
 }
 }

@@ -18,6 +18,7 @@ MonoBehaviour:
     para esquivar.'
   IconOverride: {fileID: 0}
   ColorOverride: {r: 0.30980393, g: 0.7019608, b: 0.9098039, a: 1}
+  Signature: 0
   Locomotion: 0
   MoveSpeed: 4.1
   Attack: 2
@@ -42,3 +43,19 @@ MonoBehaviour:
   MobilitySeconds: 0.25
   MobilityCooldown: 5
   MobilityDamage: 0
+  Upgrades:
+  - Mods:
+    - Stat: 8
+      Op: 0
+      Value: 2
+  - Mods:
+    - Stat: 0
+      Op: 1
+      Value: 1.2
+  - Mods:
+    - Stat: 10
+      Op: 0
+      Value: 0.2
+    - Stat: 11
+      Op: 0
+      Value: 0.8

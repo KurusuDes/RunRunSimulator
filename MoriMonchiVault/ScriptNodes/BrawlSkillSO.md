@@ -6,7 +6,7 @@ tags: [script, data, so]
 
 **Ruta:** `Data/Brawl/BrawlSkillSO.cs`
 
-**Responsabilidad:** SO de habilidad (cuerno o espalda) en Brawl 3v3. Define lanzamiento (windup, cooldown, casteo, tracking), alcance y área, efectos (daño, curación, escudo, duración), estados (slow, stun, haste, boost, etc.), proyectil y firma visual. Un asset por parte (33 skills: 10 familias × 3-5 partes cada una).
+**Responsabilidad:** SO de habilidad (cuerno o espalda) en Brawl 3v3. Define lanzamiento (windup, cooldown, casteo, tracking), alcance y área, efectos (daño, curación, escudo, duración), estados (slow, stun, haste, boost, etc.), proyectil, firma visual y escalones de mejora por tier. Un asset por parte (33 skills: 10 familias × 3-5 partes cada una).
 
 **Vinculado a:** [[Index/32 - Demo Brawl 3v3 arcade]] (sección "3 · Cuernos y espaldas")
 
@@ -55,6 +55,7 @@ tags: [script, data, so]
 | | `ExplodeRadius` | float | Radio de explosión (0 = sin explosión) |
 | | `SpriteSize` | float | Tamaño del ícono como proyectil |
 | | `FollowCaster` | bool | Si el proyectil sigue al lanzador |
+| **Evolución** | `Upgrades` | `List<BrawlUpgradeStep>` | Escalones de mejora. El escalón `i` se aplica al llegar al tier `i + 2`; máximo 3 |
 
 ## Familias de Habilidad (10 tipos)
 
@@ -87,12 +88,13 @@ tags: [script, data, so]
 - Cargado por `BrawlKitDatabaseSO.Skill(partId, slot)` (búsqueda primero por partId, luego por slot fallback)
 
 **Salida:**
-- `BrawlFighter.HornSkill` / `BackSkill` (asignado en SetHornSkill/SetBackSkill)
+- `BrawlFighter.HornSkill` / `BackSkill`: en `Bind` se reemplazan por una copia mejorada según el tier (`BrawlUpgrades.Upgraded`)
 - `BrawlSkillCaster` ejecuta casting (windup, cooldown, targeting)
 - `BrawlSkillEffects` calcula daño/curación/estados
 - `BrawlBrain.SkillJudge` evalúa cuándo castear (según Role)
 - `BrawlHudCard.PulseSkill()` visualiza cooldown en slot
 - `BrawlOverheads.HandleCastStarted()` muestra bubble con título
+- `DetailEvolutionBlock` describe los escalones con `BrawlUpgradeText`
 
 ## Notas S142
 
@@ -104,3 +106,9 @@ tags: [script, data, so]
 - TickSeconds para DoT (daño continuado) y HoT (curación continuada)
 - TauntSeconds hace que objetivo ataque al lanzador (mechanic de control)
 - SpriteSize escala el ícono en representación visual (proyectil, VFX)
+
+## Notas S148
+
+- El SO del asset nunca cambia en runtime: la mejora se aplica a una copia que `BrawlFighter` destruye al re-`Bind` o al destruirse.
+- Los campos que suben son los que `BrawlUpgrades` cubre para habilidades: daño, curación, escudo, duración, cooldown, rango, radio, ángulo, cantidad, empuje, estados, rebotes, perforación y radio de explosión.
+- `Pierce` solo cambia de false a true; un escalón no lo quita.

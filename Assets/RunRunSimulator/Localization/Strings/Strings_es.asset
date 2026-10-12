@@ -1535,6 +1535,175 @@ MonoBehaviour:
     m_Localized: 'Nuevo poder: {0}'
     m_Metadata:
       m_Items: []
+  - m_Id: 28413998327431168
+    m_Localized: Nivel {0}/{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151424
+    m_Localized: "\u2713 {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151425
+    m_Localized: "\u2605 Pr\xF3xima: {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417769224830976
+    m_Localized: 'Experiencia en batalla: {0}/{1} combates'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151427
+    m_Localized: "Nivel m\xE1ximo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151428
+    m_Localized: "{0} da\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151429
+    m_Localized: "{0} curaci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151430
+    m_Localized: '{0} escudo'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151431
+    m_Localized: "{0} duraci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151432
+    m_Localized: '{0} enfriamiento'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151433
+    m_Localized: '{0} alcance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151434
+    m_Localized: "{0} \xE1rea"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151435
+    m_Localized: "{0}\xB0 de arco"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151436
+    m_Localized: '{0} proyectil'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151437
+    m_Localized: '{0} salto'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151438
+    m_Localized: "{0} p\xFAas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151439
+    m_Localized: '{0} aliado protegido'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151440
+    m_Localized: '{0} empuje'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151441
+    m_Localized: ralentiza {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151442
+    m_Localized: '{0} ralentizado'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151443
+    m_Localized: '{0} de aturdimiento'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151444
+    m_Localized: '{0} velocidad'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151445
+    m_Localized: "{0} da\xF1o a aliados"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151446
+    m_Localized: '{0} espinas'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151447
+    m_Localized: "{0} de provocaci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151448
+    m_Localized: '{0} rebote'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151449
+    m_Localized: atraviesa rivales
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151450
+    m_Localized: "{0} explosi\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151451
+    m_Localized: "{0} curaci\xF3n a aliados"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151452
+    m_Localized: '{0} recarga'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151453
+    m_Localized: "{0} tama\xF1o del golpe"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151454
+    m_Localized: '{0} velocidad'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151455
+    m_Localized: '{0} enfriamiento de movilidad'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151456
+    m_Localized: "{0} da\xF1o de movilidad"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151457
+    m_Localized: '{0} distancia de movilidad'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151458
+    m_Localized: '{0} vida'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417373404168192
+    m_Localized: "Evolucionar una parte \xB7 {0} Minerita"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422656
+    m_Localized: "Sube al azar una de las partes marcadas con \u2605. Ninguna pasa
+      de nivel hasta que todas lo alcancen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422657
+    m_Localized: "\xA1Evolucion\xF3 {0}: {1}!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422658
+    m_Localized: "Todas las partes al m\xE1ximo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422659
+    m_Localized: Tiene que crecer y ser MoriMochi para evolucionar sus partes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417769224830977
+    m_Localized: "Le faltan {0} combates para la pr\xF3xima evoluci\xF3n."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

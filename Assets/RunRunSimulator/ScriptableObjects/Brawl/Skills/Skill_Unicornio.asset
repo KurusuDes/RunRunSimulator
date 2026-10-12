@@ -53,3 +53,16 @@ MonoBehaviour:
   ExplodeRadius: 0
   SpriteSize: 0.8
   FollowCaster: 0
+  Upgrades:
+  - Mods:
+    - Stat: 1
+      Op: 1
+      Value: 1.2
+  - Mods:
+    - Stat: 14
+      Op: 0
+      Value: 0.2
+  - Mods:
+    - Stat: 4
+      Op: 1
+      Value: 0.8

@@ -1538,6 +1538,175 @@ MonoBehaviour:
     m_Localized: 'New power: {0}'
     m_Metadata:
       m_Items: []
+  - m_Id: 28413998327431168
+    m_Localized: Level {0}/{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151424
+    m_Localized: "\u2713 {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151425
+    m_Localized: "\u2605 Next: {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417769224830976
+    m_Localized: 'Battle experience: {0}/{1} fights'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151427
+    m_Localized: Max level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151428
+    m_Localized: '{0} damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151429
+    m_Localized: '{0} healing'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151430
+    m_Localized: '{0} shield'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151431
+    m_Localized: '{0} duration'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151432
+    m_Localized: '{0} cooldown'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151433
+    m_Localized: '{0} range'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151434
+    m_Localized: '{0} area'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151435
+    m_Localized: "{0}\xB0 arc"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151436
+    m_Localized: '{0} projectile'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151437
+    m_Localized: '{0} jump'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151438
+    m_Localized: '{0} spikes'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151439
+    m_Localized: '{0} shielded ally'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151440
+    m_Localized: '{0} knockback'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151441
+    m_Localized: slows {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151442
+    m_Localized: '{0} slowed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151443
+    m_Localized: '{0} stun'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151444
+    m_Localized: '{0} speed boost'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151445
+    m_Localized: '{0} ally damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151446
+    m_Localized: '{0} thorns'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151447
+    m_Localized: '{0} taunt'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151448
+    m_Localized: '{0} bounce'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151449
+    m_Localized: pierces foes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151450
+    m_Localized: '{0} blast'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151451
+    m_Localized: '{0} ally healing'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151452
+    m_Localized: '{0} reload'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151453
+    m_Localized: '{0} hit size'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151454
+    m_Localized: '{0} speed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151455
+    m_Localized: '{0} mobility cooldown'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151456
+    m_Localized: '{0} mobility damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151457
+    m_Localized: '{0} mobility distance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28413998386151458
+    m_Localized: '{0} health'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417373404168192
+    m_Localized: "Evolve a part \xB7 {0} Minerita"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422656
+    m_Localized: "Levels up one of the \u2605 parts at random. No part goes further
+      until all of them catch up."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422657
+    m_Localized: '{0} evolved: {1}!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422658
+    m_Localized: All parts maxed out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417374100422659
+    m_Localized: It has to grow into a MoriMochi before its parts can evolve.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28417769224830977
+    m_Localized: Needs {0} more fights for the next evolution.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

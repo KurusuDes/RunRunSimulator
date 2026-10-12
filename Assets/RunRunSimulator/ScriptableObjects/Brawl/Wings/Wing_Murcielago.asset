@@ -18,6 +18,7 @@ MonoBehaviour:
     blanco."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Locomotion: 0
   MoveSpeed: 5
   Attack: 0
@@ -42,3 +43,16 @@ MonoBehaviour:
   MobilitySeconds: 0.45
   MobilityCooldown: 4.5
   MobilityDamage: 750
+  Upgrades:
+  - Mods:
+    - Stat: 25
+      Op: 1
+      Value: 1.3
+  - Mods:
+    - Stat: 0
+      Op: 1
+      Value: 1.2
+  - Mods:
+    - Stat: 24
+      Op: 1
+      Value: 0.75

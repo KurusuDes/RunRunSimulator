@@ -346,6 +346,130 @@
     -unity-font-style: italic;
 }
 
+/* Evolucion de partes con Minerita (temporal, UI funcional). */
+.part-evo {
+    margin-top: 6px;
+    align-items: flex-start;
+}
+
+.part-evo__head {
+    flex-direction: row;
+    align-items: center;
+}
+
+.part-evo__pips {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 6px;
+}
+
+.part-evo__pip {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+    border-width: 2px;
+    border-color: var(--mm-frame-soft);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.part-evo__pip--on {
+    border-color: var(--mm-gold);
+    background-color: var(--mm-gold);
+}
+
+.part-evo__level {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--mm-ink-soft);
+}
+
+.part-evo__done {
+    font-size: 19px;
+    color: var(--mm-good);
+    white-space: normal;
+}
+
+.part-evo__next {
+    font-size: 19px;
+    color: var(--mm-ink);
+    white-space: normal;
+}
+
+.part-evo__max {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--mm-gold);
+}
+
+.part-evo--candidate .part-evo__next {
+    color: var(--mm-plum);
+    -unity-font-style: bold;
+}
+
+.part-evo--fresh {
+    padding: 4px;
+    border-radius: 6px;
+    background-color: rgba(233, 161, 31, 0.15);
+}
+
+.evo-action {
+    flex-direction: column;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-width: 2px;
+    border-radius: 8px;
+    border-color: var(--mm-gold);
+    background-color: rgba(233, 161, 31, 0.1);
+}
+
+.evo-action__button {
+    height: 44px;
+    margin: 4px 0 0 0;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 6px;
+    font-size: 21px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    background-color: var(--mm-plum);
+}
+
+.evo-action__button:hover {
+    background-color: var(--mm-teal);
+}
+
+.evo-action__button:disabled {
+    opacity: 0.45;
+}
+
+.evo-action__xp {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--mm-ink);
+}
+
+.evo-action__hint {
+    margin-top: 4px;
+    font-size: 18px;
+    color: var(--mm-ink-soft);
+    white-space: normal;
+}
+
+.evo-action__result {
+    margin-bottom: 4px;
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: var(--mm-gold);
+    white-space: normal;
+}
+
+.evo-action__max {
+    font-size: 21px;
+    -unity-font-style: bold;
+    color: var(--mm-gold);
+    white-space: normal;
+}
+
 /* ── Combat tab: one card per finished fight, newest first ───────
    Turn-by-turn detail is not shown here — that replay lives in the
    Combat Visualizer. */

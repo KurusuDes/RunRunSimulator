@@ -6,7 +6,9 @@ tags: [script, world, brawl, core, fighter, state]
 
 **Ruta:** `World/Brawl/BrawlFighter.cs`
 
-**Responsabilidad:** Núcleo de estado de combatiente: vida, escudo, velocidad, daño. Mantiene referencias a componentes (Motor, Wing, SkillCaster, Brain). Punto de unión de entrada de daño y curación. Emite eventos estáticos para inscripción de presentación. Aplica modificadores de estado (slow, stun, haste, boost, espinas, provocación). Registra combatientes en lista estática `BrawlFighter.All`. Recibe el poder y la vida de la bajada vía `Prime` y puede marcarse como muñeco (`Dummy`). `Bind` resuelve el kit, los temas y el bloqueo de espalda con `BrawlKitProfile.Of`.
+**Responsabilidad:** Núcleo de estado de combatiente: vida, escudo, velocidad, daño. Mantiene referencias a componentes (Motor, Wing, SkillCaster, Brain). Punto de unión de entrada de daño y curación. Emite eventos estáticos para inscripción de presentación. Aplica modificadores de estado (slow, stun, haste, boost, espinas, provocación). Registra combatientes en lista estática `BrawlFighter.All`. Recibe el poder y la vida de la bajada vía `Prime` y puede marcarse como muñeco (`Dummy`). `Bind` resuelve el kit, los temas y el bloqueo de espalda con `BrawlKitProfile.Of`. **S148:** `Bind` aplica las mejoras por tier: alas, cuerno y espalda se reemplazan por copias mejoradas (`BrawlUpgrades.Upgraded`) y el cuerpo ajusta HP y velocidad (`BrawlUpgrades.Body`).
+
+**Vinculado a:** [[Index/32 - Demo Brawl 3v3 arcade]]
 
 ## Estructura
 
@@ -18,6 +20,7 @@ tags: [script, world, brawl, core, fighter, state]
 | `caster` | `BrawlSkillCaster` | Habilidades (cuerno, espalda) |
 | `brain` | `BrawlBrain` | IA autónoma |
 | `bodyRadius`, `centerHeight` | float | Geometría de colisión (defaults 0.65 y 0.8) |
+| `upgraded` (privado) | `List<UnityEngine.Object>` | Copias mejoradas de alas, cuerno y espalda creadas en `Bind` (S148). Se destruyen en `ReleaseUpgrades` |
 
 ## Propiedades Públicas
 
@@ -27,7 +30,7 @@ tags: [script, world, brawl, core, fighter, state]
 | `Team` | `ExpeditionTeam` | Player o Rival |
 | `DisplayName` | string | `CustomName` del DNA o nombre del GameObject |
 | `BodyLabel` | string | Etiqueta de cuerpo desde `BrawlTuningSO.BodyFor` |
-| `MaxHp`, `Hp`, `Hp01` | float | Vida y ratio |
+| `MaxHp`, `Hp`, `Hp01` | float | Vida máxima (cuerpo y mejora de cuerpo), vida actual y ratio |
 | `Shield` | float | Escudo activo (decrece por tiempo) |
 | `IsAlive` | bool | `Hp > 0` |
 | `IsStunned` | bool | Aturdido; `SpeedMultiplier = 0` |
@@ -39,10 +42,10 @@ tags: [script, world, brawl, core, fighter, state]
 | `Position`, `Center` | Vector3 | Posición y centro de impacto |
 | `Radius` | float | Radio de cuerpo |
 | `Lift` | float | Altura de salto (set por Motor) |
-| `BaseSpeed` | float | `WingKit.MoveSpeed × body.SpeedMul` |
+| `BaseSpeed` | float | `WingKit.MoveSpeed × body.SpeedMul × speedUp`; `speedUp` es la mejora de velocidad del cuerpo (S148) |
 | `HealFactor`, `RoundDamageFactor` | float | Multiplicadores de curación y daño (muerte súbita, ramp de KO) |
 | `Taunter` | BrawlFighter | Quien provoca, si el taunt está vigente |
-| `WingKit`, `HornSkill`, `BackSkill` | SO | Kits y habilidades. `BackSkill` es null si la espalda está bloqueada |
+| `WingKit`, `HornSkill`, `BackSkill` | SO | Kits y habilidades ya mejoradas por tier (copias). `BackSkill` es null si la espalda está bloqueada |
 | `BackLocked` | bool | Espalda bloqueada por forma no adulta; lo copia `Bind` de `BrawlKitProfile` |
 | `WingTheme`, `HornTheme`, `BackTheme` | `BrawlTheme` | Color e ícono de VFX. `BackTheme` queda en default si la espalda está bloqueada |
 | `DamageDealt`, `HealingDone`, `KOs` | float/int | Estadísticas de ronda |
@@ -65,7 +68,7 @@ tags: [script, world, brawl, core, fighter, state]
 
 | Método | Descripción |
 |--------|-------------|
-| `Bind(dna, team, kits, tuning, parts, bank, fur)` | Inicialización completa: visualiza el DNA, resuelve kit, temas y `BackLocked` con `BrawlKitProfile.Of`, toma `MaxHp`, `BaseSpeed` y `BodyLabel` de `tuning.BodyFor(BodyShapeID)`, resetea estado, registra en `All` e inicia motor, ala, caster y brain. Resetea `Power = 1` y `Dummy = false` |
+| `Bind(dna, team, kits, tuning, parts, bank, fur)` | Inicialización completa: libera las copias de la vez anterior, visualiza el DNA, resuelve kit, temas y `BackLocked` con `BrawlKitProfile.Of`. Crea copias mejoradas de ala, cuerno y espalda según `WingTier`, `HornTier` y `BackTier` (S148). Calcula `MaxHp` con `tuning.BaseHp × body.HpMul × hpUp` y `BaseSpeed` con `WingKit.MoveSpeed × body.SpeedMul × speedUp`, donde `hpUp` y `speedUp` salen de `BrawlUpgrades.Body(kits.BodyUpgrades, BodyTier)`. Toma `BodyLabel` de `tuning.BodyFor(BodyShapeID)`, resetea estado, registra en `All` e inicia motor, ala, caster y brain. Resetea `Power = 1` y `Dummy = false` |
 | `Prime(power, health01)` | Escala la vida máxima por `power` (mín 0,05) y fija la vida actual a `MaxHp × health01` (mín 1). Usado por la bajada |
 | `Despawn()` | Retira de `All` |
 | `TakeDamage(hit)` | Aplica daño (absorbe escudo primero), knockback, espinas, event |
@@ -106,9 +109,11 @@ tags: [script, world, brawl, core, fighter, state]
 - [[BrawlBrain]] — toma de decisiones
 
 **Datos:**
-- [[CreatureDNA]] — estadísticas
-- [[BrawlWingKitSO]], [[BrawlSkillSO]] — kit de combate
+- [[CreatureDNA]] — estadísticas y tiers de mejora
+- [[BrawlWingKitSO]], [[BrawlSkillSO]] — kit de combate (copias mejoradas en runtime)
 - [[BrawlKitProfile]] — resuelve kit, temas, `BackLocked` y rol desde el DNA
+- [[BrawlUpgrades]] — `Upgraded` (ala, cuerno, espalda) y `Body` (HP y velocidad)
+- [[BrawlKitDatabaseSO]] — `BodyUpgrades`
 - [[BrawlTheme]] — tema VFX
 - [[BrawlTuningSO]] — parámetros globales
 
@@ -132,3 +137,4 @@ tags: [script, world, brawl, core, fighter, state]
 - `Prime` multiplica `MaxHp` cada vez que se llama: no es idempotente. Hoy se llama una vez por spawn, porque `Bind` restaura `MaxHp` antes.
 - `TakeDamage` reescribe `hit.Amount` a daño aplicado + absorbido (con tope de vida restante) antes de `OnDamaged`.
 - S146: `BackLocked` nuevo. Con espalda bloqueada no hay `BackSkill` ni tema de espalda, y el HUD muestra el slot con "?".
+- S148: las copias mejoradas (`upgraded`) se destruyen en cada `ReleaseUpgrades`: al re-`Bind` y en `OnDestroy`. Los SO del kit nunca se modifican. Una parte sin escalones sigue usando el mismo asset.

@@ -43,3 +43,16 @@ MonoBehaviour:
   MobilitySeconds: 0.4
   MobilityCooldown: 6
   MobilityDamage: 0
+  Upgrades:
+  - Mods:
+    - Stat: 5
+      Op: 1
+      Value: 1.15
+  - Mods:
+    - Stat: 0
+      Op: 1
+      Value: 1.2
+  - Mods:
+    - Stat: 21
+      Op: 1
+      Value: 0.85

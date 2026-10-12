@@ -31,6 +31,8 @@ public class BrawlFighter : MonoBehaviour
 
     private static readonly List<BrawlFighter> all = new();
 
+    private readonly List<UnityEngine.Object> upgraded = new();
+
     private float shieldPool;
     private float shieldUntil;
     private float slowValue;
@@ -112,6 +114,7 @@ public class BrawlFighter : MonoBehaviour
     private void OnDestroy()
     {
         all.Remove(this);
+        ReleaseUpgrades();
     }
 
     public void Bind(CreatureDNA dna, ExpeditionTeam team, BrawlKitDatabaseSO kits, BrawlTuningSO tuning, CreatureDatabaseSO parts, MonchiVisualBankSO bank, FurTypeDatabaseSO fur)
@@ -125,18 +128,22 @@ public class BrawlFighter : MonoBehaviour
         visualizer.SetFurDatabase(fur);
         visualizer.Assemble(dna);
 
+        ReleaseUpgrades();
+
         var profile = BrawlKitProfile.Of(dna, kits, parts);
-        WingKit = profile.Wing;
-        HornSkill = profile.Horn;
-        BackSkill = profile.Back;
+        WingKit = BrawlUpgrades.Upgraded(profile.Wing, (int)dna.WingTier, upgraded);
+        HornSkill = BrawlUpgrades.Upgraded(profile.Horn, (int)dna.HornTier, upgraded);
+        BackSkill = BrawlUpgrades.Upgraded(profile.Back, (int)dna.BackTier, upgraded);
         WingTheme = profile.WingTheme;
         HornTheme = profile.HornTheme;
         BackTheme = profile.BackTheme;
         BackLocked = profile.BackLocked;
 
+        BrawlUpgrades.Body(kits != null ? kits.BodyUpgrades : null, (int)dna.BodyTier, out var hpUp, out var speedUp);
+
         var body = tuning.BodyFor(dna.BodyShapeID);
-        MaxHp = tuning.BaseHp * body.HpMul;
-        BaseSpeed = WingKit.MoveSpeed * body.SpeedMul;
+        MaxHp = tuning.BaseHp * body.HpMul * hpUp;
+        BaseSpeed = WingKit.MoveSpeed * body.SpeedMul * speedUp;
         BodyLabel = body.Label;
         Hp = MaxHp;
 
@@ -303,6 +310,17 @@ public class BrawlFighter : MonoBehaviour
         taunter = by;
         tauntUntil = Mathf.Max(tauntUntil, Time.time + seconds);
         OnStatusApplied?.Invoke(this, BrawlStatusKind.Taunt, seconds);
+    }
+
+    private void ReleaseUpgrades()
+    {
+        for (int i = 0; i < upgraded.Count; i++)
+        {
+            if (upgraded[i] != null)
+                Destroy(upgraded[i]);
+        }
+
+        upgraded.Clear();
     }
 
     private bool CanApply(float value, float seconds)

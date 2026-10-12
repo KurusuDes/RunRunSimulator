@@ -6,7 +6,7 @@ tags: [script, system, expedition, bridge, monetization]
 
 **Ruta:** `Systems/Expedition/ExpeditionBridge.cs`
 
-**Responsabilidad:** Orquestador de las transiciones tienda↔arena de la bajada. Cobra el costo de bajada en Dabloons, espera el flush a la nube antes de cambiar de escena y, al volver, aplica el resultado: Minerita por botín (tasa de `BrawlRunRulesSO`), bajas (si permadeath), evolución por exploración y el evento `ExpeditionReturned` con el payload completo para la tarjeta de retorno.
+**Responsabilidad:** Orquestador de las transiciones tienda↔arena de la bajada. Cobra el costo de bajada en Dabloons, espera el flush a la nube antes de cambiar de escena y, al volver, aplica el resultado: Minerita por botín (tasa de `BrawlRunRulesSO`), bajas (si permadeath), batallas (S148), exploración por evolución de etapa y el evento `ExpeditionReturned` con el payload completo para la tarjeta de retorno.
 
 ## Campos Serializados
 
@@ -39,7 +39,7 @@ tags: [script, system, expedition, bridge, monetization]
 2. `TryConsumeResult`. Si no hay resultado, sale.
 3. Tasa = `runRules.MineritaPerLoot` (si `runRules` falta, tasa 1 y warning). Material = `PlayerSecured` (ya descontada la pérdida de la derrota). `Minerita += material × tasa` con `Wallet.Add`.
 4. Si `permadeathEnabled`: `CreatureLifecycle.Kill` a los `FallenIds`; si `Lost`, a todo `TeamIds`. IDs no encontrados o ya muertos se ignoran.
-5. El equipo se arma con todos los DNA vivos de `TeamIds` (también caídos o en derrota). Si no hay derrota: `CreatureGrowth.RecordExploration` por cada miembro no caído. El umbral sale de `BreedingController.LifeStageTable.ExplorationsToEvolve` (3 si no hay tabla). Los que evolucionan van a `evolvedIds`; los que estaban en Slime marcan `touched`.
+5. El equipo se arma con los DNA vivos de `TeamIds` (también caídos o en derrota). Cada miembro suma `result.Combats` a `Battles` (S148). Si no hay derrota: `CreatureGrowth.RecordExploration` por cada miembro no caído. El umbral sale de `BreedingController.LifeStageTable.ExplorationsToEvolve` (3 si no hay tabla). Los que evolucionan van a `evolvedIds`; los que estaban en Slime marcan `touched`.
 6. Si `touched`: `GameEvents.RegistryChanged(registry)`. Por cada evolucionado: `GameEvents.CreatureFormChanged(dna)`.
 7. `GameEvents.ExpeditionReturned(ExpeditionReturn{...})` con `MineritaLost = MaterialLost × tasa`, `Team`, `EvolvedIds` y `ExplorationsToEvolve`.
 
@@ -50,6 +50,7 @@ tags: [script, system, expedition, bridge, monetization]
 - `Depart` no revisa el horario: esa guarda vive solo en el botón de `ExpeditionPanelUITK`.
 - Con derrota, la Minerita se paga sobre el botín que quedó tras la pérdida.
 - S145: la tasa de Minerita por botín ya no es un campo de este script (`mineritaPerMaterial` se quitó): vive en `BrawlRunRulesSO.MineritaPerLoot`.
+- S148: los combates de la bajada suman a `Battles` de todo el equipo, incluidos caídos y en derrota. `Battles` es el requisito de `PartLevelUpEffectSO`; no se confunde con la exploración, que sigue contando solo a los no caídos y solo si se gana.
 
 ## Conexiones
 
@@ -57,9 +58,11 @@ tags: [script, system, expedition, bridge, monetization]
 - [[ExpeditionPanelUITK]] — llama `RequestDeparture`
 - [[ExpeditionReturnCardUITK]] — consume `ExpeditionReturned` (tarjeta de resultado)
 - [[BrawlRunDirector]] — vuelve con `ReturnToStore(run.ToResult())`
+- [[BrawlRun]] — `Combats` del resultado
 - [[BrawlRunRulesSO]] — `DescentCost`, `MineritaPerLoot`, `Activate`/`Deactivate`
 - [[GameManager]] — `FlushToCloudAsync`, `Registry`
 - [[CloudSyncService]] — `StartupSyncDone`
 - [[Wallet]] — `TrySpend(Dabloons)`, `Add(Minerita)`
 - [[CreatureLifecycle]], [[CreatureGrowth]], [[BreedingController]] — muerte, exploración, tabla de etapas
+- [[CreatureDNA]] — `Battles`
 - [[GameEvents]] — `RegistryChanged`, `CreatureFormChanged`, `ExpeditionReturned`

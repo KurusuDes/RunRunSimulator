@@ -28,7 +28,8 @@ public class CustomerPricingSO : SerializedScriptableObject
             {
                 { Tier.Tier1, 20 },
                 { Tier.Tier2, 50 },
-                { Tier.Tier3, 120 }
+                { Tier.Tier3, 120 },
+                { Tier.Tier4, 250 }
             };
         }
     }

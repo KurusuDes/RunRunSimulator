@@ -72,6 +72,11 @@ Cutie Marks y linaje (H2) · rival real asíncrono y ferales (H3) · permadeath 
 4. **P0.8** audio y **P0.9** mallas: en paralelo (assets externos o artista).
 5. P1 por lotes según lo que pida el playtest.
 
+## 4b · Resuelto en S148
+
+- **P0.1 + P0.2 ✅ (rediseñados por Juan):** no hay cambio de poder. Evolucionar suma un efecto al poder de la parte (escalera fija de 3 mejoras: variación o potencia). Un solo botón por criatura: la parte sale al azar entre las del nivel más bajo y ninguna pasa de nivel hasta que todas lo alcancen. Solo evoluciona un MoriMochi adulto, y cada evolución pide **experiencia en batalla** (combates acumulados en la bajada) además de Minerita. Detalle en [[Index/09 - Active Context]] (S148). Futuro: mini variaciones de una misma parte.
+- **Decisiones 2-5:** bendiciones 1 de 3 al cerrar cada tramo · jefes = MoriMonchis gigantes con partes propias · audio = comprar pack · las 7 partes sin malla salen del pool hasta modelarlas (sin ejecutar).
+
 ## 4 · Decisiones de Juan (bloquean P0)
 
 1. **Poderes (E2.2):** ¿el cambio de poder se hereda a las crías? ¿Cuántas opciones se ofrecen por parte (2 o 3)? Los precios los fija la IA.

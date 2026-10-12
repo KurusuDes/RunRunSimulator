@@ -19,6 +19,7 @@ public class BrawlRun
     public int MaterialLost { get; private set; }
     public bool Lost { get; private set; }
     public int RoomsCleared { get; private set; }
+    public int Combats { get; private set; }
 
     public bool TramoDone => RoomIndex >= rooms.Count;
     public float RivalPower => rules.RivalPower(Depth);
@@ -72,6 +73,7 @@ public class BrawlRun
     public void RecordCombat(bool won, IReadOnlyDictionary<string, float> health01, int rivalsDefeated)
     {
         if (Lost) return;
+        Combats++;
 
         for (int i = 0; i < teamIds.Count; i++)
         {
@@ -122,7 +124,8 @@ public class BrawlRun
             Lost = Lost,
             FallenIds = new List<string>(),
             Fallen = 0,
-            TeamIds = new List<string>(teamIds)
+            TeamIds = new List<string>(teamIds),
+            Combats = Combats
         };
     }
 }

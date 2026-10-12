@@ -134,6 +134,12 @@ public class ExpeditionBridge : MonoBehaviour
                 if (!registry.TryGet(id, out var dna) || dna == null || dna.IsDead) continue;
                 team.Add(dna);
 
+                if (result.Combats > 0)
+                {
+                    dna.Battles += result.Combats;
+                    touched = true;
+                }
+
                 if (result.Lost) continue;
                 if (result.FallenIds != null && result.FallenIds.Contains(id)) continue;
 

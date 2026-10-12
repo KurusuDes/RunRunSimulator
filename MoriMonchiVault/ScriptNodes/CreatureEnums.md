@@ -6,7 +6,7 @@ tags: [enum, creature, core, expedition]
 
 **Ruta:** `Core/Enums/CreatureEnums.cs`
 
-**Responsabilidad:** Enumeraciones centrales de comportamiento, estado y forma de MoriMonchi. CreatureGender, LifeStage, MonchiMood, Tier, BusyReason, HatchResult, NeedType, CreatureCondition, CreatureIntent (30 valores), ProximityReaction, EmoteKind, SocialInteractionKind, MonchiForm (S135).
+**Responsabilidad:** Enumeraciones centrales de comportamiento, estado y forma de MoriMochi. CreatureGender, LifeStage, MonchiMood, Tier (1 a 4), BusyReason, HatchResult, NeedType, CreatureCondition, CreatureIntent (30 valores), ProximityReaction, EmoteKind, SocialInteractionKind, MonchiForm (S135).
 
 **S131:** Agregado HatchResult para flujo de cría local.
 **S135:** Agregado MonchiForm para soportar Egg/Slime/Adult.
@@ -18,7 +18,7 @@ tags: [enum, creature, core, expedition]
 | `CreatureGender` | Unknown, Male, Female | Sexo de la criatura |
 | `LifeStage` | Newborn, Child, Teen, Adult, Elder | Etapa de vida |
 | `MonchiMood` | 12 valores (Neutral - KO) | Estado emocional/físico |
-| `Tier` | Tier1, Tier2, Tier3 | Nivel de rareza/poder |
+| `Tier` | Tier1, Tier2, Tier3, Tier4 | Tier del MoriMochi: precio base en `CustomerPricingSO` y nivel de mejora de cada parte |
 | `BusyReason` | None, Breeding, Sold | Razón de ocupación |
 | `NeedType` | Health, Energy, Affect | Tipos de necesidad básica |
 | `CreatureCondition` | Healthy, InNeed, Sick | Condición de salud |
@@ -28,14 +28,20 @@ tags: [enum, creature, core, expedition]
 | `SocialInteractionKind` | PlayChase, SleepTogether, GremlinFight | Interacción social |
 | `MonchiForm` | Adult (0), Egg (1), Slime (2) | Forma del MoriMochi (S135) |
 
+## Tier
+
+- `Tier1` es la base. Cada escalón de mejora de una parte sube un tier.
+- `Tier4` es el máximo de una parte con 3 escalones en su kit (`BrawlUpgrades.MaxSteps`).
+- Los valores son 1 a 4, así que `(int)tier` sirve como nivel.
+
 ## CreatureIntent (30 valores)
 
 ```
-0:  Idle              5: Retreating     10: Playing       15: Chasing       20: Losing       25: Guarding
-1:  Wandering         6: SeekingFood    11: Held          16: SleepTogether  21: Clashing      26: Hunting
-2:  Following         7: SeekingRest    12: Tumbling      17: Fighting       22: Dazed         27: Taunting
-3:  Approaching       8: SeekingPlay    13: Socializing   18: Collecting     23: Carrying      28: Exploring
-4:  Fleeing           9: Eating         14: (reserved)    19: Taking         24: Securing      29: Reporting
+0:  Idle              5: Retreating     10: Resting       15: Chasing       20: Losing       25: Guarding
+1:  Wandering         6: SeekingFood    11: Playing       16: SleepingTogether  21: Clashing  26: Hunting
+2:  Following         7: SeekingRest    12: Held          17: Fighting      22: Dazed        27: Taunting
+3:  Approaching       8: SeekingPlay    13: Tumbling      18: Collecting    23: Carrying     28: Exploring
+4:  Fleeing           9: Eating         14: Socializing   19: Taking        24: Securing     29: Reporting
 ```
 
 ### Cambios por Sesión
@@ -102,4 +108,4 @@ Propósito: Diferenciar forma visual del MoriMochi para soporte de ciclos de vid
 
 ## Conexiones
 
-[[MonchiVisualBankSO]], [[IncubationService]], [[MonchiMoodDriver]], [[MonchiPartRegistrar]], [[CreatureDNA]]
+[[MonchiVisualBankSO]], [[IncubationService]], [[MonchiMoodDriver]], [[MonchiPartRegistrar]], [[CreatureDNA]], [[CustomerPricingSO]], [[BrawlUpgrades]]

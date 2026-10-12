@@ -6,7 +6,7 @@ tags: [script, data, so]
 
 **Ruta:** `Data/Brawl/BrawlWingKitSO.cs`
 
-**Responsabilidad:** SO de ala en Brawl. Define movimiento (locomoción, velocidad), ataque básico (tipo, rango, daño, velocidad proyectil, patrón), movilidad (tipo, distancia, enfriamiento) y curación aliada opcional. Un asset por ala (W0-W5: Vela, Colibrí, Aletas, Cintas, Plumitas, Murciélago).
+**Responsabilidad:** SO de ala en Brawl. Define movimiento (locomoción, velocidad), ataque básico (tipo, rango, daño, velocidad proyectil, patrón), movilidad (tipo, distancia, enfriamiento), curación aliada opcional y escalones de mejora por tier. Un asset por ala (W0-W5: Vela, Colibrí, Aletas, Cintas, Plumitas, Murciélago).
 
 **Vinculado a:** [[Index/32 - Demo Brawl 3v3 arcade]] (sección "2 · Alas")
 
@@ -44,6 +44,7 @@ tags: [script, data, so]
 | | `MobilitySeconds` | float | Duración de la movilidad |
 | | `MobilityCooldown` | float | Enfriamiento entre usos |
 | | `MobilityDamage` | float | Daño al impactar con movilidad |
+| **Evolución** | `Upgrades` | `List<BrawlUpgradeStep>` | Escalones de mejora. El escalón `i` se aplica al llegar al tier `i + 2`; máximo 3 |
 
 ## Referencia: Alas S142
 
@@ -63,11 +64,12 @@ tags: [script, data, so]
 - Cargado por `BrawlKitDatabaseSO.Wing(partId)`
 
 **Salida:**
-- `BrawlFighter.WingKit` (asignado en SetWing)
+- `BrawlFighter.WingKit`: en `Bind` se reemplaza por una copia mejorada según el tier (`BrawlUpgrades.Upgraded`)
 - `BrawlWing` copia valores a instancia personal (stats del fighter)
 - `BrawlBody` usa para VFX (tamaño sprite, patrón proyectil)
 - `BrawlHudCard` muestra tema del ala
 - `BrawlBrain` usa MoveSpeed para cálculos de distancia
+- `DetailEvolutionBlock` describe los escalones con `BrawlUpgradeText`
 
 ## Notas S142
 
@@ -77,3 +79,9 @@ tags: [script, data, so]
 - AllyHeal (Colibrí) es mechanics especial: el ala básico cura aliados bajo threshold
 - HealBelow evita waste (no cura al 99% de vida)
 - AttackAnim permite custom animaciones por ala en future
+
+## Notas S148
+
+- Las mejoras que aplican a alas son: `Damage`, `Range`, `Angle`, `Count`, `Knockback`, `Slow`, `SlowSeconds`, `AllyHeal`, `Reload`, `HitRadius`, `MoveSpeed`, `MobilityCooldown`, `MobilityDamage` y `MobilityDistance`.
+- `Reload` no baja de 0,05 s tras una mejora.
+- Igual que las habilidades, la mejora se aplica a una copia que `BrawlFighter` destruye al re-`Bind` o al destruirse.

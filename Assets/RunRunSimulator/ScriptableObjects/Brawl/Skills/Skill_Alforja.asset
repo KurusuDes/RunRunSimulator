@@ -18,6 +18,7 @@ MonoBehaviour:
   Description: "Le tira una merienda al aliado m\xE1s herido."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 0.9098039, g: 0.6313726, b: 0.3529412, a: 1}
+  Signature: 0
   Family: 9
   Role: 2
   Target: 3
@@ -52,3 +53,16 @@ MonoBehaviour:
   ExplodeRadius: 0
   SpriteSize: 0.8
   FollowCaster: 0
+  Upgrades:
+  - Mods:
+    - Stat: 6
+      Op: 1
+      Value: 1.4
+  - Mods:
+    - Stat: 1
+      Op: 1
+      Value: 1.2
+  - Mods:
+    - Stat: 4
+      Op: 1
+      Value: 0.8

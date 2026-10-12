@@ -8,6 +8,23 @@ public class BrawlKitDatabaseSO : ScriptableObject
 {
     public List<BrawlWingKitSO> Wings = new();
     public List<BrawlSkillSO> Skills = new();
+    public List<BrawlUpgradeStep> BodyUpgrades = new();
+
+    private static readonly IReadOnlyList<BrawlUpgradeStep> NoUpgrades = new List<BrawlUpgradeStep>().AsReadOnly();
+
+    public IReadOnlyList<BrawlUpgradeStep> Upgrades(CreatureDNA dna, PartRole role)
+    {
+        if (dna == null) return NoUpgrades;
+        IReadOnlyList<BrawlUpgradeStep> steps = null;
+        switch (role)
+        {
+            case PartRole.Body: steps = BodyUpgrades; break;
+            case PartRole.Horn: steps = Skill(dna.HornID, ClashSlot.Horn)?.Upgrades; break;
+            case PartRole.Back: steps = Skill(dna.BackID, ClashSlot.Back)?.Upgrades; break;
+            case PartRole.Wing: steps = Wing(dna.WingID)?.Upgrades; break;
+        }
+        return steps ?? NoUpgrades;
+    }
 
     public BrawlWingKitSO Wing(string partId)
     {

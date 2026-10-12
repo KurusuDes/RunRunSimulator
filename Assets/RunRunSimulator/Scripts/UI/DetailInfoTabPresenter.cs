@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 namespace MoriMonchiSimulator
@@ -8,17 +9,21 @@ public class DetailInfoTabPresenter
     private readonly CreatureDatabaseSO database;
     private readonly CareGateSO careGate;
     private readonly BrawlKitDatabaseSO kits;
+    private readonly DetailEvolutionBlock evolutionBlock;
 
     private readonly VisualElement needHealthFill, needEnergyFill, needAffectFill;
     private readonly VisualElement needHealthRow, needEnergyRow, needAffectRow;
     private readonly Label exploreStatus, combatRoleTitle, identityLabel, roleElementLabel, progressionLabel;
     private readonly VisualElement partsContainer, combatRole, combatRolePill;
+    private CreatureDNA lastDna;
 
-    public DetailInfoTabPresenter(VisualElement root, CreatureDatabaseSO database, CareGateSO careGate, BrawlKitDatabaseSO kits)
+    public DetailInfoTabPresenter(VisualElement root, CreatureDatabaseSO database, CareGateSO careGate, BrawlKitDatabaseSO kits,
+        EvolutionEffectSO evolution, Func<CreatureRegistrySO> registry)
     {
         this.database = database;
         this.careGate = careGate;
         this.kits = kits;
+        evolutionBlock = new DetailEvolutionBlock(kits, evolution, registry, () => Rebuild(lastDna));
 
         needHealthRow    = root.Q<VisualElement>("need-health");
         needEnergyRow    = root.Q<VisualElement>("need-energy");
@@ -39,6 +44,7 @@ public class DetailInfoTabPresenter
     public void Rebuild(CreatureDNA dna)
     {
         if (dna == null) return;
+        lastDna = dna;
 
         SetNeedBar(needHealthFill, NeedType.Health, dna.Needs.Health);
         SetNeedBar(needEnergyFill, NeedType.Energy, dna.Needs.Energy);
@@ -103,29 +109,34 @@ public class DetailInfoTabPresenter
     {
         if (partsContainer == null) return;
         partsContainer.Clear();
+
+        var action = evolutionBlock.BuildAction(dna);
+        if (action != null) partsContainer.Add(action);
+
         if (database == null) return;
 
-        AddPartRow(PartRole.Body, database.GetBodyShape(dna.BodyShapeID));
-        AddSkillRow(PartRole.Horn, database.GetHorn(dna.HornID), profile.Horn);
-        AddSkillRow(PartRole.Back, database.GetBack(dna.BackID), profile.Back, profile.BackLocked);
-        AddWingRow(PartRole.Wing, database.GetWing(dna.WingID), profile.Wing);
+        AddPartRow(PartRole.Body, database.GetBodyShape(dna.BodyShapeID), evolutionBlock.Build(dna, PartRole.Body, null));
+        AddSkillRow(PartRole.Horn, database.GetHorn(dna.HornID), profile.Horn, evolution: evolutionBlock.Build(dna, PartRole.Horn, profile.Horn?.Family));
+        AddSkillRow(PartRole.Back, database.GetBack(dna.BackID), profile.Back, profile.BackLocked,
+            profile.BackLocked ? null : evolutionBlock.Build(dna, PartRole.Back, profile.Back?.Family));
+        AddWingRow(PartRole.Wing, database.GetWing(dna.WingID), profile.Wing, evolutionBlock.Build(dna, PartRole.Wing, null));
         AddPartRow(PartRole.Face, database.GetFace(dna.FaceID));
     }
 
-    private void AddSkillRow(PartRole slot, BodyPart part, BrawlSkillSO skill, bool locked = false)
+    private void AddSkillRow(PartRole slot, BodyPart part, BrawlSkillSO skill, bool locked = false, VisualElement evolution = null)
     {
-        if (locked) AddPowerPartRow(slot, part, Loc.Tr("ui.power.locked.title"), Loc.Tr("ui.power.locked.desc"), null, true);
-        else if (skill != null) AddPowerPartRow(slot, part, skill.Title, skill.Description, skill.Role);
-        else AddPowerPartRow(slot, part, null, null, null);
+        if (locked) AddPowerPartRow(slot, part, Loc.Tr("ui.power.locked.title"), Loc.Tr("ui.power.locked.desc"), null, true, evolution);
+        else if (skill != null) AddPowerPartRow(slot, part, skill.Title, skill.Description, skill.Role, evolution: evolution);
+        else AddPowerPartRow(slot, part, null, null, null, evolution: evolution);
     }
 
-    private void AddWingRow(PartRole slot, BodyPart part, BrawlWingKitSO wing)
+    private void AddWingRow(PartRole slot, BodyPart part, BrawlWingKitSO wing, VisualElement evolution = null)
     {
-        if (wing != null) AddPowerPartRow(slot, part, wing.Title, wing.Description, BrawlKitProfile.WingRole(wing));
-        else AddPowerPartRow(slot, part, null, null, null);
+        if (wing != null) AddPowerPartRow(slot, part, wing.Title, wing.Description, BrawlKitProfile.WingRole(wing), evolution: evolution);
+        else AddPowerPartRow(slot, part, null, null, null, evolution: evolution);
     }
 
-    private void AddPartRow(PartRole slot, BodyPart part)
+    private void AddPartRow(PartRole slot, BodyPart part, VisualElement evolution = null)
     {
         var row = new VisualElement();
         row.AddToClassList("part-row");
@@ -134,12 +145,24 @@ public class DetailInfoTabPresenter
         var text = new Label();
         text.AddToClassList("part-text");
         text.text = PartLine(slot, part);
-        row.Add(text);
+
+        if (evolution != null)
+        {
+            var body = new VisualElement();
+            body.AddToClassList("part-body");
+            body.Add(text);
+            body.Add(evolution);
+            row.Add(body);
+        }
+        else
+        {
+            row.Add(text);
+        }
 
         partsContainer.Add(row);
     }
 
-    private void AddPowerPartRow(PartRole slot, BodyPart part, string powerTitle, string powerDescription, BrawlSkillRole? powerRole, bool locked = false)
+    private void AddPowerPartRow(PartRole slot, BodyPart part, string powerTitle, string powerDescription, BrawlSkillRole? powerRole, bool locked = false, VisualElement evolution = null)
     {
         var row = new VisualElement();
         row.AddToClassList("part-row");
@@ -170,6 +193,8 @@ public class DetailInfoTabPresenter
 
             body.Add(power);
         }
+
+        if (evolution != null) body.Add(evolution);
 
         row.Add(body);
         partsContainer.Add(row);

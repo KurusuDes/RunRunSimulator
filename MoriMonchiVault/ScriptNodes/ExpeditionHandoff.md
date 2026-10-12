@@ -14,7 +14,7 @@ tags: [script, core, handoff, expedition, time-scale]
 
 ## Tipos
 
-**`ExpeditionResult`** (resultado de la bajada, lo arma `BrawlRun.ToResult()`): `Seed`, `Winner`, `PlayerSecured`, `MaterialLost`, `RivalSecured`, `Floors`, `Lost`, `FallenIds`, `Fallen`, `TeamIds`.
+**`ExpeditionResult`** (resultado de la bajada, lo arma `BrawlRun.ToResult()`): `Seed`, `Winner`, `PlayerSecured`, `MaterialLost`, `RivalSecured`, `Floors`, `Lost`, `FallenIds`, `Fallen`, `TeamIds`, `Combats`.
 
 **`ExpeditionReturn`** (payload de `GameEvents.ExpeditionReturned`): `Seed`, `Winner`, `PlayerSecured`, `RivalSecured`, `MineritaGained`, `MineritaLost`, `Fallen`, `Floors`, `Lost`, `Team` (`List<CreatureDNA>`), `EvolvedIds` (`List<string>`), `ExplorationsToEvolve` (`int`).
 
@@ -68,3 +68,4 @@ La arena escala `timeScale` (4x). `MMTimeManager` multiplica `fixedDeltaTime` po
 - `ReturnToStore` con resultado no toca `CameFromStore`; lo limpia `TryConsumeResult` al consumir el resultado.
 - Sin IDs (`GoToArena(null)`) la arena no tiene equipo y el director vuelve a la tienda.
 - S145: `ExpeditionResult` suma `MaterialLost` y `ExpeditionReturn` suma `MineritaLost`, `Team`, `EvolvedIds` y `ExplorationsToEvolve`. El toast de retorno de `InfoOverlayUITK` ya no existe: la tarjeta lee el payload entero.
+- S148: `ExpeditionResult` suma `Combats` (combates resueltos en la bajada). `ExpeditionBridge` lo suma a `CreatureDNA.Battles` de cada MoriMochi del equipo.

@@ -18,6 +18,7 @@ MonoBehaviour:
   Description: "Dispara doce p\xFAas finas en todas direcciones."
   IconOverride: {fileID: 0}
   ColorOverride: {r: 1, g: 1, b: 1, a: 0}
+  Signature: 0
   Family: 4
   Role: 0
   Target: 0
@@ -52,3 +53,16 @@ MonoBehaviour:
   ExplodeRadius: 0
   SpriteSize: 0.45
   FollowCaster: 0
+  Upgrades:
+  - Mods:
+    - Stat: 8
+      Op: 0
+      Value: 4
+  - Mods:
+    - Stat: 0
+      Op: 1
+      Value: 1.2
+  - Mods:
+    - Stat: 5
+      Op: 1
+      Value: 1.25

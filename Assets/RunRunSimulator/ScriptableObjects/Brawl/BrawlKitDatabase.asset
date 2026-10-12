@@ -53,3 +53,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c4ed59bcc6e85f344be1c9f25f92153b, type: 2}
   - {fileID: 11400000, guid: 593dd1523ccc03a458986e1f8e5bccc0, type: 2}
   - {fileID: 11400000, guid: 6543c3a20b4f3ad4fb6f054123786ff7, type: 2}
+  BodyUpgrades:
+  - Mods:
+    - Stat: 27
+      Op: 1
+      Value: 1.08
+  - Mods:
+    - Stat: 23
+      Op: 1
+      Value: 1.05
+  - Mods:
+    - Stat: 27
+      Op: 1
+      Value: 1.1
