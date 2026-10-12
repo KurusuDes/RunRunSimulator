@@ -205,13 +205,13 @@ MonoBehaviour:
       Data: 4|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 27.08503
+      Data: 0
     - Name: Energy
       Entry: 4
-      Data: 28.3435211
+      Data: 0
     - Name: Affect
       Entry: 4
-      Data: -54.15664
+      Data: -100
     - Name: 
       Entry: 8
       Data: 
@@ -418,13 +418,13 @@ MonoBehaviour:
       Data: 8|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 82.58476
+      Data: 0
     - Name: Energy
       Entry: 4
-      Data: 77.78355
+      Data: 0
     - Name: Affect
       Entry: 4
-      Data: 70.29701
+      Data: -100
     - Name: 
       Entry: 8
       Data: 
@@ -631,13 +631,13 @@ MonoBehaviour:
       Data: 12|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 82.58476
+      Data: 0
     - Name: Energy
       Entry: 4
-      Data: 57.3066139
+      Data: 0
     - Name: Affect
       Entry: 4
-      Data: -46.685524
+      Data: -100
     - Name: 
       Entry: 8
       Data: 
@@ -844,13 +844,13 @@ MonoBehaviour:
       Data: 16|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 84.6987152
+      Data: 0
     - Name: Energy
       Entry: 4
-      Data: 87.03114
+      Data: 0
     - Name: Affect
       Entry: 4
-      Data: 12.1679926
+      Data: -100
     - Name: 
       Entry: 8
       Data: 
@@ -1066,13 +1066,13 @@ MonoBehaviour:
       Data: 20|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 28.7694435
+      Data: 0
     - Name: Energy
       Entry: 4
-      Data: 99.2462845
+      Data: 0
     - Name: Affect
       Entry: 4
-      Data: -46.7486458
+      Data: -100
     - Name: 
       Entry: 8
       Data: 
@@ -1279,13 +1279,13 @@ MonoBehaviour:
       Data: 24|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 85.81075
+      Data: 0
     - Name: Energy
       Entry: 4
-      Data: 88.50544
+      Data: 0
     - Name: Affect
       Entry: 4
-      Data: 35.0596733
+      Data: -100
     - Name: 
       Entry: 8
       Data: 
@@ -1492,13 +1492,13 @@ MonoBehaviour:
       Data: 28|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 30.4515362
+      Data: 0
     - Name: Energy
       Entry: 4
-      Data: 99.36142
+      Data: 0
     - Name: Affect
       Entry: 4
-      Data: 40.40003
+      Data: -100
     - Name: 
       Entry: 8
       Data: 
@@ -1705,13 +1705,13 @@ MonoBehaviour:
       Data: 32|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 87.4402847
+      Data: 0
     - Name: Energy
       Entry: 4
-      Data: 62.4417343
+      Data: 0
     - Name: Affect
       Entry: 4
-      Data: 69.27813
+      Data: -100
     - Name: 
       Entry: 8
       Data: 

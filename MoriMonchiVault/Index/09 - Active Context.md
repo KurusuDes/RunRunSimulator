@@ -4,6 +4,33 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-12 (Session 150 — **prueba de juguetes en video + primer QA con testers Haiku** — 0 `.cs` tocados; sin cambios de escena ni de assets a mano)
+
+**Focus:** Juan aprobó seguir con props e interacción (F5/F6 de `Index/34`), pero pidió antes probar los juguetes con un video corto y **soltar sub-agentes Haiku que prueben el mundo y den feedback**.
+
+**Hecho:**
+1. **Video** `Recordings/S150/toys.mp4` (24 s, 720p; ignorado por git), enviado. Pelota y mordedor entre las criaturas + charcos de la manguera. Juguetes instanciados en runtime en el patio con la Sala de juegos cerrada (artificial).
+2. **Plan F5/F6 presentado, sin ejecutar** (decisiones de Juan abiertas abajo): F5 jugar tú (lanzar pelota y que la traigan, tironear el mordedor, pilla-pilla al robarte), F6 cuerda / peluche / burbujas, afinidad al jugar juntos.
+3. **QA con 3 testers Haiku en paralelo** (`general-purpose` + `model: haiku`, solo lectura por `execute_code`, ~8 muestras cada uno; ~410k tokens en total). Verificados por mí:
+   - ✅ **Afecto sin recuperación autónoma:** 2 criaturas en −100 (rango −100..100, `NeedsState.AddAffect`); solo juguetes/jugador lo suben.
+   - ✅ **Juguetes se escapan del patio:** se los llevan adentro de la tienda; la manguera quedó libre ~37 s en la puerta (−23, 23.5). Agravado por spawnear en el patio con la Sala cerrada.
+   - ✅ **Mordedor poco usado** (la pelota sí: 3 pateadores distintos).
+   - 🟡 **2 criaturas quietas en Reacting/Approaching**, velocidad 0, sin path, a 1 m entre sí (sin medir duración).
+   - 🟡 **Consola:** 0 errores; `[CloudSync] Pushed 8 creatures` ~8 veces en ~80 s y un `Leak Detected: Persistent allocates 4`.
+   - ❌ Falsos positivos: `NeedStation.supply` null (no lo es); criaturas sobre `NavMeshSurfaceFrontDesk` (es el piso de la tienda).
+   - ❌ **Clientes que no entran / nacen en Leaving: es diseño** (Juan S150): sin MoriMonchis en exhibición no entran; para eso sirve la vitrina donde pones los que quieres vender.
+
+**Quirks ⚠️:** (1) **Hay dos editores Unity con MCP** (`AxieDarknessArise` y `RunRunSimulator`): llamar `set_active_instance RunRunSimulator@6fcadfc6` al abrir; el MCP se cae y vuelve (re-pinear). (2) **El Recorder graba el Game View = `Camera.main`**: una cámara extra con `depth` alto NO sale; apagar `Camera.main.enabled` mientras se graba. Con el editor sin foco y `FrameRatePlayback.Constant`, 24 s de juego tardan ~10 min. (3) Probar el encuadre antes de grabar con `cam.Render()` a un `RenderTexture` → JPG (barato). (4) El patio tiene la pared de la tienda en z≈25 y el jugador (cápsula) tapa el cuadro: moverlo con el `CharacterController` apagado. (5) Testers Haiku: útiles como barrido, ~1 error por informe, asumen que `Time.time` avanza más de lo que avanza → verificar antes de actuar.
+
+**Siguiente paso (S151, propuesta):**
+1. Juan responde las decisiones del plan F5/F6: (a) "players" = tú con ellas, entre ellas o ambas; (b) cuerda/peluche/burbujas; (c) arte de packs o provisional; (d) tironeo con E mantenida o pulsada rápido; (e) precios por la IA.
+2. Arreglos del QA: afecto con recuperación autónoma, juguetes que vuelven a su zona (o confinados), criaturas trabadas en Approaching sin path; revisar la frecuencia del push a la nube.
+3. Probar el ciclo de venta con criaturas en la vitrina (los clientes solo entran así).
+
+**Archivos `.cs` S150:** ninguno creado ni modificado. Cambiaron por el save en Play `New Creature Registry SO.asset` y `PlayerInventory.asset`.
+
+---
+
 **Session:** 2026-10-12 (Session 149 — **roadmap de cierre del gameplay + sim de crianza: bloqueantes, expansiones, decoraciones de cría, juguetes, charcos con shader, mantenimiento y clientes con gusto** — 18 `.cs` creados, 45 modificados, 12 borrados; compila 0 errores; todo verificado en Play; 6 videos enviados)
 
 **Focus:** Juan pidió un roadmap de TODO lo que falta para cerrar el gameplay y marcar lo completado → **checklist viva [[Index/34 - Roadmap de cierre del gameplay]]** (orden A → D → E → F → G → C → B → H → I). Dirección nueva de Juan: **el corazón es el sim de crianza** (tienda por expansiones, breeding con decoraciones, juguetes sociales, mantenimiento). Decisiones S149 en la sección final de `Index/34`.
