@@ -6,7 +6,7 @@ tags: [persistence, io, serialization]
 
 **Ruta:** `Core/SaveSystem.cs`
 
-**Responsabilidad:** I/O de persistencia local (JSON) para CreatureRegistry, FurnitureRegistry, PlayerInventory, SocialGraph y WorldState aislados por scope de jugador (multi-instancia). S128: Toda lectura/escritura pasa por [[SaveMigrations]] (sobre con versión y timestamp). S129: Registry cambió de Dictionary a RegistryData (Alive + Departed). S131: Agregados SaveWorldState, LoadWorldState, SerializeWorldState, DeserializeWorldState para estado de mundo.
+**Responsabilidad:** I/O de persistencia local (JSON) para CreatureRegistry, PlayerInventory, SocialGraph y WorldState aislados por scope de jugador (multi-instancia). S128: Toda lectura/escritura pasa por [[SaveMigrations]] (sobre con versión y timestamp). S129: Registry cambió de Dictionary a RegistryData (Alive + Departed). S131: Agregados SaveWorldState, LoadWorldState, SerializeWorldState, DeserializeWorldState para estado de mundo. **S149:** se retira todo el bloque de muebles (`SaveFurniture`, `LoadFurniture`, `SerializeFurniture`, `DeserializeFurniture`, archivo `furniture_registry.json`). `BackupLocal` y `LatestLocalSavedAt` quedan con 4 archivos.
 
 ## Métodos Públicos
 
@@ -20,11 +20,6 @@ tags: [persistence, io, serialization]
 | `Serialize(CreatureDNA)` | `string` | Serializa una criatura → JSON (no sobre) |
 | `Deserialize(string json)` | `RegistryData` | JSON → `RegistryData` (migra si es v1/v2) |
 | `LoadDatabaseCopy()` | `Dictionary<string, CreatureDNA>` | Lee copy sin tocar registry ni disparar eventos |
-| **Furniture** |
-| `SaveFurniture(registry)` | `void` | Guarda muebles disco |
-| `LoadFurniture(registry)` | `void` | Carga muebles; empty start si no existe |
-| `SerializeFurniture(registry)` | `string` | Serializa muebles → JSON sobre |
-| `DeserializeFurniture(json)` | `Dictionary<string, PlacedFurniture>` | JSON → muebles dict |
 | **Inventory** |
 | `SaveInventory(inventory)` | `void` | Guarda inventario disco |
 | `LoadInventory(inventory)` | `void` | Carga inventario; empty start si no existe |
@@ -41,18 +36,18 @@ tags: [persistence, io, serialization]
 | `SerializeWorldState(WorldStateSO world)` | `string` | Serializa WorldStateData → JSON sobre |
 | `DeserializeWorldState(string json)` | `WorldStateData` | JSON → WorldStateData |
 | **Utilities** |
-| `LatestLocalSavedAt()` | `long` | Timestamp (ticks) del archivo más reciente (registry/furniture/inventory/social/world) |
-| `BackupLocal(string suffix)` | `void` | Respalda los 5 archivos con sufijo: `file.{suffix}.bak.json` |
+| `LatestLocalSavedAt()` | `long` | Timestamp (ticks) del archivo más reciente (registry/inventory/social/world) |
+| `BackupLocal(string suffix)` | `void` | Respalda los 4 archivos con sufijo: `file.{suffix}.bak.json` |
 
 ## Rutas & Scoping
 
 **Base:** `Application.persistentDataPath`
 
 **Archivos:**
-- Sin scope: `creature_database.json`, `furniture_registry.json`, `player_inventory.json`, `social_graph.json`, `world_state.json`
-- Con scope: `creature_database_{userId}.json`, `furniture_registry_{userId}.json`, `player_inventory_{userId}.json`, `social_graph_{userId}.json`, `world_state_{userId}.json`
+- Sin scope: `creature_database.json`, `player_inventory.json`, `social_graph.json`, `world_state.json`
+- Con scope: `creature_database_{userId}.json`, `player_inventory_{userId}.json`, `social_graph_{userId}.json`, `world_state_{userId}.json`
 
-**Migración automática:** Primera vez con scope, hereda save viejo sin scope si existe.
+**Migración automática:** Primera vez con scope, hereda save viejo sin scope si existe (solo para la base de criaturas).
 
 ## Serialización JSON
 
@@ -111,13 +106,18 @@ if (worldAt > latest) latest = worldAt;
 
 **LoadSocialGraph():** Lee social_graph.json, deserializa, filtra huérfanos, importa a SocialGraphService.
 
-## Invariantes S128+/S131
+## Invariantes S128+/S131/S149
 
 - Nunca lanza si JSON es nulo/corrupto → sobre vacío o defaults
 - Todos los archivos usan sobre (Version/SavedAtTicks/Data)
 - Timestamp: `DateTime.UtcNow.Ticks` al escribir, extraído al leer
 - Scoping: `_userScope` centralizado, heredado sin scope si primer login
 - WorldState: nuevo archivo, mismo sobre/migration pipeline
+- Sin persistencia de muebles desde S149 (`SaveKind` de muebles ya no se usa aquí)
+
+## Cambios S149
+
+**Retirado:** `FURNITURE_FILENAME`, `SaveFurniture`, `LoadFurniture`, `SerializeFurniture`, `DeserializeFurniture`, la rama de muebles en `LatestLocalSavedAt` y el respaldo de muebles en `BackupLocal`.
 
 ## Cambios S131
 
@@ -140,10 +140,10 @@ if (worldAt > latest) latest = worldAt;
 ## Conexiones
 
 **Data:**
-- [[CreatureRegistrySO]], [[FurnitureRegistrySO]], [[PlayerInventorySO]], [[WorldStateSO]]
+- [[CreatureRegistrySO]], [[PlayerInventorySO]], [[WorldStateSO]]
 
 **Sistemas:**
-- [[GameManager]] — dispara SaveDatabase/SaveFurniture/SaveInventory/SaveWorldState
+- [[GameManager]] — dispara SaveDatabase/SaveInventory/SaveSocialGraph/SaveWorldState
 - [[CloudSyncOps]], [[CloudSyncService]] — usan para merge/conflict detection
 - [[SocialGraphService]] — exporta/importa grafo social
 - [[SaveMigrations]] — versionado y envelope
@@ -153,5 +153,5 @@ if (worldAt > latest) latest = worldAt;
 
 - **WorldState archivo nuevo:** `world_state[_{userId}].json` — separado de registry.
 - **Defaults:** Si archivo no existe, LoadWorldState retorna null → SO defaults a día=1, minuto=360.
-- **BackupLocal S131:** Ahora respalda 5 archivos (+ world_state).
+- **BackupLocal:** Respalda 4 archivos (database, inventory, social, world_state) desde S149.
 - **Multi-account:** SaveKind enum necesita entrada World (ya incluida).

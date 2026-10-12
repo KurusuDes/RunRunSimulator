@@ -18,6 +18,5 @@ public enum PlayerStateType
     None      = 0,
     Exploring = 1,
     Menu      = 2,
-    Building  = 3,
 }
 }

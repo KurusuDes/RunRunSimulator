@@ -28,7 +28,6 @@ public class CloudSyncOps
 
     private readonly CloudAuth auth;
     private readonly CreatureRegistrySO registry;
-    private readonly FurnitureRegistrySO furnitureRegistry;
     private readonly PlayerInventorySO inventory;
     private readonly WorldStateSO worldState;
     private readonly Action<string> setStatus;
@@ -41,15 +40,13 @@ public class CloudSyncOps
     public string SecurityStatus        { get; private set; } = "---";
 
     public CloudSyncOps(CloudAuth auth, CreatureRegistrySO registry,
-        FurnitureRegistrySO furnitureRegistry, PlayerInventorySO inventory,
-        WorldStateSO worldState, Action<string> setStatus)
+        PlayerInventorySO inventory, WorldStateSO worldState, Action<string> setStatus)
     {
-        this.auth              = auth;
-        this.registry          = registry;
-        this.furnitureRegistry = furnitureRegistry;
-        this.inventory         = inventory;
-        this.worldState        = worldState;
-        this.setStatus         = setStatus;
+        this.auth       = auth;
+        this.registry   = registry;
+        this.inventory  = inventory;
+        this.worldState = worldState;
+        this.setStatus  = setStatus;
     }
 
     private string MetaPath =>
@@ -160,8 +157,6 @@ public class CloudSyncOps
                     { META_KEY,     JsonConvert.SerializeObject(new SyncMeta { CloudPushedAt = pushedAt }) },
                     { SOCIAL_KEY,   SaveSystem.SerializeSocialGraph() },
                 };
-                if (furnitureRegistry != null)
-                    payload[FURNITURE_KEY] = SaveSystem.SerializeFurniture(furnitureRegistry);
                 if (inventory != null)
                     payload[INVENTORY_KEY] = SaveSystem.SerializeInventory(inventory);
                 if (worldState != null)
@@ -174,8 +169,8 @@ public class CloudSyncOps
                 WriteLocalMeta(localMeta);
                 RefreshSecurityDisplay();
 
-                setStatus($"Pushed {registry.Count} creatures, {furnitureRegistry?.Count ?? 0} furniture");
-                Debug.Log($"[CloudSync] Pushed {registry.Count} creatures, {furnitureRegistry?.Count ?? 0} furniture.");
+                setStatus($"Pushed {registry.Count} creatures");
+                Debug.Log($"[CloudSync] Pushed {registry.Count} creatures.");
             }, setStatus);
         }
         finally
@@ -197,7 +192,7 @@ public class CloudSyncOps
         {
             setStatus("Pulling...");
             var result = await CloudSaveService.Instance.Data.Player.LoadAsync(
-                new HashSet<string> { REGISTRY_KEY, META_KEY, FURNITURE_KEY, INVENTORY_KEY, SOCIAL_KEY, WORLD_KEY });
+                new HashSet<string> { REGISTRY_KEY, META_KEY, INVENTORY_KEY, SOCIAL_KEY, WORLD_KEY });
 
             if (!result.ContainsKey(REGISTRY_KEY))
             {
@@ -210,14 +205,6 @@ public class CloudSyncOps
             registry.LoadFrom(data);
             SaveSystem.SaveDatabase(registry);
             GameEvents.RegistryReloaded(registry);
-
-            if (result.ContainsKey(FURNITURE_KEY) && furnitureRegistry != null)
-            {
-                var fData = SaveSystem.DeserializeFurniture(result[FURNITURE_KEY].Value.GetAs<string>());
-                furnitureRegistry.LoadFrom(fData);
-                SaveSystem.SaveFurniture(furnitureRegistry);
-                GameEvents.FurnitureReloaded(furnitureRegistry);
-            }
 
             if (result.ContainsKey(INVENTORY_KEY) && inventory != null)
             {
@@ -256,8 +243,8 @@ public class CloudSyncOps
             });
             RefreshSecurityDisplay();
 
-            setStatus($"Pulled {registry.Count} creatures, {furnitureRegistry?.Count ?? 0} furniture");
-            Debug.Log($"[CloudSync] Pulled {registry.Count} creatures, {furnitureRegistry?.Count ?? 0} furniture.");
+            setStatus($"Pulled {registry.Count} creatures");
+            Debug.Log($"[CloudSync] Pulled {registry.Count} creatures.");
         }, setStatus);
     }
 
@@ -346,12 +333,6 @@ public class CloudSyncOps
             SaveSystem.SaveDatabase(registry);
             GameEvents.RegistryReloaded(registry);
 
-            if (furnitureRegistry != null)
-            {
-                furnitureRegistry.LoadFrom(null);
-                SaveSystem.SaveFurniture(furnitureRegistry);
-                GameEvents.FurnitureReloaded(furnitureRegistry);
-            }
             if (inventory != null)
             {
                 inventory.LoadFrom(null);

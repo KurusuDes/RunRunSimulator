@@ -24,6 +24,11 @@ public class StarterKitService : MonoBehaviour
             yield return null;
         }
 
+        TryApply();
+    }
+
+    public bool TryApply()
+    {
         var worldState = GameManager.Instance != null ? GameManager.Instance.WorldState : null;
         var registry = GameManager.Instance != null ? GameManager.Instance.Registry : null;
         var inventory = GameManager.CurrentInventory;
@@ -31,34 +36,24 @@ public class StarterKitService : MonoBehaviour
         if (kit == null || worldState == null || registry == null || inventory == null)
         {
             Debug.LogWarning("[StarterKit] refs faltantes, no se aplica el kit.");
-            yield break;
+            return false;
         }
 
         bool isNewGame = worldState.TutorialStep == 0 && registry.Count == 0;
         if (!isNewGame)
         {
             Debug.Log("[StarterKit] partida existente, kit no aplicado.");
-            yield break;
+            return false;
         }
 
         if (kit.Minerita > 0) Wallet.Add(Currency.Minerita, kit.Minerita, "starter");
         if (kit.Dabloons > 0) Wallet.Add(Currency.Dabloons, kit.Dabloons, "starter");
 
-        bool furnitureAdded = false;
-        if (kit.Furniture != null)
-        {
-            foreach (var def in kit.Furniture)
-            {
-                if (def == null) continue;
-                if (inventory.AddFurniture(def.Id)) furnitureAdded = true;
-            }
-        }
-        if (furnitureAdded) GameEvents.InventoryChanged(inventory);
-
         worldState.TutorialStep = 1;
         GameEvents.WorldStateChanged(worldState);
 
-        Debug.Log($"[StarterKit] Kit inicial aplicado: +{kit.Minerita} Minerita, +{kit.Dabloons} Dabloons, {kit.Furniture?.Count ?? 0} muebles.");
+        Debug.Log($"[StarterKit] Kit inicial aplicado: +{kit.Minerita} Minerita, +{kit.Dabloons} Dabloons.");
+        return true;
     }
 }
 }

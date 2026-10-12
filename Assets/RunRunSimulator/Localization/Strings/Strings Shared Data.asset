@@ -1695,6 +1695,58 @@ MonoBehaviour:
     m_Key: ui.evo.needbattles
     m_Metadata:
       m_Items: []
+  - m_Id: 28564101534375936
+    m_Key: ui.overlay.uncle.call
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28571620340195328
+    m_Key: ui.store.tab.expansions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500706500608
+    m_Key: ui.store.tab.decor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500731666432
+    m_Key: ui.store.decor.unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500731666433
+    m_Key: ui.decor.slot.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28599012626587648
+    m_Key: ui.store.tab.toys
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512527790080
+    m_Key: ui.station.food
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512699756544
+    m_Key: ui.station.water
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512699756545
+    m_Key: ui.station.clean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302503088128
+    m_Key: npc.taste.role
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002688
+    m_Key: npc.taste.color
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002689
+    m_Key: npc.taste.set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002690
+    m_Key: npc.taste.none
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

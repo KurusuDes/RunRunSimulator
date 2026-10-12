@@ -1,21 +1,58 @@
 ---
-tags: [script, world]
+tags: [script, world, needs, station]
 ---
 
 # NeedStation.cs
 
 **Ruta:** `World/Needs/NeedStation.cs`
 
-**Responsabilidad:** Estación abstracta de restauración de necesidades. Slot-based capacity, fill rate. Se auto-registra en `NeedStationRegistry`. Abstracta: subclases implementan `Need` enum (Energy para RestZone, Health para Feeder, etc.).
+**Responsabilidad:** Estación abstracta de restauración de necesidades. Tiene varios puntos de uso (slots) y un ritmo de llenado. Se auto-registra en `NeedStationRegistry` al activarse. Las subclases fijan el tipo de necesidad (`Need`: Health para Feeder, Energy para RestZone, Affect para PlayZone). **S149:** la estación consume reservas de `StationSupply` del mismo GameObject: sin reserva no hay disponibilidad ni restauración.
 
-**Métodos principales:**
-- `TryReserve(MoriMochiAgent agent, Vector3 from, int areaMask, float sampleRadius, out Vector3 usePos) → bool` — reserva slot más cercano (re-entrante: si ya tiene slot, reusa)
-- `Release(MoriMochiAgent agent)` — libera slot
+## Campos Serializados
 
-**Invariantes S93 (rescatados de comentarios):**
-- Capacidad = cantidad de use points (slots); cada agente reserva el slot libre y ALCANZABLE más cercano y lo retiene hasta terminar o ser interrumpido; sin puntos → un slot implícito en el transform.
-- `TryReserve` es re-entrante (si ya tiene slot, lo reusa).
+| Campo | Tipo | Default | Descripción |
+|-------|------|---------|-------------|
+| `usePoints` | `List<Transform>` | vacío | Puntos donde se para el monchi (un slot por punto). Vacío = un slot en el transform |
+| `fillPerSecond` | float (Min 0) | 25 | Puntos de necesidad restaurados por segundo de uso |
 
-**Vinculado a:** [[Index/06 - Player & World]]
+## Propiedades
 
-**Conexiones:** [[NeedStationRegistry]], [[Feeder]], [[PlayZone]], [[RestZone]], [[MoriMochiAgent]], [[NeedsState]]
+| Propiedad | Descripción |
+|-----------|-------------|
+| `Need` (abstract) | `NeedType` que cubre la estación |
+| `UsePosition` | Posición del primer punto de uso no nulo |
+| `IsAvailable` | False si la reserva está vacía (`StationSupply.IsEmpty`) o si todos los slots están ocupados |
+
+## Métodos Públicos
+
+| Método | Retorna | Descripción |
+|--------|---------|-------------|
+| `TryReserve(agent, from, areaMask, sampleRadius, out usePos)` | `bool` | Reserva el slot libre y alcanzable más cercano. Re-entrante: si el agente ya tiene slot, lo reusa |
+| `Release(agent)` | `void` | Libera el slot del agente |
+| `Refill(NeedsState needs, float dt)` | `bool` | Consume `fillPerSecond * dt` de la reserva y restaura la necesidad al factor de la reserva. Devuelve true si la reserva está vacía o la necesidad llegó a 100 |
+
+## Llenado con reserva (S149)
+
+`Refill` pide `amount = fillPerSecond * dt` a `StationSupply.Consume(amount)`. Ese valor devuelve un factor (0 a 1) que escala lo restaurado:
+- Comida y agua: factor 1 si hay reserva, 0 si no.
+- Limpieza (Clean): factor 1 con reserva suficiente, 0.5 bajo `dirtyThreshold`.
+
+Si el factor es 0, la estación termina el uso.
+
+## Invariantes
+
+- Capacidad = cantidad de puntos de uso (slots). Cada agente reserva el slot libre y alcanzable más cercano y lo conserva hasta terminar o ser interrumpido.
+- Sin puntos de uso, existe un slot implícito en el transform.
+- `TryReserve` es re-entrante.
+
+## Vinculado a
+
+- [[Index/06 - Player & World]]
+
+## Conexiones
+
+- [[NeedStationRegistry]] (registro estático)
+- [[StationSupply]] (reserva consumible, S149)
+- [[Feeder]], [[PlayZone]], [[RestZone]] (subclases)
+- [[MoriMochiAgent]], [[AgentBrain]] (`TryReserve`, `Refill`, `Release`)
+- [[NeedsState]] (`Restore`, `Get`)

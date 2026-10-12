@@ -14,6 +14,7 @@ public abstract class NeedStation : MonoBehaviour
     public abstract NeedType Need { get; }
 
     private MoriMochiAgent[] occupants;
+    private StationSupply supply;
     private int SlotCount => (usePoints != null && usePoints.Count > 0) ? usePoints.Count : 1;
 
     private void EnsureSlots()
@@ -40,11 +41,14 @@ public abstract class NeedStation : MonoBehaviour
     {
         get
         {
+            if (supply != null && supply.IsEmpty) return false;
             EnsureSlots();
             foreach (var o in occupants) if (o == null) return true;
             return false;
         }
     }
+
+    private void Awake() => supply = GetComponent<StationSupply>();
 
     private void OnEnable()  { EnsureSlots(); NeedStationRegistry.Register(this); }
     private void OnDisable() => NeedStationRegistry.Unregister(this);
@@ -84,8 +88,10 @@ public abstract class NeedStation : MonoBehaviour
 
     public bool Refill(NeedsState needs, float dt)
     {
-        needs.Restore(Need, fillPerSecond * dt);
-        return needs.Get(Need) >= 100f;
+        float amount = fillPerSecond * dt;
+        float k = supply != null ? supply.Consume(amount) : 1f;
+        needs.Restore(Need, amount * k);
+        return k <= 0f || needs.Get(Need) >= 100f;
     }
 
     private void OnDrawGizmos()

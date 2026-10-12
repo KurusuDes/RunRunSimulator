@@ -72,7 +72,6 @@ public class PlayerController : MonoBehaviour
         PlayerInputs.InteractReleased  += OnInteractReleased;
         PlayerInputs.ThrowPressed      += OnThrow;
         UIManager.OnUIFocusChanged     += OnUIFocusChanged;
-        BuildModeController.OnBuildModeChanged += OnBuildModeChanged;
     }
 
     private void OnDisable()
@@ -83,7 +82,6 @@ public class PlayerController : MonoBehaviour
         PlayerInputs.InteractReleased  -= OnInteractReleased;
         PlayerInputs.ThrowPressed      -= OnThrow;
         UIManager.OnUIFocusChanged     -= OnUIFocusChanged;
-        BuildModeController.OnBuildModeChanged -= OnBuildModeChanged;
     }
 
     private void OnMoveChanged(Vector2 move) => moveInput = move;
@@ -91,13 +89,10 @@ public class PlayerController : MonoBehaviour
     private void OnUIFocusChanged(bool uiFocused) =>
         SetState(uiFocused ? PlayerStateType.Menu : PlayerStateType.Exploring);
 
-    private void OnBuildModeChanged(bool building) =>
-        SetState(building ? PlayerStateType.Building : PlayerStateType.Exploring);
-
     private void SetState(PlayerStateType next)
     {
         state = next;
-        bool firstPerson = state == PlayerStateType.Exploring || state == PlayerStateType.Building;
+        bool firstPerson = state == PlayerStateType.Exploring;
 
         Cursor.lockState = firstPerson ? CursorLockMode.Locked : CursorLockMode.None;
         Cursor.visible   = !firstPerson;
@@ -119,7 +114,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (state != PlayerStateType.Exploring && state != PlayerStateType.Building) return;
+        if (state != PlayerStateType.Exploring) return;
         if (cameraTransform == null) return;
 
         Vector3 camForward = cameraTransform.forward; camForward.y = 0f; camForward.Normalize();

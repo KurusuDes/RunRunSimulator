@@ -30,9 +30,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CreatureRegistrySO creatureRegistry;
 
     [Required, AssetsOnly, BoxGroup("Setup")]
-    [SerializeField] private FurnitureRegistrySO furnitureRegistry;
-
-    [Required, AssetsOnly, BoxGroup("Setup")]
     [SerializeField] private PlayerInventorySO inventory;
 
     [Required, AssetsOnly, BoxGroup("Setup")]
@@ -66,42 +63,20 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnRegistryChanged  += Persist;
-        GameEvents.OnFurnitureChanged += PersistFurniture;
         GameEvents.OnInventoryChanged += PersistInventory;
-        GameEvents.OnInventoryReloaded += GrantPlacedFurniture;
         GameEvents.OnWorldStateChanged += PersistWorldState;
     }
 
     private void OnDisable()
     {
         GameEvents.OnRegistryChanged  -= Persist;
-        GameEvents.OnFurnitureChanged -= PersistFurniture;
         GameEvents.OnInventoryChanged -= PersistInventory;
-        GameEvents.OnInventoryReloaded -= GrantPlacedFurniture;
         GameEvents.OnWorldStateChanged -= PersistWorldState;
-    }
-
-    private void GrantPlacedFurniture(PlayerInventorySO _)
-    {
-        if (furnitureRegistry == null || inventory == null) return;
-        bool changed = false;
-        foreach (var p in furnitureRegistry.GetAll().Values)
-        {
-            if (p == null || string.IsNullOrEmpty(p.DefId)) continue;
-            if (inventory.AddFurniture(p.DefId)) changed = true;
-        }
-        if (changed) GameEvents.InventoryChanged(inventory);
     }
 
     private void Persist(CreatureRegistrySO registry)
     {
         SaveSystem.SaveDatabase(registry);
-        RequestPush();
-    }
-
-    private void PersistFurniture(FurnitureRegistrySO registry)
-    {
-        SaveSystem.SaveFurniture(registry);
         RequestPush();
     }
 
@@ -199,7 +174,6 @@ public class GameManager : MonoBehaviour
     }
 
     public CreatureRegistrySO     Registry             => creatureRegistry;
-    public FurnitureRegistrySO    FurnitureRegistry    => furnitureRegistry;
     public PlayerInventorySO      Inventory            => inventory;
     public CreatureDatabaseSO     Database             => database;
     public RarityOddsTableSO      RarityOddsTable      => rarityOddsTable;

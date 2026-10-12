@@ -23,97 +23,6 @@ MonoBehaviour:
     SerializationNodes: []
   RestockEveryDays: 3
   DiscountEveryDays: 7
-  furnitureListings:
-  - Furniture: {fileID: 11400000, guid: 80f4b68885003194fa09dafad1fd2e30, type: 2}
-    Shop:
-      BasePrice: 10
-      Currency: 0
-      DiscountBase: 0.5
-      CurrentStock: 10
-      MaxStock: 10
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: 37aa5aba470a7d34b8accb4a6b47f0dd, type: 2}
-    Shop:
-      BasePrice: 15
-      Currency: 0
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: bad16601457de164fbb50e6991176d49, type: 2}
-    Shop:
-      BasePrice: 5
-      Currency: 0
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: ba68d698d77df2f4c973fdf26d61635f, type: 2}
-    Shop:
-      BasePrice: 8
-      Currency: 0
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: 41ef5d1e02e544b46b035885f14b69c0, type: 2}
-    Shop:
-      BasePrice: 12
-      Currency: 0
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: b2db5f511fc3c0c409bfd64e2d93f89a, type: 2}
-    Shop:
-      BasePrice: 20
-      Currency: 1
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: 9ba4ded41a75ef344808f0c81705d60e, type: 2}
-    Shop:
-      BasePrice: 25
-      Currency: 0
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: e67791997f2dae04e9a7ce8aad8d9d4f, type: 2}
-    Shop:
-      BasePrice: 50
-      Currency: 0
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: 97e15594ff740d84e942830aadb1f1f6, type: 2}
-    Shop:
-      BasePrice: 30
-      Currency: 0
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
-  - Furniture: {fileID: 11400000, guid: 9909d1becec5d104399d8c1f73d7e22f, type: 2}
-    Shop:
-      BasePrice: 15
-      Currency: 0
-      DiscountBase: 0
-      CurrentStock: -1
-      MaxStock: -1
-      TypeFilter: 1
-      Tags: []
   itemListings:
   - Item: {fileID: 11400000, guid: c32c36a4dafd59047a5a0c7191796964, type: 2}
     Shop:
@@ -124,6 +33,7 @@ MonoBehaviour:
       MaxStock: 10
       TypeFilter: 0
       Tags: []
+    RequiresExpansion: {fileID: 0}
   - Item: {fileID: 11400000, guid: 96132c048a9740c4bb5caafdbab6e54b, type: 2}
     Shop:
       BasePrice: 3
@@ -133,6 +43,37 @@ MonoBehaviour:
       MaxStock: 10
       TypeFilter: 0
       Tags: []
+    RequiresExpansion: {fileID: 0}
+  - Item: {fileID: 11400000, guid: a661eecb3bb3161469ecef1578c9e211, type: 2}
+    Shop:
+      BasePrice: 15
+      Currency: 0
+      DiscountBase: 0
+      CurrentStock: -1
+      MaxStock: -1
+      TypeFilter: 0
+      Tags: []
+    RequiresExpansion: {fileID: 11400000, guid: 00e40dc1ea0169048bebec9d33439fe1, type: 2}
+  - Item: {fileID: 11400000, guid: d61c4d7343bc9b14aabfe9b487265267, type: 2}
+    Shop:
+      BasePrice: 12
+      Currency: 0
+      DiscountBase: 0
+      CurrentStock: -1
+      MaxStock: -1
+      TypeFilter: 0
+      Tags: []
+    RequiresExpansion: {fileID: 11400000, guid: 00e40dc1ea0169048bebec9d33439fe1, type: 2}
+  - Item: {fileID: 11400000, guid: 47901fa8154ae934eadf855612d3e4c7, type: 2}
+    Shop:
+      BasePrice: 25
+      Currency: 0
+      DiscountBase: 0
+      CurrentStock: -1
+      MaxStock: -1
+      TypeFilter: 0
+      Tags: []
+    RequiresExpansion: {fileID: 11400000, guid: 00e40dc1ea0169048bebec9d33439fe1, type: 2}
   creatureBoxListings:
   - Box: {fileID: 11400000, guid: a45874471a59ebf48b50fdc68582b6c2, type: 2}
     Shop:
@@ -156,3 +97,14 @@ MonoBehaviour:
       - nuevo
   upgradeListings:
   - {fileID: 11400000, guid: 1a2166b2b7095ec4d9031ccdf89d94f2, type: 2}
+  - {fileID: 11400000, guid: 219826c93a9718c488d31caccae45fb0, type: 2}
+  - {fileID: 11400000, guid: 00e40dc1ea0169048bebec9d33439fe1, type: 2}
+  decorListings:
+  - {fileID: 11400000, guid: 5779f366fbedbc7498a5e5e2eb084080, type: 2}
+  - {fileID: 11400000, guid: 3e54e8fcc446c9540af72fb0b18f5004, type: 2}
+  - {fileID: 11400000, guid: afda021f56156a347856d736b5d1cdec, type: 2}
+  - {fileID: 11400000, guid: e20ab3359ed7722419202d58f13e99d0, type: 2}
+  - {fileID: 11400000, guid: 7db113073dab7644287d3560dd57681e, type: 2}
+  - {fileID: 11400000, guid: 1318909bb0c1d024d83d96423cf8577f, type: 2}
+  - {fileID: 11400000, guid: 65ccace5a164f5d4b95fe42940745332, type: 2}
+  - {fileID: 11400000, guid: 02c846b57b2b81b4d97cfac4619ec7bf, type: 2}

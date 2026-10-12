@@ -16,6 +16,11 @@ public class CustomerPricingSO : SerializedScriptableObject
     [MinValue(0)] public float BreedCountMultiplier = 2f;
     [MinValue(0)] public float TierMultiplier = 5f;
 
+    [MinValue(0)] public float RarityBonusPerLevel = 6f;
+    [MinValue(1)] public float ShinyMultiplier = 1.5f;
+    [Range(0f, 1f)] public float CareMinMultiplier = 0.8f;
+    [MinValue(1)] public float CareMaxMultiplier = 1.2f;
+
     [Title("Renegotiation")]
     [Range(0f, 1f)] public float RenegotiationStep = 0.20f;
 

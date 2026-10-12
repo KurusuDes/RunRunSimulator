@@ -4,7 +4,7 @@ using UnityEngine.AI;
 namespace MoriMonchiSimulator
 {
 
-internal enum AgentState { Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation, Courting, Socializing, HandFeed, Expedition, Clashing }
+internal enum AgentState { Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation, Courting, Socializing, HandFeed, Expedition, Clashing, Playing }
 
 internal class AgentContext
 {
@@ -48,7 +48,7 @@ internal class AgentContext
     internal bool IsNavMeshControlled() =>
         State == AgentState.Idle        || State == AgentState.Roaming      || State == AgentState.Reacting ||
         State == AgentState.SeekingNeed || State == AgentState.UsingStation || State == AgentState.Courting ||
-        State == AgentState.Socializing || State == AgentState.Expedition  || State == AgentState.Clashing;
+        State == AgentState.Socializing || State == AgentState.Expedition  || State == AgentState.Clashing   || State == AgentState.Playing;
 
     internal bool IsBreeding => Dna != null && Dna.BusyState == BusyReason.Breeding;
 

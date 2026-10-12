@@ -6,7 +6,7 @@ tags: [scriptable-object, visual-data, genetics]
 
 **Ruta:** `Data/Databases/MonchiVisualBankSO.cs`
 
-**Responsabilidad:** Banco visual centralizado: body FBX, partes modulares (Adult/Egg/Slime), modelos base, AnimatorControllers, material de cara único (S139), sets de ánimo por género (S139). **S138:** Agregado `eggScale` (default 3.4 en asset). **S139:** Agregados FaceMaterial (shader MoriMonchi/MonchiFace) y MoodSetFemale; nuevo método MoodSetFor(gender) para obtener set correcto según género.
+**Responsabilidad:** Banco visual centralizado: body FBX, partes modulares (Adult/Egg/Slime), modelos base, AnimatorControllers, material de cara único (S139), sets de ánimo por género (S139). **S138:** Agregado `eggScale` (default 3.4 en asset). **S139:** Agregados FaceMaterial (shader MoriMonchi/MonchiFace) y MoodSetFemale; nuevo método MoodSetFor(gender) para obtener set correcto según género. **S149:** Nuevo `HasPartMesh(partId)` para saber si una parte tiene malla antes de tirarla (lo usa `PartPool`).
 
 ## Campos Públicos Serializados
 
@@ -52,6 +52,7 @@ tags: [scriptable-object, visual-data, genetics]
 |--------|-------------|
 | `GetBody(bodyShapeId)` | Retorna body adulto: override si existe, sino rotación aleatoria de lista bodies por hash estable |
 | `GetPartMesh(partId, form)` | Retorna parte FBX modulada por Form (Adult/Egg/Slime) |
+| `HasPartMesh(partId)` | **S149 NUEVO** `true` si la parte tiene malla adulta. Lo usa `PartPool.Rollable` |
 | `GetGem(uniqueId)` | Retorna material gema shiny por hash estable de ID único |
 | `SetPartMesh(partId, prefab, form)` | Editor: registra parte en diccionario |
 
@@ -88,6 +89,11 @@ public MonchiMoodSetSO MoodSetFor(CreatureGender gender)
 - MonchiVisualizer.SetMood() llama `bank.MoodSetFor(currentDna.Gender)` en lugar de `bank.MoodSet`
 - Material único reduce overhead de instantiation por mood
 - MPB write (_MainTex/_PrevTex/_FaceT/_FaceMode) permite shader-driven transiciones blink/pop
+
+## Cambios S149
+
+- `HasPartMesh(partId)` agregado. Equivale a `GetPartMesh(partId) != null` con forma Adult.
+- Consumidor: `PartPool.Rollable` (filtra Horn, Back y Wing sin malla en la tirada).
 
 ## Escalas y Modelos por Forma
 
@@ -136,3 +142,4 @@ public MonchiMoodSetSO MoodSetFor(CreatureGender gender)
 - [[MonchiMoodSetSO]] (obtiene caras por mood, S139: por género via moodSetFemale)
 - [[MonchiEggBody]] (consume EggScale, EggHeight, EggAnimatorController, S137)
 - [[MonchiSlimeBody]] (consume SlimeScale, SlimeAnimatorController, S137)
+- [[PartPool]] (consume HasPartMesh, S149)

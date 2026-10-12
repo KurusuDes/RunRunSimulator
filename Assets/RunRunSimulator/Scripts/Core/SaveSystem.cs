@@ -11,7 +11,6 @@ namespace MoriMonchiSimulator
 public static class SaveSystem
 {
     private const string DB_FILENAME        = "creature_database.json";
-    private const string FURNITURE_FILENAME = "furniture_registry.json";
     private const string INVENTORY_FILENAME = "player_inventory.json";
     private const string SOCIAL_FILENAME    = "social_graph.json";
     private const string WORLD_FILENAME     = "world_state.json";
@@ -57,18 +56,6 @@ public static class SaveSystem
             return new RegistryData { Alive = new Dictionary<string, CreatureDNA>(), Departed = new Dictionary<string, CreatureDNA>() };
 
         return env.Data.ToObject<RegistryData>(JsonSerializer.Create(Settings));
-    }
-
-    public static string SerializeFurniture(FurnitureRegistrySO registry) =>
-        SaveMigrations.Write(JToken.FromObject(registry.GetAll(), JsonSerializer.Create(Settings)), DateTime.UtcNow.Ticks);
-
-    public static Dictionary<string, PlacedFurniture> DeserializeFurniture(string json)
-    {
-        SaveEnvelope env = SaveMigrations.Read(json, SaveKind.Furniture);
-        if (env.Data == null || env.Data.Type == JTokenType.Null)
-            return new Dictionary<string, PlacedFurniture>();
-
-        return env.Data.ToObject<Dictionary<string, PlacedFurniture>>(JsonSerializer.Create(Settings));
     }
 
     public static string SerializeInventory(PlayerInventorySO inventory) =>
@@ -117,26 +104,6 @@ public static class SaveSystem
         }
 
         return Deserialize(File.ReadAllText(path)).Alive;
-    }
-
-    public static void SaveFurniture(FurnitureRegistrySO registry)
-    {
-        string path = ScopedPath(FURNITURE_FILENAME);
-        File.WriteAllText(path, SerializeFurniture(registry));
-        Debug.Log($"[SaveSystem] Saved {registry.Count} placed furniture → {path}");
-    }
-
-    public static void LoadFurniture(FurnitureRegistrySO registry)
-    {
-        string path = ScopedPath(FURNITURE_FILENAME);
-        if (!File.Exists(path))
-        {
-            Debug.Log("[SaveSystem] No furniture save found — starting fresh.");
-            registry.LoadFrom(null);
-            return;
-        }
-
-        registry.LoadFrom(DeserializeFurniture(File.ReadAllText(path)));
     }
 
     public static void SaveInventory(PlayerInventorySO inventory)
@@ -226,13 +193,11 @@ public static class SaveSystem
         long latest = 0;
 
         long registryAt  = SavedAtOf(DbPath, SaveKind.Registry);
-        long furnitureAt = SavedAtOf(ScopedPath(FURNITURE_FILENAME), SaveKind.Furniture);
         long inventoryAt = SavedAtOf(ScopedPath(INVENTORY_FILENAME), SaveKind.Inventory);
         long socialAt    = SavedAtOf(ScopedPath(SOCIAL_FILENAME), SaveKind.Social);
         long worldAt     = SavedAtOf(ScopedPath(WORLD_FILENAME), SaveKind.World);
 
         if (registryAt  > latest) latest = registryAt;
-        if (furnitureAt > latest) latest = furnitureAt;
         if (inventoryAt > latest) latest = inventoryAt;
         if (socialAt    > latest) latest = socialAt;
         if (worldAt     > latest) latest = worldAt;
@@ -255,7 +220,6 @@ public static class SaveSystem
     public static void BackupLocal(string suffix)
     {
         BackupFile(DbPath, suffix);
-        BackupFile(ScopedPath(FURNITURE_FILENAME), suffix);
         BackupFile(ScopedPath(INVENTORY_FILENAME), suffix);
         BackupFile(ScopedPath(SOCIAL_FILENAME), suffix);
         BackupFile(ScopedPath(WORLD_FILENAME), suffix);

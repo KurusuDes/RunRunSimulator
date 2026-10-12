@@ -14,8 +14,6 @@ namespace MoriMonchiSimulator
 
         public static string RarityName(Rarity rarity) => Loc.Tr("rarity." + KeyOf(rarity));
 
-        public static string FurnitureCategoryName(FurnitureCategory category) => Loc.Tr("furniturecategory." + KeyOf(category));
-
         static string KeyOf(System.Enum value) => value.ToString().ToLowerInvariant();
     }
 }

@@ -47,7 +47,8 @@ public class HotbarController : MonoBehaviour
 
     public int ActiveSlot => activeSlot;
     public string ActiveItemId => Inventory != null ? Inventory.GetHotbarSlot(activeSlot) : null;
-    public bool HasActiveItem => !string.IsNullOrEmpty(ActiveItemId);
+    public GameObject ActiveHeldObject => heldVisual;
+    public bool HasActiveItem =>!string.IsNullOrEmpty(ActiveItemId);
 
     public bool IsOfferingFood
     {

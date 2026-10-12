@@ -30,15 +30,7 @@ internal class AutoPlayerOpeningSteps
         int minerita  = Wallet.Balance(Currency.Minerita);
         if (minerita < 3 * hatchCost) { core.Fail($"Minerita insuficiente: {minerita} < {3 * hatchCost}"); yield break; }
 
-        var incubatorDef = AutoPlayerQuery.FindFurnitureDefinition<IncubatorContainer>();
-        var inventory    = GameManager.CurrentInventory;
-        if (incubatorDef == null || inventory == null || !inventory.HasFurniture(incubatorDef.Id))
-        {
-            core.Fail("El inventario no posee el mueble incubadora del kit inicial");
-            yield break;
-        }
-
-        core.Ok("Llegada", $"minerita={minerita} hatchCost={hatchCost} incubadora={incubatorDef.Id}");
+        core.Ok("Llegada", $"minerita={minerita} hatchCost={hatchCost}");
     }
 
     public IEnumerator Step2_BuyEggBox()
@@ -87,25 +79,6 @@ internal class AutoPlayerOpeningSteps
         if (core.Failed) yield break;
 
         core.Ok("Abrir caja", $"huevos={core.EggIds.Count}");
-    }
-
-    public IEnumerator Step4_PlaceIncubator()
-    {
-        core.CurrentStep = 4;
-
-        var furnitureService = Object.FindFirstObjectByType<FurnitureService>();
-        var grid             = Object.FindFirstObjectByType<PlacementGrid>();
-        if (furnitureService == null || grid == null) { core.Fail("No hay FurnitureService/PlacementGrid en escena"); yield break; }
-
-        var def = AutoPlayerQuery.FindFurnitureDefinition<IncubatorContainer>();
-        if (def == null) { core.Fail("No se encontro la FurnitureDefinitionSO de la incubadora"); yield break; }
-
-        if (!AutoPlayerQuery.TryPlaceInSpiral(furnitureService, def)) { core.Fail("No se pudo colocar la incubadora en ninguna celda libre"); yield break; }
-
-        yield return core.WaitFor(() => Object.FindFirstObjectByType<IncubatorContainer>() != null, core.StepTimeout, "IncubatorContainer en escena");
-        if (core.Failed) yield break;
-
-        core.Ok("Colocar incubadora", $"def={def.Id}");
     }
 
     public IEnumerator Step5_EggsIntoIncubator()

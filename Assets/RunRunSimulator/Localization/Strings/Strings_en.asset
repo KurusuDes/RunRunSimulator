@@ -1707,6 +1707,59 @@ MonoBehaviour:
     m_Localized: Needs {0} more fights for the next evolution.
     m_Metadata:
       m_Items: []
+  - m_Id: 28564101534375936
+    m_Localized: 'Your uncle called: he''s sending you {0} as a gift. Open it at
+      the entrance!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28571620340195328
+    m_Localized: Expansions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500706500608
+    m_Localized: Decor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500731666432
+    m_Localized: ???
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500731666433
+    m_Localized: Empty slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28599012626587648
+    m_Localized: Toys
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512527790080
+    m_Localized: Food {0}%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512699756544
+    m_Localized: Water {0}%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512699756545
+    m_Localized: Clean {0}%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302503088128
+    m_Localized: Looking for a {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002688
+    m_Localized: "Looking for this color \u25CF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002689
+    m_Localized: I love {0} parts
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002690
+    m_Localized: Looking for a bargain
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

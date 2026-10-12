@@ -68,7 +68,8 @@ public class CreatureDNA
 
     public long   BreedReadyAt   = 0;
     public string BreedPartnerID = "";
-    public string LocationKey  = "";
+    public List<string> BreedDecorIDs = new List<string>();
+    public string LocationKey = "";
     public int    LocationSlot = -1;
 
     public int AgeDays(int today) => Mathf.Max(0, today - BirthDay);

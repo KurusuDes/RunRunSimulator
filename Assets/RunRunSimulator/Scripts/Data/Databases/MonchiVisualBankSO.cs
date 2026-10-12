@@ -79,6 +79,8 @@ public class MonchiVisualBankSO : SerializedScriptableObject
         return null;
     }
 
+    public bool HasPartMesh(string partId) => GetPartMesh(partId) != null;
+
 #if UNITY_EDITOR
     public void SetPartMesh(string partId, GameObject prefab, MonchiForm form = MonchiForm.Adult)
     {

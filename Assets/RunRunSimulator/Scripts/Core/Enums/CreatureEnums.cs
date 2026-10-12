@@ -62,6 +62,13 @@ public enum NeedType
     Affect = 2,
 }
 
+public enum SupplyKind
+{
+    Food  = 0,
+    Water = 1,
+    Clean = 2,
+}
+
 public enum CreatureCondition
 {
     Healthy = 0,

@@ -6,30 +6,24 @@ tags: [script, store, data, catalog]
 
 **Ruta:** `Systems/Store/ShopCatalogSO.cs`
 
-**Responsabilidad:** Catálogo unificado: descuentos + restock schedule por día de juego. Expone 4 tipos de listings: Furniture, WorldProps, Creature Boxes, y Upgrades (S138). S131: API cambió DateTime → int day (GameClock.Instance.Day). Métodos: IsDiscountActive(int day), FinalPrice(StoreShopData, int day), NeedsRestock(int day), RestockAll(int day).
+**Responsabilidad:** Catálogo unificado: descuentos + restock schedule por día de juego. Expone listings de props del mundo, cajas de criaturas, mejoras (S138) y decoraciones de cría (S149). S131: API cambió DateTime → int day (GameClock.Instance.Day). **S149:** Se retiran los listings de muebles. Se agrega `RequiresExpansion` en props, `decorListings` y la exportación/importación de stock a `WorldStateSO`. Métodos: IsDiscountActive(int day), FinalPrice(StoreShopData, int day), NeedsRestock(int day), RestockAll(int day), ExportStock(), ImportStock().
 
 ## Clases Internas
 
-### FurnitureListing
+### ItemListing (props del mundo)
 ```csharp
-public class FurnitureListing
-{
-    [Required, AssetsOnly] public FurnitureDefinitionSO Furniture;
-    public StoreShopData Shop;
-}
-```
-
-### ItemListing
-```csharp
+[Serializable]
 public class ItemListing
 {
     [Required, AssetsOnly] public ItemDefinitionSO Item;
     public StoreShopData Shop;
+    [AssetsOnly] public ShopUpgradeSO RequiresExpansion;   // S149
 }
 ```
 
 ### CreatureBoxListing
 ```csharp
+[Serializable]
 public class CreatureBoxListing
 {
     [Required, AssetsOnly] public CreatureBoxSO Box;
@@ -41,10 +35,11 @@ public class CreatureBoxListing
 
 | Propiedad | Retorna | Descripción |
 |-----------|---------|-------------|
-| `FurnitureListings` | `IReadOnlyList<FurnitureListing>` | Muebles |
-| `ItemListings` | `IReadOnlyList<ItemListing>` | Props |
+| `ItemListings` | `IReadOnlyList<ItemListing>` | Props del mundo |
 | `CreatureBoxListings` | `IReadOnlyList<CreatureBoxListing>` | Cajas de criaturas |
-| `UpgradeListings` | `IReadOnlyList<ShopUpgradeSO>` | **(S138)** Mejoras compradas con Dabloons |
+| `UpgradeListings` | `IReadOnlyList<ShopUpgradeSO>` | **(S138)** Mejoras compradas con Dabloons. Sin stock ni restock |
+| `DecorListings` | `IReadOnlyList<BreedingDecorSO>` | **(S149)** Decoraciones de cría. Stock ilimitado |
+| `LastRestockDay` | int | **(S149)** Día del último restock (`NonSerialized`, se persiste vía WorldState) |
 | `RestockEveryDays` | int | Intervalo restock (default 3) |
 | `DiscountEveryDays` | int | Intervalo descuento (default 7; 0=nunca) |
 
@@ -55,7 +50,16 @@ public class CreatureBoxListing
 | `IsDiscountActive(int day)` | `bool` | `day % DiscountEveryDays == 0` (módulo) |
 | `FinalPrice(StoreShopData shop, int day)` | `int` | Precio + descuento según IsDiscountActive(day) |
 | `NeedsRestock(int day)` | `bool` | `lastRestockDay <= 0 \|\| day - lastRestockDay >= RestockEveryDays` |
-| `RestockAll(int day)` | `void` | Recarga stock todas listings; guarda lastRestockDay |
+| `RestockAll(int day)` | `void` | Recarga stock de props y cajas; guarda lastRestockDay. Decoraciones y mejoras no entran |
+| `ExportStock()` | `Dictionary<string, int>` | **(S149)** Stock actual de props y cajas (sin los de stock ilimitado) |
+| `ImportStock(stock, restockDay)` | `void` | **(S149)** Carga stock guardado; si falta un ID, repone al máximo |
+
+## Cambios S149
+
+- **Retirado:** `FurnitureListing` y su lista de muebles.
+- **Agregado:** `RequiresExpansion` en `ItemListing` (un prop puede exigir una expansión abierta).
+- **Agregado:** `decorListings` y `DecorListings`.
+- **Agregado:** `ExportStock` / `ImportStock` / `LastRestockDay`. `StoreManager` los usa para persistir stock en `WorldStateSO`.
 
 ## Cambios S138
 
@@ -65,12 +69,7 @@ public class CreatureBoxListing
 [SerializeField] private List<ShopUpgradeSO> upgradeListings = new List<ShopUpgradeSO>();
 ```
 
-**Nueva propiedad:**
-```csharp
-public IReadOnlyList<ShopUpgradeSO> UpgradeListings => upgradeListings;
-```
-
-Mejoras no tienen stock (no consumen), ni restock schedule. Cada mejora rastrean su nivel en `WorldStateSO.UpgradeLevel(id)`.
+Mejoras no tienen stock (no consumen), ni restock schedule. Cada mejora rastrea su nivel en `WorldStateSO.UpgradeLevel(id)`.
 
 ## Dev Button
 
@@ -88,4 +87,4 @@ private void DevForceRestock()
 - [[Index/28 - Currency & Monetization]]
 - [[Index/04 - Store & Transactions]]
 
-**Conexiones:** [[StoreShopData]], [[FurnitureDefinitionSO]], [[ItemDefinitionSO]], [[CreatureBoxSO]], [[ShopUpgradeSO]], [[StoreManager]], [[GameClock]]
+**Conexiones:** [[StoreShopData]], [[ItemDefinitionSO]], [[CreatureBoxSO]], [[ShopUpgradeSO]], [[BreedingDecorSO]], [[StoreManager]], [[WorldStateSO]], [[GameClock]]

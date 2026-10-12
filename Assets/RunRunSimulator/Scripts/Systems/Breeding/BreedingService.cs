@@ -13,8 +13,11 @@ public static class BreedingService
         string                 fatherID,
         CreatureRegistrySO     registry,
         CreatureDatabaseSO     partDb,
-        InheritanceOddsTableSO odds)
+        InheritanceOddsTableSO odds,
+        IEnumerable<BreedingModifier> modifiers = null)
     {
+        var effective = BreedingOdds.From(odds, modifiers ?? System.Array.Empty<BreedingModifier>());
+
         if (!registry.TryGet(motherID, out var mother))
         {
             Debug.LogError($"[BreedingService] Mother ID '{motherID}' not found in registry.");
@@ -55,11 +58,11 @@ public static class BreedingService
 
         var child = new CreatureDNA
         {
-            BodyShapeID    = ResolveSlot(PartRole.Body, motherID, fatherID, registry, partDb, odds),
-            HornID         = ResolveSlot(PartRole.Horn, motherID, fatherID, registry, partDb, odds),
-            BackID         = ResolveSlot(PartRole.Back, motherID, fatherID, registry, partDb, odds),
-            WingID         = ResolveSlot(PartRole.Wing, motherID, fatherID, registry, partDb, odds),
-            FaceID         = ResolveSlot(PartRole.Face, motherID, fatherID, registry, partDb, odds),
+            BodyShapeID    = ResolveSlot(PartRole.Body, motherID, fatherID, registry, partDb, effective),
+            HornID         = ResolveSlot(PartRole.Horn, motherID, fatherID, registry, partDb, effective),
+            BackID         = ResolveSlot(PartRole.Back, motherID, fatherID, registry, partDb, effective),
+            WingID         = ResolveSlot(PartRole.Wing, motherID, fatherID, registry, partDb, effective),
+            FaceID         = ResolveSlot(PartRole.Face, motherID, fatherID, registry, partDb, effective),
             BaseColor      = childBase,
             SecondaryColor = ColorGenetics.DeriveSecondary(childBase),
             FurType        = ColorGenetics.Inherit(mother.FurType, father.FurType),
@@ -91,15 +94,15 @@ public static class BreedingService
         string                 fatherID,
         CreatureRegistrySO     registry,
         CreatureDatabaseSO     partDb,
-        InheritanceOddsTableSO odds)
+        BreedingOdds           effective)
     {
-        var slot = odds.Roll();
+        var slot = effective.Roll();
 
         string partID = slot switch
         {
-            InheritanceOddsTableSO.Slot.Parent           => PickFromLevel(role, 0, motherID, fatherID, registry),
-            InheritanceOddsTableSO.Slot.Grandparent      => PickFromLevel(role, 1, motherID, fatherID, registry),
-            InheritanceOddsTableSO.Slot.GreatGrandparent => PickFromLevel(role, 2, motherID, fatherID, registry),
+            InheritanceOddsTableSO.Slot.Parent           => PickFromLevel(role, 0, motherID, fatherID, registry, effective),
+            InheritanceOddsTableSO.Slot.Grandparent      => PickFromLevel(role, 1, motherID, fatherID, registry, effective),
+            InheritanceOddsTableSO.Slot.GreatGrandparent => PickFromLevel(role, 2, motherID, fatherID, registry, effective),
             _                                            => null
         };
 
@@ -107,21 +110,27 @@ public static class BreedingService
     }
 
     private static string PickFromLevel(
-        PartRole         role,
-        int              levels,
-        string           motherID,
-        string           fatherID,
-        CreatureRegistrySO registry)
+        PartRole           role,
+        int                levels,
+        string             motherID,
+        string             fatherID,
+        CreatureRegistrySO registry,
+        BreedingOdds       effective)
     {
-        var generation = ExpandGenerations(new[] { motherID, fatherID }, levels, registry);
+        var motherSide = SideCandidates(role, motherID, levels, registry);
+        var fatherSide = SideCandidates(role, fatherID, levels, registry);
 
-        var candidates = generation
+        var chosen = effective.PickMotherSide() ? motherSide : fatherSide;
+        if (chosen.Count == 0) chosen = chosen == motherSide ? fatherSide : motherSide;
+
+        return chosen.Count > 0 ? chosen[Random.Range(0, chosen.Count)] : null;
+    }
+
+    private static List<string> SideCandidates(PartRole role, string originID, int levels, CreatureRegistrySO registry) =>
+        ExpandGenerations(new[] { originID }, levels, registry)
             .Select(id => registry.TryGet(id, out var c) ? SlotPartID(c, role) : null)
             .Where(p => !string.IsNullOrEmpty(p))
             .ToList();
-
-        return candidates.Count > 0 ? candidates[Random.Range(0, candidates.Count)] : null;
-    }
 
     private static List<string> ExpandGenerations(
         IEnumerable<string> origins,
@@ -156,11 +165,11 @@ public static class BreedingService
 
     private static string RandomPartID(PartRole role, CreatureDatabaseSO partDb) => role switch
     {
-        PartRole.Body => partDb.BodyShapes?.GetRandomPart()?.ID ?? "",
-        PartRole.Horn => partDb.Horns?.GetRandomPart()?.ID      ?? "",
-        PartRole.Back => partDb.Backs?.GetRandomPart()?.ID      ?? "",
-        PartRole.Wing => partDb.Wings?.GetRandomPart()?.ID      ?? "",
-        PartRole.Face => partDb.Faces?.GetRandomPart()?.ID      ?? "",
+        PartRole.Body => partDb.BodyShapes?.GetRandomPart(where: PartPool.Rollable)?.ID ?? "",
+        PartRole.Horn => partDb.Horns?.GetRandomPart(where: PartPool.Rollable)?.ID      ?? "",
+        PartRole.Back => partDb.Backs?.GetRandomPart(where: PartPool.Rollable)?.ID      ?? "",
+        PartRole.Wing => partDb.Wings?.GetRandomPart(where: PartPool.Rollable)?.ID      ?? "",
+        PartRole.Face => partDb.Faces?.GetRandomPart(where: PartPool.Rollable)?.ID      ?? "",
         _             => ""
     };
 

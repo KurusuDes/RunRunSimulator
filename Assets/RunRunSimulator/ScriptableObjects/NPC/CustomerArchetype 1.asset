@@ -21,14 +21,20 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  DisplayName: ruth
+  DisplayName: Artista
   Icon: {fileID: 0}
   AgentPrefab: {fileID: 0}
   WeightBreed: 1
   WeightTier: 1
   BudgetMultiplier: 1
-  RenegotiationTolerance: 0.5
+  BudgetMin: 25
+  BudgetMax: 70
+  Taste: 2
+  TasteBonus: 0.4
+  BuyWithoutMatchChance: 0.2
+  TasteFromDisplayChance: 0.6
+  RenegotiationTolerance: 0.4
   MinInspections: 1
   MaxInspections: 3
-  InspectionDuration: 3
-  WaitTimeoutSeconds: 60
+  InspectionDuration: 3.5
+  WaitTimeoutSeconds: 50

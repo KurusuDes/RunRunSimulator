@@ -6,39 +6,46 @@ tags: [script, system, startup]
 
 **Ruta:** `Systems/Player/StarterKitService.cs`
 
-**Responsabilidad:** Servicio que aplica el kit inicial (moneda + muebles) en partida nueva. Espera a que `CloudSyncService.StartupSyncDone == true` y `TutorialStep >= 1`. Detecta nueva partida: `TutorialStep == 0 && registry.Count == 0`. Si es nueva: suma Minerita/Dabloons via `Wallet.Add()`, agrega muebles al inventario, dispara `GameEvents.InventoryChanged` si hubo cambios, avanza TutorialStep a 1, y emite `GameEvents.WorldStateChanged`. Timeout 20s si cloud stall. MonoBehaviour stateless wired en escena.
+**Responsabilidad:** Servicio que aplica el kit inicial (moneda) en partida nueva. Espera a que `CloudSyncService.StartupSyncDone == true` o un timeout de 20 s (medido en tiempo sin escala). Detecta nueva partida: `TutorialStep == 0 && registry.Count == 0`. Si es nueva: suma Minerita y Dabloons via `Wallet.Add()`, avanza TutorialStep a 1 y emite `GameEvents.WorldStateChanged`. **S149:** Se retira el kit de muebles (ya no existen); `TryApply()` pasa a ser público y lo llama también `AdminDevConsole`. MonoBehaviour stateless wired en escena.
 
 ## Campos Serializados
 
-- `kit` (StarterKitSO, required) — asset con valores iniciales
+- `kit` (StarterKitSO, required) — asset con valores iniciales (Minerita, Dabloons)
 - `cloudSync` (CloudSyncService, required) — esperar a sync
 - `syncTimeoutSeconds` (float, default 20) — timeout para CloudSync.StartupSyncDone
 
 ## Ciclo de Vida
 
 ### Start()
-1. Inicia corrutina `ApplyKitRoutine()` (async, no bloquea)
+1. Inicia corrutina `ApplyKitRoutine()` (no bloquea)
 
 ### ApplyKitRoutine()
-1. Espera a CloudSyncService.StartupSyncDone (con timeout)
-2. Obtiene `GameManager.Instance.WorldState`, `GameManager.Instance.Registry`, `GameManager.CurrentInventory`
-3. Si alguna ref falta → warning y fin
-4. Detecta nueva partida: `TutorialStep == 0 && registry.Count == 0`
-5. Si no es nueva → log y fin (kit no aplicado a saves existentes)
-6. Si es nueva:
-   - Suma `kit.Minerita` y `kit.Dabloons` via `Wallet.Add(currency, amount, "starter")`
-   - Por cada mueble en kit.Furniture: si no null, suma via `inventory.AddFurniture(def.Id)`
-   - Si hubo muebles agregados: dispara `GameEvents.InventoryChanged(inventory)`
+1. Espera a `CloudSyncService.StartupSyncDone` (con timeout, en `unscaledDeltaTime`)
+2. Llama `TryApply()`
+
+### TryApply() (público, bool)
+1. Obtiene `GameManager.Instance.WorldState`, `Registry` y `CurrentInventory`
+2. Si alguna ref o `kit` falta → warning y devuelve false
+3. Detecta nueva partida: `TutorialStep == 0 && registry.Count == 0`
+4. Si no es nueva → log y devuelve false (kit no aplicado a saves existentes)
+5. Si es nueva:
+   - Suma `kit.Minerita` y `kit.Dabloons` via `Wallet.Add(currency, amount, "starter")` (solo si > 0)
    - Avanza `worldState.TutorialStep = 1`
    - Dispara `GameEvents.WorldStateChanged(worldState)`
-   - Registra log con detalles
+   - Devuelve true
 
 ## Invariantes
 
 - **Una sola vez**: detecta nueva partida por estado (TutorialStep=0, Count=0), no hay flag
 - **No sobrescribe si existe**: el kit es solo para init (partida nueva solo)
 - **Wallet es singleton**: `Wallet.Add()` es estático, centraliza currency
-- **Eventos disparan**: InventoryChanged si muebles, WorldStateChanged siempre
+- **Eventos disparan**: WorldStateChanged siempre que aplica (S149: ya no dispara InventoryChanged)
+
+## Cambios S149
+
+- **Retirado:** Kit de muebles (`kit.Furniture`) y la llamada `AddFurniture`.
+- **Retirado:** Evento `InventoryChanged` en el kit.
+- **Público:** `TryApply()` ahora devuelve bool y lo usa `AdminDevConsole` (reset de save).
 
 ## Vinculado a
 
@@ -49,6 +56,7 @@ tags: [script, system, startup]
 
 - [[StarterKitSO]] (asset de config)
 - [[CloudSyncService]] (señal de inicio de sesión)
+- [[AdminDevConsole]] (llama `TryApply`)
 - [[GameManager]] (WorldState, Registry, refs)
 - [[Wallet]] (currency manipulation)
-- [[GameEvents]] (InventoryChanged, WorldStateChanged)
+- [[GameEvents]] (WorldStateChanged)

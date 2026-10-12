@@ -4,6 +4,7 @@ description: Cierra sesion MoriMonchis (actualiza Active Context y dispara vault
 
 Cerra la sesion siguiendo el protocolo de CLAUDE.md (pasos 8-9):
 
+0. Guardá el editor antes de todo (evita el aviso de recovery de escena al reabrir Unity): si está en Play, salí (`manage_editor stop`); guardá las escenas abiertas (`manage_scene save`, o `execute_code` con `EditorSceneManager.SaveOpenScenes()` + `AssetDatabase.SaveAssets()`); confirmá que ninguna escena abierta quede `isDirty`. Si el MCP no conecta, avisame para que guarde yo con Ctrl+S antes de cerrar Unity.
 1. Corré `git status --porcelain` y armá la lista de scripts `.cs` modificados o creados en esta sesion, marcando cada uno NUEVO o MODIFICADO.
 2. Actualizá `MoriMonchiVault/Index/09 - Active Context.md`: qué se tocó esta sesion y cuál es el siguiente paso. Al final de la nota dejá la lista de `.cs` modificados/creados con su estado.
 3. Si hubo `.cs` con cambio de contrato o responsabilidad, invocá el sub-agente `vault-documenter` (Agent tool, `subagent_type: vault-documenter`) pasándole esa lista en el formato:

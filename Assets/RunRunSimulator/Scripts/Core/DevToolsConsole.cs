@@ -37,17 +37,6 @@ public class DevToolsConsole : MonoBehaviour
         Debug.Log("[DevToolsConsole] Dabloons reset to 0.");
     }
 
-    [Button("Clear Furniture Owned (DEV)", ButtonSizes.Medium), GUIColor(1f, 0.5f, 0.3f), BoxGroup("Dev Tools")]
-    private void DevClearFurnitureOwned()
-    {
-        if (gameManager == null) { Debug.LogWarning("[DevToolsConsole] No GameManager assigned."); return; }
-        var inventory = gameManager.Inventory;
-        if (inventory == null) { Debug.LogWarning("[DevToolsConsole] No inventory assigned."); return; }
-        inventory.ClearFurnitureOwned();
-        GameEvents.InventoryChanged(inventory);
-        Debug.Log("[DevToolsConsole] Furniture owned list cleared.");
-    }
-
     [Button("Clear World Props (DEV)", ButtonSizes.Medium), GUIColor(1f, 0.5f, 0.3f), BoxGroup("Dev Tools")]
     private void DevClearWorldProps()
     {

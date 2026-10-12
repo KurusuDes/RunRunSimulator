@@ -28,6 +28,9 @@ namespace MoriMonchiSimulator
         public float ReactionDelay { get; private set; }
         public LeaveReason Reason { get; private set; }
         public CreatureDNA TargetMM { get; private set; }
+        public CustomerTaste Taste { get; private set; }
+        public int Budget { get; private set; }
+        public float PickMatch { get; private set; }
         public int InitialOffer { get; private set; }
         public int CurrentOffer { get; private set; }
         public bool HasCounteredOnce { get; private set; }
@@ -79,7 +82,25 @@ namespace MoriMonchiSimulator
             ApplyWalkableAreas();
             ApplyInstanceVariation();
             inspectionsRemaining = UnityEngine.Random.Range(archetype.MinInspections, archetype.MaxInspections + 1);
+            Budget = UnityEngine.Random.Range(archetype.BudgetMin, Mathf.Max(archetype.BudgetMin, archetype.BudgetMax) + 1);
+            Taste = CustomerTaste.Roll(archetype, CollectDisplayedCreatures(), GameManager.Instance != null ? GameManager.Instance.Database : null);
             TransitionTo(NpcState.Wandering);
+        }
+
+        private List<CreatureDNA> CollectDisplayedCreatures()
+        {
+            var list = new List<CreatureDNA>();
+            if (displays == null) return list;
+            foreach (var d in displays)
+            {
+                if (d == null || d.Occupants == null) continue;
+                foreach (var occ in d.Occupants)
+                {
+                    var dna = occ?.DNA;
+                    if (dna != null && CreatureAvailability.IsFree(dna)) list.Add(dna);
+                }
+            }
+            return list;
         }
 
         private void ApplyWalkableAreas()
@@ -174,16 +195,17 @@ namespace MoriMonchiSimulator
             inspectTimer += Time.deltaTime;
             if (inspectTimer < Archetype.InspectionDuration) return;
 
-            var pick = BestPickFromContainer(currentDisplay);
+            var pick = BestPickFromContainer(currentDisplay, out float pickMatch);
             inspectionsRemaining--;
 
             if (pick != null)
             {
                 TargetMM = pick;
+                PickMatch = pickMatch;
                 var svc = CustomerService.Instance;
                 if (svc != null)
                 {
-                    InitialOffer = svc.Valuation.Estimate(pick, Archetype, svc.Pricing);
+                    InitialOffer = svc.Valuation.Estimate(pick, Archetype, svc.Pricing, pickMatch);
                     CurrentOffer = InitialOffer;
                 }
                 HasCounteredOnce = false;
@@ -337,22 +359,54 @@ namespace MoriMonchiSimulator
             }
         }
 
-        private CreatureDNA BestPickFromContainer(StoreContainer container)
+        private CreatureDNA BestPickFromContainer(StoreContainer container, out float pickMatch)
         {
+            pickMatch = 0f;
             if (container == null) return null;
-            CreatureDNA best = null;
-            int bestPrice = int.MinValue;
             var svc = CustomerService.Instance;
             if (svc == null) return null;
+
+            var db = GameManager.Instance != null ? GameManager.Instance.Database : null;
+            float ceiling = Budget * 1.2f;
+            bool anyTaste = Taste.Kind == TasteKind.None;
+
+            CreatureDNA bestMatch = null;
+            int bestMatchPrice = int.MinValue;
+            CreatureDNA cheapest = null;
+            int cheapestPrice = int.MaxValue;
+            float cheapestMatch = 0f;
+
             foreach (var occ in container.Occupants)
             {
                 var dna = occ?.DNA;
                 if (dna == null) continue;
                 if (!CreatureAvailability.IsFree(dna)) continue;
-                int price = svc.Valuation.Estimate(dna, Archetype, svc.Pricing);
-                if (price > bestPrice) { bestPrice = price; best = dna; }
+                float match = Taste.Match(dna, db);
+                int price = svc.Valuation.Estimate(dna, Archetype, svc.Pricing, match);
+                if (price > ceiling) continue;
+
+                if ((anyTaste || match >= 1f) && price > bestMatchPrice)
+                {
+                    bestMatchPrice = price;
+                    bestMatch = dna;
+                    pickMatch = match;
+                }
+                if (price < cheapestPrice)
+                {
+                    cheapestPrice = price;
+                    cheapest = dna;
+                    cheapestMatch = match;
+                }
             }
-            return best;
+
+            if (bestMatch != null) return bestMatch;
+            if (cheapest != null && UnityEngine.Random.value < Archetype.BuyWithoutMatchChance)
+            {
+                pickMatch = cheapestMatch;
+                return cheapest;
+            }
+            pickMatch = 0f;
+            return null;
         }
 
         private void OnEnable() => GameEvents.OnCustomerSold += OnSomeoneSold;

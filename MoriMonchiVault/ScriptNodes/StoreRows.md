@@ -6,34 +6,32 @@ tags: [script, ui, store, data, rows]
 
 **Ruta:** `UI/StoreRows.cs`
 
-**Responsabilidad:** Utilidad estática: convierte catálogo en rows de UI. **S138:** Furniture tab ahora incluye mejoras con `Upgrade` field. Abstracción agnóstica de presentación.
+**Responsabilidad:** Utilidad estática: convierte el catálogo en rows de UI. Abstracción agnóstica de presentación. **S138:** la pestaña de mejoras con `Upgrade` field. **S149:** las pestañas cambian: sale Furniture y entran Expansions (mejoras), Decor (decoraciones de cría) y Toys (juguetes).
 
 ## Enumeraciones
 
 ### Tab
 
 ```csharp
-enum Tab { Furniture, WorldProps, Consumables, Creatures }
+public enum Tab { Expansions, WorldProps, Consumables, Creatures, Decor, Toys }
 ```
+
+**S149:** `Furniture` reemplazado por `Expansions`. Las etiquetas salen de `Loc` (`ui.store.tab.*`).
 
 ## Structs Públicos
 
-### Row (S138)
+### Row
 
 ```csharp
 public struct Row
 {
     public string          Name;            // Display name
-    public StoreShopData   Shop;            // Stock, precio (null para mejoras)
+    public StoreShopData   Shop;            // Stock, precio (null para mejoras y decoraciones)
     public Func<BuyResult> Buy;             // Lambda compra
-    public int?            PriceOverride;   // **(S138)** Precio para mejoras
-    public ShopUpgradeSO   Upgrade;         // **(S138)** Referencia si es mejora
+    public int?            PriceOverride;   // Precio fijo (mejoras, decoraciones, cajas)
+    public ShopUpgradeSO   Upgrade;         // Referencia si es mejora
 }
 ```
-
-**Cambios S138:**
-- `PriceOverride` — precio fijo (para mejoras sin Stock)
-- `Upgrade` — referencia a ShopUpgradeSO si es mejora
 
 ## Métodos Públicos
 
@@ -44,39 +42,40 @@ public struct Row
 
 ## Lógica Collect
 
-**Furniture tab (S138):**
-1. Itera `catalog.FurnitureListings` (muebles)
-   - Row: Shop + Buy → BuyFurniture
-2. Itera `catalog.UpgradeListings` (mejoras)
-   - Row: Upgrade + PriceOverride + Buy → BuyUpgrade
-   - Sin Shop (no tiene stock)
-   - `PriceOverride = upgrade.PriceFor(upgrade.CurrentLevel)`
+**Expansions (S138, renombrada S149):**
+1. Itera `catalog.UpgradeListings`.
+2. Row: Upgrade + `PriceOverride = upgrade.PriceFor(upgrade.CurrentLevel)` + Buy → `BuyUpgrade`. Sin Shop (no tiene stock).
 
-**Creatures tab (S137):**
-- Itera `catalog.CreatureBoxListings` (cajas)
-- Row: Box + Shop + Buy → BuyCreatureBox
-- `PriceOverride = store.CreatureBoxPrice(box, shop)` (maneja gratis onboarding)
+**Decor (S149):**
+1. Itera `catalog.DecorListings`.
+2. El nombre se oculta (`ui.store.decor.unknown`) hasta que `WorldState.BredTotal` cumple `DiscoverAtBreeds`.
+3. Si el jugador ya tiene unidades, agrega el contador `×N` al nombre (`inventory.DecorCount`).
+4. Row: `PriceOverride = decor.Price` + Buy → `BuyDecor`. Sin Shop (stock ilimitado).
 
-**WorldProps / Consumables:**
-- Itera `catalog.ItemListings` con filtro categoría
+**Creatures (S137):**
+- Itera `catalog.CreatureBoxListings`.
+- Row: Box + Shop + Buy → `BuyCreatureBox`.
+- `PriceOverride = store.CreatureBoxPrice(box, shop)` (maneja gratis onboarding).
 
-## Integración S138
+**WorldProps / Consumables / Toys:**
+- Itera `catalog.ItemListings` y filtra por `WorldPropCategory`: WorldProps = Tool, Toys = Toy, Consumables = Food o Medicine.
+- **S149:** un listing con `RequiresExpansion` solo aparece si esa expansión tiene nivel >= 1.
+- Row: Shop + Buy → `BuyWorldProp`.
 
-**StorePanelUITK.BuildRows()** → llama `StoreRows.Collect(Tab.Furniture, ...)` 
-- UI itera rows, renderiza tanto muebles como mejoras
-- Ejecuta `row.Buy()` en click
-- Usa `row.PriceOverride` si existe, sino `row.Shop.Price`
+## Integración
 
-## Invariantes S138
+**StorePanelUITK** llama `Collect` por pestaña; la UI renderiza el row, ejecuta `row.Buy()` al click y usa `row.PriceOverride` si existe, o `row.Shop.Price` en caso contrario.
 
-- Mejoras solo en tab Furniture
-- Mejoras sin Stock (no consumen)
-- Row.Upgrade ≠ null ⟹ Row.Shop = null
-- Row.PriceOverride = precio para siguiente nivel
+## Invariantes
+
+- Mejoras solo en la pestaña Expansions.
+- Mejoras y decoraciones sin Stock (no consumen).
+- `Row.Upgrade != null` implica `Row.Shop == null`.
+- `Row.PriceOverride` es el precio actual de la mejora (siguiente nivel) o el precio fijo de la decoración.
 
 ## Vinculado a
 
 - [[Index/28 - Currency & Monetization]]
 - [[Index/04 - Store & Transactions]]
 
-**Conexiones:** [[StorePanelUITK]], [[StoreManager]], [[ShopCatalogSO]], [[ShopUpgradeSO]], [[CreatureBoxSO]]
+**Conexiones:** [[StorePanelUITK]], [[StoreManager]], [[ShopCatalogSO]], [[ShopUpgradeSO]], [[CreatureBoxSO]], [[BreedingDecorSO]], [[WorldPropCategory]], [[WorldStateSO]], [[PlayerInventorySO]], [[Loc]]

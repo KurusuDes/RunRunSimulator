@@ -6,10 +6,10 @@ tags: [script, world, ai, context, internal]
 
 **Ruta:** `World/AI/AgentContext.cs`
 
-**Responsabilidad:** Contenedor de estado puro compartido entre colaboradores (AgentBrain, AgentPhysics, AgentExpedition, AgentClash, AgentSenses, AgentSocial, AgentConfinement, AgentAbilities). Almacena refs de componentes, DNA/perfil, estado de juego, máscaras NavMesh, percepciones, pizarrón de equipo (S103), órdenes de arena (S104), buffs de velocidad por habilidades (S107), **estadísticas operacionales (S109: Stats)**. Sin lógica de estado; solo datos y helpers (SetDestinationSafe, IsMoving, PlanarDistance, etc.).
+**Responsabilidad:** Contenedor de estado puro compartido entre colaboradores (AgentBrain, AgentPhysics, AgentExpedition, AgentClash, AgentSenses, AgentSocial, AgentConfinement, AgentAbilities, AgentToys). Almacena refs de componentes, DNA/perfil, estado de juego, máscaras NavMesh, percepciones, pizarrón de equipo (S103), órdenes de arena (S104), buffs de velocidad por habilidades (S107), estadísticas operacionales (S109). **S149:** se agrega el estado `Playing` para juguetes. Sin lógica de estado; solo datos y helpers (SetDestinationSafe, IsMoving, PlanarDistance, etc.).
 
-**Enum AgentState:**
-Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation, Courting, Socializing, HandFeed, Expedition, Clashing
+**Enum AgentState (S149):**
+Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation, Courting, Socializing, HandFeed, Expedition, Clashing, Playing
 
 **Campos Internos:**
 - Refs: Owner, Body, Agent, Rb, Col (componentes)
@@ -18,10 +18,10 @@ Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation,
 - CurrentContainer (corral si confinado)
 - State (AgentState actual)
 - BaseSpeed (velocidad base NavMesh)
-- **S107 NUEVO:**
+- **S107:**
   - `SpeedMultiplier` (float, default 1f) — factor multiplicador de velocidad (ej. 1.35 para boost de habilidad)
-  - `SpeedBoostUntil` (float) — timestamp hasta el cual boost está activo. Si Time.time >= SpeedBoostUntil, MultipliedSpeed = 1f
-- **S109 NUEVO:**
+  - `SpeedBoostUntil` (float) — timestamp hasta el cual boost está activo. Si Time.time >= SpeedBoostUntil, el multiplicador no aplica
+- **S109:**
   - `Stats` (ExpeditionStats) — estadísticas operacionales resueltas (CarryCapacity, LoadedSpeedFactor, KeepCarryOnKnock, GuardRadius, VisibleFrom). Actualizado por AgentAbilities.RefreshStats() en Bind y ResetForReuse; también por MoriMochiAgent.SetOrders()
 - Occupation (S104) — ocupación arena derivada de Orders
 - ArenaOrders Orders (S104) — órdenes vigentes (Loot/Contact/Posture)
@@ -31,20 +31,20 @@ Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation,
 - NavMesh: FreeAreaMask, ConfinedAreaMask, RebakeInProgress
 
 **Métodos Públicos:**
-- `bool IsNavMeshControlled() → bool` — si state es controlado por navmesh (Idle, Roaming, Reacting, SeekingNeed, UsingStation, Expedition, Clashing)
+- `bool IsNavMeshControlled()` — true si el state es controlado por NavMesh (Idle, Roaming, Reacting, SeekingNeed, UsingStation, Courting, Socializing, Expedition, Clashing, Playing)
 - `bool IsBreeding { get; }` — si DNA.BusyState == Breeding
 - `bool IsMoving { get; }` — si Agent activo y en movimiento
 - `void SetStopped(bool stopped)` — Agent.isStopped
 - `void SetDestinationSafe(Vector3 desired)` — SetDestination con sample check
-- `void ApplyGaitSpeed(bool loaded)` (S109 ACTUALIZADO) — aplica factor velocidad según State/Profile + SpeedMultiplier si boost activo + LoadedSpeedFactor si cargado:
+- `void ApplyGaitSpeed(bool loaded)` — aplica factor velocidad según State/Profile + SpeedMultiplier si boost activo + LoadedSpeedFactor si cargado. **S149:** no se aplica en Courting ni Clashing:
   - factor = Profile.RoamSpeedFactor si Roaming, sino 1f
   - target = BaseSpeed * factor
-  - Si loaded: target *= Stats.LoadedSpeedFactor (nuevo parámetro)
+  - Si loaded: target *= Stats.LoadedSpeedFactor
   - Si Time.time < SpeedBoostUntil: target *= SpeedMultiplier
   - Sets Agent.speed = target
 - `void SetColliderTrigger(bool isTrigger)`
-- `float PlanarDistanceToPlayer() → float` — XZ distance al player
-- `static Vector3 RandomPointInBounds(Bounds b) → Vector3`
+- `float PlanarDistanceToPlayer()` — XZ distance al player (`float.MaxValue` si no hay player)
+- `static Vector3 RandomPointInBounds(Bounds b)`
 
 **S104 Cambios:**
 - Campos `Occupation` y `ArenaOrders Orders` agregados
@@ -65,6 +65,10 @@ Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation,
 - ApplyGaitSpeed() firma cambió: `ApplyGaitSpeed(bool loaded)` en lugar de sin parámetros
 - Stats se usa en AgentGatherer, ExpeditionNav, Perceivable, PerceivableRegistry para deducir capacidad, radio, visibilidad
 
+**S149 Cambios:**
+- `AgentState.Playing` agregado. Lo usa `AgentToys` mientras el monchi juega con un juguete. Cuenta como estado controlado por NavMesh.
+- `ApplyGaitSpeed` no cambia la velocidad en Courting ni Clashing.
+
 **Invariantes:**
 - Contenedor puro: sin lógica de transición de estado
 - Ref compartida: todos los colaboradores leen/escriben ctx, no hay duplicación
@@ -76,4 +80,4 @@ Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation,
 
 **Vinculado a:** [[Index/22 - Arena (S103-S104)]], [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]]
 
-**Conexiones:** [[MoriMochiAgent]], [[AgentBrain]], [[AgentPhysics]], [[AgentExpedition]], [[AgentClash]], [[AgentAbilities]], [[AgentSenses]], [[AgentSocial]], [[AgentConfinement]], [[TeamBlackboard]], [[CreatureDNA]], [[ArenaOrders]], [[ArenaOrderRules]], [[ExpeditionStats]]
+**Conexiones:** [[MoriMochiAgent]], [[AgentBrain]], [[AgentPhysics]], [[AgentExpedition]], [[AgentClash]], [[AgentAbilities]], [[AgentSenses]], [[AgentSocial]], [[AgentConfinement]], [[AgentToys]], [[TeamBlackboard]], [[CreatureDNA]], [[ArenaOrders]], [[ArenaOrderRules]], [[ExpeditionStats]]

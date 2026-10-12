@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -29,6 +30,10 @@ public class BreedingController : MonoBehaviour
 
     public CreatureLifeStageTableSO LifeStageTable => lifeStageTable;
 
+    [BoxGroup("Setup")]
+    [SerializeField] private BreedingDecorDatabaseSO decorDatabase;
+    public BreedingDecorDatabaseSO DecorDatabase => decorDatabase;
+
     private void Awake()
     {
         Instance = this;
@@ -46,8 +51,8 @@ public class BreedingController : MonoBehaviour
     public float GetAffinity(Role a, Role b) =>
         affinityTable?.GetAffinity(a, b) ?? 0.5f;
 
-    public bool StartBreeding(string motherID, string fatherID) =>
-        incubation != null && incubation.StartBreeding(motherID, fatherID);
+    public bool StartBreeding(string motherID, string fatherID, IReadOnlyList<string> decorIds = null) =>
+        incubation != null && incubation.StartBreeding(motherID, fatherID, decorIds);
 
     public HatchResult TryHatch(string motherID, string fatherID) =>
         incubation != null ? incubation.TryHatch(motherID, fatherID) : HatchResult.Invalid;

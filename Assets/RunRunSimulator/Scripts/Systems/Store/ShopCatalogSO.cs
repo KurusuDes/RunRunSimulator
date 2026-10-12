@@ -9,16 +9,6 @@ namespace MoriMonchiSimulator
 public class ShopCatalogSO : SerializedScriptableObject
 {
     [Serializable]
-    public class FurnitureListing
-    {
-        [Required, AssetsOnly, HideLabel, HorizontalGroup(220)]
-        public FurnitureDefinitionSO Furniture;
-
-        [HideLabel]
-        public StoreShopData Shop;
-    }
-
-    [Serializable]
     public class ItemListing
     {
         [Required, AssetsOnly, HideLabel, HorizontalGroup(220)]
@@ -26,6 +16,8 @@ public class ShopCatalogSO : SerializedScriptableObject
 
         [HideLabel]
         public StoreShopData Shop;
+
+        [AssetsOnly] public ShopUpgradeSO RequiresExpansion;
     }
 
     [Serializable]
@@ -54,10 +46,6 @@ public class ShopCatalogSO : SerializedScriptableObject
         Debug.Log("[ShopCatalog] Force restock fired — all listings refilled to MaxStock.");
     }
 
-    [Title("Furniture for sale")]
-    [TableList(AlwaysExpanded = true)]
-    [SerializeField] private List<FurnitureListing> furnitureListings = new List<FurnitureListing>();
-
     [Title("World props for sale")]
     [TableList(AlwaysExpanded = true)]
     [SerializeField] private List<ItemListing> itemListings = new List<ItemListing>();
@@ -69,8 +57,11 @@ public class ShopCatalogSO : SerializedScriptableObject
     [Title("Shop upgrades for sale")]
     [SerializeField] private List<ShopUpgradeSO> upgradeListings = new List<ShopUpgradeSO>();
 
+    [Title("Breeding decor for sale (unlimited stock)")]
+    [SerializeField] private List<BreedingDecorSO> decorListings = new List<BreedingDecorSO>();
+
+    public IReadOnlyList<BreedingDecorSO>     DecorListings        => decorListings;
     public IReadOnlyList<ShopUpgradeSO>       UpgradeListings      => upgradeListings;
-    public IReadOnlyList<FurnitureListing>    FurnitureListings    => furnitureListings;
     public IReadOnlyList<ItemListing>         ItemListings         => itemListings;
     public IReadOnlyList<CreatureBoxListing>  CreatureBoxListings  => creatureBoxListings;
 
@@ -85,9 +76,32 @@ public class ShopCatalogSO : SerializedScriptableObject
     {
         lastRestockDay = day;
 
-        foreach (var l in furnitureListings)    l?.Shop?.Restock();
         foreach (var l in itemListings)         l?.Shop?.Restock();
         foreach (var l in creatureBoxListings)  l?.Shop?.Restock();
+    }
+
+    public int LastRestockDay => lastRestockDay;
+
+    public Dictionary<string, int> ExportStock()
+    {
+        var stock = new Dictionary<string, int>();
+        foreach (var l in itemListings)        if (l?.Item != null && !string.IsNullOrEmpty(l.Item.Id) && l.Shop != null && !l.Shop.IsUnlimited) stock[l.Item.Id] = l.Shop.CurrentStock;
+        foreach (var l in creatureBoxListings) if (l?.Box != null && !string.IsNullOrEmpty(l.Box.Id) && l.Shop != null && !l.Shop.IsUnlimited) stock[l.Box.Id] = l.Shop.CurrentStock;
+        return stock;
+    }
+
+    public void ImportStock(IReadOnlyDictionary<string, int> stock, int restockDay)
+    {
+        lastRestockDay = restockDay;
+        foreach (var l in itemListings)        if (l?.Item != null) ApplyStock(stock, l.Item.Id, l.Shop);
+        foreach (var l in creatureBoxListings) if (l?.Box != null) ApplyStock(stock, l.Box.Id, l.Shop);
+    }
+
+    private static void ApplyStock(IReadOnlyDictionary<string, int> stock, string id, StoreShopData shop)
+    {
+        if (shop == null || string.IsNullOrEmpty(id) || shop.IsUnlimited) return;
+        if (stock != null && stock.TryGetValue(id, out var value)) shop.CurrentStock = Mathf.Clamp(value, 0, shop.MaxStock);
+        else shop.Restock();
     }
 
     [NonSerialized] private int lastRestockDay;

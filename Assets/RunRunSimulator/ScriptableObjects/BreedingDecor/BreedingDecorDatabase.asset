@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7063bf9544dfb40884fc56b26aa2d0, type: 3}
+  m_Name: BreedingDecorDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.BreedingDecorDatabaseSO
+  decors:
+  - {fileID: 11400000, guid: 5779f366fbedbc7498a5e5e2eb084080, type: 2}
+  - {fileID: 11400000, guid: 3e54e8fcc446c9540af72fb0b18f5004, type: 2}
+  - {fileID: 11400000, guid: afda021f56156a347856d736b5d1cdec, type: 2}
+  - {fileID: 11400000, guid: e20ab3359ed7722419202d58f13e99d0, type: 2}
+  - {fileID: 11400000, guid: 7db113073dab7644287d3560dd57681e, type: 2}
+  - {fileID: 11400000, guid: 1318909bb0c1d024d83d96423cf8577f, type: 2}
+  - {fileID: 11400000, guid: 65ccace5a164f5d4b95fe42940745332, type: 2}
+  - {fileID: 11400000, guid: 02c846b57b2b81b4d97cfac4619ec7bf, type: 2}

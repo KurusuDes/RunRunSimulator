@@ -20,6 +20,7 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
     private AgentExpedition  expedition;
     private AgentClash       clash;
     private AgentAbilities   abilities;
+    private AgentToys        toys;
     private Perceivable perceivable;
 
     private void OnEnable()
@@ -53,6 +54,7 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
         expedition  = new AgentExpedition(this, ctx);
         clash       = new AgentClash(this, ctx);
         abilities   = new AgentAbilities(this, ctx);
+        toys        = new AgentToys(this, ctx);
         perceivable = GetComponent<Perceivable>();
 
         ctx.Rb.isKinematic = true;
@@ -119,6 +121,7 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
         expedition.ResetForReuse();
         clash.ResetForReuse();
         abilities.ResetForReuse();
+        toys.ResetForReuse();
         ctx.RebakeInProgress = false;
         ctx.State            = AgentState.Idle;
     }
@@ -128,6 +131,7 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
         brain.ReleaseStation();
         confinement.DetachForReuse();
         social.ResetForReuse();
+        toys.ResetForReuse();
         if (ctx.Agent.enabled && ctx.Agent.isOnNavMesh) ctx.Agent.ResetPath();
     }
 
@@ -145,13 +149,14 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
 
         brain.TickAlways(Time.deltaTime);
         senses.Tick();
+        toys.TickAlways();
         ctx.ApplyGaitSpeed(expedition.Carried > 0);
         if (ctx.State == AgentState.Idle || ctx.State == AgentState.Roaming || ctx.State == AgentState.Expedition)
             abilities.TickMobility();
         switch (ctx.State)
         {
-            case AgentState.Idle:         brain.TickIdle();    if (ctx.State == AgentState.Idle    && !clash.TryEngage() && !expedition.TryEngage()) social.TryEngage(); break;
-            case AgentState.Roaming:      brain.TickRoaming(); if (ctx.State == AgentState.Roaming && !clash.TryEngage() && !expedition.TryEngage()) social.TryEngage(); break;
+            case AgentState.Idle:         brain.TickIdle();    if (ctx.State == AgentState.Idle    && !clash.TryEngage() && !expedition.TryEngage() && !toys.TryEngage()) social.TryEngage(); break;
+            case AgentState.Roaming:      brain.TickRoaming(); if (ctx.State == AgentState.Roaming && !clash.TryEngage() && !expedition.TryEngage() && !toys.TryEngage()) social.TryEngage(); break;
             case AgentState.Reacting:     brain.TickReacting();      break;
             case AgentState.Thrown:       clash.TickAirborne(); physics.TickThrown(); break;
             case AgentState.Recovering:   physics.TickRecovering();  break;
@@ -162,6 +167,7 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
             case AgentState.HandFeed:     brain.TickHandFeed();      break;
             case AgentState.Expedition:   if (clash.TryEngage()) expedition.Cancel(); else expedition.TickExpedition(); break;
             case AgentState.Clashing:     clash.TickClashing();      break;
+            case AgentState.Playing:      toys.TickPlaying();        break;
         }
     }
 
@@ -187,6 +193,8 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
     public bool IsCourting => ctx.State == AgentState.Courting;
     public bool IsSocializing => ctx.State == AgentState.Socializing;
     public bool IsRecovering => ctx.State == AgentState.Recovering;
+    public bool IsPlayingWithToy => ctx.State == AgentState.Playing;
+    public void ReactToToyHit(Toy toy, MoriMochiAgent kicker) => toys.ReactToHit(toy, kicker);
 
     public bool IsInFriendlyReaction => brain.IsInFriendlyReaction;
 
@@ -199,6 +207,7 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
         ctx.State == AgentState.Clashing    ? clash.Intent :
         ctx.State == AgentState.Socializing ? social.Intent :
         ctx.State == AgentState.Expedition  ? expedition.Intent :
+        ctx.State == AgentState.Playing     ? toys.Intent :
         brain.Intent;
 
     public IReadOnlyList<Percept> Percepts => ctx.Percepts;
@@ -312,6 +321,8 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
 
     [TabGroup("Tuning", "References"), Title("References")]
     [SerializeField] private NameTag nameTag;
+    [TabGroup("Tuning", "References")]
+    [SerializeField] internal ToyTuningSO toyTuning;
     [TabGroup("Tuning", "Movement"), Title("NavMesh sampling")]
     [Tooltip("Max distance to snap a desired point onto the NavMesh.")]
     [SerializeField] internal float sampleRadius = 4f;

@@ -11,10 +11,6 @@ public class PlayerInventorySO : SerializedScriptableObject
 {
     public const int HotbarSize = 6;
 
-    [Title("Furniture owned (F# ids — set)")]
-    [OdinSerialize, ReadOnly]
-    private List<string> furnitureOwned = new List<string>();
-
     [Title("World props stored (I# ids — list, dupes = multiple instances)")]
     [OdinSerialize, ReadOnly]
     private List<string> worldPropsStored = new List<string>();
@@ -30,17 +26,31 @@ public class PlayerInventorySO : SerializedScriptableObject
     [OdinSerialize, ReadOnly, PreviouslySerializedAs("adventureMaterial")]
     private int minerita;
 
-    public bool AddFurniture(string id)
+    [Title("Breeding decor owned, not placed (id -> count)")]
+    [OdinSerialize, ReadOnly]
+    private Dictionary<string, int> decorOwned = new Dictionary<string, int>();
+
+    public IReadOnlyDictionary<string, int> DecorOwned => decorOwned;
+
+    public int DecorCount(string id) =>
+        !string.IsNullOrEmpty(id) && decorOwned.TryGetValue(id, out var n) ? n : 0;
+
+    public void AddDecor(string id, int amount = 1)
     {
-        if (string.IsNullOrEmpty(id) || furnitureOwned.Contains(id)) return false;
-        furnitureOwned.Add(id);
+        if (string.IsNullOrEmpty(id) || amount <= 0) return;
+        decorOwned[id] = DecorCount(id) + amount;
+        MarkDirty();
+    }
+
+    public bool TryTakeDecor(string id)
+    {
+        int n = DecorCount(id);
+        if (n <= 0) return false;
+        if (n == 1) decorOwned.Remove(id);
+        else decorOwned[id] = n - 1;
         MarkDirty();
         return true;
     }
-
-    public bool HasFurniture(string id) => furnitureOwned.Contains(id);
-
-    public IReadOnlyList<string> FurnitureOwned => furnitureOwned;
 
     public void AddWorldProp(string id)
     {
@@ -101,12 +111,6 @@ public class PlayerInventorySO : SerializedScriptableObject
         MarkDirty();
     }
 
-    public void ClearFurnitureOwned()
-    {
-        furnitureOwned.Clear();
-        MarkDirty();
-    }
-
     public void ClearWorldPropsStored()
     {
         worldPropsStored.Clear();
@@ -136,29 +140,29 @@ public class PlayerInventorySO : SerializedScriptableObject
     [Serializable]
     public class InventoryData
     {
-        public List<string> FurnitureOwned   = new List<string>();
         public List<string> WorldPropsStored = new List<string>();
         public string[]      HotbarSlots      = new string[HotbarSize];
         public int           Dabloons         = 0;
         public int           Minerita         = 0;
+        public Dictionary<string, int> DecorOwned = new Dictionary<string, int>();
     }
 
     public InventoryData GetData() => new InventoryData
     {
-        FurnitureOwned   = new List<string>(furnitureOwned),
         WorldPropsStored = new List<string>(worldPropsStored),
         HotbarSlots      = (string[])hotbarSlots.Clone(),
         Dabloons         = dabloons,
         Minerita         = minerita,
+        DecorOwned       = new Dictionary<string, int>(decorOwned),
     };
 
     public void LoadFrom(InventoryData data)
     {
-        furnitureOwned   = data?.FurnitureOwned   ?? new List<string>();
         worldPropsStored = data?.WorldPropsStored ?? new List<string>();
         hotbarSlots      = NormalizeHotbar(data?.HotbarSlots);
         dabloons         = data?.Dabloons ?? 0;
         minerita         = data?.Minerita ?? 0;
+        decorOwned       = data?.DecorOwned != null ? new Dictionary<string, int>(data.DecorOwned) : new Dictionary<string, int>();
         MarkDirty();
     }
 

@@ -1,13 +1,7 @@
 ---
-tags: [script, cloud]
+tags: [script, deprecated, borrado]
 ---
 
-# FurnitureRegistrySO.md
+# FurnitureRegistrySO.cs
 
-**Ruta:** `Data/Furniture/FurnitureRegistrySO.cs`
-
-**Responsabilidad:** Cache en memoria de todos los muebles colocados. Diccionario serializado de `PlacedFurniture`.
-
-**Vinculado a:** [[Index/07 - Persistence & Identity]]
-
-**Conexiones:** [[SaveSystem]], [[FurnitureService]], [[FurnitureSpawner]], [[PlacedFurniture]]
+> 🪦 **Borrado en S149.** Sistema de muebles retirado; las expansiones de tienda se resuelven con `ShopZone`. El historial previo queda en git.

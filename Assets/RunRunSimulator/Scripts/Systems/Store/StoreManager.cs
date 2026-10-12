@@ -17,31 +17,34 @@ public class StoreManager : MonoBehaviour
 
     private static int Today => GameClock.Instance != null ? GameClock.Instance.Day : 1;
 
-    private void OnEnable()  => GameEvents.OnDayStarted += OnDayStarted;
-    private void OnDisable() => GameEvents.OnDayStarted -= OnDayStarted;
+    private void OnEnable()
+    {
+        GameEvents.OnDayStarted += OnDayStarted;
+        GameEvents.OnWorldStateReloaded += OnWorldStateReloaded;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnDayStarted -= OnDayStarted;
+        GameEvents.OnWorldStateReloaded -= OnWorldStateReloaded;
+    }
 
     private void OnDayStarted(int day) => RestockIfNeeded();
 
-    public BuyResult BuyFurniture(FurnitureDefinitionSO def, StoreShopData shop)
+    private void OnWorldStateReloaded(WorldStateSO world)
     {
-        if (def == null || shop == null) { Debug.LogWarning("[StoreManager] BuyFurniture: null arg."); return BuyResult.OutOfStock; }
+        if (catalog == null || world == null) return;
+        catalog.ImportStock(world.ShopStock, world.LastRestockDay);
+        if (catalog.NeedsRestock(Today)) catalog.RestockAll(Today);
+    }
 
-        if (!shop.InStock) return BuyResult.OutOfStock;
-
-        var inventory = GameManager.CurrentInventory;
-        if (inventory == null) { Debug.LogError("[StoreManager] No PlayerInventory available."); return BuyResult.OutOfStock; }
-
-        if (inventory.HasFurniture(def.Id)) return BuyResult.AlreadyOwned;
-
-        int price = catalog.FinalPrice(shop, Today);
-        if (price > 0 && Wallet.Balance(shop.Currency) < price) return BuyResult.InsufficientFunds;
-
-        shop.TryConsume();
-        inventory.AddFurniture(def.Id);
-        if (price > 0) Wallet.TrySpend(shop.Currency, price, "store");
-        else           GameEvents.InventoryChanged(inventory);
-        Debug.Log($"[StoreManager] Bought furniture '{def.DisplayName}' ({def.Id}) for {price} {shop.Currency}.");
-        return BuyResult.Success;
+    private void PersistStock()
+    {
+        var world = GameManager.Instance != null ? GameManager.Instance.WorldState : null;
+        if (catalog == null || world == null) return;
+        world.SetShopStock(catalog.ExportStock());
+        world.LastRestockDay = catalog.LastRestockDay;
+        GameEvents.WorldStateChanged(world);
     }
 
     public BuyResult BuyWorldProp(ItemDefinitionSO def, StoreShopData shop)
@@ -67,7 +70,7 @@ public class StoreManager : MonoBehaviour
         int price = catalog.FinalPrice(shop, Today);
         if (price > 0 && !Wallet.TrySpend(shop.Currency, price, "store")) return BuyResult.InsufficientFunds;
 
-        shop.TryConsume();
+        if (shop.TryConsume()) PersistStock();
 
         var box = SpawnDeliveryBox(price, shop);
         if (box == null) return BuyResult.OutOfStock;
@@ -101,7 +104,7 @@ public class StoreManager : MonoBehaviour
         int price = CreatureBoxPrice(box, shop);
         if (price > 0 && !Wallet.TrySpend(shop.Currency, price, "store")) return BuyResult.InsufficientFunds;
 
-        shop.TryConsume();
+        if (shop.TryConsume()) PersistStock();
 
         var deliveryBox = SpawnDeliveryBox(price, shop);
         if (deliveryBox == null) return BuyResult.OutOfStock;
@@ -110,6 +113,29 @@ public class StoreManager : MonoBehaviour
         if (price <= 0) GameEvents.InventoryChanged(inventory);
         Debug.Log($"[StoreManager] Ordered creature box '{box.DisplayName}' ({box.Id}) for {price} {shop.Currency}.");
         return BuyResult.Success;
+    }
+
+    public bool GiftCreatureBox(CreatureBoxSO box)
+    {
+        if (box == null) { Debug.LogWarning("[StoreManager] GiftCreatureBox: null box."); return false; }
+
+        if (deliveryBoxPrefab == null || deliverySpawnPoint == null)
+        {
+            Debug.LogError("[StoreManager] Assign deliveryBoxPrefab + deliverySpawnPoint first.");
+            return false;
+        }
+        if (!Application.isPlaying)
+        {
+            Debug.LogWarning("[StoreManager] Enter Play mode to gift (spawns a DeliveryBox).");
+            return false;
+        }
+
+        var deliveryBox = SpawnDeliveryBox(0, null);
+        if (deliveryBox == null) return false;
+
+        deliveryBox.Configure(box);
+        Debug.Log($"[StoreManager] Gifted creature box '{box.DisplayName}' ({box.Id}).");
+        return true;
     }
 
     public BuyResult BuyUpgrade(ShopUpgradeSO upgrade)
@@ -126,6 +152,22 @@ public class StoreManager : MonoBehaviour
         world.SetUpgradeLevel(upgrade.Id, level + 1);
         GameEvents.WorldStateChanged(world);
         Debug.Log($"[StoreManager] Bought upgrade '{upgrade.DisplayName}' ({upgrade.Id}) level {level + 1}/{upgrade.MaxLevel} for {price} Dabloons.");
+        return BuyResult.Success;
+    }
+
+    public BuyResult BuyDecor(BreedingDecorSO decor)
+    {
+        if (decor == null || string.IsNullOrEmpty(decor.Id)) { Debug.LogWarning("[StoreManager] BuyDecor: null arg."); return BuyResult.OutOfStock; }
+
+        var inventory = GameManager.CurrentInventory;
+        if (inventory == null) { Debug.LogError("[StoreManager] No PlayerInventory available."); return BuyResult.OutOfStock; }
+
+        int price = decor.Price;
+        if (price > 0 && !Wallet.TrySpend(Currency.Dabloons, price, "decor")) return BuyResult.InsufficientFunds;
+
+        inventory.AddDecor(decor.Id);
+        GameEvents.InventoryChanged(inventory);
+        Debug.Log($"[StoreManager] Bought decor '{decor.DisplayName}' ({decor.Id}) for {price} Dabloons.");
         return BuyResult.Success;
     }
 
@@ -166,7 +208,9 @@ public class StoreManager : MonoBehaviour
     {
         if (catalog == null) return;
         int day = Today;
-        if (catalog.NeedsRestock(day)) catalog.RestockAll(day);
+        if (!catalog.NeedsRestock(day)) return;
+        catalog.RestockAll(day);
+        PersistStock();
     }
 }
 }

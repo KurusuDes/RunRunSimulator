@@ -6,17 +6,17 @@ tags: [scriptable-object, inventory, persistence]
 
 **Ruta:** `Data/Player/PlayerInventorySO.cs`
 
-**Responsabilidad:** Dato persistente del jugador (SO). Contiene dos monedas (`Dabloons`, `Minerita`), muebles desbloqueados, props del mundo, y slots hotbar. **S128:** métodos públicos `Balance()`, `Add()`, `TrySpend()`, `ResetCurrency()`; `adventureMaterial` renombrada a `minerita` con `[PreviouslySerializedAs]`. Nunca llama `SaveSystem` ni dispara eventos; lo hace [[Wallet]] (puerta única de mutaciones). **S129:** Eliminadas grillas de equipo y métodos de equipo (HC-1).
+**Responsabilidad:** Dato persistente del jugador (SO). Contiene dos monedas (`Dabloons`, `Minerita`), decoraciones de cría en stock (sin colocar), props del mundo y 6 slots de hotbar. **S128:** métodos públicos `Balance()`, `Add()`, `TrySpend()`, `ResetCurrency()`; `adventureMaterial` renombrada a `minerita` con `[PreviouslySerializedAs]`. Nunca llama `SaveSystem` ni dispara eventos; lo hace [[Wallet]] (puerta única de mutaciones). **S129:** Eliminadas grillas de equipo y métodos de equipo (HC-1). **S149:** Eliminados los muebles del inventario (`furnitureOwned` y sus métodos). Se agrega el stock de decoraciones `decorOwned`.
 
 ## Campos Públicos (Serializados Odin)
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `furnitureOwned` | `List<string>` | IDs de muebles desbloqueados (set: sin duplicados) |
 | `worldPropsStored` | `List<string>` | IDs de props del mundo (list: permite dupes) |
 | `hotbarSlots` | `string[6]` | 6 slots hotbar (I# ids, persisten) |
 | `dabloons` | `int` | Primera moneda (compras, venta, reembolso) |
 | `minerita` | `int` | Segunda moneda (exploración, evolución); migrada de `adventureMaterial` (v1→v2) |
+| `decorOwned` | `Dictionary<string, int>` | **(S149)** Decoraciones de cría sin colocar (id → cantidad) |
 
 ## Métodos Públicos
 
@@ -25,17 +25,20 @@ tags: [scriptable-object, inventory, persistence]
 | Método | Retorna | Descripción |
 |--------|---------|-------------|
 | `Balance(Currency c)` | `int` | Lee saldo de moneda (Dabloons o Minerita) |
-| `Add(Currency c, int amount)` | `void` | Suma cantidad a moneda (sin validar amount > 0; lo hace [[Wallet]]) |
-| `TrySpend(Currency c, int amount)` | `bool` | Intenta gastar; si saldo < amount → false; si ok → gasta, retorna true |
-| `ResetCurrency(Currency c, int value)` | `void` | Setea moneda a valor exacto (debug) |
+| `Add(Currency c, int amount)` | `void` | Suma cantidad a moneda (ignora amount <= 0; la validación de negocio la hace [[Wallet]]) |
+| `TrySpend(Currency c, int amount)` | `bool` | Intenta gastar; si saldo < amount o amount <= 0 → false; si ok → gasta, retorna true |
+| `ResetCurrency(Currency c)` | `void` | Pone la moneda en 0 (S149: sin parámetro de valor) |
 
-### Muebles
+### Decoraciones (S149)
 
 | Método | Retorna | Descripción |
 |--------|---------|-------------|
-| `AddFurniture(string id)` | `bool` | Añade mueble si no existe; false si ya tiene |
-| `HasFurniture(string id)` | `bool` | Consulta si posee mueble |
-| `FurnitureOwned` (property) | `IReadOnlyList<string>` | Read-only lista de muebles |
+| `DecorOwned` (property) | `IReadOnlyDictionary<string, int>` | Stock de decoraciones |
+| `DecorCount(string id)` | `int` | Cantidad en stock (0 si no hay) |
+| `AddDecor(string id, int amount = 1)` | `void` | Suma al stock |
+| `TryTakeDecor(string id)` | `bool` | Saca una unidad; false si no hay |
+
+Uso: `DecorSlot` devuelve la decoración actual con `AddDecor` y toma la siguiente con `TryTakeDecor`. `StoreManager.BuyDecor` suma al stock.
 
 ### Props del Mundo
 
@@ -43,23 +46,30 @@ tags: [scriptable-object, inventory, persistence]
 |--------|---------|-------------|
 | `AddWorldProp(string id)` | `void` | Añade prop (permite dupes) |
 | `RemoveWorldProp(string id)` | `bool` | Remueve primera instancia de prop |
+| `ClearWorldPropsStored()` | `void` | Vacía los props guardados |
 | `WorldPropsStored` (property) | `IReadOnlyList<string>` | Read-only lista de props |
 
 ### Hotbar
 
 | Método | Retorna | Descripción |
 |--------|---------|-------------|
-| `SetHotbarSlot(int slot, string id)` | `bool` | Setea ID en slot 0-5; false si fuera de rango |
-| `HotbarSlot(int slot)` | `string` | Lee ID del slot (null si vacío) |
+| `SetHotbarSlot(int slot, string id)` | `void` | Setea ID en slot 0-5; ignora si fuera de rango (S149: antes devolvía bool) |
+| `GetHotbarSlot(int slot)` | `string` | Lee ID del slot (null si vacío o fuera de rango) |
 | `ClearHotbarSlot(int slot)` | `void` | Vacía slot |
+| `ClearHotbar()` | `void` | Vacía los 6 slots |
+| `HotbarSlots` (property) | `string[]` | Arreglo de slots |
 
 ### Persistencia
 
 | Método | Retorna | Descripción |
 |--------|---------|-------------|
 | `LoadFrom(InventoryData data)` | `void` | Carga desde [[SaveSystem]]; null → valores por defecto |
-| `GetData()` | `InventoryData` | Retorna struct serializable para guardar |
-| `MarkDirty()` | `void` | Señala cambio (Odin, persiste el SO en disco inmediato) |
+| `GetData()` | `InventoryData` | Retorna struct serializable para guardar (copias) |
+| `MarkDirty()` | `void` | Privado en S149. Marca el SO como sucio en el editor |
+
+## InventoryData (S149)
+
+Campos: `WorldPropsStored`, `HotbarSlots`, `Dabloons`, `Minerita`, `DecorOwned`. Ya no tiene campo de muebles.
 
 ## Monedas S128
 
@@ -86,7 +96,12 @@ Odin `[PreviouslySerializedAs]` + [[SaveMigrations]] v1→v2 renombran `Adventur
 
 - **ELIMINADO:** Campo `equipmentGrids` y métodos de equipo (HC-1)
 - **ELIMINADO:** `AddEquipment()`, `RemoveEquipmentAt()`, `EquipmentAt()`, `GridFor()`, `CellCountOf()`
-- **MANTIENE:** Monedas, muebles, props, hotbar
+
+## Cambios S149
+
+- **ELIMINADO:** `furnitureOwned`, `AddFurniture()`, `HasFurniture()`, `FurnitureOwned`, y el campo de muebles en `InventoryData`.
+- **AGREGADO:** `decorOwned` con `DecorOwned`, `DecorCount`, `AddDecor`, `TryTakeDecor`.
+- **CAMBIO DE FIRMA:** `ResetCurrency` sin valor; `SetHotbarSlot` void; `HotbarSlot` renombrado a `GetHotbarSlot`.
 
 ## Patrón de Acceso
 
@@ -111,4 +126,4 @@ Wallet.TrySpend(Currency.Dabloons, 50, "buy_ring");
 [[Index/28 - Cimientos y camino a Game Ready]] (§3 · dos monedas)
 [[Index/29 - Plan HC - Cimientos (ejecutable)]] (§5 · C3 cartera)
 
-**Conexiones:** [[Wallet]], [[GameManager]], [[SaveSystem]], [[StoreManager]], [[GameEvents]], [[CreatureDisplay]], [[StorePanelUITK]]
+**Conexiones:** [[Wallet]], [[GameManager]], [[SaveSystem]], [[StoreManager]], [[GameEvents]], [[DecorSlot]], [[BreedingDecorSO]], [[StoreRows]]

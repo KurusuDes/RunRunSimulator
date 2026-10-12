@@ -1,13 +1,7 @@
 ---
-tags: [script, furniture]
+tags: [script, deprecated, borrado]
 ---
 
-# PlacedFurniture.md
+# PlacedFurniture.cs
 
-**Ruta:** `Data/Furniture/PlacedFurniture.cs`
-
-**Responsabilidad:** Record serializable de mueble colocado: ID, posición, rotación.
-
-**Vinculado a:** [[Index/10 - Furniture & Building]]
-
-**Conexiones:** [[FurnitureRegistrySO]], [[FurnitureService]], [[FurnitureSpawner]]
+> 🪦 **Borrado en S149.** Sistema de muebles retirado; las expansiones de tienda se resuelven con `ShopZone`. El historial previo queda en git.

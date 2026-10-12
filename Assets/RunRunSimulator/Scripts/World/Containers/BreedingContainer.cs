@@ -71,6 +71,26 @@ public class BreedingContainer : MoriMochiContainer, IInteractable
 
     public static IReadOnlyCollection<BreedingContainer> All => all;
 
+    private DecorSlot[] decorSlots;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        decorSlots = GetComponentsInChildren<DecorSlot>(true);
+    }
+
+    public IReadOnlyList<string> DecorIds()
+    {
+        var ids = new List<string>();
+        if (decorSlots == null) return ids;
+        for (int i = 0; i < decorSlots.Length; i++)
+        {
+            string id = decorSlots[i] != null ? decorSlots[i].DecorId : "";
+            if (!string.IsNullOrEmpty(id)) ids.Add(id);
+        }
+        return ids;
+    }
+
     public IEnumerable<(string mother, string father, int slot)> ActivePairs()
     {
         for (int i = 0; i < Occupants.Count; i++)
@@ -262,7 +282,7 @@ public class BreedingContainer : MoriMochiContainer, IInteractable
 
         onPairFormed?.Invoke();
 
-        bool started = controller.StartBreeding(motherDNA.UniqueID, fatherDNA.UniqueID);
+        bool started = controller.StartBreeding(motherDNA.UniqueID, fatherDNA.UniqueID, DecorIds());
 
         if (started && motherDNA.BusyState == BusyReason.Breeding && fatherDNA.BusyState == BusyReason.Breeding)
         {

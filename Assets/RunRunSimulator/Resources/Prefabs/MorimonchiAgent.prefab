@@ -1092,6 +1092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoriMochiAgent
   nameTag: {fileID: 1653583709362797035}
+  toyTuning: {fileID: 11400000, guid: ee6ec9356a6108547a0300fb99fa5998, type: 2}
   sampleRadius: 4
   repathInterval: 0.35
   followDuration: 20
@@ -1381,6 +1382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.MonchiVisualizer
   modelRoot: {fileID: 9068832504220964469}
   faceTransition: {fileID: 5912284952747808883}
+  flashMaterial: {fileID: 0}
 --- !u!114 &5095481499270891542
 MonoBehaviour:
   m_ObjectHideFlags: 0

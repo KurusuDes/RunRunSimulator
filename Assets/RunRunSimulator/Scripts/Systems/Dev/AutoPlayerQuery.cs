@@ -8,16 +8,6 @@ namespace MoriMonchiSimulator
 
 internal static class AutoPlayerQuery
 {
-    public static FurnitureDefinitionSO FindFurnitureDefinition<TComponent>() where TComponent : Component
-    {
-        var database = Resources.FindObjectsOfTypeAll<FurnitureDatabaseSO>().FirstOrDefault();
-        if (database == null) return null;
-        foreach (var def in database.All)
-            if (def != null && def.Prefab != null && def.Prefab.GetComponent<TComponent>() != null)
-                return def;
-        return null;
-    }
-
     public static bool TryFindController(MoriMochiSpawner spawner, string id, out MoriMonchiController controller)
     {
         foreach (var kv in spawner.SpawnedEntries)
@@ -75,67 +65,6 @@ internal static class AutoPlayerQuery
             if (agent != null && agent.DNA != null && !ids.Contains(agent.DNA.UniqueID))
                 parts.Add($"{agent.DNA.UniqueID}({agent.DNA.Form})");
         return parts.Count == 0 ? "ninguno" : string.Join(",", parts);
-    }
-
-    public static IEnumerable<Vector2Int> SpiralCells(Vector2Int center, int maxRadius)
-    {
-        yield return center;
-        for (int r = 1; r <= maxRadius; r++)
-        {
-            for (int x = -r; x <= r; x++)
-            {
-                yield return new Vector2Int(center.x + x, center.y - r);
-                yield return new Vector2Int(center.x + x, center.y + r);
-            }
-            for (int y = -r + 1; y <= r - 1; y++)
-            {
-                yield return new Vector2Int(center.x - r, center.y + y);
-                yield return new Vector2Int(center.x + r, center.y + y);
-            }
-        }
-    }
-
-    public static bool TryPlaceInSpiral(FurnitureService service, FurnitureDefinitionSO def, Func<Vector2Int, bool> cellFilter = null, Vector2Int? center = null, int maxRadius = 25)
-    {
-        foreach (var cell in SpiralCells(center ?? Vector2Int.zero, maxRadius))
-        {
-            if (cellFilter != null && !cellFilter(cell)) continue;
-            if (service.TryPlace(def, cell, 0)) return true;
-        }
-        return false;
-    }
-
-    public static int CustomerAreaMask()
-    {
-        int mask = 0;
-        foreach (var areaName in new[] { "ShopFrontDesk", "Outside" })
-        {
-            int idx = NavMesh.GetAreaFromName(areaName);
-            if (idx >= 0) mask |= 1 << idx;
-        }
-        return mask != 0 ? mask : NavMesh.AllAreas;
-    }
-
-    public static bool CellReachableByCustomers(PlacementGrid grid, Vector2Int cell, Vector2Int footprint, int mask)
-    {
-        if (!grid.CanPlace(cell, footprint, 0)) return false;
-        return NavMesh.SamplePosition(grid.FootprintCenter(cell, footprint, 0), out _, 2.5f, mask);
-    }
-
-    public static bool IsReachableFromRegister(Vector3 center, int mask)
-    {
-        var register = CashRegister.Instance;
-        if (register == null) return false;
-        if (!NavMesh.SamplePosition(register.transform.position, out var from, 2.5f, mask)) return false;
-
-        var offsets = new[] { Vector3.right, Vector3.left, Vector3.forward, Vector3.back };
-        var path = new NavMeshPath();
-        foreach (var offset in offsets)
-        {
-            if (!NavMesh.SamplePosition(center + offset * 2f, out var to, 1.5f, mask)) continue;
-            if (NavMesh.CalculatePath(from.position, to.position, mask, path) && path.status == NavMeshPathStatus.PathComplete) return true;
-        }
-        return false;
     }
 
     public static List<string> BuildTeam(CreatureRegistrySO registry, int max, List<string> exclude = null)

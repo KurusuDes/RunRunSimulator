@@ -14,12 +14,6 @@ public static class GameEvents
     public static void BreedingCompleted(CreatureDNA mother, CreatureDNA father, CreatureDNA child) =>
         OnBreedingCompleted?.Invoke(mother, father, child);
 
-    public static event Action<FurnitureRegistrySO> OnFurnitureChanged;
-    public static void FurnitureChanged(FurnitureRegistrySO registry) => OnFurnitureChanged?.Invoke(registry);
-
-    public static event Action<FurnitureRegistrySO> OnFurnitureReloaded;
-    public static void FurnitureReloaded(FurnitureRegistrySO registry) => OnFurnitureReloaded?.Invoke(registry);
-
     public static event Action OnNavMeshWillRebake;
     public static void NavMeshWillRebake() => OnNavMeshWillRebake?.Invoke();
 
@@ -50,10 +44,16 @@ public static class GameEvents
     public static event Action<WorldStateSO> OnWorldStateReloaded;
     public static void WorldStateReloaded(WorldStateSO state) => OnWorldStateReloaded?.Invoke(state);
 
+    public static event Action<CreatureBoxSO> OnRescueGiftSent;
+    public static void RescueGiftSent(CreatureBoxSO box) => OnRescueGiftSent?.Invoke(box);
+
     public static event Action<int> OnDayStarted;
     public static void DayStarted(int day) => OnDayStarted?.Invoke(day);
 
     public static event Action<DayBlockDef> OnDayBlockChanged;
     public static void DayBlockChanged(DayBlockDef block) => OnDayBlockChanged?.Invoke(block);
+
+    public static event Action<ShopUpgradeSO, int> OnShopZoneOpened;
+    public static void ShopZoneOpened(ShopUpgradeSO expansion, int level) => OnShopZoneOpened?.Invoke(expansion, level);
 }
 }

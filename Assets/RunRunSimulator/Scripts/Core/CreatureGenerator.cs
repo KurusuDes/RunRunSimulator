@@ -63,7 +63,7 @@ public static class CreatureGenerator
 
     private static T Pick<T>(PartDatabaseSO<T> db) where T : BodyPart
     {
-        return db?.GetRandomPart();
+        return db?.GetRandomPart(where: PartPool.Rollable);
     }
 }
 }

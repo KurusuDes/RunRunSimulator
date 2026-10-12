@@ -21,12 +21,18 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  DisplayName: Paul
+  DisplayName: Fan de los roles
   Icon: {fileID: 0}
   AgentPrefab: {fileID: 0}
   WeightBreed: 1
   WeightTier: 1
   BudgetMultiplier: 1
+  BudgetMin: 20
+  BudgetMax: 60
+  Taste: 1
+  TasteBonus: 0.35
+  BuyWithoutMatchChance: 0.25
+  TasteFromDisplayChance: 0.6
   RenegotiationTolerance: 0.5
   MinInspections: 1
   MaxInspections: 3

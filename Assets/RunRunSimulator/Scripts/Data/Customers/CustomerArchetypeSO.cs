@@ -18,6 +18,14 @@ public class CustomerArchetypeSO : SerializedScriptableObject
 
     [Title("Budget")]
     [MinValue(0)] public float BudgetMultiplier = 1f;
+    [MinValue(0)] public int BudgetMin = 20;
+    [MinValue(0)] public int BudgetMax = 80;
+
+    [Title("Taste")]
+    public TasteKind Taste = TasteKind.None;
+    [Range(0f, 2f)] public float TasteBonus = 0.35f;
+    [Range(0f, 1f)] public float BuyWithoutMatchChance = 0.3f;
+    [Range(0f, 1f)] public float TasteFromDisplayChance = 0.6f;
 
     [Title("Negotiation")]
     [Range(0f, 1f)] public float RenegotiationTolerance = 0.5f;

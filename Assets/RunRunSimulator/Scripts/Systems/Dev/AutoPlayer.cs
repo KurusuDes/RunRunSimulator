@@ -97,12 +97,10 @@ public class AutoPlayer : MonoBehaviour
         if (from <= 1)  { yield return opening.Step1_Arrival();           if (failed) yield break; }
         if (from <= 2)  { yield return opening.Step2_BuyEggBox();         if (failed) yield break; }
         if (from <= 3)  { yield return opening.Step3_OpenBox();           if (failed) yield break; }
-        if (from <= 4)  { yield return opening.Step4_PlaceIncubator();    if (failed) yield break; }
         if (from <= 5)  { yield return opening.Step5_EggsIntoIncubator(); if (failed) yield break; }
         if (from <= 6)  { yield return opening.Step6_HatchThree();        if (failed) yield break; }
         if (from <= 9)  { yield return opening.Step7to9_Expedition();     if (failed) yield break; }
         if (from <= 10) { yield return opening.Step10_HatchRemaining();   if (failed) yield break; }
-        if (from <= 11) { yield return loop.Step11_BuyBreedingRoom();     if (failed) yield break; }
         if (from <= 12) { yield return loop.Step12_ExpeditionsUntilPair(); if (failed) yield break; }
         if (from <= 13) { yield return loop.Step13_Breed();               if (failed) yield break; }
         if (from <= 14) { yield return loop.Step14_Showcase();            if (failed) yield break; }

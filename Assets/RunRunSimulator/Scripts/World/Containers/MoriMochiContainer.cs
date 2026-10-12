@@ -57,8 +57,7 @@ public class MoriMochiContainer : MonoBehaviour
     {
         if (string.IsNullOrEmpty(anchorKey))
         {
-            var marker = GetComponentInParent<PlacedFurnitureMarker>();
-            anchorKey = marker != null ? $"{marker.AnchorCell.x}_{marker.AnchorCell.y}" : name;
+            anchorKey = name;
             AnchorRegistry.Register(this);
         }
     }

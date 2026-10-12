@@ -6,7 +6,7 @@ tags: [data, genetics, serializable, timestamp]
 
 **Ruta:** `Data/Genetics/CreatureDNA.cs`
 
-**Responsabilidad:** Dato genética + estado MoriMochi. Guarda las partes elegidas, sus tiers de mejora (S148), los potenciales de cuerno, espalda y ala, las exploraciones y batallas acumuladas, y el estado de vida (muerto, vendido, ocupado). **S138:** `Stamp()` garantiza Timestamp estrictamente creciente vía static lastStamp.
+**Responsabilidad:** Dato genética + estado MoriMochi. Guarda las partes elegidas, sus tiers de mejora (S148), los potenciales de cuerno, espalda y ala, las exploraciones y batallas acumuladas, el estado de vida (muerto, vendido, ocupado) y el estado de cría y ubicación. **S138:** `Stamp()` garantiza Timestamp estrictamente creciente vía static lastStamp.
 
 ## S148: Tiers de Partes
 
@@ -43,6 +43,16 @@ tags: [data, genetics, serializable, timestamp]
 | `Form` | `MonchiForm` | Adult por defecto; Egg o Slime según ciclo de vida |
 | `BusyState` | `BusyReason` | `IsBusy` y `IsSold` se derivan de este campo |
 | `Needs` | `NeedsState` | Salud, energía y afecto |
+
+## Cría y Ubicación
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `BreedReadyAt` | long | Minuto total de juego (`GameClock.TotalMinutes`) en que la cría queda lista. 0 = no hay cría en curso. Lo compara `IncubationService.IsReady` |
+| `BreedPartnerID` | string | ID de la pareja de la cría en curso |
+| `BreedDecorIDs` | `List<string>` | Decoraciones (`BreedingDecorSO.Id`) de la cría en curso. Se convierten en `BreedingModifier` al eclosionar |
+| `LocationKey`, `LocationSlot` | string, int | Dónde está físicamente la criatura (corral y slot de cría). `LocationSlot` = -1 si no tiene |
+| `BirthDay`, `AgeDays(today)` | int | Día de nacimiento y edad calculada |
 
 ## S138: Strict Monotonic Timestamp
 
@@ -82,3 +92,5 @@ Immutable, determinístico por Timestamp monotónico.
 - [[ExpeditionBridge]] — suma `Battles` y `Explorations`
 - [[PartLevelUpEffectSO]] — lee `Battles`, `TierOf` y `Form`; escribe el tier con `SetTier`
 - [[BrawlUpgrades]], [[BrawlFighter]] — leen los tiers para armar el combatiente
+- [[BreedingDecorSO]], [[BreedingOdds]], [[IncubationService]] — `BreedDecorIDs` alimenta los modificadores de herencia
+- [[BreedingContainer]], [[DecorSlot]] — `LocationKey` y `LocationSlot` ubican a la criatura

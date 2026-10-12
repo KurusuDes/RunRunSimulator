@@ -8,10 +8,9 @@ namespace MoriMonchiSimulator
 
 public class CloudSyncService : MonoBehaviour
 {
-    private CreatureRegistrySO  registry;
-    private FurnitureRegistrySO furnitureRegistry;
-    private PlayerInventorySO   inventory;
-    private WorldStateSO        worldState;
+    private CreatureRegistrySO registry;
+    private PlayerInventorySO  inventory;
+    private WorldStateSO       worldState;
 
     private CloudAuth    auth;
     private CloudSyncOps syncOps;
@@ -62,12 +61,11 @@ public class CloudSyncService : MonoBehaviour
 
     private async void Start()
     {
-        registry          = GameManager.Instance.Registry;
-        furnitureRegistry = GameManager.Instance.FurnitureRegistry;
-        inventory         = GameManager.Instance.Inventory;
-        worldState        = GameManager.Instance.WorldState;
+        registry   = GameManager.Instance.Registry;
+        inventory  = GameManager.Instance.Inventory;
+        worldState = GameManager.Instance.WorldState;
         auth    = new CloudAuth(s => status = s, HandleSignedInAsync);
-        syncOps = new CloudSyncOps(auth, registry, furnitureRegistry, inventory, worldState, s => status = s);
+        syncOps = new CloudSyncOps(auth, registry, inventory, worldState, s => status = s);
         await auth.InitializeAsync();
         if (!auth.IsSignedIn) StartupSyncDone = true;
     }
@@ -83,11 +81,6 @@ public class CloudSyncService : MonoBehaviour
         SaveSystem.LoadSocialGraph(registry);
         GameEvents.RegistryReloaded(registry);
 
-        if (furnitureRegistry != null)
-        {
-            SaveSystem.LoadFurniture(furnitureRegistry);
-            GameEvents.FurnitureReloaded(furnitureRegistry);
-        }
         if (inventory != null)
         {
             SaveSystem.LoadInventory(inventory);

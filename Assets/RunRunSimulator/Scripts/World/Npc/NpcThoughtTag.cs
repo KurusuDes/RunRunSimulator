@@ -109,8 +109,14 @@ public class NpcThoughtTag : MonoBehaviour
         if (responseTimer > 0f) responseTimer -= Time.deltaTime;
         else                    shownLine = pendingLine;
 
-        thoughtLabel.text          = shownLine;
-        thoughtLabel.style.display = string.IsNullOrEmpty(shownLine) ? DisplayStyle.None : DisplayStyle.Flex;
+        bool browsing = state == NpcAgent.NpcState.Wandering || state == NpcAgent.NpcState.InspectingDisplay;
+        string line   = browsing ? agent.Taste.Describe() : shownLine;
+
+        if (browsing && agent.Taste.Kind == TasteKind.Color) thoughtLabel.style.color = agent.Taste.Color;
+        else                                                 thoughtLabel.style.color = StyleKeyword.Null;
+
+        thoughtLabel.text          = line;
+        thoughtLabel.style.display = string.IsNullOrEmpty(line) ? DisplayStyle.None : DisplayStyle.Flex;
     }
 }
 }

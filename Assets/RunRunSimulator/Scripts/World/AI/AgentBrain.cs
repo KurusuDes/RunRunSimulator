@@ -17,6 +17,7 @@ internal class AgentBrain
     private AgentState stateBeforeReact = AgentState.Roaming;
     private ProximityReaction activeReaction;
     private NeedStation reservedStation;
+    private float neglectCooldownTimer;
 
     private bool petting;
     private float petTimer;
@@ -200,7 +201,16 @@ internal class AgentBrain
         if (!TryGetCriticalNeed(out var need)) return false;
 
         var station = NeedStationRegistry.GetClosest(ctx.Body.position, need);
-        if (station == null) return false;
+        if (station == null)
+        {
+            if (neglectCooldownTimer <= Time.time && NeedStationRegistry.AnyOfType(need))
+            {
+                neglectCooldownTimer = Time.time + 20f;
+                owner.EmitEmote(EmoteKind.Molesto);
+                ctx.Dna.Needs.AddAffect(-5f);
+            }
+            return false;
+        }
         if (!station.TryReserve(ctx.Owner, ctx.Body.position, ctx.Agent.areaMask, owner.sampleRadius, out var usePos)) return false;
 
         reservedStation      = station;

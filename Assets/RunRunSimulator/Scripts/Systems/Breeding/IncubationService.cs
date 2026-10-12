@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 namespace MoriMonchiSimulator
@@ -21,7 +22,7 @@ public class IncubationService : MonoBehaviour
         database = gm.Database;
     }
 
-    public bool StartBreeding(string motherID, string fatherID)
+    public bool StartBreeding(string motherID, string fatherID, IReadOnlyList<string> decorIds = null)
     {
         if (GameClock.Instance == null || !GameClock.Instance.Loaded)
         {
@@ -47,6 +48,7 @@ public class IncubationService : MonoBehaviour
         father.BreedReadyAt   = mother.BreedReadyAt;
         mother.BreedPartnerID = fatherID;
         father.BreedPartnerID = motherID;
+        mother.BreedDecorIDs  = decorIds != null ? new List<string>(decorIds) : new List<string>();
 
         GameEvents.RegistryChanged(registry);
 
@@ -180,13 +182,27 @@ public class IncubationService : MonoBehaviour
 
     private void HatchLocally(string motherID, string fatherID)
     {
-        if (registry.TryGet(motherID, out var mother)) ClearBreedState(mother);
+        var decorIds = new List<string>();
+        if (registry.TryGet(motherID, out var mother))
+        {
+            if (mother.BreedDecorIDs != null) decorIds.AddRange(mother.BreedDecorIDs);
+            ClearBreedState(mother);
+        }
         if (registry.TryGet(fatherID, out var father)) ClearBreedState(father);
 
         var odds = BreedingController.Instance != null ? BreedingController.Instance.InheritanceOdds : null;
         if (odds == null) { Debug.LogError("[Incubation] No InheritanceOddsTable available."); return; }
 
-        var child = BreedingService.Breed(motherID, fatherID, registry, database, odds);
+        var modifiers   = new List<BreedingModifier>();
+        var decorDb     = BreedingController.Instance.DecorDatabase;
+        if (decorDb != null)
+            foreach (var decorId in decorIds)
+            {
+                var decor = decorDb.Get(decorId);
+                if (decor != null && decor.Modifiers != null) modifiers.AddRange(decor.Modifiers);
+            }
+
+        var child = BreedingService.Breed(motherID, fatherID, registry, database, odds, modifiers);
         if (child == null)
         {
             status = "Hatch failed during local mint — see errors.";
@@ -206,6 +222,13 @@ public class IncubationService : MonoBehaviour
         GameEvents.BreedingCompleted(m, f, child);
         GameEvents.RegistryChanged(registry);
 
+        var world = GameManager.Instance.WorldState;
+        if (world != null)
+        {
+            world.BredTotal++;
+            GameEvents.WorldStateChanged(world);
+        }
+
         status = $"Egg hatched! \"{child.CustomName}\" ({child.Gender}) was born.";
         Debug.Log($"[Incubation] {status}  {child.UniqueID}");
     }
@@ -215,6 +238,7 @@ public class IncubationService : MonoBehaviour
         dna.BusyState      = BusyReason.None;
         dna.BreedReadyAt   = 0;
         dna.BreedPartnerID = "";
+        dna.BreedDecorIDs  = new List<string>();
     }
 }
 }

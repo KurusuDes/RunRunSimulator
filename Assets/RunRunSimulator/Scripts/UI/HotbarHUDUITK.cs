@@ -22,14 +22,12 @@ public class HotbarHUDUITK : MonoBehaviour
         inventory = GameManager.CurrentInventory;
         HotbarController.OnHotbarChanged       += Refresh;
         GameEvents.OnInventoryReloaded         += OnInventoryReloaded;
-        BuildModeController.OnBuildModeChanged += OnBuildModeChanged;
     }
 
     private void OnDisable()
     {
         HotbarController.OnHotbarChanged       -= Refresh;
         GameEvents.OnInventoryReloaded         -= OnInventoryReloaded;
-        BuildModeController.OnBuildModeChanged -= OnBuildModeChanged;
     }
 
     private void Start()
@@ -39,12 +37,6 @@ public class HotbarHUDUITK : MonoBehaviour
     }
 
     private void OnInventoryReloaded(PlayerInventorySO inv) { inventory = inv; Refresh(); }
-
-    private void OnBuildModeChanged(bool building)
-    {
-        var root = UiPanels.RootOf(document);
-        if (root != null) root.style.display = building ? DisplayStyle.None : DisplayStyle.Flex;
-    }
 
     private void BuildSlots()
     {

@@ -10,6 +10,13 @@ public static class NeedStationRegistry
     public static void Register(NeedStation s)   { if (!stations.Contains(s)) stations.Add(s); }
     public static void Unregister(NeedStation s) => stations.Remove(s);
 
+    public static bool AnyOfType(NeedType type)
+    {
+        foreach (var s in stations)
+            if (s != null && s.Need == type) return true;
+        return false;
+    }
+
     public static NeedStation GetClosest(Vector3 from, NeedType type, bool onlyAvailable = true)
     {
         NeedStation best = null;

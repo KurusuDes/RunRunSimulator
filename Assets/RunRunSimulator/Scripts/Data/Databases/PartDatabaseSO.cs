@@ -24,9 +24,10 @@ public abstract class PartDatabaseSO<T> : KeyedDatabaseSO<T> where T : BodyPart
 
     public T GetPartByID(string id) => GetByID(id);
 
-    public T GetRandomPart(Rarity? rarityFilter = null, PartSetSO setFilter = null)
+    public T GetRandomPart(Rarity? rarityFilter = null, PartSetSO setFilter = null, System.Func<T, bool> where = null)
     {
         var pool = parts.Values.Where(p => p != null);
+        if (where != null)         pool = pool.Where(where);
 
         if (rarityFilter.HasValue) pool = pool.Where(p => p.Rarity == rarityFilter.Value);
         if (setFilter != null)     pool = pool.Where(p => p.Set    == setFilter);

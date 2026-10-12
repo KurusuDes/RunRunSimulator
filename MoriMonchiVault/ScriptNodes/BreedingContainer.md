@@ -6,60 +6,89 @@ tags: [script, genetics, breeding, container]
 
 **Ruta:** `World/Containers/BreedingContainer.cs`
 
-**Responsabilidad:** Corral de cría (hereda MoriMochiContainer). Solo acepta adultos (Form=Adult). Pairing automático con affinity×diceChance. Maneja interacción: si hay eclosión lista, `TryHatch()` vía `BreedingController`. Anima courtship + resultado (éxito/falla). S137: ciclo de vida redondeado (huevo nace como Form=Slime, luego incubadora lo resucita, crece a Adult).
+**Responsabilidad:** Corral de cría (hereda `MoriMochiContainer`). Solo acepta adultos (Form=Adult). Tira parejas automáticamente cada `rollInterval` según afinidad × dado. Al formar pareja asigna un slot fijo de cría, pasa la lista de decoraciones a `BreedingController.StartBreeding` y pone en cortejo a la pareja. Restaura necesidades a los ocupantes. Al eclosionar la cría, la lanza fuera del corral. Sirve la interacción de eclosión (`TryHatch`).
 
-**S138:** Sin cambios. Nodo clarificado.
-
-## Accepts() — Ciclo de Vida S137
+## Accepts() — Ciclo de Vida
 
 ```csharp
-protected override bool Accepts(MoriMochiAgent agent) =>
-    agent != null && agent.DNA != null && agent.DNA.Form == MonchiForm.Adult;
+protected override bool Accepts(MoriMochiAgent agent) => agent.DNA != null && agent.DNA.Form == MonchiForm.Adult;
 ```
 
-**Solo adultos:** excluye Eggs (no vivos, incubables) y Slimes (exploradores jóvenes, no reproducibles aún). Validación de entrada al corral.
-
-## TryRollPair() — Pairing Automático
-
-Usa `BreedingController.GetAffinity(mother.Role, father.Role)` para calcular probabilidad:
-
-```csharp
-float affinity = BreedingController.Instance?.GetAffinity(mother.Role, father.Role) ?? 0.5f;
-float pairChance = affinity * diceChance;
-return Random.value < pairChance;
-```
-
-Ambos padres deben estar en corral y pasar validación de forma + ocupantes.
-
-## Interact() — Ciclo de Eclosión
-
-1. **Detecta estado breeding:** ¿Algún ocupante con BusyReason=Breeding?
-2. **Si hay eclosión lista:** `BreedingController.TryHatch(motherID, fatherID)` → switch(HatchResult)
-   - `Hatched` — anima huevo, hijo nace Form=Egg (ó Form=Slime según spawn), dispara GameEvents
-   - `NotReady` — toast "Aún falta tiempo"
-   - `InsufficientMinerita` — toast "Insuficiente Minerita"
-   - `Invalid` — toast error
-3. **Si no hay eclosión:** muestra timer resta + UI visual
+**Solo adultos:** excluye Eggs (incubables) y Slimes (exploradores jóvenes).
 
 ## Campos Serializados
 
-| Campo | Tipo | Propósito |
-|-------|------|----------|
-| `diceChance` | float | Probabilidad base antes de affinity (0–1) |
+| Campo | Tipo | Default | Propósito |
+|-------|------|---------|----------|
+| `diceChance` | float (0-1) | 0.5 | Dado de pareja; se multiplica por la afinidad |
+| `rollInterval` | float (Min 1) | 10 s | Cada cuánto se intenta una pareja |
+| `pairCooldown` | float (Min 0) | 60 s | Cooldown de un adulto tras formar pareja |
+| `restoreRate` | float (Min 0) | 5 | Salud, energía y afecto por segundo para cada ocupante |
+| `breedingSlots` | `BreedingSlot[]` | — | **(S149)** Un slot por pareja con `spotA` y `spotB` (anclas hijas) |
+| `launchHeight` | float (Min 0) | 1.5 | Altura desde la que se lanza la cría |
+| `birthEjectDistance` | float (Min 0) | 2 | Distancia fuera del borde del corral donde cae la cría |
+| `onPairFormed` | `UnityEvent` | — | Feedback al formar pareja |
 
-## Ciclo de Vida Completo (S137+)
+## Ciclo de Pareja (TryRollPair)
 
-1. **Corral vacío:** espera ocupantes adultos
-2. **Pairing:** automático si 2+ adultos + affinity roll
-3. **StartBreeding:** padres marcan BusyState=Breeding, timer inicia
-4. **TryHatch (al tapear E):** si ready, hijo nace Form=Egg
-5. **Hijo a incubadora:** incubadora lo hatcha a Form=Slime
-6. **Slime crece:** expedición → Adult
-7. **Adult de vuelta al corral:** puede reproducirse
+1. Necesita al menos 2 ocupantes y `BreedingController` en escena.
+2. Filtra hembras y machos disponibles (vivos, no ocupados, adultos, `BreedCount < MaxBreedCount`, sin cooldown).
+3. Elige una hembra y un macho al azar.
+4. `chance = GetAffinity(mother.Role, father.Role) × diceChance`. Si el dado no alcanza, reporta y termina.
+5. Llama `controller.StartBreeding(mother.UniqueID, father.UniqueID, DecorIds())` **(S149)**.
+6. Si arrancó, asigna `LocationKey` y `LocationSlot` (primer slot libre, `FindFreeSlot`) a ambos, pone cooldown y dispara `RegistryChanged`.
+
+## Cortejo (ManageCourtship)
+
+Cada frame busca pares de ocupantes con `BusyState == Breeding` y `BreedPartnerID` recíproco. Pone a la hembra y al macho en `EnterCourtship` apuntando al centro del slot (`ResolveCourtAnchor`: promedio de `spotA` y `spotB`). Los ocupantes que dejan de formar pareja salen del cortejo.
+
+## Decoraciones (S149)
+
+- `decorSlots` se toma de los hijos (`DecorSlot`).
+- `DecorIds()` devuelve los IDs de decoración colocados. Se pasan a la cría en curso.
+
+## Eclosión (Interact)
+
+Busca una hembra con `BusyState == Breeding` y `BreedReadyAt > 0`, y llama `BreedingController.TryHatch(mother, partner)`. Según el resultado:
+- `Hatched`: mensaje de éxito.
+- `NotReady`: muestra las horas de juego que faltan.
+- `InsufficientMinerita`: muestra el costo de `HatchCostFor`.
+- Otro: error genérico.
+
+## Nacimiento (OnBreedingCompleted)
+
+Al completarse la cría (`GameEvents.OnBreedingCompleted`), si los padres están en este corral, registra el lanzamiento de la cría con `MoriMochiSpawner.Instance.RegisterBirthLaunch(child.UniqueID, LaunchPoint, BirthLanding())` y saca a los padres del cortejo. `BirthLanding()` cae fuera del borde (`birthEjectDistance`).
+
+## Restauración (PassiveRestore)
+
+Cada frame suma `restoreRate * dt` a salud, energía y afecto de cada ocupante vivo.
+
+## Release y cancelación
+
+Al retirar un agente (`Release`), si estaba en cría, `CancelBreeding` limpia el estado de cría, la ubicación y el de la pareja, y llama `BreedingController.CancelBreeding`.
+
+## Diagnóstico
+
+`PairDiagnostics` (solo en Play) muestra por ocupante por qué está disponible o no: muerto, incubando, ocupado, máx. crías, no adulto, cooldown o disponible.
+
+## Registro estático
+
+`All` lista los corrales de cría activos (`Start` agrega, `OnDestroy` quita).
 
 ## Vinculado a
 
 - [[Index/02 - Genetics & Breeding]]
 - [[Index/04 - Breeding System]]
 
-**Conexiones:** [[MoriMochiContainer]], [[BreedingController]], [[IncubationService]], [[GameClock]], [[GameEvents]], [[MoriMochiAgent]]
+## Conexiones
+
+**Padre:** [[MoriMochiContainer]]
+
+**Sistemas:**
+- [[BreedingController]] — `StartBreeding`, `TryHatch`, `CancelBreeding`, `GetAffinity`, `Incubation`
+- [[IncubationService]] — `HatchCostFor`
+- [[MoriMochiSpawner]] — `RegisterBirthLaunch`
+- [[DecorSlot]] — decoraciones (S149)
+- [[GameClock]], [[GameEvents]] (`OnBreedingCompleted`, `RegistryChanged`)
+- [[MoriMochiAgent]] — `EnterCourtship`, `ExitCourtship`, `DNA`
+- [[CreatureDNA]], [[BreedingService]] (`MaxBreedCount`)

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 213121948f9fb0b458f1f38dfbf917b1, type: 3}
+  m_Name: CustomerArchetype_Ahorrador
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.CustomerArchetypeSO
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  DisplayName: Ahorrador
+  Icon: {fileID: 0}
+  AgentPrefab: {fileID: 0}
+  WeightBreed: 1
+  WeightTier: 1
+  BudgetMultiplier: 0.9
+  BudgetMin: 10
+  BudgetMax: 35
+  Taste: 0
+  TasteBonus: 0
+  BuyWithoutMatchChance: 1
+  TasteFromDisplayChance: 0.6
+  RenegotiationTolerance: 0.2
+  MinInspections: 1
+  MaxInspections: 3
+  InspectionDuration: 2.5
+  WaitTimeoutSeconds: 40

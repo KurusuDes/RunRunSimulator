@@ -1,12 +1,5 @@
 namespace MoriMonchiSimulator
 {
-public enum FurnitureCategory
-{
-    Decoration = 0,
-    Display    = 1,
-    Functional = 2,
-}
-
 public enum ItemType
 {
     Furniture = 0,
@@ -18,6 +11,7 @@ public enum WorldPropCategory
     Tool     = 0,
     Food     = 1,
     Medicine = 2,
+    Toy      = 3,
 }
 
 public enum BuyResult
@@ -32,6 +26,22 @@ public enum Currency
 {
     Dabloons = 0,
     Minerita = 1,
+}
+
+public enum ToyKind
+{
+    Ball,
+    Chew,
+    Hose,
+    Mop,
+}
+
+public enum TasteKind
+{
+    None    = 0,
+    Role    = 1,
+    Color   = 2,
+    PartSet = 3,
 }
 
 [System.Flags]

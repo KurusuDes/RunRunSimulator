@@ -6,7 +6,7 @@ tags: [script, singleton, breeding]
 
 **Ruta:** `Systems/Breeding/BreedingController.cs`
 
-**Responsabilidad:** Apex del sistema de cría (domain owner). Singleton: `static Instance`. Posee `inheritanceOddsTable`, `affinityTable`, `lifeStageTable` y `incubation` (IncubationService, todos serializados). Getters públicos: `InheritanceOdds`, `LifeStageTable`, `Incubation`, `EggHatchCost`. Public API: `GetAffinity(Role a, Role b)`, `StartBreeding()` (wrapper a incubation), `TryHatch()` (wrapper → retorna HatchResult), `TryHatchEgg(CreatureDNA egg)` **(S137)**, `BreedCreatures()` (local sync), `CancelBreeding()`, `CancelAllBreeding()`. BreedingContainer pide servicios vía `Instance`. Resuelve registry y database de `GameManager.Instance` en Awake.
+**Responsabilidad:** Apex del sistema de cría (domain owner). Singleton: `static Instance`. Posee `inheritanceOddsTable`, `affinityTable`, `lifeStageTable`, `decorDatabase` e `incubation` (IncubationService, todos serializados). Getters públicos: `InheritanceOdds`, `LifeStageTable`, `Incubation`, `DecorDatabase`, `EggHatchCost`. Public API: `GetAffinity(Role a, Role b)`, `StartBreeding()` (wrapper a incubation, **S149** con decoraciones), `TryHatch()` (wrapper → retorna HatchResult), `TryHatchEgg(CreatureDNA egg)` **(S137)**, `BreedCreatures()` (local sync), `CancelBreeding()`, `CancelAllBreeding()`. BreedingContainer pide servicios vía `Instance`. Resuelve registry y database de `GameManager.Instance` en Awake.
 
 ## Campos Serializados
 
@@ -16,6 +16,7 @@ tags: [script, singleton, breeding]
 | `incubation` | `IncubationService` | Servicio de incubación local (S131, antes AsyncBreedingService) |
 | `affinityTable` | `BreedingAffinityTableSO` | Matriz de afinidad Role → Role |
 | `lifeStageTable` | `CreatureLifeStageTableSO` | Umbrales de edad (días) → etapa de vida |
+| `decorDatabase` | `BreedingDecorDatabaseSO` | **(S149)** Catálogo de decoraciones de cría |
 
 ## Propiedades Públicas
 
@@ -25,14 +26,15 @@ tags: [script, singleton, breeding]
 | `InheritanceOdds` | `InheritanceOddsTableSO` | Getter (encapsulación) |
 | `LifeStageTable` | `CreatureLifeStageTableSO` | Getter (encapsulación) |
 | `Incubation` | `IncubationService` | Getter (acceso a servicio local) |
-| `EggHatchCost` | `int` | **(S137)** Getter → `incubation?.EggHatchCost ?? 10` (costo Minerita para eclosionar huevo) |
+| `DecorDatabase` | `BreedingDecorDatabaseSO` | **(S149)** Getter. Lo usan `DecorSlot` e `IncubationService` |
+| `EggHatchCost` | `int` | **(S137)** Getter → `incubation.EggHatchCost` o 10 si no hay servicio (costo Minerita para eclosionar huevo) |
 
 ## Métodos Públicos
 
 | Método | Retorna | Descripción |
 |--------|---------|-------------|
 | `GetAffinity(Role a, Role b)` | `float` | Afinidad entre dos roles (S39 cambio a Role-based); default 0.5f si tabla ausente |
-| `StartBreeding(string motherID, string fatherID)` | `bool` | Wrapper → `incubation.StartBreeding()` |
+| `StartBreeding(string motherID, string fatherID, IReadOnlyList<string> decorIds = null)` | `bool` | **(S149)** Wrapper → `incubation.StartBreeding(...)`. Acepta decoraciones que modifican la herencia. Devuelve false si no hay servicio |
 | `TryHatch(string motherID, string fatherID)` | `HatchResult` | Wrapper → `incubation.TryHatch()` — retorna Hatched/NotReady/InsufficientMinerita/Invalid |
 | `TryHatchEgg(CreatureDNA egg)` | `HatchResult` | **(S137)** Wrapper → `incubation.TryHatchEgg(egg)` — intenta eclosionar huevo suelto. Retorna Hatched/InsufficientMinerita/Invalid. Disparado por IncubatorContainer.Interact() |
 | `CancelBreeding(string motherID, string fatherID)` | `void` | Wrapper → `incubation.CancelBreeding()` |
@@ -51,6 +53,8 @@ tags: [script, singleton, breeding]
 8. Dispara `GameEvents.BreedingCompleted(mother, father, child)`
 9. Dispara `GameEvents.RegistryChanged(registry)` → persistencia
 10. Retorna `child.UniqueID`
+
+**Nota S149:** `BreedCreatures` llama `Breed` sin modificadores. Las decoraciones solo afectan la ruta de `IncubationService` (`StartBreeding`).
 
 ## S137: TryHatchEgg
 
@@ -141,6 +145,7 @@ Cambio S39: Firma antes era `GetAffinity(Personality, Personality)` → ahora `G
 - [[BreedingAffinityTableSO]] — matriz de afinidad Role → Role
 - [[InheritanceOddsTableSO]] — tabla de herencia + HatchCost
 - [[CreatureLifeStageTableSO]] — umbrales de edad
+- [[BreedingDecorDatabaseSO]] — catálogo de decoraciones (S149)
 
 **Sistemas:**
 - [[CreatureRegistrySO]] — consulta/mutación de DNAs
@@ -153,6 +158,7 @@ Cambio S39: Firma antes era `GetAffinity(Personality, Personality)` → ahora `G
 - [[BreedingContainer]] — solicita servicios vía Instance
 - [[BreedingEggsTabPresenter]] — llama TryHatch, procesa HatchResult
 - [[IncubatorContainer]] — **(S137)** llama TryHatchEgg, consulta EggHatchCost
+- [[DecorSlot]] — **(S149)** lee `DecorDatabase`
 
 ## Notas (S137 HC-4 + Ciclo de Vida)
 

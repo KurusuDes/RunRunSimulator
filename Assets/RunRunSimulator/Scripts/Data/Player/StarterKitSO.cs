@@ -10,8 +10,5 @@ public class StarterKitSO : ScriptableObject
     [Title("Currency")]
     public int Dabloons = 0;
     public int Minerita = 30;
-
-    [Title("Furniture")]
-    public List<FurnitureDefinitionSO> Furniture = new List<FurnitureDefinitionSO>();
 }
 }

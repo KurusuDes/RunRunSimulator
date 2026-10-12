@@ -12,7 +12,6 @@ public class PlayerInputs : MonoBehaviour
     public static event Action InteractPressed;
     public static event Action InteractReleased;
     public static event Action ThrowPressed;
-    public static event Action BuildToggled;
     public static event Action<int> HotbarScrolled;
     public static event Action DropPressed;
 
@@ -34,7 +33,6 @@ public class PlayerInputs : MonoBehaviour
         actions.Player.Interact.performed += OnInteractPerformed;
         actions.Player.Interact.canceled  += OnInteractCanceled;
         actions.Player.Attack.performed   += OnAttack;
-        actions.Player.Build.performed    += OnBuild;
         actions.Player.Drop.performed      += OnDrop;
         actions.Player.HotbarStep.performed += OnHotbarStep;
 
@@ -50,7 +48,6 @@ public class PlayerInputs : MonoBehaviour
         actions.Player.Interact.performed -= OnInteractPerformed;
         actions.Player.Interact.canceled  -= OnInteractCanceled;
         actions.Player.Attack.performed   -= OnAttack;
-        actions.Player.Build.performed    -= OnBuild;
         actions.Player.Drop.performed      -= OnDrop;
         actions.Player.HotbarStep.performed -= OnHotbarStep;
 
@@ -84,8 +81,6 @@ public class PlayerInputs : MonoBehaviour
         int subs = ThrowPressed?.GetInvocationList().Length ?? 0;
         ThrowPressed?.Invoke();
     }
-
-    private void OnBuild(InputAction.CallbackContext c) => BuildToggled?.Invoke();
 
     private void OnDrop(InputAction.CallbackContext c) => DropPressed?.Invoke();
 

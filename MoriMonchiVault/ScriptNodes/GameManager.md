@@ -6,17 +6,18 @@ tags: [script, core, singleton]
 
 **Ruta:** `Core/GameManager.cs`
 
-**Responsabilidad:** Ciclo de vida del juego. Singleton que centraliza acceso a databases y registries. **Único orquestador de persistencia local:** escucha `GameEvents.OnRegistryChanged`, `OnFurnitureChanged`, `OnInventoryChanged`, `OnWorldStateChanged` e invoca `SaveSystem` a disco. S128: Push agrupado a nube con `pushDelaySeconds` (default 5); se cancela y sube ya en quit/pause; `Time.unscaledTime` para que pausa no congele timer. S131: Agregado `WorldStateSO` y `PersistWorldState()` para sincronización de estado de mundo.
+**Responsabilidad:** Ciclo de vida del juego. Singleton que centraliza acceso a databases y registries. **Único orquestador de persistencia local:** escucha `GameEvents.OnRegistryChanged`, `OnInventoryChanged`, `OnWorldStateChanged` e invoca `SaveSystem` a disco. S128: Push agrupado a nube con `pushDelaySeconds` (default 5); se cancela y sube ya en quit/pause; `Time.unscaledTime` para que pausa no congele timer. S131: Agregado `WorldStateSO` y `PersistWorldState()` para sincronización de estado de mundo. **S149:** se retiran los muebles del gestor (`FurnitureRegistry`, `PersistFurniture`, `GrantPlacedFurniture`, suscripción a `OnFurnitureChanged`). `FlushToCloudAsync` además guarda el grafo social.
 
 ## Métodos Públicos
 
 | Método | Descripción |
 |--------|-------------|
 | `PushToCloud()` | Dispara `cloudSync.PushAsync()` (fire-and-forget) |
-| `FlushToCloudAsync()` | Guarda ALL a disco + espera push cloud (síncrono de persist) |
+| `FlushToCloudAsync()` | Guarda registry, grafo social y WorldState a disco + espera push cloud |
+| `FlushToCloud()` | Versión sin await de `FlushToCloudAsync` |
 | `MintRandomCreature()` | Genera random, asigna género/elemento/rol/diales/nombre, registra, **dispara RegistryChanged** |
 | `MintCreature()` | Genera random DNA, registra, retorna CreatureDNA — **NO dispara evento** (responsibility del caller) |
-| `CollectLooseWorldProps()` | Busca en escena props sueltos (debug) |
+| `CollectLooseWorldProps()` | Recoge props sueltos de la escena al inventario (en quit/pause) |
 
 ## Propiedades Estáticas
 
@@ -31,18 +32,17 @@ tags: [script, core, singleton]
 |-----------|------|-------------|
 | `Registry` | `CreatureRegistrySO` | Registro de criaturas vivas/muertas |
 | `Database` | `CreatureDatabaseSO` | Bases de partes (Horns, Backs, Wings, Faces) |
-| `FurnitureRegistry` | `FurnitureRegistrySO` | Muebles colocados |
 | `Inventory` | `PlayerInventorySO` | Cartera y objetos del jugador |
 | `FurTypeDatabase` | `FurTypeDatabaseSO` | Tipos de pelaje |
 | `RarityOddsTable` | `RarityOddsTableSO` | Odds de rareza |
-| `MonchiVisualBank` | `MonchiVisualBankSO` | Banco de visuals |
+| `MonchiVisualBank` | `MonchiVisualBankSO` | Banco de visuals (también lo consulta `PartPool`) |
 | `RoleWorldProfiles` | `RoleWorldProfileSO` | Perfiles de rol para arena |
 | `WorldState` | `WorldStateSO` | **(S131)** Estado del mundo (día, minuto, tutorial) |
 
-## Persistencia S128+ + S131
+## Persistencia S128+ + S131 + S149
 
 **Push agrupado:**
-1. Evento gameplay → `Persist()` / `PersistFurniture()` / `PersistInventory()` / `PersistWorldState()` (S131)
+1. Evento gameplay → `Persist()` / `PersistInventory()` / `PersistWorldState()` (S131)
 2. Guarda a disco vía [[SaveSystem]]
 3. `RequestPush()` → `pushPending = true`, `pushDeadline = Time.unscaledTime + pushDelaySeconds`
 4. `Update()` → si `Time.unscaledTime >= pushDeadline` → `PushToCloud()`
@@ -50,9 +50,7 @@ tags: [script, core, singleton]
 **Suscriptores de eventos (OnEnable):**
 ```csharp
 GameEvents.OnRegistryChanged  += Persist;
-GameEvents.OnFurnitureChanged += PersistFurniture;
 GameEvents.OnInventoryChanged += PersistInventory;
-GameEvents.OnInventoryReloaded += GrantPlacedFurniture;
 GameEvents.OnWorldStateChanged += PersistWorldState;  // S131
 ```
 
@@ -66,7 +64,7 @@ private void PersistWorldState(WorldStateSO state)
 ```
 
 **Flush forzado:**
-- `OnApplicationQuit()` y `OnApplicationPause(paused: true)` → `FlushToCloudAsync()` (guarda a disco + espera push)
+- `OnApplicationQuit()` y `OnApplicationPause(paused: true)` → `CollectLooseWorldProps()` y `FlushToCloud()` (guarda a disco + espera push)
 - Expedición retorno: [[ExpeditionBridge]] aplica `RegistryChanged` → GameManager persiste
 - CreatureLifecycle.Kill/Adopt → RegistryChanged → persist
 
@@ -75,12 +73,17 @@ private void PersistWorldState(WorldStateSO state)
 ## Ciclo de Vida
 
 1. `Awake()` → `Instance = this`
-2. `OnEnable()` → Suscribe a 5 eventos (Registry/Furniture/Inventory/WorldState + OnInventoryReloaded)
-3. `OnInventoryReloaded()` → `GrantPlacedFurniture()` — rellena inventario con muebles colocados
-4. Gameplay → eventos → `Persist()` (SaveSystem + RequestPush)
-5. `Update()` → si deadline vencido → push async
-6. Quit/Pause → `FlushToCloudAsync()`
-7. `OnDestroy()` → Limpia `Instance` si es el mismo
+2. `OnEnable()` → Suscribe a 3 eventos (Registry/Inventory/WorldState)
+3. Gameplay → eventos → `Persist()` (SaveSystem + RequestPush)
+4. `Update()` → si deadline vencido → push async
+5. Quit/Pause → `FlushToCloudAsync()`
+6. `OnDestroy()` → Limpia `Instance` si es el mismo
+
+## Cambios S149
+
+**Retirado:** `furnitureRegistry` (campo y getter), `PersistFurniture`, `GrantPlacedFurniture` (escuchaba `OnInventoryReloaded`), suscripción a `OnFurnitureChanged`.
+
+**Agregado:** `SaveSystem.SaveSocialGraph()` en `FlushToCloudAsync`.
 
 ## Cambios S131
 
@@ -93,7 +96,7 @@ private void PersistWorldState(WorldStateSO state)
 
 **Propósito:** Sincronizar estado de mundo (día/minuto) con persistencia y cloud. Ahora Day/MinuteOfDay mutados por GameClock disparan `WorldStateChanged` → autoguardado sin gameplay code adicional.
 
-## Invariantes S128+ / S131
+## Invariantes S128+ / S131 / S149
 
 - Singleton: Awake crea, OnDestroy limpia si es el mismo
 - No disparador de eventos: solo consumidor de persistencia
@@ -112,7 +115,7 @@ private void PersistWorldState(WorldStateSO state)
 ## Conexiones
 
 **Data:**
-- [[CreatureRegistrySO]], [[CreatureDatabaseSO]], [[FurnitureRegistrySO]], [[PlayerInventorySO]], [[WorldStateSO]]
+- [[CreatureRegistrySO]], [[CreatureDatabaseSO]], [[PlayerInventorySO]], [[WorldStateSO]]
 
 **Sistemas:**
 - [[CloudSyncService]] — push async

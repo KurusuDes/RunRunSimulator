@@ -1,13 +1,7 @@
 ---
-tags: [script, furniture]
+tags: [script, deprecated, borrado]
 ---
 
-# FurnitureDefinitionSO.md
+# FurnitureDefinitionSO.cs
 
-**Ruta:** `Data/Furniture/FurnitureDefinitionSO.cs`
-
-**Responsabilidad:** Definición de mueble: nombre, prefab 3D, tamaño grid, categoría, precio.
-
-**Vinculado a:** [[Index/10 - Furniture & Building]]
-
-**Conexiones:** [[FurnitureSpawner]], [[FurnitureDatabaseSO]], [[ShopCatalogSO]], [[PlacedFurnitureMarker]]
+> 🪦 **Borrado en S149.** Sistema de muebles retirado; las expansiones de tienda se resuelven con `ShopZone`. El historial previo queda en git.

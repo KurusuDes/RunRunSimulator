@@ -1704,6 +1704,59 @@ MonoBehaviour:
     m_Localized: "Le faltan {0} combates para la pr\xF3xima evoluci\xF3n."
     m_Metadata:
       m_Items: []
+  - m_Id: 28564101534375936
+    m_Localized: "Te llam\xF3 tu t\xEDo: te manda {0} de regalo. \xA1\xC1brela en
+      la entrada!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28571620340195328
+    m_Localized: Expansiones
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500706500608
+    m_Localized: Decoraciones
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500731666432
+    m_Localized: ???
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28576500731666433
+    m_Localized: Ranura libre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28599012626587648
+    m_Localized: Juguetes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512527790080
+    m_Localized: Comida {0}%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512699756544
+    m_Localized: Agua {0}%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28615512699756545
+    m_Localized: Limpieza {0}%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302503088128
+    m_Localized: Busco un {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002688
+    m_Localized: "Busco uno de este color \u25CF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002689
+    m_Localized: Me encantan los {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28625302566002690
+    m_Localized: Busco algo barato
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
