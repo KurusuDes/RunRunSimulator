@@ -58,5 +58,14 @@ public static class GameEvents
 
     public static event Action<ShopUpgradeSO, int> OnShopZoneOpened;
     public static void ShopZoneOpened(ShopUpgradeSO expansion, int level) => OnShopZoneOpened?.Invoke(expansion, level);
+
+    public static event Action<CreatureBoxSO> OnCreatureBoxOrdered;
+    public static void CreatureBoxOrdered(CreatureBoxSO box) => OnCreatureBoxOrdered?.Invoke(box);
+
+    public static event Action<GoalSO> OnGoalCompleted;
+    public static void GoalCompleted(GoalSO goal) => OnGoalCompleted?.Invoke(goal);
+
+    public static event Action<SupplyKind> OnStationRefilled;
+    public static void StationRefilled(SupplyKind kind) => OnStationRefilled?.Invoke(kind);
 }
 }

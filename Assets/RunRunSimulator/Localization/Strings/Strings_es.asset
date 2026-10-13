@@ -2044,6 +2044,143 @@ MonoBehaviour:
     m_Localized: Interfaz
     m_Metadata:
       m_Items: []
+  - m_Id: 28969757550632960
+    m_Localized: Continuar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215872
+    m_Localized: Nueva partida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215873
+    m_Localized: Ajustes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215874
+    m_Localized: Salir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215875
+    m_Localized: "\xBFEmpezar de cero? Se borra tu partida: tus MoriMonchis, monedas
+      y tienda."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215876
+    m_Localized: "S\xED, empezar de cero"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215877
+    m_Localized: Cancelar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215878
+    m_Localized: "Cr\xEDa, cuida y baja de noche"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215879
+    m_Localized: "Volver al t\xEDtulo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215880
+    m_Localized: Saltar tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215881
+    m_Localized: "Mu\xE9vete con WASD y mira con el rat\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215882
+    m_Localized: "Sigue la gu\xEDa hasta la PC"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215883
+    m_Localized: Pulsa E para abrir la tienda online
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215884
+    m_Localized: "Pesta\xF1a MoriMonchis: tu primera caja es gratis"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215885
+    m_Localized: Abre la caja de entrega con E
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215886
+    m_Localized: Llena el comedero con E
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215887
+    m_Localized: De noche, baja con tu equipo desde la terminal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976047748341760
+    m_Localized: Primera venta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976048289406976
+    m_Localized: Vende 5 MoriMonchis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976048725614592
+    m_Localized: "Tu primera cr\xEDa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049170210816
+    m_Localized: "Cr\xEDa 5 MoriMonchis"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049598029824
+    m_Localized: Primera bajada
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049971322880
+    m_Localized: Baja 5 noches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976050361393152
+    m_Localized: Cumple un encargo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976050826960896
+    m_Localized: Cumple 5 encargos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976051254779904
+    m_Localized: Gana 500 dabloons vendiendo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976051632267264
+    m_Localized: Abre la Sala de juegos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052047503360
+    m_Localized: "Un linaje: cr\xEDa 15"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516672
+    m_Localized: 'Tienda famosa: vende 25'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516673
+    m_Localized: Metas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516674
+    m_Localized: 'se abre con:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516675
+    m_Localized: "Todav\xEDa no: cumple su meta"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516676
+    m_Localized: "\xA1Meta cumplida! {0} \xB7 +{1} dabloons"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516677
+    m_Localized: abre
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

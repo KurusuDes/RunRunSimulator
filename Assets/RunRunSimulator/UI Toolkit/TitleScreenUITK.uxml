@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Theme.uss" />
+    <Style src="TitleScreenUITKStyle.uss" />
+    <ui:VisualElement name="title-root" class="mm-theme title-root">
+        <ui:VisualElement name="title-scrim" class="title-scrim" picking-mode="Ignore">
+            <ui:VisualElement class="title-scrim-main" picking-mode="Ignore" />
+            <ui:VisualElement class="title-scrim-edge title-scrim-edge--1" picking-mode="Ignore" />
+            <ui:VisualElement class="title-scrim-edge title-scrim-edge--2" picking-mode="Ignore" />
+            <ui:VisualElement class="title-scrim-edge title-scrim-edge--3" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="title-menu" class="title-menu">
+            <ui:VisualElement name="title-logo" class="title-logo" picking-mode="Ignore" />
+            <ui:Label name="title-tagline" class="title-tagline title-slide title-slide--hidden" />
+            <ui:Button name="title-continue" class="title-button title-button--primary title-slide title-slide--hidden" />
+            <ui:Button name="title-new" class="title-button title-slide title-slide--hidden" />
+            <ui:Button name="title-settings" class="title-button title-slide title-slide--hidden" />
+            <ui:Button name="title-quit" class="title-button title-button--danger title-slide title-slide--hidden" />
+        </ui:VisualElement>
+        <ui:VisualElement name="title-confirm" class="title-confirm">
+            <ui:VisualElement name="title-confirm-panel" class="title-confirm-panel">
+                <ui:Label name="title-confirm-text" class="title-confirm-text" />
+                <ui:VisualElement class="title-confirm-row">
+                    <ui:Button name="title-confirm-yes" class="title-button title-button--danger title-confirm-button" />
+                    <ui:Button name="title-confirm-no" class="title-button title-confirm-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Label name="title-version" class="title-version" picking-mode="Ignore" />
+        <ui:VisualElement name="title-fade" class="title-fade title-fade--black" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

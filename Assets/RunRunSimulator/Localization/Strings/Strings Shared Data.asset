@@ -2019,6 +2019,142 @@ MonoBehaviour:
     m_Key: ui.settings.audio.ui
     m_Metadata:
       m_Items: []
+  - m_Id: 28969757550632960
+    m_Key: ui.title.continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215872
+    m_Key: ui.title.new
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215873
+    m_Key: ui.title.settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215874
+    m_Key: ui.title.quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215875
+    m_Key: ui.title.confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215876
+    m_Key: ui.title.confirm.yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215877
+    m_Key: ui.title.confirm.no
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215878
+    m_Key: ui.title.tagline
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215879
+    m_Key: ui.pause.totitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215880
+    m_Key: ui.pause.skiptutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215881
+    m_Key: tut.move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215882
+    m_Key: tut.gopc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215883
+    m_Key: tut.openstore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215884
+    m_Key: tut.buybox
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215885
+    m_Key: tut.openbox
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215886
+    m_Key: tut.feed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215887
+    m_Key: tut.descend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976047748341760
+    m_Key: goal.sell1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976048289406976
+    m_Key: goal.sell5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976048725614592
+    m_Key: goal.breed1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049170210816
+    m_Key: goal.breed5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049598029824
+    m_Key: goal.desc1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049971322880
+    m_Key: goal.desc5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976050361393152
+    m_Key: goal.order1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976050826960896
+    m_Key: goal.order5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976051254779904
+    m_Key: goal.earn500
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976051632267264
+    m_Key: goal.playroom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052047503360
+    m_Key: goal.breed15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516672
+    m_Key: goal.sell25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516673
+    m_Key: ui.store.tab.goals
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516674
+    m_Key: ui.store.locked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516675
+    m_Key: ui.store.result.locked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516676
+    m_Key: ui.goal.done
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516677
+    m_Key: ui.store.goal.opens
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

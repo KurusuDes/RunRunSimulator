@@ -51,6 +51,8 @@ public class StoreManager : MonoBehaviour
     {
         if (def == null || shop == null) { Debug.LogWarning("[StoreManager] BuyWorldProp: null arg."); return BuyResult.OutOfStock; }
 
+        if (GoalService.Instance?.LockingGoal(def) != null) return BuyResult.Locked;
+
         if (!shop.InStock) return BuyResult.OutOfStock;
 
         if (deliveryBoxPrefab == null || deliverySpawnPoint == null)
@@ -110,6 +112,7 @@ public class StoreManager : MonoBehaviour
         if (deliveryBox == null) return BuyResult.OutOfStock;
 
         deliveryBox.Configure(box);
+        GameEvents.CreatureBoxOrdered(box);
         if (price <= 0) GameEvents.InventoryChanged(inventory);
         Debug.Log($"[StoreManager] Ordered creature box '{box.DisplayName}' ({box.Id}) for {price} {shop.Currency}.");
         return BuyResult.Success;
@@ -142,6 +145,8 @@ public class StoreManager : MonoBehaviour
     {
         var world = GameManager.Instance != null ? GameManager.Instance.WorldState : null;
         if (upgrade == null || world == null) { Debug.LogWarning("[StoreManager] BuyUpgrade: null arg."); return BuyResult.OutOfStock; }
+
+        if (GoalService.Instance?.LockingGoal(upgrade) != null) return BuyResult.Locked;
 
         int level = world.UpgradeLevel(upgrade.Id);
         if (upgrade.IsMaxed(level)) return BuyResult.AlreadyOwned;

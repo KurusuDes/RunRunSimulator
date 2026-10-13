@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 namespace MoriMonchiSimulator
 {
 
@@ -37,9 +36,6 @@ public struct ExpeditionReturn
 
 public static class ExpeditionHandoff
 {
-    public const string StoreScene = "GameScene";
-    public const string ArenaScene = "BrawlDemo";
-
     public static bool CameFromStore { get; private set; }
     public static bool HasResult { get; private set; }
     public static ExpeditionResult Result { get; private set; }
@@ -47,8 +43,6 @@ public static class ExpeditionHandoff
 
     private static readonly List<string> selectedIds = new();
     public static IReadOnlyList<string> SelectedIds => selectedIds;
-
-    private static float defaultFixedDeltaTime;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetState()
@@ -58,13 +52,6 @@ public static class ExpeditionHandoff
         Result = default;
         RunSeed = 0;
         selectedIds.Clear();
-        defaultFixedDeltaTime = Time.fixedDeltaTime;
-    }
-
-    private static void ResetTime()
-    {
-        Time.timeScale = 1f;
-        if (defaultFixedDeltaTime > 0f) Time.fixedDeltaTime = defaultFixedDeltaTime;
     }
 
     public static void GoToArena(IReadOnlyList<string> ids = null)
@@ -74,8 +61,7 @@ public static class ExpeditionHandoff
         CameFromStore = true;
         HasResult = false;
         RunSeed = System.Environment.TickCount & 0x7fffffff;
-        ResetTime();
-        SceneManager.LoadScene(ArenaScene);
+        SceneFlow.GoToArena();
     }
 
     public static void ReturnToStore(ExpeditionResult? result)
@@ -90,8 +76,7 @@ public static class ExpeditionHandoff
             CameFromStore = false;
         }
         selectedIds.Clear();
-        ResetTime();
-        SceneManager.LoadScene(StoreScene);
+        SceneFlow.GoToStore();
     }
 
     public static bool TryConsumeResult(out ExpeditionResult result)

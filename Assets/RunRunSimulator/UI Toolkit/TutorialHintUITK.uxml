@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Theme.uss" />
+    <Style src="TutorialHintUITKStyle.uss" />
+    <ui:VisualElement name="hint-root" picking-mode="Ignore" class="mm-theme hint-root">
+        <ui:VisualElement name="hint-pill" picking-mode="Ignore" class="hint-pill">
+            <ui:Label name="hint-badge" picking-mode="Ignore" class="hint-badge" />
+            <ui:Label name="hint-text" picking-mode="Ignore" class="hint-text" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

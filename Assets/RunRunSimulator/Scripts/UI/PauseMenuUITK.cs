@@ -17,6 +17,8 @@ public class PauseMenuUITK : MonoBehaviour
     private VisualElement root;
     private Button resumeButton;
     private Button settingsButton;
+    private Button skipTutorialButton;
+    private Button titleButton;
     private Button quitButton;
     private Label titleLabel;
 
@@ -61,6 +63,8 @@ public class PauseMenuUITK : MonoBehaviour
     {
         if (resumeButton   != null) resumeButton.clicked   -= OnResumeClicked;
         if (settingsButton != null) settingsButton.clicked -= OnSettingsClicked;
+        if (skipTutorialButton != null) skipTutorialButton.clicked -= OnSkipTutorialClicked;
+        if (titleButton    != null) titleButton.clicked    -= OnTitleClicked;
         if (quitButton     != null) quitButton.clicked     -= OnQuitClicked;
         if (escape != null)
         {
@@ -77,10 +81,14 @@ public class PauseMenuUITK : MonoBehaviour
         titleLabel     = root.Q<Label>("pause-title");
         resumeButton   = root.Q<Button>("pause-resume");
         settingsButton = root.Q<Button>("pause-settings");
+        skipTutorialButton = root.Q<Button>("pause-skiptutorial");
+        titleButton    = root.Q<Button>("pause-totitle");
         quitButton     = root.Q<Button>("pause-quit");
 
         if (resumeButton   != null) resumeButton.clicked   += OnResumeClicked;
         if (settingsButton != null) settingsButton.clicked += OnSettingsClicked;
+        if (skipTutorialButton != null) skipTutorialButton.clicked += OnSkipTutorialClicked;
+        if (titleButton    != null) titleButton.clicked    += OnTitleClicked;
         if (quitButton     != null) quitButton.clicked     += OnQuitClicked;
         RefreshTexts();
     }
@@ -90,7 +98,23 @@ public class PauseMenuUITK : MonoBehaviour
         if (titleLabel     != null) titleLabel.text     = Loc.Tr("ui.pause.title");
         if (resumeButton   != null) resumeButton.text   = Loc.Tr("ui.pause.resume");
         if (settingsButton != null) settingsButton.text = Loc.Tr("ui.pause.settings");
+        if (skipTutorialButton != null) skipTutorialButton.text = Loc.Tr("ui.pause.skiptutorial");
+        if (titleButton    != null) titleButton.text    = Loc.Tr("ui.pause.totitle");
         if (quitButton     != null) quitButton.text     = Loc.Tr("ui.pause.quit");
+        RefreshSkipTutorial();
+    }
+
+    private void RefreshSkipTutorial()
+    {
+        if (skipTutorialButton == null) return;
+        bool tutorialActive = TutorialDirector.Instance != null && TutorialDirector.Instance.Active;
+        skipTutorialButton.style.display = tutorialActive ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    private void OnSkipTutorialClicked()
+    {
+        if (TutorialDirector.Instance != null) TutorialDirector.Instance.Skip();
+        RefreshSkipTutorial();
     }
 
     private void RefreshEscape()
@@ -182,6 +206,24 @@ public class PauseMenuUITK : MonoBehaviour
         if (UIManager.Present || !settingsOpen) return;
         settingsOpen = false;
         if (paused && root != null) root.style.display = DisplayStyle.Flex;
+    }
+
+    private async void OnTitleClicked()
+    {
+        if (quitting) return;
+        quitting = true;
+        if (titleButton != null) titleButton.SetEnabled(false);
+        if (quitButton != null) quitButton.SetEnabled(false);
+
+        if (GameManager.Instance != null)
+        {
+            try { await GameManager.Instance.FlushToCloudAsync(); }
+            catch (System.Exception e) { Debug.LogException(e); }
+        }
+
+        if (UIManager.Present) UIManager.RequestPanelSet(UIPanelType.Pause, false);
+        else                   ClosePause();
+        SceneFlow.GoToTitle();
     }
 
     private async void OnQuitClicked()

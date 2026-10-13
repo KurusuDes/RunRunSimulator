@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c208417364d2c264985e1647504b3461, type: 3}
+  m_Name: Goal_ORDER5
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.GoalSO
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Id: ORDER5
+  TitleKey: goal.order5
+  Kind: 3
+  ExpansionId: 
+  Target: 5
+  RewardDabloons: 70
+  UnlocksExpansions: []
+  UnlocksItems:
+  - {fileID: 11400000, guid: 1b2a412a0ca6bb64da0987808e87291c, type: 2}

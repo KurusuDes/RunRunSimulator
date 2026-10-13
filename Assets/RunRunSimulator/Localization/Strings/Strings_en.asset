@@ -2047,6 +2047,143 @@ MonoBehaviour:
     m_Localized: Interface
     m_Metadata:
       m_Items: []
+  - m_Id: 28969757550632960
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215872
+    m_Localized: New game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215873
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215874
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215875
+    m_Localized: 'Start over? Your save will be erased: your MoriMonchis, coins and
+      shop.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215876
+    m_Localized: Yes, start over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215877
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215878
+    m_Localized: Breed, care and descend at night
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215879
+    m_Localized: Back to title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215880
+    m_Localized: Skip tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215881
+    m_Localized: Move with WASD and look with the mouse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215882
+    m_Localized: Follow the guide to the PC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215883
+    m_Localized: Press E to open the online shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215884
+    m_Localized: 'MoriMonchis tab: your first box is free'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215885
+    m_Localized: Open the delivery box with E
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215886
+    m_Localized: Refill the feeder with E
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28969757563215887
+    m_Localized: At night, descend with your team from the terminal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976047748341760
+    m_Localized: First sale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976048289406976
+    m_Localized: Sell 5 MoriMonchis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976048725614592
+    m_Localized: Your first hatchling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049170210816
+    m_Localized: Breed 5 MoriMonchis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049598029824
+    m_Localized: First descent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976049971322880
+    m_Localized: Descend 5 nights
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976050361393152
+    m_Localized: Complete an order
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976050826960896
+    m_Localized: Complete 5 orders
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976051254779904
+    m_Localized: Earn 500 dabloons selling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976051632267264
+    m_Localized: Open the Playroom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052047503360
+    m_Localized: 'A lineage: breed 15'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516672
+    m_Localized: 'Famous shop: sell 25'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516673
+    m_Localized: Goals
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516674
+    m_Localized: 'unlocks with:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516675
+    m_Localized: 'Not yet: complete its goal'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516676
+    m_Localized: "Goal complete! {0} \xB7 +{1} dabloons"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28976052479516677
+    m_Localized: unlocks
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -63,6 +63,13 @@ Leyenda: `[x]` hecho · `[ ]` falta · ~~tachado~~ = se cae por una decisión. O
 - [x] E5 · ✅ S149 (por cantidad de crías: la decoración se ve "???" hasta criar 1/2/3/4/6 MoriMonchis según cuál) **Descubrimiento:** al principio el jugador no sabe qué hace cada decoración; lo va desbloqueando con misiones o por cantidad de MoriMonchis criados
 - [x] E6 · ✅ S151 La ficha (pestaña Linaje) muestra la **Herencia**: una línea por parte con su origen y la decoración que lo empujó ("Cuerno · de mamá Wiggly Droob — por Retrato familiar", "Alas · una mutación — por Lámpara de lava"). La cría guarda `Origins` en el save (no en el genetic string). E2: el servicio no limita parejas simultáneas (estado por madre); falta probarlo en juego con 2 machos libres y el Criadero nivel 2
 
+**Rediseño de la cría (Juan S152, decidido):** los corrales son zonas de agrupación y el huevo vive en otro lugar.
+- [ ] E7 · **Corrales grandes**: el Criadero arranca con 2 corrales y sus mejoras suman hasta 10. Cada corral aloja **2 adultos al inicio y sube hasta 6** con mejoras; ahí conviven, cortejan y se aparean
+- [ ] E8 · **Puff a la Huevera**: las parejas se forman solas (como hoy); cuando terminan de aparearse, el jugador se acerca y con **E** la pareja se separa y el huevo hace *puff* y aparece en la repisa. En el corral ya no se eclosiona nada
+- [ ] E9 · **Huevera = repisa sobre la incubadora**: el jugador elige qué huevo de la repisa pasa a la incubadora y decide si empezar la eclosión pagando Minerita (reusa `IncubatorContainer` y el modelo `ShopIncubator`, S152)
+- [ ] E10 · **Repisa llena = sin cortejo**: si la repisa está llena, los MoriMonchis de los corrales dejan de cortejar hasta que haya lugar
+- [ ] E11 · Arte: corral grande (sale de `Tools/Blender/props/shop_corral.py`, S152) + repisa de huevos
+
 ## F · Juguetes y vida social (lo más importante para Juan)
 
 > Juan S149: *"poder comprarles juguetes y que puedan interactuar con ellos y con los demás"*.
@@ -86,11 +93,11 @@ Leyenda: `[x]` hecho · `[ ]` falta · ~~tachado~~ = se cae por una decisión. O
 
 ## C · Cáscara y arranque (C7 de `Index/28`)
 
-- [ ] C1 · Pantalla de título: continuar / nueva partida
+- [x] C1 · ✅ S152 Pantalla de título: continuar / nueva partida (escena `Title` con diorama animado)
 - [x] C2 · ✅ S151 v1 (plantilla; Juan: "aún no tenemos la UI oficial") **Pausa** con Esc (reanudar / ajustes / salir guardando; congela el tiempo; también en la arena) + **Ajustes por secciones**, guardados en el equipo (no en la partida): General (idioma), Video (modo, resolución, VSync, tope de FPS, calidad), Interfaz (nombres flotantes siempre / al mirar / nunca, escala del HUD, ayudas de teclas), Controles (sensibilidad, invertir Y, campo de visión), Audio (5 volúmenes, se oirán con el pack). Prefab `Prefabs/UI/PauseSettingsUI` en GameScene y ArenaSandbox. Juan pidió que sea "muy rico en opciones" e ir sumando secciones: siguen Accesibilidad (daltonismo, reducir movimiento, tamaño de texto), reasignar teclas, mando y balanceo de cámara (no existe todavía)
-- [ ] C3 · Un solo dueño del flujo de escenas (título → tienda ↔ Brawl)
-- [ ] C4 · Tutorial con 6-8 pasos reales hasta la primera bajada (hoy es un número que solo usa el kit inicial)
-- [ ] C5 · Metas y desbloqueos (10-15): expansiones, juguetes y salas que se abren al llegar a un tramo o a una venta
+- [x] C3 · ✅ S152 Un solo dueño del flujo de escenas (título → tienda ↔ Brawl): `SceneFlow`
+- [x] C4 · ✅ S152 Tutorial de 7 pasos hasta la primera bajada (guía en el piso, píldora, saltable); falta probar "Nueva partida" con cuenta vacía
+- [x] C5 · ✅ S152 12 metas (pestaña "Metas" en la PC + aviso); abren Sala de juegos, Cuerda, Burbujas y Peluche
 - [ ] C6 · Primera build de PC (destapa NavMesh, `Resources` y Odin)
 
 ## B · Run con decisiones (P0.3-P0.5 de `Index/33`)

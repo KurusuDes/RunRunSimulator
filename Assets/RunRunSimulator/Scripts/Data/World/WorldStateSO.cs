@@ -19,6 +19,8 @@ public class WorldStateData
     public Dictionary<string, float> StationLevels = new Dictionary<string, float>();
     public List<ShopOrder> Orders = new List<ShopOrder>();
     public int OrdersDay = 0;
+    public Dictionary<string, int> Counters = new Dictionary<string, int>();
+    public List<string> CompletedGoals = new List<string>();
 }
 
 [CreateAssetMenu(fileName = "WorldState", menuName = "RunRunSimulator/World/World State")]
@@ -93,6 +95,26 @@ public class WorldStateSO : ScriptableObject
     public List<ShopOrder> Orders { get => orders; set => orders = value ?? new List<ShopOrder>(); }
     public int OrdersDay { get => ordersDay; set => ordersDay = value; }
 
+    [ShowInInspector, ReadOnly] private Dictionary<string, int> counters = new Dictionary<string, int>();
+    [ShowInInspector, ReadOnly] private List<string> completedGoals = new List<string>();
+
+    public int Counter(string key) =>
+        !string.IsNullOrEmpty(key) && counters.TryGetValue(key, out var value) ? value : 0;
+
+    public void AddCounter(string key, int amount)
+    {
+        if (string.IsNullOrEmpty(key)) return;
+        counters[key] = Counter(key) + amount;
+    }
+
+    public bool IsGoalDone(string id) => !string.IsNullOrEmpty(id) && completedGoals.Contains(id);
+
+    public void MarkGoalDone(string id)
+    {
+        if (string.IsNullOrEmpty(id) || completedGoals.Contains(id)) return;
+        completedGoals.Add(id);
+    }
+
     public WorldStateData GetData() => new WorldStateData
     {
         Day            = day,
@@ -106,6 +128,8 @@ public class WorldStateSO : ScriptableObject
         StationLevels  = new Dictionary<string, float>(stationLevels),
         Orders         = new List<ShopOrder>(orders),
         OrdersDay      = ordersDay,
+        Counters       = new Dictionary<string, int>(counters),
+        CompletedGoals = new List<string>(completedGoals),
     };
 
     public void LoadFrom(WorldStateData data)
@@ -131,6 +155,12 @@ public class WorldStateSO : ScriptableObject
             ? new List<ShopOrder>(data.Orders)
             : new List<ShopOrder>();
         ordersDay = data?.OrdersDay ?? 0;
+        counters = data?.Counters != null
+            ? new Dictionary<string, int>(data.Counters)
+            : new Dictionary<string, int>();
+        completedGoals = data?.CompletedGoals != null
+            ? new List<string>(data.CompletedGoals)
+            : new List<string>();
     }
 }
 }

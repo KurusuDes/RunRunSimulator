@@ -4,6 +4,32 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-13 (Session 152 — **bloque C de `Index/34`: título + flujo de escenas, tutorial, metas; título animado con diorama; 3 props en Blender estilo KayKit; rediseño de la cría** — 10 `.cs` creados, 12 modificados; compila 0 errores; probado en Play por sondas y 6 capturas)
+
+**Focus:** Juan: "sigue con el bloque C". Luego pidió el título "woah" (animado) y modelar en Blender lo que falta de la tienda "en la línea de KayKit, que encaje con los MoriMonchis".
+
+**Hecho:**
+1. **C1/C3 Título + flujo de escenas:** escena `Title` primera en la build (Continuar · Nueva partida con confirmación · Ajustes · Salir). `SceneFlow` (estática) es el único dueño de nombres de escena y saltos; `ExpeditionHandoff` y `AutoPlayer` la usan. Nueva partida = `SceneFlow.RequestNewGame()` → `StarterKitService` hace `ResetProgressAsync` + kit tras el sync. Pausa suma "Volver al título" (flush y carga).
+2. **C4 Tutorial:** `TutorialDirector` (7 pasos en escena: moverse, ir a la PC, abrir tienda, comprar caja gratis, abrir caja, llenar comedero, bajar), progreso en `WorldState.TutorialStep` (1..7, 8 = terminado; save viejo con criaturas → terminado; pasos de caja se saltan si ya hay criaturas). `TutorialGuide` (camino NavMesh punteado que fluye + aro que late, `CueDrawer`) y `TutorialHintUITK` (píldora "n/7" con ✓). "Saltar tutorial" en la pausa. Eventos nuevos `OnCreatureBoxOrdered`, `OnStationRefilled`.
+3. **C5 Metas:** 12 `GoalSO` en `ScriptableObjects/Progress` (ventas, crías, bajadas, encargos, dabloons ganados, abrir Sala de juegos; +20..+200). `GoalService` cuenta (contadores y metas cumplidas en `WorldState`), premia, avisa (`OnGoalCompleted` → toast) y bloquea: Sala de juegos (vender 5), Cuerda (criar 5), Burbujas (5 bajadas), Peluche (5 encargos); `BuyResult.Locked`. Pestaña "Metas" en la PC.
+4. **Título animado:** diorama en `Title` (isla, Synty Nature, sol bajo, cielo procedural, niebla, volumen de posproceso, luciérnagas/mariposas), 5 MoriMonchis al azar (`TitleDiorama` + `TitleWanderer` + prefab `Prefabs/Title/TitleMonchi`), cámara orbitando con `MMAutoRotate`. UI: logo letra a letra con rebote y ola, botones escalonados, primario que respira, fundido de entrada/salida.
+5. **Props Blender (KayKit):** `Tools/Blender/props/shop_pc.py`, `shop_incubator.py`, `shop_corral.py` → `Resources/Models/Shop/` (ShopPC, ShopPC_Desk, ShopIncubator, ShopCorral). **Sin importar en Unity ni colocar** (disco lleno).
+6. **Rediseño de la cría** decidido con Juan y escrito en `Index/34` E7-E11 (corrales 2→10, 2→6 adultos, E sobre pareja terminada → puff → repisa sobre la incubadora, repisa llena = sin cortejo).
+7. Packs gratis sugeridos (KayKit Furniture/Restaurant/City Builder/Forest, Kenney Mini Characters) — Juan prefiere KayKit por lo toony.
+
+**Quirks ⚠️:** (1) **Disco C casi lleno (0,26-0,5 GB)**: Unity muestra "Low disk space" y bloquea el MCP hasta pulsar OK (se puede pulsar por user32 desde PowerShell). Lo llenan el pack de git de AxieDarknessArise (2,2 GB) y la caché de Next de IncaBlobs; 17 repos viejos fueron a la papelera (Juan debe vaciarla) y faltan los temporales (~20 GB). (2) UIDocuments copiados de un prefab por código quedaron con `panelSettings` null: asignar `StandartPanelSettings` por `SerializedObject`. (3) Un prefab armado con `CopySerialized` desde `MorimonchiAgent` hereda `areaMask` de la tienda (56) y UnityEvents a MMF del prefab: limpiar. (4) `NavMeshSurface.BuildNavMesh()` por código no guarda el NavMeshData: crear asset y referenciarlo (`Scenes/Title/NavMesh-Ground.asset`). (5) `execute_code` bloquea `AssetDatabase.DeleteAsset`.
+
+**Siguiente paso (S153, propuesta):**
+1. Juan libera disco (papelera + temporales).
+2. **Cría E7-E10** (`Index/34`): corrales grandes, E → puff → repisa, incubadora elige huevo, repisa llena corta el cortejo.
+3. Importar y colocar los 4 FBX de `Models/Shop` reemplazando los cubos (escala vs MoriMonchis en juego); corral grande y repisa (E11).
+4. **C6 primera build de PC** y probar "Nueva partida" con cuenta vacía.
+
+**Archivos `.cs` S152 — creados (10):** `Core/SceneFlow.cs` · `Data/Progress/GoalSO.cs` · `Data/Tutorial/TutorialStep.cs` · `Systems/Progress/GoalService.cs` · `Systems/Tutorial/TutorialDirector.cs` · `UI/TitleScreenUITK.cs` · `UI/TutorialHintUITK.cs` · `World/Title/TitleDiorama.cs` · `World/Title/TitleWanderer.cs` · `World/Tutorial/TutorialGuide.cs`
+**Modificados (12):** `Core/Enums/StoreEnums.cs` · `Core/ExpeditionHandoff.cs` · `Core/GameEvents.cs` · `Data/World/WorldStateSO.cs` · `Systems/Dev/AutoPlayer.cs` · `Systems/Player/StarterKitService.cs` · `Systems/Store/StoreManager.cs` · `UI/InfoOverlayUITK.cs` · `UI/PauseMenuUITK.cs` · `UI/StorePanelUITK.cs` · `UI/StoreRows.cs` · `World/Needs/StationSupply.cs`
+
+---
+
 **Session:** 2026-10-13 (Session 151 — **cierre del mundo exterior (lotes 1-5 de `Index/34`) + pausa y ajustes v1** — 30 `.cs` creados, 30 modificados; compila 0 errores; todo probado en Play por sondas; video `Recordings/S151/toys.mp4` enviado)
 
 **Focus:** Juan: "sigamos el roadmap para completar todo el outer world" y después "un menú de settings muy rico en opciones… podemos ir separando las secciones". Checklist viva actualizada en [[Index/34 - Roadmap de cierre del gameplay]] (E6, F5, F6, G4-G6, H2, H5, H7, C2 marcados; H4 tachado).

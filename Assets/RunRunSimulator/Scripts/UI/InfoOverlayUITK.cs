@@ -37,6 +37,7 @@ public class InfoOverlayUITK : MonoBehaviour
     private const string CreatureLostKey = "ui.overlay.creature.lost";
     private const string UncleCallKey = "ui.overlay.uncle.call";
     private const string OrderDoneKey = "ui.orders.done";
+    private const string GoalDoneKey = "ui.goal.done";
 
     [SerializeField, Min(0f)] private float toastSeconds = 6f;
 
@@ -56,6 +57,7 @@ public class InfoOverlayUITK : MonoBehaviour
         GameEvents.OnCreatureDeparted += HandleCreatureDeparted;
         GameEvents.OnRescueGiftSent += HandleRescueGiftSent;
         GameEvents.OnOrderCompleted += HandleOrderCompleted;
+        GameEvents.OnGoalCompleted += HandleGoalCompleted;
         GameEvents.OnDayBlockChanged += HandleDayBlockChanged;
         GameEvents.OnDayStarted += HandleDayStarted;
         UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocaleChanged += HandleLocaleChanged;
@@ -69,6 +71,7 @@ public class InfoOverlayUITK : MonoBehaviour
         GameEvents.OnCreatureDeparted -= HandleCreatureDeparted;
         GameEvents.OnRescueGiftSent -= HandleRescueGiftSent;
         GameEvents.OnOrderCompleted -= HandleOrderCompleted;
+        GameEvents.OnGoalCompleted -= HandleGoalCompleted;
         GameEvents.OnDayBlockChanged -= HandleDayBlockChanged;
         GameEvents.OnDayStarted -= HandleDayStarted;
         UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocaleChanged -= HandleLocaleChanged;
@@ -193,6 +196,19 @@ public class InfoOverlayUITK : MonoBehaviour
         expeditionToastLabel.RemoveFromClassList("toast--draw");
 
         expeditionToastLabel.text = Loc.Tr(OrderDoneKey, order.Describe(), order.Reward);
+        expeditionToastLabel.style.display = DisplayStyle.Flex;
+        toastTimer = toastSeconds;
+    }
+
+    private void HandleGoalCompleted(GoalSO goal)
+    {
+        if (goal == null || expeditionToastLabel == null) return;
+
+        expeditionToastLabel.RemoveFromClassList("toast--win");
+        expeditionToastLabel.RemoveFromClassList("toast--lose");
+        expeditionToastLabel.RemoveFromClassList("toast--draw");
+
+        expeditionToastLabel.text = Loc.Tr(GoalDoneKey, Loc.Tr(goal.TitleKey), goal.RewardDabloons);
         expeditionToastLabel.style.display = DisplayStyle.Flex;
         toastTimer = toastSeconds;
     }

@@ -293,6 +293,9 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
             case BuyResult.AlreadyOwned:
                 ShowNotify(Loc.Tr("ui.store.toast.already_owned"));
                 break;
+            case BuyResult.Locked:
+                ShowNotify(Loc.Tr("ui.store.result.locked"));
+                break;
         }
     }
 

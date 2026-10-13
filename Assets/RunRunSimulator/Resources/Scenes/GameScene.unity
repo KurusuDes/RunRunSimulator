@@ -770,6 +770,65 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &124260290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 124260292}
+  - component: {fileID: 124260291}
+  m_Layer: 0
+  m_Name: GoalService
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &124260291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124260290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f6a54164810c654abcf7e17e4fe3fb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.GoalService
+  goals:
+  - {fileID: 11400000, guid: a9fa6dc7f4a82a948a0dbbd06a4990a2, type: 2}
+  - {fileID: 11400000, guid: 310b5331bdf486f4da319a35bf2b640f, type: 2}
+  - {fileID: 11400000, guid: 9a2dc35d07b26ec409027143664eecac, type: 2}
+  - {fileID: 11400000, guid: 6396a6cec7c65554cbdae4fbe45b5b50, type: 2}
+  - {fileID: 11400000, guid: 74fd2b193c4052a49ba469d7a8b3d1f1, type: 2}
+  - {fileID: 11400000, guid: 1bc0bc83f2cd2ec4a9858d1ea0f9a33f, type: 2}
+  - {fileID: 11400000, guid: 63f59de3eb960ad49b16f8b1761d2ec5, type: 2}
+  - {fileID: 11400000, guid: a9f01bde362dc42409189c311728b062, type: 2}
+  - {fileID: 11400000, guid: 9f0bba2a9771e20479a3ca19022d77f0, type: 2}
+  - {fileID: 11400000, guid: 19136de5ee75ed7458ad70a3a75e64f8, type: 2}
+  - {fileID: 11400000, guid: d6521fe44813ac940ae4138f58d6ac2e, type: 2}
+  - {fileID: 11400000, guid: fb68c1ff68c28434cacbf1da704eec18, type: 2}
+  cloudSync: {fileID: 1443145214}
+  syncTimeoutSeconds: 20
+--- !u!4 &124260292
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124260290}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &135786151
 GameObject:
   m_ObjectHideFlags: 0
@@ -24955,6 +25014,75 @@ MonoBehaviour:
   modelRoot: {fileID: 1756866069}
   faceTransition: {fileID: 0}
   flashMaterial: {fileID: 0}
+--- !u!1 &946766876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 946766879}
+  - component: {fileID: 946766878}
+  - component: {fileID: 946766877}
+  m_Layer: 0
+  m_Name: TutorialHintUITK
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &946766877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946766876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce4d3f4deb374c44b1289aa352f44bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.TutorialHintUITK
+  document: {fileID: 946766878}
+--- !u!114 &946766878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946766876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 3c8a8da8175b6d54a907634fef6a08f4, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 9e0731687f7a2394d848ff4719001206, type: 3}
+  m_SortingOrder: 49
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!4 &946766879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946766876}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &946942836
 Mesh:
   m_ObjectHideFlags: 0
@@ -29983,6 +30111,107 @@ MonoBehaviour:
   breedMotherID: 
   breedFatherID: 
   hatchIndex: 0
+--- !u!1 &1233659255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1233659258}
+  - component: {fileID: 1233659257}
+  - component: {fileID: 1233659256}
+  m_Layer: 0
+  m_Name: TutorialDirector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1233659256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233659255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d83cbbf2a44581042a3d3151da86b91c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.TutorialGuide
+  player: {fileID: 1458888896}
+  cueMaterial: {fileID: 2100000, guid: b6161c9a839d2a44db2a08bb2d783d0f, type: 2}
+  additiveMaterial: {fileID: 2100000, guid: 395e47b9e943caa4cb03a1cac9f0b16d, type: 2}
+  lineColor: {r: 1, g: 0.78, b: 0.28, a: 0.9}
+  targetColor: {r: 1, g: 0.85, b: 0.4, a: 0.9}
+  lineWidth: 0.12
+  dashLength: 0.35
+  dashGap: 0.25
+  flowSpeed: 1.2
+  repathInterval: 0.25
+  floorOffset: 0.05
+--- !u!114 &1233659257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233659255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 696b804668e7f0c4b9a32384fa6fa934, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.TutorialDirector
+  steps:
+  - TextKey: tut.move
+    Signal: 0
+    Target: {fileID: 0}
+    Radius: 0
+  - TextKey: tut.gopc
+    Signal: 1
+    Target: {fileID: 1177616826}
+    Radius: 2.2
+  - TextKey: tut.openstore
+    Signal: 2
+    Target: {fileID: 1177616826}
+    Radius: 1.2
+  - TextKey: tut.buybox
+    Signal: 3
+    Target: {fileID: 0}
+    Radius: 0
+  - TextKey: tut.openbox
+    Signal: 4
+    Target: {fileID: 3045775183304592829}
+    Radius: 1.6
+  - TextKey: tut.feed
+    Signal: 5
+    Target: {fileID: 931262681}
+    Radius: 1.6
+  - TextKey: tut.descend
+    Signal: 6
+    Target: {fileID: 1390625410}
+    Radius: 1.6
+  player: {fileID: 1458888896}
+  cloudSync: {fileID: 1443145214}
+  syncTimeoutSeconds: 20
+  moveDistance: 3
+--- !u!4 &1233659258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233659255}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1240719129
 Mesh:
   m_ObjectHideFlags: 0
@@ -43144,3 +43373,6 @@ SceneRoots:
   - {fileID: 374287512}
   - {fileID: 1967799263}
   - {fileID: 1717143769}
+  - {fileID: 1233659258}
+  - {fileID: 946766879}
+  - {fileID: 124260292}

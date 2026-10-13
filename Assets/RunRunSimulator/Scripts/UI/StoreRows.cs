@@ -5,7 +5,7 @@ namespace MoriMonchiSimulator
 
 public static class StoreRows
 {
-    public enum Tab { Expansions, WorldProps, Consumables, Creatures, Decor, Toys, Orders }
+    public enum Tab { Expansions, WorldProps, Consumables, Creatures, Decor, Toys, Orders, Goals }
 
     public struct Row
     {
@@ -26,6 +26,7 @@ public static class StoreRows
         Tab.Decor       => Loc.Tr("ui.store.tab.decor"),
         Tab.Toys        => Loc.Tr("ui.store.tab.toys"),
         Tab.Orders      => Loc.Tr("ui.store.tab.orders"),
+        Tab.Goals       => Loc.Tr("ui.store.tab.goals"),
         _              => "",
     };
 
@@ -47,13 +48,27 @@ public static class StoreRows
             return;
         }
 
+        if (tab == Tab.Goals)
+        {
+            CollectGoals(rows);
+            return;
+        }
+
         if (catalog == null) return;
+
+        var goals = GoalService.Instance;
 
         if (tab == Tab.Expansions)
         {
             foreach (var upgrade in catalog.UpgradeListings)
             {
                 if (upgrade == null) continue;
+                var locking = goals != null ? goals.LockingGoal(upgrade) : null;
+                if (locking != null)
+                {
+                    rows.Add(new Row { Name = LockedName(NameOf(upgrade.DisplayName, upgrade.Id), locking) });
+                    continue;
+                }
                 var capturedUpgrade = upgrade;
                 rows.Add(new Row
                 {
@@ -113,6 +128,12 @@ public static class StoreRows
             if (!MatchesItemTab(tab, def.Category)) continue;
             if (listing.RequiresExpansion != null
                 && (GameManager.Instance?.WorldState?.UpgradeLevel(listing.RequiresExpansion.Id) ?? 0) < 1) continue;
+            var lockingGoal = goals != null ? goals.LockingGoal(def) : null;
+            if (lockingGoal != null)
+            {
+                rows.Add(new Row { Name = LockedName(NameOf(def.DisplayName, def.Id), lockingGoal) });
+                continue;
+            }
             var capturedDef  = def;
             var capturedShop = listing.Shop;
             rows.Add(new Row
@@ -123,6 +144,40 @@ public static class StoreRows
             });
         }
     }
+
+    private static void CollectGoals(List<Row> rows)
+    {
+        var service = GoalService.Instance;
+        if (service == null) return;
+        foreach (var goal in service.Goals)
+        {
+            if (goal == null) continue;
+            string progress = service.IsDone(goal) ? "✓" : $"{service.Progress(goal)}/{goal.Target}";
+            string reward   = $"+{goal.RewardDabloons}";
+            string opens    = UnlockNames(goal);
+            if (opens.Length > 0) reward += $" · {Loc.Tr("ui.store.goal.opens")} {opens}";
+            rows.Add(new Row
+            {
+                Name   = $"{Loc.Tr(goal.TitleKey)}  {progress}",
+                Reward = reward,
+            });
+        }
+    }
+
+    private static string UnlockNames(GoalSO goal)
+    {
+        var names = new List<string>();
+        if (goal.UnlocksExpansions != null)
+            foreach (var upgrade in goal.UnlocksExpansions)
+                if (upgrade != null) names.Add(NameOf(upgrade.DisplayName, upgrade.Id));
+        if (goal.UnlocksItems != null)
+            foreach (var item in goal.UnlocksItems)
+                if (item != null) names.Add(NameOf(item.DisplayName, item.Id));
+        return string.Join(", ", names);
+    }
+
+    private static string LockedName(string name, GoalSO goal) =>
+        $"{name} · {Loc.Tr("ui.store.locked")} {Loc.Tr(goal.TitleKey)}";
 
     private static bool MatchesItemTab(Tab tab, WorldPropCategory cat) =>
         tab == Tab.WorldProps ? cat == WorldPropCategory.Tool

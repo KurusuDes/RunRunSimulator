@@ -63,6 +63,7 @@ public class StationSupply : MonoBehaviour, IInteractable
     {
         Refill(max);
         Persist();
+        GameEvents.StationRefilled(kind);
         onRefill?.PlayFeedbacks();
     }
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 namespace MoriMonchiSimulator
@@ -22,6 +23,13 @@ public class StarterKitService : MonoBehaviour
         {
             elapsed += Time.unscaledDeltaTime;
             yield return null;
+        }
+
+        if (SceneFlow.ConsumeNewGameRequest() && cloudSync != null)
+        {
+            Task resetTask = cloudSync.ResetProgressAsync();
+            while (!resetTask.IsCompleted) yield return null;
+            if (resetTask.IsFaulted) Debug.LogException(resetTask.Exception);
         }
 
         TryApply();

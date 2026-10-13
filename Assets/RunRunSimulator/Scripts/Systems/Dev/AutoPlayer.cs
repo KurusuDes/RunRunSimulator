@@ -115,7 +115,7 @@ public class AutoPlayer : MonoBehaviour
         LastExpeditionReturn = null;
         ExpeditionBridge.RequestDeparture(teamIds);
 
-        yield return WaitFor(() => SceneManager.GetActiveScene().name == ExpeditionHandoff.ArenaScene, stepTimeout, "escena ArenaSandbox");
+        yield return WaitFor(() => SceneManager.GetActiveScene().name == SceneFlow.ArenaScene, stepTimeout, "escena ArenaSandbox");
         if (failed) yield break;
 
         ArenaRound       round    = null;
@@ -143,7 +143,7 @@ public class AutoPlayer : MonoBehaviour
         RestoreSpeed();
         director.Retreat();
 
-        yield return WaitFor(() => SceneManager.GetActiveScene().name == ExpeditionHandoff.StoreScene && LastExpeditionReturn.HasValue,
+        yield return WaitFor(() => SceneManager.GetActiveScene().name == SceneFlow.StoreScene && LastExpeditionReturn.HasValue,
             stepTimeout, "vuelta a GameScene + OnExpeditionReturned");
         if (failed) yield break;
 

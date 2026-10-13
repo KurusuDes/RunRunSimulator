@@ -20,6 +20,7 @@ public enum BuyResult
     OutOfStock        = 1,
     InsufficientFunds = 2,
     AlreadyOwned      = 3,
+    Locked            = 4,
 }
 
 public enum Currency

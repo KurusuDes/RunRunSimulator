@@ -6,6 +6,8 @@
             <ui:Label name="pause-title" class="pause-title" />
             <ui:Button name="pause-resume" class="pause-button pause-button--primary" />
             <ui:Button name="pause-settings" class="pause-button" />
+            <ui:Button name="pause-skiptutorial" class="pause-button" />
+            <ui:Button name="pause-totitle" class="pause-button" />
             <ui:Button name="pause-quit" class="pause-button pause-button--danger" />
         </ui:VisualElement>
     </ui:VisualElement>
