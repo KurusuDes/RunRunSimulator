@@ -21,7 +21,7 @@ tags: [script, world, ai, agent, facade, expedition]
 | `AgentExpedition` | Expedición de arena (recolectar, reportar, huir) |
 | `AgentClash` | Choque físico 1v1 (golpes, tell, knock) |
 | `AgentAbilities` | Habilidades de arena y buffs de movilidad |
-| `AgentToys` **(S149)** | Juguetes: patear pelota, llevar en la boca, robar, quitar al jugador |
+| `AgentToys` **(S149)** | Juguetes: orquesta `ToyPlayerPlay`, `ToyBuddyPlay`, `ToyFreePlay` (S151) |
 | `Perceivable` | Componente: equipo de expedición (`Team`) |
 
 ## Ciclo de Update
@@ -35,8 +35,9 @@ tags: [script, world, ai, agent, facade, expedition]
 7. En Idle, Roaming o Expedition: `abilities.TickMobility()`.
 8. Switch por estado:
    - Idle / Roaming: `brain.Tick*`; si sigue ahí, intenta en orden `clash.TryEngage`, `expedition.TryEngage`, `toys.TryEngage` y luego `social.TryEngage`.
+   - Reacting **(S151):** `brain.TickReacting()`; si la reacción es amistosa (`brain.IsInFriendlyReaction`), intenta `toys.TryEngage()` (juguete que el jugador lanzó o sostiene).
    - Playing: `toys.TickPlaying()`.
-   - Resto: Reacting, Thrown, Recovering, SeekingNeed, UsingStation, Courting, Socializing, HandFeed, Expedition, Clashing (cada uno a su colaborador).
+   - Resto: Thrown, Recovering, SeekingNeed, UsingStation, Courting, Socializing, HandFeed, Expedition, Clashing (cada uno a su colaborador).
 
 `FixedUpdate` → `physics.FixedTick()`.
 
@@ -45,7 +46,7 @@ tags: [script, world, ai, agent, facade, expedition]
 | Propiedad | Tipo | Descripción |
 |-----------|------|-------------|
 | `DNA` | `CreatureDNA` | DNA vivo |
-| `Intent` | `CreatureIntent` | Según estado: Clashing, Socializing, Expedition, Playing o brain |
+| `Intent` | `CreatureIntent` | Según estado: Clashing, Socializing, Expedition, Playing (`toys.Intent`) o brain |
 | `Team` | `ExpeditionTeam` | Equipo de arena (vía `Perceivable`) |
 | `Occupation` / `Orders` | `Occupation` / `ArenaOrders` | Ocupación y órdenes de arena |
 | `IsPenned`, `IsForSale` | bool | En corral; en corral de tienda (`StoreContainer`) |
@@ -54,6 +55,7 @@ tags: [script, world, ai, agent, facade, expedition]
 | `IsBeingPetted`, `CanBePetted`, `IsInFriendlyReaction` | bool | Desde `AgentBrain` |
 | `Velocity`, `IsHeld`, `IsAirborne` | propiedades | Física |
 | `Percepts`, `Stats`, `Carried`, `CarryCapacity` | | Expedición y percepción |
+| `Condition` | `CreatureCondition` | Sick si `Health <= criticalHealth`; InNeed si `Energy` o `Affect` están en umbral crítico; si no, Healthy |
 
 ## Métodos Públicos Clave
 
@@ -90,13 +92,17 @@ Visuales solo vía MMFeedbacks (regla de juice).
 - **References:** `nameTag`, `toyTuning` **(S149)** (`ToyTuningSO`).
 - **Movement:** `sampleRadius` 4, `repathInterval` 0.35, `followDuration` 10, `reactCooldown` 15, `petRadius` 2.5, `petLookAngle` 20°, `breedingAreaName` ("BreedingRoom"), y los parámetros de cortejo (`courtSpeedMultiplier` 1.7, `courtOrbitRadius`, `courtAngularSpeed`, etc.).
 - **Needs (decay por minuto de juego):** `healthDecayPerGameMinute` 0.5, `energyDecayPerGameMinute` 1 (solo al moverse), `affectDecayPerGameMinute` 0.5. Umbrales: `criticalHealth` 25, `criticalEnergy` 25, `criticalAffect` -75.
+- **Needs (recuperación) (S151):** `energyRestPerGameMinute` 0.05 (en reposo, sin cama), `energyRestCap` 60 (tope de energía en reposo), `affectRestValue` 0 (valor de reposo del afecto), `affectRecoveryPerGameMinute` 1 (recuperación del afecto por debajo del reposo).
 - **Needs (estrés):** `affectOnThrow` 8, `affectOnHardCollision` 5, `hardImpactThreshold` 4.
 - **Needs (caricia):** `petAffectPerSecond` 6, `petRampPerSecond` 0.3, `petMaxDuration` 6, `petEmoteInterval` 1.5.
 - **Needs (comer de la mano):** `feedNoticeRadius` 6, `feedDistance` 1.2, `feedShyBelow` 0.35, `feedShyDistance` 3, `feedHesitateSeconds` 2, `feedEatSeconds` 1.5, `feedHungerThreshold` 70, `feedHealthBoost` 35, `feedAffectBoost` 5, `feedCooldown` 20.
 - **Physics:** hold, lanzamiento, rebote (`bounciness` 0.55, `maxBounces` 3), knock, recuperación.
 - **Dev:** `CurrentState`, `NavStatus`, `forceRagdoll`, `logStateTransitions`, `snapWarnThreshold`.
 
-`Condition` (Healthy, InNeed, Sick) se deriva de las necesidades y los umbrales.
+## Cambios S151
+
+- `Update`: en `Reacting`, las reacciones amistosas (Approach / Follow / Retreat) también pueden llevar al monchi a jugar con un juguete del jugador (`toys.TryEngage`).
+- Necesidades: nuevos campos de recuperación en reposo (`energyRestPerGameMinute`, `energyRestCap`, `affectRestValue`, `affectRecoveryPerGameMinute`). Ver `AgentBrain`.
 
 ## Cambios S149
 

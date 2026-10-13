@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 8f46963f1a93ef449bc2beb3f4c28e5e, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 3841679640632229986
   m_TableData:
   - m_Id: 4172413173760
     m_Localized: Protector
@@ -1760,6 +1761,311 @@ MonoBehaviour:
     m_Localized: Looking for a bargain
     m_Metadata:
       m_Items: []
+  - m_Id: 28890620945293312
+    m_Localized: Mash E!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28890621293420544
+    m_Localized: You won the tug!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28890621293420545
+    m_Localized: "It got away with it \u2014 chase it!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450085449728
+    m_Localized: Inheritance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450320330752
+    m_Localized: " \xB7 "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450320330753
+    m_Localized: " \u2014 by {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450349690880
+    m_Localized: a mutation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450353885184
+    m_Localized: came out at random
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450353885185
+    m_Localized: from mom {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450358079488
+    m_Localized: from dad {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450358079489
+    m_Localized: from maternal grandmother {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450362273792
+    m_Localized: from paternal grandmother {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450362273793
+    m_Localized: from maternal grandfather {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450362273794
+    m_Localized: from paternal grandfather {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450362273795
+    m_Localized: from maternal great-grandmother {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450362273796
+    m_Localized: from paternal great-grandmother {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450362273797
+    m_Localized: from maternal great-grandfather {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28911450362273798
+    m_Localized: from paternal great-grandfather {0}
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28919161065889792
+    m_Localized: This place is filthy!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28919161095249920
+    m_Localized: "The stations are empty\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28919161095249921
+    m_Localized: This place could use a good cleaning.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699071905792
+    m_Localized: Frail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699088683008
+    m_Localized: Orders
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699088683009
+    m_Localized: No orders today
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699088683010
+    m_Localized: 'Order fulfilled: {0} (+{1})'
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28930699092877312
+    m_Localized: Looking for a MoriMochi with the {0} role
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28930699092877313
+    m_Localized: Looking for a MoriMochi with parts from the {0} set
+    m_Metadata:
+      m_Items:
+      - rid: 3841679640632229986
+  - m_Id: 28939696143392768
+    m_Localized: Paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169984
+    m_Localized: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169985
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169986
+    m_Localized: Quit game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169987
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169988
+    m_Localized: Apply
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169989
+    m_Localized: Reset section
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169990
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169991
+    m_Localized: Changes applied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169992
+    m_Localized: General
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169993
+    m_Localized: Video
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169994
+    m_Localized: Interface
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169995
+    m_Localized: Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169996
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169997
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169998
+    m_Localized: Display mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169999
+    m_Localized: Windowed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170000
+    m_Localized: Fullscreen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170001
+    m_Localized: Borderless window
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170002
+    m_Localized: Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170003
+    m_Localized: Native
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170004
+    m_Localized: Vertical sync (VSync)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170005
+    m_Localized: FPS limit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170006
+    m_Localized: Unlimited
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170007
+    m_Localized: Graphics quality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170008
+    m_Localized: Floating names
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170009
+    m_Localized: Always
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170010
+    m_Localized: When looked at
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170011
+    m_Localized: Never
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170012
+    m_Localized: HUD scale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170013
+    m_Localized: Key hints
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170014
+    m_Localized: Look sensitivity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170015
+    m_Localized: Invert Y axis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170016
+    m_Localized: Field of view
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170017
+    m_Localized: Default
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170018
+    m_Localized: You will hear it once audio is added
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170019
+    m_Localized: Master volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170020
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170021
+    m_Localized: Effects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170022
+    m_Localized: Ambience
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170023
+    m_Localized: Interface
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3841679640632229986
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 28911450320330753
+        - id: 28911450353885185
+        - id: 28911450358079488
+        - id: 28911450358079489
+        - id: 28911450362273792
+        - id: 28911450362273793
+        - id: 28911450362273794
+        - id: 28911450362273795
+        - id: 28911450362273796
+        - id: 28911450362273797
+        - id: 28911450362273798
+        - id: 28930699088683010
+        - id: 28930699092877312
+        - id: 28930699092877313

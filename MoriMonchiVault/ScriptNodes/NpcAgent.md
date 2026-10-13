@@ -6,7 +6,7 @@ tags: [script, world, npc, core, queue]
 
 **Ruta:** `World/Npc/NpcAgent.cs`
 
-**Responsabilidad:** Cliente NPC de la tienda: recorre exhibiciones, elige una criatura según su gusto y su presupuesto, hace fila, negocia y compra (o se va). **S138:** `TickQueueing` mide la distancia al slot en plano XZ (antes 3D; el offset Y=0.83 impedía llegar). **S149:** el cliente tiene gusto (`CustomerTaste`) y presupuesto; la elección y la oferta inicial se calculan con ambos. Sus áreas caminables salen de la lista `walkableAreaNames`.
+**Responsabilidad:** Cliente NPC de la tienda: recorre exhibiciones, elige una criatura según su gusto y su presupuesto, hace fila, negocia y compra (o se va). **S138:** `TickQueueing` mide la distancia al slot en plano XZ (antes 3D; el offset Y=0.83 impedía llegar). **S149:** el cliente tiene gusto (`CustomerTaste`) y presupuesto; la elección y la oferta inicial se calculan con ambos. Sus áreas caminables salen de la lista `walkableAreaNames`. **S151:** registra si la tienda está sucia al elegir (`ComplainedDirty`), y esa señal alimenta su pensamiento de queja.
 
 ## Estado de Cliente (S149)
 
@@ -16,6 +16,7 @@ tags: [script, world, npc, core, queue]
 | `Budget` | int | Presupuesto tirado entre `BudgetMin` y `BudgetMax` del arquetipo |
 | `PickMatch` | float | Cumplimiento del gusto de la criatura elegida |
 | `InitialOffer` / `CurrentOffer` | int | Oferta inicial (valuación con `tasteMatch`) y la vigente |
+| `ComplainedDirty` | bool | **(S151)** Verdadero si al elegir la tienda estaba sucia (`ShopCleanliness.IsDirty`) |
 | `TargetMM` | `CreatureDNA` | Criatura elegida |
 | `Reason` | `LeaveReason` | Por qué se va |
 | `HasCounteredOnce` | bool | Ya usó contraoferta |
@@ -46,13 +47,15 @@ None, Purchased, Outbid (otro cliente compró la criatura), QueueFull.
 - Si no hay mejor match, con probabilidad `BuyWithoutMatchChance` elige la más barata.
 - Sin elección: vuelve a Wandering o sale si ya no le quedan inspecciones.
 
+Al elegir (`TickInspecting`): calcula `InitialOffer` con `ValuationHandler`, y `ComplainedDirty = ShopCleanliness.IsDirty(pricing)` (S151).
+
 ## Fila y compra
 
 - `TickApproachingRegister` pide un slot en la caja (`CashRegister.TryReserveSlot`). Si no hay, sale por `QueueFull`.
 - `TickQueueing` avanza hasta el slot con distancia XZ (S138). Al llegar al frente pasa a `WaitingAtRegister`.
 - `WaitingAtRegister` sale tras `WaitTimeoutSeconds`.
 - `AcceptCurrentOffer()`: `Wallet.Add(Dabloons, CurrentOffer)`, `CreatureLifecycle.Adopt(TargetMM)` y `GameEvents.CustomerSold`.
-- `TryCounterOffer()`: una sola contraoferta según `NegotiationFlow`.
+- `TryCounterOffer()`: una sola contraoferta según `NegotiationFlow.ComputeCounter` y `EvaluateCounter` (con tope `BudgetCeiling`, es decir `Budget * 1.2`, y el gusto `PickMatch`).
 
 ## Eventos
 
@@ -72,7 +75,7 @@ None, Purchased, Outbid (otro cliente compró la criatura), QueueFull.
 
 ## Conexiones
 
-**Clientes y valuación:** [[CustomerArchetypeSO]], [[CustomerTaste]], [[ValuationHandler]], [[CustomerPricingSO]], [[NegotiationFlow]], [[CustomerService]]
+**Clientes y valuación:** [[CustomerArchetypeSO]], [[CustomerTaste]], [[ValuationHandler]], [[CustomerPricingSO]], [[NegotiationFlow]], [[CustomerService]], [[ShopCleanliness]] (S151)
 
 **Tienda:** [[StoreContainer]] (exhibiciones), [[CashRegister]] (caja y fila), [[NpcController]] (spawn y despawn), [[NpcThoughtTag]] (burbuja)
 

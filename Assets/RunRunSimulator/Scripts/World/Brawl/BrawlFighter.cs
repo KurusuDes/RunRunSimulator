@@ -47,6 +47,7 @@ public class BrawlFighter : MonoBehaviour
     private BrawlFighter taunter;
     private float tauntUntil;
     private bool frozen;
+    private float frailFactor = 1f;
 
     public static IReadOnlyList<BrawlFighter> All => all;
     public static event Action<BrawlFighter> OnBound;
@@ -121,7 +122,8 @@ public class BrawlFighter : MonoBehaviour
     {
         DNA = dna;
         Team = team;
-        Power = 1f;
+        frailFactor = team == ExpeditionTeam.Player && CreatureFrailty.IsFrail(dna) ? CreatureFrailty.Penalty : 1f;
+        Power = frailFactor;
         Dummy = false;
 
         visualizer.SetBank(bank);
@@ -143,7 +145,7 @@ public class BrawlFighter : MonoBehaviour
 
         var body = tuning.BodyFor(dna.BodyShapeID);
         MaxHp = tuning.BaseHp * body.HpMul * hpUp;
-        BaseSpeed = WingKit.MoveSpeed * body.SpeedMul * speedUp;
+        BaseSpeed = WingKit.MoveSpeed * body.SpeedMul * speedUp * frailFactor;
         BodyLabel = body.Label;
         Hp = MaxHp;
 
@@ -162,8 +164,9 @@ public class BrawlFighter : MonoBehaviour
 
     public void Prime(float power, float health01)
     {
-        Power = Mathf.Max(0.05f, power);
-        MaxHp *= Power;
+        float scale = Mathf.Max(0.05f, power);
+        Power = scale * frailFactor;
+        MaxHp *= scale;
         Hp = Mathf.Clamp(MaxHp * Mathf.Clamp01(health01), 1f, MaxHp);
     }
 

@@ -12,7 +12,13 @@ public class WorldPropInstance : MonoBehaviour, IInteractable
 
     public bool IsHeld { get; set; }
 
-    public void Configure(string id) => itemId = id;
+    public bool SpawnedAtRuntime { get; private set; }
+
+    public void Configure(string id)
+    {
+        itemId           = id;
+        SpawnedAtRuntime = true;
+    }
 
     public void Interact()
     {

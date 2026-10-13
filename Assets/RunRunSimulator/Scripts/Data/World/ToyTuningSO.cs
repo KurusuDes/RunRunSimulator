@@ -36,5 +36,41 @@ public class ToyTuningSO : ScriptableObject
     [Title("Robo al jugador")]
     [Min(0f)] public float SnatchRange = 1.3f;
     [Min(0f)] public float SnatchChancePerSecond = 0.08f;
+
+    [Title("Traer")]
+    [Min(0f)] public float FetchEngageChancePerSecond = 2f;
+    [Min(0f)] public float FetchAffect = 8f;
+    [Min(0f)] public float FetchDropRange = 1.4f;
+
+    [Title("Tironeo con el jugador")]
+    [Min(0f)] public float TugRange = 1.6f;
+    [Min(0f)] public float TugPressPower = 0.12f;
+    [Min(0f)] public float TugPullPerSecond = 0.3f;
+    [Range(0f, 1f)] public float TugBoldnessPull = 0.25f;
+    [Min(0f)] public float TugMaxSeconds = 8f;
+    [Min(0f)] public float TugWinAffect = 10f;
+
+    [Title("Pilla-pilla")]
+    [Min(0f)] public float TeaseDuration = 8f;
+    [Min(0f)] public float TeaseKeepAway = 3f;
+    [Min(0.1f)] public float TeaseSpeedMultiplier = 1.5f;
+    [Min(0f)] public float CaughtAffect = 6f;
+
+    [Title("Cuerda entre monchis")]
+    [Range(0f, 1f)] public float RopeTugChance = 0.7f;
+    [Min(0f)] public float RopeTugMin = 2f;
+    [Min(0f)] public float RopeTugMax = 5f;
+    [Min(0f)] public float RopeTugAffect = 4f;
+
+    [Title("Peluche")]
+    [Min(0f)] public float HugChancePerSecond = 0.5f;
+    [Min(0f)] public float HugDurationMin = 6f;
+    [Min(0f)] public float HugDurationMax = 10f;
+    [Min(0f)] public float HugAffectPerSecond = 3f;
+
+    [Title("Burbujas")]
+    [Min(0f)] public float PopRange = 0.9f;
+    [Min(1)] public int PopsMax = 4;
+    [Min(0f)] public float PopAffect = 2f;
 }
 }

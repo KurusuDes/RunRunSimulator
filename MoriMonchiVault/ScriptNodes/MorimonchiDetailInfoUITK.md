@@ -6,7 +6,7 @@ tags: [script, ui, uitk]
 
 **Ruta:** `UI/MorimonchiDetailInfoUITK.cs`
 
-**Responsabilidad:** Panel de detalles UITK de MoriMochi. Pestañas: Info (partes con el poder de su kit, necesidades, ✓ apta para bajar, rol de combate sugerido y evolución por parte), Crianza, Linaje (árboles genealógicos) y Relaciones. **S75:** Sin tab Combate (demolición). **S93:** Usa `UiPanels.RootOf()`. **S129:** Eliminada pestaña Equipo (demolición HC-1). Muestra: partes genéticas, 3 barras de necesidades (color según `NeedsDisplay`), marca ✓ si apta para explorar (green badge), rol/elemento/gender. **S145:** la pestaña Info recibe el `BrawlKitDatabaseSO` para mostrar poderes y rol sugerido. **S148:** la pestaña Info recibe el `EvolutionEffectSO` para el botón de evolución y los bloques por parte.
+**Responsabilidad:** Panel de detalles UITK de MoriMochi. Pestañas: Info (partes con el poder de su kit, necesidades, ✓ apta para bajar, rol de combate sugerido y evolución por parte), Crianza, Linaje (árboles genealógicos) y Relaciones. **S75:** Sin tab Combate (demolición). **S93:** Usa `UiPanels.RootOf()`. **S129:** Eliminada pestaña Equipo (demolición HC-1). Muestra: partes genéticas, 3 barras de necesidades (color según `NeedsDisplay`), marca ✓ si apta para explorar (green badge), rol/elemento/gender. **S145:** la pestaña Info recibe el `BrawlKitDatabaseSO` para mostrar poderes y rol sugerido. **S148:** la pestaña Info recibe el `EvolutionEffectSO` para el botón de evolución y los bloques por parte. **S151:** el panel suma el presenter de herencia (`DetailInheritancePresenter`) en la pestaña Linaje.
 
 ## Campos Serializados
 
@@ -24,7 +24,7 @@ tags: [script, ui, uitk]
 
 - **Info** (`tab-info`) — Partes con poder de kit y evolución, necesidades (3 barras con color), ✓ apta, rol de combate sugerido, demografía (rol/elemento/género).
 - **Crianza** (`tab-breed`) — placeholder `breed-empty`.
-- **Linaje** (`tab-lineage`) — árboles genealógicos; placeholder `lineage-empty`.
+- **Linaje** (`tab-lineage`) — árboles genealógicos (`DetailTreesPresenter`) y línea de herencia por parte (`DetailInheritancePresenter`, S151); placeholder `lineage-empty`.
 - **Relaciones** (`tab-relations`) — amigos y enemigos; placeholder `relations-empty`.
 
 ## Flujo
@@ -32,11 +32,15 @@ tags: [script, ui, uitk]
 - **Awake:** aplica `sortingOrder` al documento.
 - **OnEnable / OnDisable:** suscribe y desuscribe `UIManager.OnCreatureSelected` (→ `Show`), `GameEvents.OnRegistryChanged` y `GameEvents.OnInventoryChanged`. Ambos eventos de datos repueblan si el panel está visible; el botón de evolución depende del saldo de Minerita.
 - **Start:** `Wire()` y registro navegable.
-- **Wire():** busca `title`, `portrait`, `tabs`, `close-button`; aplica `WireStaticLabels`; crea los presenters: `DetailInfoTabPresenter(root, database, careGate, kits, evolution, () => registry)`, `DetailTreesPresenter(root, database, () => registry)` y `DetailRelationsPresenter(root, () => registry)`.
+- **Wire():** busca `title`, `portrait`, `tabs`, `close-button`; aplica `WireStaticLabels`; crea los presenters: `DetailInfoTabPresenter(root, database, careGate, kits, evolution, () => registry)`, `DetailTreesPresenter(root, database, () => registry)`, `DetailInheritancePresenter(root, () => registry)` (S151) y `DetailRelationsPresenter(root, () => registry)`.
 - **Show(dna, registry):** guarda registry y `current`, `Wire`, `Populate`, selecciona el tab 0 y `RequestPanelSet(panel, true)`.
-- **Populate(dna):** título (`CustomName` o `ToStringID`), retrato con `MonchiPortraitUI.ApplyLive`, `info.Rebuild`, `trees.Rebuild`, `relations.Rebuild`.
+- **Populate(dna):** título (`CustomName` o `ToStringID`), retrato con `MonchiPortraitUI.ApplyLive`, `info.Rebuild`, `trees.Rebuild`, `inheritance.Rebuild` (S151), `relations.Rebuild`.
 - **OnRegistryChanged / OnInventoryChanged:** si el panel está visible, repuebla `current`.
 - **OnUINavigate:** cambia de tab con el eje x. `OnUISubmit` no hace nada. `OnUICancel` devuelve false.
+
+## Cambios en S151
+
+- Nuevo presenter `DetailInheritancePresenter`, creado en `Wire()` y repoblado en `Populate()`.
 
 ## Cambios en S129
 
@@ -67,4 +71,4 @@ Affect usa rango [-100, 100]; Health/Energy [0, 100].
 - [[Index/28 - Cimientos y camino a Game Ready]]
 - [[Index/32 - Demo Brawl 3v3 arcade]]
 
-**Conexiones:** [[DetailInfoTabPresenter]], [[DetailRelationsPresenter]], [[DetailTreesPresenter]], [[BrawlKitDatabaseSO]], [[EvolutionEffectSO]], [[NeedsDisplay]], [[CreatureAvailability]], [[CareGateSO]], [[MonchiPortraitUI]], [[UiPanels]], [[GameEvents]], [[UIManager]]
+**Conexiones:** [[DetailInfoTabPresenter]], [[DetailRelationsPresenter]], [[DetailTreesPresenter]], [[DetailInheritancePresenter]] (S151), [[BrawlKitDatabaseSO]], [[EvolutionEffectSO]], [[NeedsDisplay]], [[CreatureAvailability]], [[CareGateSO]], [[MonchiPortraitUI]], [[UiPanels]], [[GameEvents]], [[UIManager]]

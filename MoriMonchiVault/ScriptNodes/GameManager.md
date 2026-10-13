@@ -6,7 +6,7 @@ tags: [script, core, singleton]
 
 **Ruta:** `Core/GameManager.cs`
 
-**Responsabilidad:** Ciclo de vida del juego. Singleton que centraliza acceso a databases y registries. **Único orquestador de persistencia local:** escucha `GameEvents.OnRegistryChanged`, `OnInventoryChanged`, `OnWorldStateChanged` e invoca `SaveSystem` a disco. S128: Push agrupado a nube con `pushDelaySeconds` (default 5); se cancela y sube ya en quit/pause; `Time.unscaledTime` para que pausa no congele timer. S131: Agregado `WorldStateSO` y `PersistWorldState()` para sincronización de estado de mundo. **S149:** se retiran los muebles del gestor (`FurnitureRegistry`, `PersistFurniture`, `GrantPlacedFurniture`, suscripción a `OnFurnitureChanged`). `FlushToCloudAsync` además guarda el grafo social.
+**Responsabilidad:** Ciclo de vida del juego. Singleton que centraliza acceso a databases y registries. **Único orquestador de persistencia local:** escucha `GameEvents.OnRegistryChanged`, `OnInventoryChanged`, `OnWorldStateChanged` e invoca `SaveSystem` a disco. S128: Push agrupado a nube con `pushDelaySeconds` (default 5); se cancela y sube ya en quit/pause; `Time.unscaledTime` para que pausa no congele timer. S131: Agregado `WorldStateSO` y `PersistWorldState()` para sincronización de estado de mundo. S149: se retiran los muebles del gestor (`FurnitureRegistry`, `PersistFurniture`, `GrantPlacedFurniture`, suscripción a `OnFurnitureChanged`). `FlushToCloudAsync` además guarda el grafo social. **S151:** el push tiene piso de frecuencia (`minPushIntervalSeconds` = 30) y se agrega el campo `socialTuning`.
 
 ## Métodos Públicos
 
@@ -37,15 +37,17 @@ tags: [script, core, singleton]
 | `RarityOddsTable` | `RarityOddsTableSO` | Odds de rareza |
 | `MonchiVisualBank` | `MonchiVisualBankSO` | Banco de visuals (también lo consulta `PartPool`) |
 | `RoleWorldProfiles` | `RoleWorldProfileSO` | Perfiles de rol para arena |
-| `WorldState` | `WorldStateSO` | **(S131)** Estado del mundo (día, minuto, tutorial) |
+| `WorldState` | `WorldStateSO` | **(S131)** Estado del mundo (día, minuto, tutorial, encargos) |
 
-## Persistencia S128+ + S131 + S149
+**Campo sin getter (S151):** `socialTuning` (`SocialTuningSO`, Required, AssetsOnly). Se serializa en el inspector; GameManager no lo expone por propiedad.
+
+## Persistencia S128+ + S131 + S149 + S151
 
 **Push agrupado:**
 1. Evento gameplay → `Persist()` / `PersistInventory()` / `PersistWorldState()` (S131)
 2. Guarda a disco vía [[SaveSystem]]
-3. `RequestPush()` → `pushPending = true`, `pushDeadline = Time.unscaledTime + pushDelaySeconds`
-4. `Update()` → si `Time.unscaledTime >= pushDeadline` → `PushToCloud()`
+3. `RequestPush()` → `pushPending = true`, `pushDeadline = max(Time.unscaledTime + pushDelaySeconds, lastPushTime + minPushIntervalSeconds)` (S151)
+4. `Update()` → si `Time.unscaledTime >= pushDeadline` → `PushToCloud()` y guarda `lastPushTime`
 
 **Suscriptores de eventos (OnEnable):**
 ```csharp
@@ -79,6 +81,10 @@ private void PersistWorldState(WorldStateSO state)
 5. Quit/Pause → `FlushToCloudAsync()`
 6. `OnDestroy()` → Limpia `Instance` si es el mismo
 
+## Cambios S151
+
+**Agregado:** `socialTuning` (campo serializado, Required). `minPushIntervalSeconds` (default 30): entre dos pushes pasa como mínimo ese intervalo aunque haya mutaciones seguidas.
+
 ## Cambios S149
 
 **Retirado:** `furnitureRegistry` (campo y getter), `PersistFurniture`, `GrantPlacedFurniture` (escuchaba `OnInventoryReloaded`), suscripción a `OnFurnitureChanged`.
@@ -96,13 +102,13 @@ private void PersistWorldState(WorldStateSO state)
 
 **Propósito:** Sincronizar estado de mundo (día/minuto) con persistencia y cloud. Ahora Day/MinuteOfDay mutados por GameClock disparan `WorldStateChanged` → autoguardado sin gameplay code adicional.
 
-## Invariantes S128+ / S131 / S149
+## Invariantes S128+ / S131 / S149 / S151
 
 - Singleton: Awake crea, OnDestroy limpia si es el mismo
 - No disparador de eventos: solo consumidor de persistencia
 - Acceso centralizado: todas las referencias por getter, no SerializeField directo
 - Persistencia order: Disco (SaveSystem) → Nube (PushAsync) — nunca inversión
-- Push agrupado: múltiples mutaciones → un solo push en 5 s
+- Push agrupado: múltiples mutaciones → un solo push en 5 s, y nunca más de un push cada 30 s
 - Sin escala de tiempo: push no se congela con pausa
 - WorldState integrado: estado de mundo unificado y persistido automáticamente
 
@@ -115,7 +121,7 @@ private void PersistWorldState(WorldStateSO state)
 ## Conexiones
 
 **Data:**
-- [[CreatureRegistrySO]], [[CreatureDatabaseSO]], [[PlayerInventorySO]], [[WorldStateSO]]
+- [[CreatureRegistrySO]], [[CreatureDatabaseSO]], [[PlayerInventorySO]], [[WorldStateSO]], [[SocialTuningSO]]
 
 **Sistemas:**
 - [[CloudSyncService]] — push async
@@ -125,6 +131,7 @@ private void PersistWorldState(WorldStateSO state)
 - [[SaveSystem]] — persistencia a disco
 - [[CreatureLifecycle]] — vía RegistryChanged
 - [[DeliveryBox]] — vía RegistryChanged
+- [[OrderBoardService]] — lee `WorldState` y `Database` (S151)
 
 ## Notas (S131 HC-4)
 

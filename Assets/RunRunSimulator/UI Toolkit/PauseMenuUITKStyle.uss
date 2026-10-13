@@ -1,0 +1,55 @@
+.pause-root {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--mm-scrim);
+}
+
+.pause-panel {
+    width: 460px;
+    padding: 28px;
+    align-items: stretch;
+    background-color: var(--mm-surface);
+    border-width: 3px;
+    border-color: var(--mm-frame);
+    border-radius: 18px;
+}
+
+.pause-title {
+    font-size: 40px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--mm-gold);
+    margin-bottom: 22px;
+}
+
+.pause-button {
+    height: 64px;
+    margin: 6px 0;
+    font-size: 26px;
+    -unity-font-style: bold;
+    color: var(--mm-ink);
+    background-color: var(--mm-surface-2);
+    border-width: 3px;
+    border-color: var(--mm-frame);
+    border-radius: 14px;
+}
+
+.pause-button:hover {
+    background-color: var(--mm-gold);
+}
+
+.pause-button--primary {
+    background-color: var(--mm-teal);
+    color: rgb(255, 255, 255);
+}
+
+.pause-button--primary:hover {
+    background-color: var(--mm-good);
+}
+
+.pause-button--danger:hover {
+    background-color: var(--mm-coral);
+    color: rgb(255, 255, 255);
+}

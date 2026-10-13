@@ -6,7 +6,7 @@ tags: [script, world, ai, context, internal]
 
 **Ruta:** `World/AI/AgentContext.cs`
 
-**Responsabilidad:** Contenedor de estado puro compartido entre colaboradores (AgentBrain, AgentPhysics, AgentExpedition, AgentClash, AgentSenses, AgentSocial, AgentConfinement, AgentAbilities, AgentToys). Almacena refs de componentes, DNA/perfil, estado de juego, máscaras NavMesh, percepciones, pizarrón de equipo (S103), órdenes de arena (S104), buffs de velocidad por habilidades (S107), estadísticas operacionales (S109). **S149:** se agrega el estado `Playing` para juguetes. Sin lógica de estado; solo datos y helpers (SetDestinationSafe, IsMoving, PlanarDistance, etc.).
+**Responsabilidad:** Contenedor de estado puro compartido entre colaboradores (AgentBrain, AgentPhysics, AgentExpedition, AgentClash, AgentSenses, AgentSocial, AgentConfinement, AgentAbilities, AgentToys). Almacena refs de componentes, DNA/perfil, estado de juego, máscaras NavMesh, percepciones, pizarrón de equipo (S103), órdenes de arena (S104), buffs de velocidad por habilidades (S107), estadísticas operacionales (S109). **S149:** se agrega el estado `Playing` para juguetes. **S151:** la velocidad se reduce si la criatura es frágil. Sin lógica de estado; solo datos y helpers (SetDestinationSafe, IsMoving, PlanarDistance, etc.).
 
 **Enum AgentState (S149):**
 Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation, Courting, Socializing, HandFeed, Expedition, Clashing, Playing
@@ -36,11 +36,12 @@ Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation,
 - `bool IsMoving { get; }` — si Agent activo y en movimiento
 - `void SetStopped(bool stopped)` — Agent.isStopped
 - `void SetDestinationSafe(Vector3 desired)` — SetDestination con sample check
-- `void ApplyGaitSpeed(bool loaded)` — aplica factor velocidad según State/Profile + SpeedMultiplier si boost activo + LoadedSpeedFactor si cargado. **S149:** no se aplica en Courting ni Clashing:
+- `void ApplyGaitSpeed(bool loaded)` — aplica factor velocidad según State/Profile + SpeedMultiplier si boost activo + LoadedSpeedFactor si cargado + penalización de fragilidad (S151). **S149:** no se aplica en Courting ni Clashing:
   - factor = Profile.RoamSpeedFactor si Roaming, sino 1f
   - target = BaseSpeed * factor
   - Si loaded: target *= Stats.LoadedSpeedFactor
   - Si Time.time < SpeedBoostUntil: target *= SpeedMultiplier
+  - Si `CreatureFrailty.IsFrail(Dna)`: target *= `CreatureFrailty.Penalty` (0.5) (S151)
   - Sets Agent.speed = target
 - `void SetColliderTrigger(bool isTrigger)`
 - `float PlanarDistanceToPlayer()` — XZ distance al player (`float.MaxValue` si no hay player)
@@ -69,6 +70,9 @@ Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation,
 - `AgentState.Playing` agregado. Lo usa `AgentToys` mientras el monchi juega con un juguete. Cuenta como estado controlado por NavMesh.
 - `ApplyGaitSpeed` no cambia la velocidad en Courting ni Clashing.
 
+**S151 Cambios:**
+- `ApplyGaitSpeed` aplica `CreatureFrailty.Penalty` (0.5) cuando `CreatureFrailty.IsFrail(Dna)` es true: criaturas con salud en 0 o en etapa Elder van a mitad de velocidad.
+
 **Invariantes:**
 - Contenedor puro: sin lógica de transición de estado
 - Ref compartida: todos los colaboradores leen/escriben ctx, no hay duplicación
@@ -80,4 +84,4 @@ Idle, Roaming, Reacting, Carried, Thrown, Recovering, SeekingNeed, UsingStation,
 
 **Vinculado a:** [[Index/22 - Arena (S103-S104)]], [[Index/23 - Arena Sandbox & Expedicion (S102-S103)]]
 
-**Conexiones:** [[MoriMochiAgent]], [[AgentBrain]], [[AgentPhysics]], [[AgentExpedition]], [[AgentClash]], [[AgentAbilities]], [[AgentSenses]], [[AgentSocial]], [[AgentConfinement]], [[AgentToys]], [[TeamBlackboard]], [[CreatureDNA]], [[ArenaOrders]], [[ArenaOrderRules]], [[ExpeditionStats]]
+**Conexiones:** [[MoriMochiAgent]], [[AgentBrain]], [[AgentPhysics]], [[AgentExpedition]], [[AgentClash]], [[AgentAbilities]], [[AgentSenses]], [[AgentSocial]], [[AgentConfinement]], [[AgentToys]], [[TeamBlackboard]], [[CreatureDNA]], [[CreatureFrailty]] (S151), [[ArenaOrders]], [[ArenaOrderRules]], [[ExpeditionStats]]

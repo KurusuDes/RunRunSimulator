@@ -53,6 +53,9 @@ public static class GameEvents
     public static event Action<DayBlockDef> OnDayBlockChanged;
     public static void DayBlockChanged(DayBlockDef block) => OnDayBlockChanged?.Invoke(block);
 
+    public static event Action<ShopOrder> OnOrderCompleted;
+    public static void OrderCompleted(ShopOrder order) => OnOrderCompleted?.Invoke(order);
+
     public static event Action<ShopUpgradeSO, int> OnShopZoneOpened;
     public static void ShopZoneOpened(ShopUpgradeSO expansion, int level) => OnShopZoneOpened?.Invoke(expansion, level);
 }

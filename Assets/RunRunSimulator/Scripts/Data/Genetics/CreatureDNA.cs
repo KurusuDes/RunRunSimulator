@@ -31,6 +31,8 @@ public class CreatureDNA
     public string       FatherID    = "";
     public List<string> ChildrenIDs = new List<string>();
 
+    public List<PartOrigin> Origins = new List<PartOrigin>();
+
     public CreatureGender Gender = CreatureGender.Unknown;
 
     public Role Role = Role.Protector;

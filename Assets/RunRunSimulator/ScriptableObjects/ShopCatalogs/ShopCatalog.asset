@@ -74,6 +74,36 @@ MonoBehaviour:
       TypeFilter: 0
       Tags: []
     RequiresExpansion: {fileID: 11400000, guid: 00e40dc1ea0169048bebec9d33439fe1, type: 2}
+  - Item: {fileID: 11400000, guid: 8ae80d5fd259546449733f496b4c2819, type: 2}
+    Shop:
+      BasePrice: 18
+      Currency: 0
+      DiscountBase: 0
+      CurrentStock: -1
+      MaxStock: -1
+      TypeFilter: 0
+      Tags: []
+    RequiresExpansion: {fileID: 11400000, guid: 00e40dc1ea0169048bebec9d33439fe1, type: 2}
+  - Item: {fileID: 11400000, guid: 1b2a412a0ca6bb64da0987808e87291c, type: 2}
+    Shop:
+      BasePrice: 20
+      Currency: 0
+      DiscountBase: 0
+      CurrentStock: -1
+      MaxStock: -1
+      TypeFilter: 0
+      Tags: []
+    RequiresExpansion: {fileID: 11400000, guid: 00e40dc1ea0169048bebec9d33439fe1, type: 2}
+  - Item: {fileID: 11400000, guid: 846e5306cfb572046b32fae08a50fa09, type: 2}
+    Shop:
+      BasePrice: 35
+      Currency: 0
+      DiscountBase: 0
+      CurrentStock: -1
+      MaxStock: -1
+      TypeFilter: 0
+      Tags: []
+    RequiresExpansion: {fileID: 11400000, guid: 00e40dc1ea0169048bebec9d33439fe1, type: 2}
   creatureBoxListings:
   - Box: {fileID: 11400000, guid: a45874471a59ebf48b50fdc68582b6c2, type: 2}
     Shop:

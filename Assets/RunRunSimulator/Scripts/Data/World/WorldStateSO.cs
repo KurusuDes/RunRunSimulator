@@ -17,6 +17,8 @@ public class WorldStateData
     public int BredTotal = 0;
     public Dictionary<string, string> DecorSlots = new Dictionary<string, string>();
     public Dictionary<string, float> StationLevels = new Dictionary<string, float>();
+    public List<ShopOrder> Orders = new List<ShopOrder>();
+    public int OrdersDay = 0;
 }
 
 [CreateAssetMenu(fileName = "WorldState", menuName = "RunRunSimulator/World/World State")]
@@ -85,6 +87,12 @@ public class WorldStateSO : ScriptableObject
         stationLevels[id] = level;
     }
 
+    [ShowInInspector, ReadOnly] private List<ShopOrder> orders = new List<ShopOrder>();
+    [SerializeField, ReadOnly] private int ordersDay = 0;
+
+    public List<ShopOrder> Orders { get => orders; set => orders = value ?? new List<ShopOrder>(); }
+    public int OrdersDay { get => ordersDay; set => ordersDay = value; }
+
     public WorldStateData GetData() => new WorldStateData
     {
         Day            = day,
@@ -96,6 +104,8 @@ public class WorldStateSO : ScriptableObject
         BredTotal      = bredTotal,
         DecorSlots     = new Dictionary<string, string>(decorSlots),
         StationLevels  = new Dictionary<string, float>(stationLevels),
+        Orders         = new List<ShopOrder>(orders),
+        OrdersDay      = ordersDay,
     };
 
     public void LoadFrom(WorldStateData data)
@@ -117,6 +127,10 @@ public class WorldStateSO : ScriptableObject
         stationLevels = data?.StationLevels != null
             ? new Dictionary<string, float>(data.StationLevels)
             : new Dictionary<string, float>();
+        orders = data?.Orders != null
+            ? new List<ShopOrder>(data.Orders)
+            : new List<ShopOrder>();
+        ordersDay = data?.OrdersDay ?? 0;
     }
 }
 }

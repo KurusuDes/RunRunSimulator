@@ -6,7 +6,7 @@ tags: [script, world, brawl, core, fighter, state]
 
 **Ruta:** `World/Brawl/BrawlFighter.cs`
 
-**Responsabilidad:** Núcleo de estado de combatiente: vida, escudo, velocidad, daño. Mantiene referencias a componentes (Motor, Wing, SkillCaster, Brain). Punto de unión de entrada de daño y curación. Emite eventos estáticos para inscripción de presentación. Aplica modificadores de estado (slow, stun, haste, boost, espinas, provocación). Registra combatientes en lista estática `BrawlFighter.All`. Recibe el poder y la vida de la bajada vía `Prime` y puede marcarse como muñeco (`Dummy`). `Bind` resuelve el kit, los temas y el bloqueo de espalda con `BrawlKitProfile.Of`. **S148:** `Bind` aplica las mejoras por tier: alas, cuerno y espalda se reemplazan por copias mejoradas (`BrawlUpgrades.Upgraded`) y el cuerpo ajusta HP y velocidad (`BrawlUpgrades.Body`).
+**Responsabilidad:** Núcleo de estado de combatiente: vida, escudo, velocidad, daño. Mantiene referencias a componentes (Motor, Wing, SkillCaster, Brain). Punto de unión de entrada de daño y curación. Emite eventos estáticos para inscripción de presentación. Aplica modificadores de estado (slow, stun, haste, boost, espinas, provocación). Registra combatientes en lista estática `BrawlFighter.All`. Recibe el poder y la vida de la bajada vía `Prime` y puede marcarse como muñeco (`Dummy`). `Bind` resuelve el kit, los temas y el bloqueo de espalda con `BrawlKitProfile.Of`. **S148:** `Bind` aplica las mejoras por tier: alas, cuerno y espalda se reemplazan por copias mejoradas (`BrawlUpgrades.Upgraded`) y el cuerpo ajusta HP y velocidad (`BrawlUpgrades.Body`). **S151:** un monchi frágil del equipo del jugador (`CreatureFrailty.IsFrail`) entra al combate con poder y velocidad reducidos por `CreatureFrailty.Penalty` (0.5).
 
 **Vinculado a:** [[Index/32 - Demo Brawl 3v3 arcade]]
 
@@ -21,6 +21,7 @@ tags: [script, world, brawl, core, fighter, state]
 | `brain` | `BrawlBrain` | IA autónoma |
 | `bodyRadius`, `centerHeight` | float | Geometría de colisión (defaults 0.65 y 0.8) |
 | `upgraded` (privado) | `List<UnityEngine.Object>` | Copias mejoradas de alas, cuerno y espalda creadas en `Bind` (S148). Se destruyen en `ReleaseUpgrades` |
+| `frailFactor` (privado) | float | 0.5 si es frágil y del equipo del jugador; 1 en otro caso (S151) |
 
 ## Propiedades Públicas
 
@@ -36,13 +37,13 @@ tags: [script, world, brawl, core, fighter, state]
 | `IsStunned` | bool | Aturdido; `SpeedMultiplier = 0` |
 | `SpeedMultiplier` | float | `(1 - slow) × (1 + haste)`; 0 si aturdido |
 | `DamageMultiplier` | float | `(1 + boost) × RoundDamageFactor × Power` |
-| `Power` | float | Multiplicador de vida y daño puesto por `Prime` (1 por defecto) |
+| `Power` | float | Multiplicador de daño. Lo fija `Bind` (frailFactor) y luego `Prime` (power × frailFactor) (S151 para frailFactor) |
 | `Dummy` | bool | Muñeco de sala de prueba; hace `Frozen` al combatiente |
 | `Frozen` | bool | Get: `frozen \|\| Dummy`. Set: pausa de gameplay (distinto de Stun) |
 | `Position`, `Center` | Vector3 | Posición y centro de impacto |
 | `Radius` | float | Radio de cuerpo |
 | `Lift` | float | Altura de salto (set por Motor) |
-| `BaseSpeed` | float | `WingKit.MoveSpeed × body.SpeedMul × speedUp`; `speedUp` es la mejora de velocidad del cuerpo (S148) |
+| `BaseSpeed` | float | `WingKit.MoveSpeed × body.SpeedMul × speedUp × frailFactor`; `speedUp` es la mejora de velocidad del cuerpo (S148); el factor de fragilidad es S151 |
 | `HealFactor`, `RoundDamageFactor` | float | Multiplicadores de curación y daño (muerte súbita, ramp de KO) |
 | `Taunter` | BrawlFighter | Quien provoca, si el taunt está vigente |
 | `WingKit`, `HornSkill`, `BackSkill` | SO | Kits y habilidades ya mejoradas por tier (copias). `BackSkill` es null si la espalda está bloqueada |
@@ -68,8 +69,8 @@ tags: [script, world, brawl, core, fighter, state]
 
 | Método | Descripción |
 |--------|-------------|
-| `Bind(dna, team, kits, tuning, parts, bank, fur)` | Inicialización completa: libera las copias de la vez anterior, visualiza el DNA, resuelve kit, temas y `BackLocked` con `BrawlKitProfile.Of`. Crea copias mejoradas de ala, cuerno y espalda según `WingTier`, `HornTier` y `BackTier` (S148). Calcula `MaxHp` con `tuning.BaseHp × body.HpMul × hpUp` y `BaseSpeed` con `WingKit.MoveSpeed × body.SpeedMul × speedUp`, donde `hpUp` y `speedUp` salen de `BrawlUpgrades.Body(kits.BodyUpgrades, BodyTier)`. Toma `BodyLabel` de `tuning.BodyFor(BodyShapeID)`, resetea estado, registra en `All` e inicia motor, ala, caster y brain. Resetea `Power = 1` y `Dummy = false` |
-| `Prime(power, health01)` | Escala la vida máxima por `power` (mín 0,05) y fija la vida actual a `MaxHp × health01` (mín 1). Usado por la bajada |
+| `Bind(dna, team, kits, tuning, parts, bank, fur)` | Inicialización completa: calcula `frailFactor` (S151), libera las copias de la vez anterior, visualiza el DNA, resuelve kit, temas y `BackLocked` con `BrawlKitProfile.Of`. Crea copias mejoradas de ala, cuerno y espalda según `WingTier`, `HornTier` y `BackTier` (S148). Calcula `MaxHp` con `tuning.BaseHp × body.HpMul × hpUp` y `BaseSpeed` con `WingKit.MoveSpeed × body.SpeedMul × speedUp × frailFactor`, donde `hpUp` y `speedUp` salen de `BrawlUpgrades.Body(kits.BodyUpgrades, BodyTier)`. Toma `BodyLabel` de `tuning.BodyFor(BodyShapeID)`, resetea estado, registra en `All` e inicia motor, ala, caster y brain. Resetea `Dummy = false` |
+| `Prime(power, health01)` | Escala la vida máxima por `power` (mín 0,05) y fija `Power = power × frailFactor` (S151). Fija la vida actual a `MaxHp × health01` (mín 1). Usado por la bajada |
 | `Despawn()` | Retira de `All` |
 | `TakeDamage(hit)` | Aplica daño (absorbe escudo primero), knockback, espinas, event |
 | `Heal(amount, source)` | Restaura vida (limitado a máx) |
@@ -110,6 +111,7 @@ tags: [script, world, brawl, core, fighter, state]
 
 **Datos:**
 - [[CreatureDNA]] — estadísticas y tiers de mejora
+- [[CreatureFrailty]] — penalización de fragilidad en Bind y Prime (S151)
 - [[BrawlWingKitSO]], [[BrawlSkillSO]] — kit de combate (copias mejoradas en runtime)
 - [[BrawlKitProfile]] — resuelve kit, temas, `BackLocked` y rol desde el DNA
 - [[BrawlUpgrades]] — `Upgraded` (ala, cuerno, espalda) y `Body` (HP y velocidad)
@@ -138,3 +140,4 @@ tags: [script, world, brawl, core, fighter, state]
 - `TakeDamage` reescribe `hit.Amount` a daño aplicado + absorbido (con tope de vida restante) antes de `OnDamaged`.
 - S146: `BackLocked` nuevo. Con espalda bloqueada no hay `BackSkill` ni tema de espalda, y el HUD muestra el slot con "?".
 - S148: las copias mejoradas (`upgraded`) se destruyen en cada `ReleaseUpgrades`: al re-`Bind` y en `OnDestroy`. Los SO del kit nunca se modifican. Una parte sin escalones sigue usando el mismo asset.
+- S151: la fragilidad solo afecta al equipo del jugador (`Team == Player`). Los rivales no pierden poder aunque sean frágiles.

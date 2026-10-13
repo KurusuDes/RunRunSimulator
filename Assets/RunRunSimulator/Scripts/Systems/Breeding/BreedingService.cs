@@ -14,9 +14,14 @@ public static class BreedingService
         CreatureRegistrySO     registry,
         CreatureDatabaseSO     partDb,
         InheritanceOddsTableSO odds,
-        IEnumerable<BreedingModifier> modifiers = null)
+        IReadOnlyList<BreedingDecorSO> decors = null)
     {
-        var effective = BreedingOdds.From(odds, modifiers ?? System.Array.Empty<BreedingModifier>());
+        var modifiers = new List<BreedingModifier>();
+        if (decors != null)
+            foreach (var decor in decors)
+                if (decor != null && decor.Modifiers != null) modifiers.AddRange(decor.Modifiers);
+
+        var effective = BreedingOdds.From(odds, modifiers);
 
         if (!registry.TryGet(motherID, out var mother))
         {
@@ -56,13 +61,21 @@ public static class BreedingService
 
         var childBase = ColorGenetics.Inherit(mother.BaseColor, father.BaseColor);
 
+        var origins = new List<PartOrigin>();
+        string bodyID = ResolveSlot(PartRole.Body, motherID, fatherID, registry, partDb, effective, decors, origins);
+        string hornID = ResolveSlot(PartRole.Horn, motherID, fatherID, registry, partDb, effective, decors, origins);
+        string backID = ResolveSlot(PartRole.Back, motherID, fatherID, registry, partDb, effective, decors, origins);
+        string wingID = ResolveSlot(PartRole.Wing, motherID, fatherID, registry, partDb, effective, decors, origins);
+        string faceID = ResolveSlot(PartRole.Face, motherID, fatherID, registry, partDb, effective, decors, origins);
+
         var child = new CreatureDNA
         {
-            BodyShapeID    = ResolveSlot(PartRole.Body, motherID, fatherID, registry, partDb, effective),
-            HornID         = ResolveSlot(PartRole.Horn, motherID, fatherID, registry, partDb, effective),
-            BackID         = ResolveSlot(PartRole.Back, motherID, fatherID, registry, partDb, effective),
-            WingID         = ResolveSlot(PartRole.Wing, motherID, fatherID, registry, partDb, effective),
-            FaceID         = ResolveSlot(PartRole.Face, motherID, fatherID, registry, partDb, effective),
+            BodyShapeID    = bodyID,
+            HornID         = hornID,
+            BackID         = backID,
+            WingID         = wingID,
+            FaceID         = faceID,
+            Origins        = origins,
             BaseColor      = childBase,
             SecondaryColor = ColorGenetics.DeriveSecondary(childBase),
             FurType        = ColorGenetics.Inherit(mother.FurType, father.FurType),
@@ -94,11 +107,13 @@ public static class BreedingService
         string                 fatherID,
         CreatureRegistrySO     registry,
         CreatureDatabaseSO     partDb,
-        BreedingOdds           effective)
+        BreedingOdds           effective,
+        IReadOnlyList<BreedingDecorSO> decors,
+        List<PartOrigin>       origins)
     {
         var slot = effective.Roll();
 
-        string partID = slot switch
+        (string PartID, string AncestorID, bool MotherSide)? picked = slot switch
         {
             InheritanceOddsTableSO.Slot.Parent           => PickFromLevel(role, 0, motherID, fatherID, registry, effective),
             InheritanceOddsTableSO.Slot.Grandparent      => PickFromLevel(role, 1, motherID, fatherID, registry, effective),
@@ -106,10 +121,30 @@ public static class BreedingService
             _                                            => null
         };
 
-        return partID ?? RandomPartID(role, partDb);
+        var origin = new PartOrigin { Role = role };
+        string partID;
+
+        if (picked.HasValue)
+        {
+            partID            = picked.Value.PartID;
+            origin.Slot       = slot;
+            origin.MotherSide = picked.Value.MotherSide;
+            origin.AncestorID = picked.Value.AncestorID;
+        }
+        else
+        {
+            partID      = RandomPartID(role, partDb);
+            origin.Slot = slot == InheritanceOddsTableSO.Slot.Mutation
+                ? InheritanceOddsTableSO.Slot.Mutation
+                : InheritanceOddsTableSO.Slot.Base;
+        }
+
+        origin.DecorID = BreedingAttribution.CreditFor(origin.Slot, origin.MotherSide, decors);
+        origins.Add(origin);
+        return partID;
     }
 
-    private static string PickFromLevel(
+    private static (string PartID, string AncestorID, bool MotherSide)? PickFromLevel(
         PartRole           role,
         int                levels,
         string             motherID,
@@ -117,20 +152,33 @@ public static class BreedingService
         CreatureRegistrySO registry,
         BreedingOdds       effective)
     {
-        var motherSide = SideCandidates(role, motherID, levels, registry);
-        var fatherSide = SideCandidates(role, fatherID, levels, registry);
+        var motherCandidates = SideCandidates(role, motherID, levels, registry);
+        var fatherCandidates = SideCandidates(role, fatherID, levels, registry);
 
-        var chosen = effective.PickMotherSide() ? motherSide : fatherSide;
-        if (chosen.Count == 0) chosen = chosen == motherSide ? fatherSide : motherSide;
+        bool useMother = effective.PickMotherSide();
+        var chosen = useMother ? motherCandidates : fatherCandidates;
+        if (chosen.Count == 0)
+        {
+            useMother = !useMother;
+            chosen    = useMother ? motherCandidates : fatherCandidates;
+        }
+        if (chosen.Count == 0) return null;
 
-        return chosen.Count > 0 ? chosen[Random.Range(0, chosen.Count)] : null;
+        var pick = chosen[Random.Range(0, chosen.Count)];
+        return (pick.PartID, pick.AncestorID, useMother);
     }
 
-    private static List<string> SideCandidates(PartRole role, string originID, int levels, CreatureRegistrySO registry) =>
-        ExpandGenerations(new[] { originID }, levels, registry)
-            .Select(id => registry.TryGet(id, out var c) ? SlotPartID(c, role) : null)
-            .Where(p => !string.IsNullOrEmpty(p))
-            .ToList();
+    private static List<(string PartID, string AncestorID)> SideCandidates(PartRole role, string originID, int levels, CreatureRegistrySO registry)
+    {
+        var result = new List<(string PartID, string AncestorID)>();
+        foreach (var id in ExpandGenerations(new[] { originID }, levels, registry))
+        {
+            if (!registry.TryGet(id, out var c)) continue;
+            string part = SlotPartID(c, role);
+            if (!string.IsNullOrEmpty(part)) result.Add((part, id));
+        }
+        return result;
+    }
 
     private static List<string> ExpandGenerations(
         IEnumerable<string> origins,

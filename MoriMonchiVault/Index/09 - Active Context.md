@@ -4,6 +4,35 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-13 (Session 151 — **cierre del mundo exterior (lotes 1-5 de `Index/34`) + pausa y ajustes v1** — 30 `.cs` creados, 30 modificados; compila 0 errores; todo probado en Play por sondas; video `Recordings/S151/toys.mp4` enviado)
+
+**Focus:** Juan: "sigamos el roadmap para completar todo el outer world" y después "un menú de settings muy rico en opciones… podemos ir separando las secciones". Checklist viva actualizada en [[Index/34 - Roadmap de cierre del gameplay]] (E6, F5, F6, G4-G6, H2, H5, H7, C2 marcados; H4 tachado).
+
+**Hecho:**
+1. **QA S150:** afecto vuelve a un reposo (0) en vez de caer a −100; energía se recupera descansando quieto hasta 60 (la cama llena el resto); juguetes viven en un `ToyPlayArea` (en `ZONE_SalaJuegos/Open`) y vuelven solos tras 25 s abandonados afuera; push a la nube con intervalo mínimo de 30 s (los comederos lo disparaban cada 10 %). Las criaturas "quietas en Approaching" eran diseño (se acercan al jugador ≤10 s).
+2. **Juguetes (F5/F6):** `AgentToys` partido por composición (núcleo + `AgentToyMotor` + `IToyBehavior`: `ToyPlayerPlay` traer/tironeo/pilla-pilla, `ToyBuddyPlay` cuerda/peluche/burbujas, `ToyFreePlay`). Tironeo con E rápido (`PlayerToyTug` + barra `TugMeterHUD`). 3 juguetes nuevos (cuerda 18, peluche 20, máquina de burbujas 35) y los viejos más grandes (pelota 1 m). Una cuerda en la boca invita a tironear; lo tirado por el jugador ignora el cooldown y se juega aunque estén reaccionando a ti.
+3. **Bug viejo:** `SocialTuning.asset` no se cargaba en la tienda → la vida social y la afinidad estaban apagadas. Ahora lo referencia `GameManager`.
+4. **Herencia (E6):** `CreatureDNA.Origins` (por parte: origen, lado, ancestro, decoración con crédito); la ficha (Linaje) muestra "Cuerno · de mamá X — por Retrato familiar".
+5. **Mantenimiento/clientes:** manchas de barro de los juguetes (`MessEmitter`, reusan `Puddle` y el trapeador); tienda sucia o estaciones vacías bajan ofertas hasta ×0.75 y el cliente se queja; contraoferta por gusto y presupuesto; **Pedidos** (3 por día en la PC, rol o set, +15/+20); **Débil** (vida 0 o anciano: −50 % velocidad en tienda, −50 % daño y velocidad en la bajada).
+6. **Nombres flotantes:** cercanos medio transparentes, el que miras completo, se achican de muy cerca.
+7. **Pausa + Ajustes v1** (plantilla): Esc, 5 secciones guardadas por PC (`SettingsService`, PlayerPrefs `mm.settings`; el idioma sigue siendo de `Loc`). Prefab `Prefabs/UI/PauseSettingsUI` en GameScene y ArenaSandbox.
+8. Arreglado: los props de escena (snacks) se sumaban al inventario en cada salida de Play (`WorldPropInstance.SpawnedAtRuntime`).
+
+**Decisiones de Juan S151:** juego contigo / entre ellas / contra ellas · juguetes exagerados, arte provisional · tironeo con E rápido · decisiones chicas y precios las decide la IA hasta que corrija al testear · OK permanente para escena/assets del plan · **todas las partes comunes, sin rareza** (H4 se cae) · pedidos sí · débil = −50 % · ajustes por PC, UI plantilla hasta la oficial.
+
+**Quirks ⚠️:** (1) `unity command eval_file` cae en timeout de 5 s con el editor sin foco; `execute_code` del MCP sí responde (y a veces reejecuta: todo idempotente). (2) Salir de Play reescribe `PlayerInventory.asset` y `New Creature Registry SO.asset` con el save: revertirlos antes de commitear. (3) `StandartPanelSettings` usa ScaleWithScreenSize: la escala del HUD cambia `referenceResolution` (se restaura al deshabilitar). (4) Los desplegables de UITK se dibujan fuera de `.mm-theme`.
+
+**Siguiente paso (S152, propuesta):**
+1. Juan prueba a mano: Esc/pausa/ajustes, tironeo, traer, pedidos; ajustar números.
+2. **C** sigue: título (C1), dueño único del flujo de escenas (C3), tutorial (C4), metas (C5), primera build (C6).
+3. Ajustes: secciones nuevas (Accesibilidad, reasignar teclas, mando).
+4. Pendientes del mundo exterior: E2 en juego (2 machos + Criadero 2), D6/H6 con packs, la cama sucia no cuenta en el descuido, 36 Snack Monchi en el save (no se sabe cuántos son del bug).
+
+**Archivos `.cs` S151 — creados (30):** `Core/CreatureFrailty.cs` · `Data/Breeding/BreedingAttribution.cs` · `Data/Breeding/PartOrigin.cs` · `Data/Settings/GameSettings.cs` · `Data/Store/ShopOrder.cs` · `Systems/Customers/ShopCleanliness.cs` · `Systems/Player/PlayerToyTug.cs` · `Systems/Settings/SettingsService.cs` · `Systems/Store/OrderBoardService.cs` · `UI/DetailInheritancePresenter.cs` · `UI/HudScaleApplier.cs` · `UI/PauseMenuUITK.cs` · `UI/SettingsPanelUITK.cs` · `UI/TugMeterHUD.cs` · `UI/Settings/{ISettingsSection,SettingsRows,SettingsGeneralSection,SettingsVideoSection,SettingsInterfaceSection,SettingsControlsSection,SettingsAudioSection}.cs` · `World/AI/{AgentToyMotor,IToyBehavior,ToyBuddyPlay,ToyFreePlay,ToyPlayerPlay}.cs` · `World/Props/{Bubble,BubbleMachine,MessEmitter,ToyPlayArea}.cs`
+**Modificados (30):** `Core/Enums/StoreEnums.cs` · `Core/Enums/UIEnums.cs` · `Core/GameEvents.cs` · `Core/GameManager.cs` · `Data/Customers/CustomerPricingSO.cs` · `Data/Genetics/CreatureDNA.cs` · `Data/World/ToyTuningSO.cs` · `Data/World/WorldStateSO.cs` · `Player/PlayerController.cs` · `Systems/Breeding/BreedingService.cs` · `Systems/Breeding/IncubationService.cs` · `Systems/Customers/NegotiationFlow.cs` · `Systems/Customers/ValuationHandler.cs` · `UI/InfoOverlayUITK.cs` · `UI/MorimonchiDetailInfoUITK.cs` · `UI/StorePanelUITK.cs` · `UI/StoreRows.cs` · `UI/UIManager.cs` · `World/AI/AgentBrain.cs` · `World/AI/AgentContext.cs` · `World/AI/AgentToys.cs` · `World/AI/MoriMochiAgent.cs` · `World/Brawl/BrawlFighter.cs` · `World/Creatures/NameTag.cs` · `World/Expedition/ArenaSandbox.cs` · `World/Npc/NpcAgent.cs` · `World/Npc/NpcDialogueBank.cs` · `World/Npc/NpcThoughtTag.cs` · `World/Props/Toy.cs` · `World/Props/WorldPropInstance.cs`
+
+---
+
 **Session:** 2026-10-12 (Session 150 — **prueba de juguetes en video + primer QA con testers Haiku** — 0 `.cs` tocados; sin cambios de escena ni de assets a mano)
 
 **Focus:** Juan aprobó seguir con props e interacción (F5/F6 de `Index/34`), pero pidió antes probar los juguetes con un video corto y **soltar sub-agentes Haiku que prueben el mundo y den feedback**.

@@ -61,7 +61,7 @@ Leyenda: `[x]` hecho · `[ ]` falta · ~~tachado~~ = se cae por una decisión. O
 - [x] E3 · ✅ S149 Decoraciones compradas con dabloons (pestaña "Decoraciones" de la PC, se guardan por cantidad) y colocadas en **3 ranuras por corral** (Juan S149: las ranuras van en cada lugar de crianza); v1: E sobre la ranura rota entre las que tienes (el panel llega con la UI comprada)
 - [x] E4 · ✅ S149 (8 decoraciones v1: Retrato, Lámpara de lava, Álbum, Cojín de mamá, Cojín de papá, Manta, Árbol genealógico, Móvil de estrellas; los efectos se suman y se pueden repetir; medido en 20.000 tiradas: retrato padres 40→50 %, dos retratos 57 %, lava mutación 20→33 %, manta 6 %, cojín de mamá 67 % a la madre) Cada decoración mueve los diales de la cría (Juan S149): subir o bajar probabilidades, forzar o bajar la mutación al azar, favorecer al padre, a la madre o a los abuelos (los diales 50/30/20 que ya existen). Da control al jugador sobre lo que cría. Una regla en una frase por decoración; catálogo v1 de 8-12
 - [x] E5 · ✅ S149 (por cantidad de crías: la decoración se ve "???" hasta criar 1/2/3/4/6 MoriMonchis según cuál) **Descubrimiento:** al principio el jugador no sabe qué hace cada decoración; lo va desbloqueando con misiones o por cantidad de MoriMonchis criados
-- [ ] E6 · El efecto se lee en la cría (test del texto plano: "salió parecida a la abuela por el móvil de estrellas")
+- [x] E6 · ✅ S151 La ficha (pestaña Linaje) muestra la **Herencia**: una línea por parte con su origen y la decoración que lo empujó ("Cuerno · de mamá Wiggly Droob — por Retrato familiar", "Alas · una mutación — por Lámpara de lava"). La cría guarda `Origins` en el save (no en el genetic string). E2: el servicio no limita parejas simultáneas (estado por madre); falta probarlo en juego con 2 machos libres y el Criadero nivel 2
 
 ## F · Juguetes y vida social (lo más importante para Juan)
 
@@ -71,8 +71,8 @@ Leyenda: `[x]` hecho · `[ ]` falta · ~~tachado~~ = se cae por una decisión. O
 - [x] F2 · ✅ S149 **Pelota:** la golpean, rueda y le pega a los demás (reacción del golpeado) — video `Recordings/S149/ball.mp4`
 - [x] F3 · ✅ S149 **Juguete de morder:** uno lo tiene, otros intentan quitárselo, persecución (5 robos en 6 s en el video `chew.mp4`)
 - [x] F4 · ✅ S149 **Manguera:** la agarran y corren mojando todo; deja charcos (tope 25) que se secan con el trapeador — `hose.mp4`
-- [ ] F5 · El jugador juega con ellas: lanzar la pelota, tironear el mordedor, perseguirlas
-- [ ] F6 · Catálogo v1 de 6-8 juguetes, cada uno con una conducta social distinta; jugar sube afecto y afinidad
+- [x] F5 · ✅ S151 El jugador juega con ellas: **traer** (lo que tiras o sueltas lo traen a tus pies, aunque estén reaccionando a ti), **tironeo** con E rápido (barra en el HUD; si pierdes se lo llevan) y **pilla-pilla** (huyen con el juguete; quitárselo = E). Juan S151: "contigo, entre ellas o contra ellas"
+- [x] F6 · ✅ S151 Catálogo v1 de 7 juguetes, grandes y exagerados (arte provisional): pelota 1 m, mordedor, manguera, trapeador, **cuerda** (tironeo entre dos), **peluche** (lo abrazan y descansan) y **máquina de burbujas** (las persiguen y revientan). Jugar juntos suma afinidad. Precios provisionales: cuerda 18, peluche 20, burbujas 35. Los juguetes viven en un área de juego (`ToyPlayArea`) y vuelven solos si quedan abandonados afuera
 - [x] F7 · ✅ S149 Los juguetes se compran en la PC (pestaña Juguetes: pelota 15, mordedor 12, manguera 25) y solo aparecen con la Sala de juegos abierta
 
 ## G · Mantenimiento (el entretenimiento del día)
@@ -80,14 +80,14 @@ Leyenda: `[x]` hecho · `[ ]` falta · ~~tachado~~ = se cae por una decisión. O
 - [x] G1 · ✅ S149 Comederos que se vacían y hay que rellenar (E sobre el comedero; vacío = las criaturas no lo eligen)
 - [x] G2 · ✅ S149 Bebederos con agua que se recarga (E o la manguera cerca; nuevo `Base_Bebedero` en el patio)
 - [x] G3 · ✅ S149 Camas que se ensucian y hay que limpiar (sucia bajo 30 % = descansa a la mitad; E limpia)
-- [ ] G4 · 🟡 S149 Charcos ✅ (el trapeador los seca al usarlo: 17 de 20 en el video `mop.mp4`); falta la suciedad general
-- [ ] G5 · 🟡 S149 **Mundo vivo:** el trapeador es juguete (se lo llevan y se lo roban entre ellas) y pueden quitarte de la mano un juguete cercano; recuperarlo = E sobre el juguete. Sin filmar todavía
-- [ ] G6 · 🟡 S149 El descuido se siente: si todas las estaciones de una necesidad están vacías la criatura se enoja y pierde 5 de afecto (cada 20 s); falta que baje lo que ofrecen los clientes
+- [x] G4 · ✅ S151 Charcos (S149) + **manchas de barro**: pelota, mordedor, cuerda y peluche dejan manchas al rodar o ir en la boca (`MessEmitter`, 15 % cada 3 m, tope 5 por juguete); el trapeador las limpia como a los charcos. Decisión de la IA (Juan no eligió entre popó y manchas)
+- [x] G5 · ✅ S151 Quitarte el juguete de la mano pasó a ser el **tironeo** (F5); filmado en `Recordings/S151/toys.mp4`
+- [x] G6 · ✅ S151 Tienda sucia (charcos + manchas) o estaciones vacías bajan las ofertas hasta ×0.75 (`ShopCleanliness`, campos en `CustomerPricing`) y el cliente se queja en su globo ("¡Qué sucio está esto!"). La cama sucia todavía no cuenta (su umbral es privado)
 
 ## C · Cáscara y arranque (C7 de `Index/28`)
 
 - [ ] C1 · Pantalla de título: continuar / nueva partida
-- [ ] C2 · Pausa, ajustes (volumen, calidad, idioma, controles) y salir guardando
+- [x] C2 · ✅ S151 v1 (plantilla; Juan: "aún no tenemos la UI oficial") **Pausa** con Esc (reanudar / ajustes / salir guardando; congela el tiempo; también en la arena) + **Ajustes por secciones**, guardados en el equipo (no en la partida): General (idioma), Video (modo, resolución, VSync, tope de FPS, calidad), Interfaz (nombres flotantes siempre / al mirar / nunca, escala del HUD, ayudas de teclas), Controles (sensibilidad, invertir Y, campo de visión), Audio (5 volúmenes, se oirán con el pack). Prefab `Prefabs/UI/PauseSettingsUI` en GameScene y ArenaSandbox. Juan pidió que sea "muy rico en opciones" e ir sumando secciones: siguen Accesibilidad (daltonismo, reducir movimiento, tamaño de texto), reasignar teclas, mando y balanceo de cámara (no existe todavía)
 - [ ] C3 · Un solo dueño del flujo de escenas (título → tienda ↔ Brawl)
 - [ ] C4 · Tutorial con 6-8 pasos reales hasta la primera bajada (hoy es un número que solo usa el kit inicial)
 - [ ] C5 · Metas y desbloqueos (10-15): expansiones, juguetes y salas que se abren al llegar a un tramo o a una venta
@@ -107,12 +107,12 @@ Leyenda: `[x]` hecho · `[ ]` falta · ~~tachado~~ = se cae por una decisión. O
 ## H · Clientes y valor de la criatura
 
 - [x] H1 · ✅ S149 Cinco arquetipos: Fan de los roles, Artista (color), Coleccionista (set de partes, presupuesto alto), Ahorrador (barato) y Familia (paciente); presupuesto, gusto y paciencia propios
-- [x] H2 · 🟡 S149 Eligen por gusto dentro de su presupuesto (si nada les gusta, a veces compran lo más barato y a veces se van); el globo dice qué buscan. La contraoferta sigue siendo una sola al azar según tolerancia
+- [x] H2 · 🟡 S149 Eligen por gusto dentro de su presupuesto (si nada les gusta, a veces compran lo más barato y a veces se van); el globo dice qué buscan. ✅ S151 La contraoferta (una) se acepta según tolerancia + gusto (+40 % si le encanta) y el presupuesto que le queda; por encima del techo (presupuesto ×1.2) siempre la rechaza
 - [x] H3 · ✅ S149 Valuación: nivel de partes + crías + rareza + shiny × cuidado (0.8-1.2) × gusto (+30-60 %); falta generación
-- [ ] H4 · Rareza real en las partes (hoy todas en 0)
-- [ ] H5 · Encargos: piden un rol, una parte o un color y pagan extra (8-12 plantillas)
+- ~~H4 · Rareza real en las partes~~ — se cae (Juan S151): todas las partes son comunes; nada detrás de rarezas. La variedad viene del linaje y de buscar genes nuevos en el mercado
+- [x] H5 · ✅ S151 **Pedidos**: 3 por día en la pestaña "Pedidos" de la PC ("Busco un MoriMochi de rol Protector · +15", "…con partes del set Carnero · +20"); vender a cualquier cliente uno que cumpla paga el extra y avisa ("Pedido cumplido"). Solo rol y set (el color no pasa el test del texto plano). Se guardan en el estado de mundo y se renuevan cada día (`OrderBoardService`)
 - [ ] H6 · Modelo y animaciones de clientes: **pack comprado** (Juan S149)
-- [ ] H7 · El cuidado paga y la edad hace algo (hoy "anciano" solo se ve en la etiqueta; vida en 0 no tiene consecuencia)
+- [x] H7 · ✅ S151 El cuidado paga (S149) y **Débil** (Juan S151): vida en 0 o anciano → se mueve a la mitad en la tienda y en la bajada pelea con −50 % de daño y velocidad (la vida no baja); la etiqueta dice "Débil" (`CreatureFrailty`)
 
 ## I · Audio y feel
 

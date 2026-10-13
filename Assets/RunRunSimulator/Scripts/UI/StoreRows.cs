@@ -5,11 +5,12 @@ namespace MoriMonchiSimulator
 
 public static class StoreRows
 {
-    public enum Tab { Expansions, WorldProps, Consumables, Creatures, Decor, Toys }
+    public enum Tab { Expansions, WorldProps, Consumables, Creatures, Decor, Toys, Orders }
 
     public struct Row
     {
         public string          Name;
+        public string          Reward;
         public StoreShopData   Shop;
         public Func<BuyResult> Buy;
         public int?            PriceOverride;
@@ -24,11 +25,28 @@ public static class StoreRows
         Tab.Creatures   => Loc.Tr("ui.store.tab.creatures"),
         Tab.Decor       => Loc.Tr("ui.store.tab.decor"),
         Tab.Toys        => Loc.Tr("ui.store.tab.toys"),
-        _               => "",
+        Tab.Orders      => Loc.Tr("ui.store.tab.orders"),
+        _              => "",
     };
 
     public static void Collect(Tab tab, ShopCatalogSO catalog, StoreManager store, List<Row> rows)
     {
+        if (tab == Tab.Orders)
+        {
+            var board = OrderBoardService.Instance;
+            if (board == null) return;
+            foreach (var order in board.Active)
+            {
+                if (order == null) continue;
+                rows.Add(new Row
+                {
+                    Name   = order.Describe(),
+                    Reward = $"+{order.Reward}",
+                });
+            }
+            return;
+        }
+
         if (catalog == null) return;
 
         if (tab == Tab.Expansions)

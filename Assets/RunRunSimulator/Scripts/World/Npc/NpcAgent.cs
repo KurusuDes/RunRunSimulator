@@ -34,6 +34,7 @@ namespace MoriMonchiSimulator
         public int InitialOffer { get; private set; }
         public int CurrentOffer { get; private set; }
         public bool HasCounteredOnce { get; private set; }
+        public bool ComplainedDirty { get; private set; }
         public NpcState State { get; private set; } = NpcState.Spawned;
         public StoreContainer CurrentDisplay => currentDisplay;
         public int AreaMask => navAgent != null ? navAgent.areaMask : NavMesh.AllAreas;
@@ -207,6 +208,7 @@ namespace MoriMonchiSimulator
                 {
                     InitialOffer = svc.Valuation.Estimate(pick, Archetype, svc.Pricing, pickMatch);
                     CurrentOffer = InitialOffer;
+                    ComplainedDirty = ShopCleanliness.IsDirty(svc.Pricing);
                 }
                 HasCounteredOnce = false;
                 TransitionTo(NpcState.ApproachingRegister);
@@ -303,7 +305,7 @@ namespace MoriMonchiSimulator
             var svc = CustomerService.Instance;
             if (svc == null) return false;
             int candidate = svc.Negotiation.ComputeCounter(CurrentOffer, svc.Pricing);
-            var decision = svc.Negotiation.EvaluateCounter(Archetype);
+            var decision = svc.Negotiation.EvaluateCounter(Archetype, CurrentOffer, candidate, Mathf.FloorToInt(BudgetCeiling()), PickMatch);
             HasCounteredOnce = true;
             if (decision == NegotiationResult.Accept)
             {
@@ -359,6 +361,8 @@ namespace MoriMonchiSimulator
             }
         }
 
+        private float BudgetCeiling() => Budget * 1.2f;
+
         private CreatureDNA BestPickFromContainer(StoreContainer container, out float pickMatch)
         {
             pickMatch = 0f;
@@ -367,7 +371,7 @@ namespace MoriMonchiSimulator
             if (svc == null) return null;
 
             var db = GameManager.Instance != null ? GameManager.Instance.Database : null;
-            float ceiling = Budget * 1.2f;
+            float ceiling = BudgetCeiling();
             bool anyTaste = Taste.Kind == TasteKind.None;
 
             CreatureDNA bestMatch = null;

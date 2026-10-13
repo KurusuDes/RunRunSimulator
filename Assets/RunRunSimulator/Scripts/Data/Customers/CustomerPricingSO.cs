@@ -21,6 +21,12 @@ public class CustomerPricingSO : SerializedScriptableObject
     [Range(0f, 1f)] public float CareMinMultiplier = 0.8f;
     [MinValue(1)] public float CareMaxMultiplier = 1.2f;
 
+    [Title("Descuido de la tienda")]
+    [Range(0f, 1f)] public float DirtyMinMultiplier = 0.75f;
+    [MinValue(1)] public float MessForFullPenalty = 12f;
+    [Range(0f, 1f)] public float EmptyStationPenalty = 0.15f;
+    [Range(0f, 1f)] public float DirtyThoughtBelow = 0.92f;
+
     [Title("Renegotiation")]
     [Range(0f, 1f)] public float RenegotiationStep = 0.20f;
 

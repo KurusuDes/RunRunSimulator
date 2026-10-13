@@ -615,6 +615,23 @@
 .lineage-body { flex-grow: 1; }
 .lineage-tree { align-items: center; padding: 12px; }
 
+.inherit-list { padding-left: 12px; padding-right: 12px; margin-bottom: 12px; }
+.inherit-line { flex-direction: row; flex-wrap: wrap; align-items: flex-start; margin-bottom: 6px; }
+.inherit-line__part {
+    -unity-text-generator: advanced;
+    -unity-text-auto-size: best-fit 16px 30px;
+    -unity-font-style: bold;
+    color: var(--mm-ink);
+    margin-right: 0;
+}
+.inherit-line__text {
+    -unity-text-generator: advanced;
+    -unity-text-auto-size: best-fit 16px 30px;
+    color: var(--mm-ink);
+    white-space: normal;
+    flex-shrink: 1;
+}
+
 /* A generation block stacks: [ancestors row] → [connector] → [this chip]. */
 .tree-block { align-items: center; }
 .tree-parents { flex-direction: row; justify-content: center; align-items: flex-end; }

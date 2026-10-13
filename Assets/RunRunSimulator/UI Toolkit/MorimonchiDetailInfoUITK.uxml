@@ -75,6 +75,8 @@
                 <ui:Tab label="Linaje" name="tab-lineage">
                     <ui:ScrollView class="lineage-body" mode="VerticalAndHorizontal">
                         <ui:VisualElement name="lineage-tree" class="lineage-tree" />
+                        <ui:Label name="inherit-title" text="Herencia" class="section-title" />
+                        <ui:VisualElement name="inherit-list" class="inherit-list" />
                         <ui:Label name="lineage-empty" text="Sin ascendencia registrada (linaje silvestre)." class="placeholder" />
                     </ui:ScrollView>
                 </ui:Tab>

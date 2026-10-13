@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Theme.uss" />
+    <Style src="PauseMenuUITKStyle.uss" />
+    <ui:VisualElement name="pause-root" class="mm-theme pause-root">
+        <ui:VisualElement name="pause-panel" class="pause-panel">
+            <ui:Label name="pause-title" class="pause-title" />
+            <ui:Button name="pause-resume" class="pause-button pause-button--primary" />
+            <ui:Button name="pause-settings" class="pause-button" />
+            <ui:Button name="pause-quit" class="pause-button pause-button--danger" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

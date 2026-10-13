@@ -6,7 +6,15 @@ tags: [data, genetics, serializable, timestamp]
 
 **Ruta:** `Data/Genetics/CreatureDNA.cs`
 
-**Responsabilidad:** Dato genética + estado MoriMochi. Guarda las partes elegidas, sus tiers de mejora (S148), los potenciales de cuerno, espalda y ala, las exploraciones y batallas acumuladas, el estado de vida (muerto, vendido, ocupado) y el estado de cría y ubicación. **S138:** `Stamp()` garantiza Timestamp estrictamente creciente vía static lastStamp.
+**Responsabilidad:** Dato genética + estado MoriMochi. Guarda las partes elegidas, sus tiers de mejora (S148), los potenciales de cuerno, espalda y ala, las exploraciones y batallas acumuladas, el estado de vida (muerto, vendido, ocupado), el estado de cría, la ubicación y, desde S151, la procedencia de cada parte (`Origins`). **S138:** `Stamp()` garantiza Timestamp estrictamente creciente vía static lastStamp.
+
+## S151: Procedencia de partes (Origins)
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `Origins` | `List<PartOrigin>` | Una entrada por parte heredada: rol, slot de origen, lado materno, ancestro y decoración que acreditó la herencia. Vacía en criaturas sin crianza (p.ej. mintadas) |
+
+Lo lee `DetailInheritancePresenter` para mostrar la línea de herencia en la ficha. Vía `PartOrigin` y `BreedingAttribution`, la crianza es quien la llena.
 
 ## S148: Tiers de Partes
 
@@ -43,6 +51,8 @@ tags: [data, genetics, serializable, timestamp]
 | `Form` | `MonchiForm` | Adult por defecto; Egg o Slime según ciclo de vida |
 | `BusyState` | `BusyReason` | `IsBusy` y `IsSold` se derivan de este campo |
 | `Needs` | `NeedsState` | Salud, energía y afecto |
+
+`CreatureFrailty.IsFrail` lee `Needs.Health` y la etapa de vida (`AgeDays`) para marcar criaturas frágiles (S151).
 
 ## Cría y Ubicación
 
@@ -94,3 +104,5 @@ Immutable, determinístico por Timestamp monotónico.
 - [[BrawlUpgrades]], [[BrawlFighter]] — leen los tiers para armar el combatiente
 - [[BreedingDecorSO]], [[BreedingOdds]], [[IncubationService]] — `BreedDecorIDs` alimenta los modificadores de herencia
 - [[BreedingContainer]], [[DecorSlot]] — `LocationKey` y `LocationSlot` ubican a la criatura
+- [[PartOrigin]], [[BreedingAttribution]], [[DetailInheritancePresenter]] — procedencia de partes (S151)
+- [[CreatureFrailty]] — fragilidad por salud y edad (S151)

@@ -36,6 +36,7 @@ public class InfoOverlayUITK : MonoBehaviour
     private const string CreatureAdoptedKey = "ui.overlay.creature.adopted";
     private const string CreatureLostKey = "ui.overlay.creature.lost";
     private const string UncleCallKey = "ui.overlay.uncle.call";
+    private const string OrderDoneKey = "ui.orders.done";
 
     [SerializeField, Min(0f)] private float toastSeconds = 6f;
 
@@ -43,6 +44,7 @@ public class InfoOverlayUITK : MonoBehaviour
     private Label dabloonsLabel;
     private Label materialLabel;
     private Label expeditionToastLabel;
+    private VisualElement hintsContainer;
     private float refreshTimer;
     private float toastTimer;
     private string lastClockText;
@@ -53,9 +55,11 @@ public class InfoOverlayUITK : MonoBehaviour
         GameEvents.OnInventoryReloaded += RefreshDabloons;
         GameEvents.OnCreatureDeparted += HandleCreatureDeparted;
         GameEvents.OnRescueGiftSent += HandleRescueGiftSent;
+        GameEvents.OnOrderCompleted += HandleOrderCompleted;
         GameEvents.OnDayBlockChanged += HandleDayBlockChanged;
         GameEvents.OnDayStarted += HandleDayStarted;
         UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocaleChanged += HandleLocaleChanged;
+        SettingsService.Changed += HandleSettingsChanged;
     }
 
     private void OnDisable()
@@ -64,9 +68,11 @@ public class InfoOverlayUITK : MonoBehaviour
         GameEvents.OnInventoryReloaded -= RefreshDabloons;
         GameEvents.OnCreatureDeparted -= HandleCreatureDeparted;
         GameEvents.OnRescueGiftSent -= HandleRescueGiftSent;
+        GameEvents.OnOrderCompleted -= HandleOrderCompleted;
         GameEvents.OnDayBlockChanged -= HandleDayBlockChanged;
         GameEvents.OnDayStarted -= HandleDayStarted;
         UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocaleChanged -= HandleLocaleChanged;
+        SettingsService.Changed -= HandleSettingsChanged;
     }
 
     private void Start()
@@ -81,7 +87,8 @@ public class InfoOverlayUITK : MonoBehaviour
         materialLabel = root.Q<Label>("material");
         expeditionToastLabel = root.Q<Label>("expedition-toast");
 
-        BuildHints(root.Q<VisualElement>("hints"));
+        hintsContainer = root.Q<VisualElement>("hints");
+        BuildHints(hintsContainer);
         RefreshClock(force: true);
 
         var inv = GameManager.CurrentInventory;
@@ -130,6 +137,15 @@ public class InfoOverlayUITK : MonoBehaviour
         dateLabel.text = text;
     }
 
+    private void HandleSettingsChanged(GameSettings settings) => ApplyKeyHintsVisibility(settings.ShowKeyHints);
+
+    private void ApplyKeyHintsVisibility(bool show)
+    {
+        if (hintsContainer == null) return;
+        hintsContainer.Query<VisualElement>(className: "hint-row")
+            .ForEach(row => row.style.display = show ? DisplayStyle.Flex : DisplayStyle.None);
+    }
+
     private void HandleDayBlockChanged(DayBlockDef block) => RefreshClock(force: true);
 
     private void HandleDayStarted(int day) => RefreshClock(force: true);
@@ -168,6 +184,19 @@ public class InfoOverlayUITK : MonoBehaviour
         toastTimer = toastSeconds;
     }
 
+    private void HandleOrderCompleted(ShopOrder order)
+    {
+        if (order == null || expeditionToastLabel == null) return;
+
+        expeditionToastLabel.RemoveFromClassList("toast--win");
+        expeditionToastLabel.RemoveFromClassList("toast--lose");
+        expeditionToastLabel.RemoveFromClassList("toast--draw");
+
+        expeditionToastLabel.text = Loc.Tr(OrderDoneKey, order.Describe(), order.Reward);
+        expeditionToastLabel.style.display = DisplayStyle.Flex;
+        toastTimer = toastSeconds;
+    }
+
     private void BuildHints(VisualElement container)
     {
         if (container == null || hints == null) return;
@@ -194,6 +223,7 @@ public class InfoOverlayUITK : MonoBehaviour
         langRow.Add(MakeLangButton("en", "EN"));
         langRow.Add(MakeLangButton("es", "ES"));
         container.Add(langRow);
+        ApplyKeyHintsVisibility(SettingsService.Current.ShowKeyHints);
     }
 
     private Button MakeLangButton(string code, string label)
@@ -208,7 +238,8 @@ public class InfoOverlayUITK : MonoBehaviour
     {
         var root = UiPanels.RootOf(document);
         if (root == null) return;
-        BuildHints(root.Q<VisualElement>("hints"));
+        hintsContainer = root.Q<VisualElement>("hints");
+        BuildHints(hintsContainer);
         RefreshClock(force: true);
         var inv = GameManager.CurrentInventory;
         if (inv != null) RefreshDabloons(inv);

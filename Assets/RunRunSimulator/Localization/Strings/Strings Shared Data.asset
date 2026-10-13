@@ -1747,6 +1747,278 @@ MonoBehaviour:
     m_Key: npc.taste.none
     m_Metadata:
       m_Items: []
+  - m_Id: 28890620945293312
+    m_Key: ui.toy.tug.mash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28890621293420544
+    m_Key: ui.toy.tug.won
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28890621293420545
+    m_Key: ui.toy.tug.lost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450085449728
+    m_Key: ui.detail.inherit.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450320330752
+    m_Key: ui.detail.inherit.sep
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450320330753
+    m_Key: ui.detail.inherit.by
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450349690880
+    m_Key: ui.detail.inherit.mutation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450353885184
+    m_Key: ui.detail.inherit.random
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450353885185
+    m_Key: ui.detail.inherit.parent.mother
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450358079488
+    m_Key: ui.detail.inherit.parent.father
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450358079489
+    m_Key: ui.detail.inherit.grand.f.mother
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450362273792
+    m_Key: ui.detail.inherit.grand.f.father
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450362273793
+    m_Key: ui.detail.inherit.grand.m.mother
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450362273794
+    m_Key: ui.detail.inherit.grand.m.father
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450362273795
+    m_Key: ui.detail.inherit.great.f.mother
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450362273796
+    m_Key: ui.detail.inherit.great.f.father
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450362273797
+    m_Key: ui.detail.inherit.great.m.mother
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28911450362273798
+    m_Key: ui.detail.inherit.great.m.father
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28919161065889792
+    m_Key: npc.thought.dirty.01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28919161095249920
+    m_Key: npc.thought.dirty.02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28919161095249921
+    m_Key: npc.thought.dirty.03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699071905792
+    m_Key: status.frail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699088683008
+    m_Key: ui.store.tab.orders
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699088683009
+    m_Key: ui.store.empty.orders
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699088683010
+    m_Key: ui.orders.done
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699092877312
+    m_Key: ui.orders.role
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28930699092877313
+    m_Key: ui.orders.set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696143392768
+    m_Key: ui.pause.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169984
+    m_Key: ui.pause.resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169985
+    m_Key: ui.pause.settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169986
+    m_Key: ui.pause.quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169987
+    m_Key: ui.settings.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169988
+    m_Key: ui.settings.apply
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169989
+    m_Key: ui.settings.reset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169990
+    m_Key: ui.settings.back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169991
+    m_Key: ui.settings.applied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169992
+    m_Key: ui.settings.section.general
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169993
+    m_Key: ui.settings.section.video
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169994
+    m_Key: ui.settings.section.interface
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169995
+    m_Key: ui.settings.section.controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169996
+    m_Key: ui.settings.section.audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169997
+    m_Key: ui.settings.general.language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169998
+    m_Key: ui.settings.video.mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160169999
+    m_Key: ui.settings.video.mode.windowed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170000
+    m_Key: ui.settings.video.mode.fullscreen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170001
+    m_Key: ui.settings.video.mode.borderless
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170002
+    m_Key: ui.settings.video.resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170003
+    m_Key: ui.settings.video.resolution.native
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170004
+    m_Key: ui.settings.video.vsync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170005
+    m_Key: ui.settings.video.fps
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170006
+    m_Key: ui.settings.video.fps.none
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170007
+    m_Key: ui.settings.video.quality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170008
+    m_Key: ui.settings.interface.nametags
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170009
+    m_Key: ui.settings.interface.nametags.always
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170010
+    m_Key: ui.settings.interface.nametags.looked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170011
+    m_Key: ui.settings.interface.nametags.never
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170012
+    m_Key: ui.settings.interface.hudscale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170013
+    m_Key: ui.settings.interface.keyhints
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170014
+    m_Key: ui.settings.controls.sensitivity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170015
+    m_Key: ui.settings.controls.invert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170016
+    m_Key: ui.settings.controls.fov
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170017
+    m_Key: ui.settings.controls.fov.default
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170018
+    m_Key: ui.settings.audio.pending
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170019
+    m_Key: ui.settings.audio.master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170020
+    m_Key: ui.settings.audio.music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170021
+    m_Key: ui.settings.audio.sfx
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170022
+    m_Key: ui.settings.audio.ambience
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28939696160170023
+    m_Key: ui.settings.audio.ui
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

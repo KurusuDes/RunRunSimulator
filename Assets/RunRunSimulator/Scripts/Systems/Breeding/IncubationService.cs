@@ -193,16 +193,16 @@ public class IncubationService : MonoBehaviour
         var odds = BreedingController.Instance != null ? BreedingController.Instance.InheritanceOdds : null;
         if (odds == null) { Debug.LogError("[Incubation] No InheritanceOddsTable available."); return; }
 
-        var modifiers   = new List<BreedingModifier>();
-        var decorDb     = BreedingController.Instance.DecorDatabase;
+        var decors  = new List<BreedingDecorSO>();
+        var decorDb = BreedingController.Instance.DecorDatabase;
         if (decorDb != null)
             foreach (var decorId in decorIds)
             {
                 var decor = decorDb.Get(decorId);
-                if (decor != null && decor.Modifiers != null) modifiers.AddRange(decor.Modifiers);
+                if (decor != null) decors.Add(decor);
             }
 
-        var child = BreedingService.Breed(motherID, fatherID, registry, database, odds, modifiers);
+        var child = BreedingService.Breed(motherID, fatherID, registry, database, odds, decors);
         if (child == null)
         {
             status = "Hatch failed during local mint — see errors.";

@@ -34,6 +34,9 @@ public enum ToyKind
     Chew,
     Hose,
     Mop,
+    Rope,
+    Plush,
+    Bubbles,
 }
 
 public enum TasteKind

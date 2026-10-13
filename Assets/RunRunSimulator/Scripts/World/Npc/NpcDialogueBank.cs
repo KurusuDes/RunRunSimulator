@@ -96,16 +96,23 @@ public static class NpcDialogueBank
         "npc.nodeal.05",
     };
 
+    private static readonly string[] dirty =
+    {
+        "npc.thought.dirty.01",
+        "npc.thought.dirty.02",
+        "npc.thought.dirty.03",
+    };
+
     private static string One(string[] bank, string targetName) =>
         Loc.Tr(bank[Random.Range(0, bank.Length)], targetName);
 
-    public static string Pick(NpcAgent.NpcState state, NpcAgent.LeaveReason reason, string targetName) =>
+    public static string Pick(NpcAgent.NpcState state, NpcAgent.LeaveReason reason, string targetName, bool complainedDirty = false) =>
         state switch
         {
             NpcAgent.NpcState.Wandering           => One(wandering,   targetName),
             NpcAgent.NpcState.InspectingDisplay   => One(inspecting,  targetName),
-            NpcAgent.NpcState.ApproachingRegister => One(approaching, targetName),
-            NpcAgent.NpcState.Queueing            => One(queueing,    targetName),
+            NpcAgent.NpcState.ApproachingRegister => One(complainedDirty ? dirty : approaching, targetName),
+            NpcAgent.NpcState.Queueing            => One(complainedDirty ? dirty : queueing,    targetName),
             NpcAgent.NpcState.WaitingAtRegister   => One(waiting,     targetName),
             NpcAgent.NpcState.Negotiating         => One(negotiating, targetName),
             NpcAgent.NpcState.Leaving             => reason switch

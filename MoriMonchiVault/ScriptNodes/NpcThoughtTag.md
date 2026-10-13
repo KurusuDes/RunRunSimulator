@@ -6,7 +6,7 @@ tags: [script, world, npc, ui]
 
 **Ruta:** `World/Npc/NpcThoughtTag.cs`
 
-**Responsabilidad:** Burbuja de pensamiento world-space (UITK) sobre NPCs. Billboard hacia la cámara, con corte por distancia. Muestra diálogo dinámico en español de [[NpcDialogueBank]] según `NpcAgent.State` y `LeaveReason`. Cachea la frase y aplica el delay de reacción (`agent.ReactionDelay`) antes de mostrar una frase nueva, para evitar parpadeo. **S93:** usa `UiPanels.RootOf()` para resolver la raíz del UIDocument. **S149:** mientras el cliente recorre la tienda (Wandering o InspectingDisplay) muestra su gusto (`CustomerTaste.Describe()`) y lo tiñe si el gusto es de color.
+**Responsabilidad:** Burbuja de pensamiento world-space (UITK) sobre NPCs. Billboard hacia la cámara, con corte por distancia. Muestra diálogo de [[NpcDialogueBank]] según `NpcAgent.State` y `LeaveReason`. Cachea la frase y aplica el delay de reacción (`agent.ReactionDelay`) antes de mostrar una frase nueva, para evitar parpadeo. **S93:** usa `UiPanels.RootOf()` para resolver la raíz del UIDocument. **S149:** mientras el cliente recorre la tienda (Wandering o InspectingDisplay) muestra su gusto (`CustomerTaste.Describe()`) y lo tiñe si el gusto es de color. **S151:** pasa `agent.ComplainedDirty` a `NpcDialogueBank.Pick` para que la queja por suciedad salga al aproximarse a la caja o estar en fila.
 
 **Propiedades serializadas:**
 - `showDistance` (float, 12): distancia máxima a cámara para mostrar burbuja.
@@ -23,7 +23,7 @@ tags: [script, world, npc, ui]
 - Detecta cambio de situación comparando tupla `(State, Reason)` contra `(lastState, lastReason)`.
 - Al detectar cambio:
   - Extrae nombre target de `agent.TargetMM.CustomName` (fallback `npc.unnamed`).
-  - Consulta `NpcDialogueBank.Pick(state, reason, name)` para obtener UNA frase random.
+  - Consulta `NpcDialogueBank.Pick(state, reason, name, agent.ComplainedDirty)` para obtener UNA frase random (S151: con la bandera de suciedad).
   - Cachea la frase en `pendingLine`.
   - Resetea `responseTimer = agent.ReactionDelay` (comienza cuenta atrás).
 - Mientras `responseTimer > 0`: decrementa cada frame, mantiene `shownLine` con frase anterior (sin parpadeo).
@@ -49,4 +49,4 @@ tags: [script, world, npc, ui]
 
 **Vinculado a:** [[Index/06 - Player & World]]
 
-**Conexiones:** [[NpcAgent]] (lee `State`, `Reason`, `ReactionDelay`, `TargetMM`, `DisplayName`, `Taste`), [[CustomerTaste]] (`Describe`, `Kind`, `Color`), [[NpcDialogueBank]] (consulta frases por situación), [[CreatureDNA]] (lee `CustomName`), [[CustomerArchetypeSO]] (fallback displayName), [[UiPanels]], [[Loc]]
+**Conexiones:** [[NpcAgent]] (lee `State`, `Reason`, `ReactionDelay`, `TargetMM`, `DisplayName`, `Taste`, `ComplainedDirty`), [[CustomerTaste]] (`Describe`, `Kind`, `Color`), [[NpcDialogueBank]] (consulta frases por situación), [[CreatureDNA]] (lee `CustomName`), [[CustomerArchetypeSO]] (fallback displayName), [[UiPanels]], [[Loc]]

@@ -20,6 +20,10 @@ public class UIManager : SerializedMonoBehaviour
 
     public static event Action<bool> OnUIFocusChanged;
 
+    public static event Action<UIPanelType, bool> OnPanelVisibilityChanged;
+
+    public static bool Present { get; private set; }
+
     public static event Action<UIPanelType, IUINavigable> OnNavigableRegistered;
     public static void RegisterNavigable(UIPanelType panel, IUINavigable nav) => OnNavigableRegistered?.Invoke(panel, nav);
     public static event Action<UIPanelType> OnNavigableUnregistered;
@@ -37,6 +41,7 @@ public class UIManager : SerializedMonoBehaviour
 
     private void OnEnable()
     {
+        Present = true;
         OnPanelToggleRequested  += TogglePanel;
         OnPanelSetRequested     += SetPanel;
         OnNavigableRegistered   += AddNavigable;
@@ -49,6 +54,7 @@ public class UIManager : SerializedMonoBehaviour
 
     private void OnDisable()
     {
+        Present = false;
         OnPanelToggleRequested  -= TogglePanel;
         OnPanelSetRequested     -= SetPanel;
         OnNavigableRegistered   -= AddNavigable;
@@ -84,6 +90,7 @@ public class UIManager : SerializedMonoBehaviour
 
         Debug.Log($"[UIManager] Panel '{panel}' → {(show ? "shown" : "hidden")}.");
         UpdateFocus();
+        OnPanelVisibilityChanged?.Invoke(panel, show);
     }
 
     private void SetPanel(UIPanelType panel, bool show)
@@ -100,6 +107,7 @@ public class UIManager : SerializedMonoBehaviour
 
         Debug.Log($"[UIManager] Panel '{panel}' set → {(show ? "shown" : "hidden")}.");
         UpdateFocus();
+        OnPanelVisibilityChanged?.Invoke(panel, show);
     }
 
     private void Push(UIPanelType panel)
@@ -116,7 +124,12 @@ public class UIManager : SerializedMonoBehaviour
 
     private void RouteCancel()
     {
-        if (stack.Count == 0) return;
+        if (stack.Count == 0)
+        {
+            if (panels.TryGetValue(UIPanelType.Pause, out var pause) && pause != null)
+                SetPanel(UIPanelType.Pause, true);
+            return;
+        }
         if (TopNavigable(out var nav) && nav.OnUICancel()) return;
         SetPanel(stack[stack.Count - 1], false);
     }

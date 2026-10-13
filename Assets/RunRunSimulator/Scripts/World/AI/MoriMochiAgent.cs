@@ -157,7 +157,7 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
         {
             case AgentState.Idle:         brain.TickIdle();    if (ctx.State == AgentState.Idle    && !clash.TryEngage() && !expedition.TryEngage() && !toys.TryEngage()) social.TryEngage(); break;
             case AgentState.Roaming:      brain.TickRoaming(); if (ctx.State == AgentState.Roaming && !clash.TryEngage() && !expedition.TryEngage() && !toys.TryEngage()) social.TryEngage(); break;
-            case AgentState.Reacting:     brain.TickReacting();      break;
+            case AgentState.Reacting:     brain.TickReacting(); if (brain.IsInFriendlyReaction) toys.TryEngage(); break;
             case AgentState.Thrown:       clash.TickAirborne(); physics.TickThrown(); break;
             case AgentState.Recovering:   physics.TickRecovering();  break;
             case AgentState.SeekingNeed:  brain.TickSeekingNeed();   break;
@@ -408,10 +408,26 @@ public class MoriMochiAgent : MonoBehaviour, IThrowable, IInteractable
     [Tooltip("Energy lost per game minute WHILE MOVING (active life).")]
     [FormerlySerializedAs("energyDecayPerSecond")]
     [SerializeField, Min(0f)] internal float energyDecayPerGameMinute = 1f;
+
+    [TabGroup("Tuning", "Needs")]
+    [Tooltip("Energy regained per game minute while standing still, up to energyRestCap. A bed is still needed to fill it.")]
+    [SerializeField, Min(0f)] internal float energyRestPerGameMinute = 0.05f;
+
+    [TabGroup("Tuning", "Needs")]
+    [Tooltip("Resting without a bed never raises energy above this.")]
+    [SerializeField, Range(0f, 100f)] internal float energyRestCap = 60f;
     [TabGroup("Tuning", "Needs")]
     [Tooltip("Affect lost per game minute — drifts toward stress (negative) when neglected.")]
     [FormerlySerializedAs("affectDecayPerSecond")]
     [SerializeField, Min(0f)] internal float affectDecayPerGameMinute = 0.5f;
+
+    [TabGroup("Tuning", "Needs")]
+    [Tooltip("Affect resting value — above it affect decays, below it affect recovers toward it.")]
+    [SerializeField, Range(-100f, 100f)] internal float affectRestValue = 0f;
+
+    [TabGroup("Tuning", "Needs")]
+    [Tooltip("Affect regained per game minute while below the resting value, never overshooting it.")]
+    [SerializeField, Min(0f)] internal float affectRecoveryPerGameMinute = 1f;
 
     [TabGroup("Tuning", "Needs"), Title("Critical thresholds (seek a station, else degrade)")]
     [Tooltip("Health at/below this → seek a Feeder.")]

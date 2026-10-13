@@ -7,6 +7,40 @@
     justify-content: center;
 }
 
+.tug-meter {
+    width: 360px;
+    margin-bottom: 14px;
+    align-items: center;
+}
+
+.tug-meter__label {
+    font-size: 30px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--mm-ink);
+    margin-bottom: 6px;
+}
+
+.tug-meter__track {
+    width: 100%;
+    height: 22px;
+    background-color: var(--mm-scrim);
+    border-width: 2px;
+    border-color: var(--mm-frame);
+    border-radius: 11px;
+    overflow: hidden;
+}
+
+.tug-meter__fill {
+    width: 50%;
+    height: 100%;
+    background-color: var(--mm-good);
+}
+
+.tug-meter--losing .tug-meter__fill {
+    background-color: var(--mm-crit);
+}
+
 .hotbar-slots {
     flex-direction: row;
 }

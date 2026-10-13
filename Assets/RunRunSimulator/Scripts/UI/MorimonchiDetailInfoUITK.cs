@@ -35,6 +35,7 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
 
     private DetailInfoTabPresenter info;
     private DetailTreesPresenter trees;
+    private DetailInheritancePresenter inheritance;
     private DetailRelationsPresenter relations;
 
     private CreatureRegistrySO registry;
@@ -103,6 +104,7 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
 
         info   = new DetailInfoTabPresenter(root, database, careGate, kits, evolution, () => registry);
         trees  = new DetailTreesPresenter(root, database, () => registry);
+        inheritance = new DetailInheritancePresenter(root, () => registry);
         relations = new DetailRelationsPresenter(root, () => registry);
 
         wired = true;
@@ -188,6 +190,7 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
 
         info.Rebuild(dna);
         trees.Rebuild(dna);
+        inheritance.Rebuild(dna);
         relations.Rebuild(dna);
     }
 }

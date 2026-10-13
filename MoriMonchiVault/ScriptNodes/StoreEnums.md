@@ -6,44 +6,27 @@ tags: [enum, store, economy]
 
 **Ruta:** `Core/Enums/StoreEnums.cs`
 
-**Responsabilidad:** Enumeraciones para tienda, muebles y props. Contiene: `FurnitureCategory` (3 tipos), `ItemType` (2 tipos), `WorldPropCategory` (3 categorías), `BuyResult` (4 resultados), `Currency` (2 monedas), `StoreItemTypeFilter` (flags de filtro). S131: Borrados `DiscountDay`, `DiscountMonth`, `RestockPeriod` (reempl azados por int day modular).
+**Responsabilidad:** Enumeraciones para tienda, props y juguetes. Contiene: `ItemType` (2 tipos), `WorldPropCategory` (4 categorías), `BuyResult` (4 resultados), `Currency` (2 monedas), `ToyKind` (7 tipos de juguete), `TasteKind` (4 tipos de gusto de cliente), `StoreItemTypeFilter` (flags de filtro). **S151:** se retiró `FurnitureCategory` (ya no existe en el archivo; el sistema de muebles se borró en S149) y `WorldPropCategory` gana `Toy`; `ToyKind` y `TasteKind` viven aquí.
 
 ## Enumeraciones Vigentes
 
 | Enum | Valores | Descripción |
 |------|---------|-------------|
-| `FurnitureCategory` | Decoration, Display, Functional | Categoría de mueble |
-| `ItemType` | Furniture, WorldProp | Tipo de item |
-| `WorldPropCategory` | Tool, Food, Medicine | Categoría de prop spawnable |
+| `ItemType` | Furniture (0), WorldProp (1) | Tipo de item |
+| `WorldPropCategory` | Tool (0), Food (1), Medicine (2), Toy (3) | Categoría de prop spawnable (Toy: S151) |
 | `BuyResult` | Success, OutOfStock, InsufficientFunds, AlreadyOwned | Resultado de compra |
 | `Currency` | Dabloons (0), Minerita (1) | Moneda (S127) |
+| `ToyKind` | Ball, Chew, Hose, Mop, Rope, Plush, Bubbles | Tipo de juguete (S151) |
+| `TasteKind` | None (0), Role (1), Color (2), PartSet (3) | Tipo de gusto de cliente / encargo (S151) |
 | `StoreItemTypeFilter` | Flags: Furniture (1), WorldProp (2), None (0) | Filtro de búsqueda |
-
-## Borrados S131
-
-| Enum | Razón |
-|------|-------|
-| `DiscountDay` | Flags Mon-Sun → reempl. `day % DiscountEveryDays == 0` |
-| `DiscountMonth` | Flags Jan-Dec → no hay calendario |
-| `RestockPeriod` | EarlyMonth/MidMonth/EndOfMonth → reempl. `day % RestockEveryDays` |
-
-**Cambios de contrato:**
-- `ShopCatalogSO.IsDiscountActive(int day)` — módulo aritmético
-- `ShopCatalogSO.NeedsRestock(int day)` — compara días absolutos
-
-## Uso
-
-- `FurnitureCategory`, `ItemType` — clasificación de SOs
-- `WorldPropCategory` — categorización en world props
-- `Currency` — moneda de transacción (S127+)
-- `BuyResult` — retornado por `StoreManager.Buy*()`, UI interpreta
-- `StoreItemTypeFilter` — Flags para filtro de tienda
 
 ## Historial
 
 **S93:** Consolidación en archivo dedicado.
 **S128:** ItemTriggerKind eliminado.
-**S131:** DiscountDay/Month/RestockPeriod eliminados (simplificación a calendario de juego).
+**S131:** DiscountDay/Month/RestockPeriod eliminados (simplificación a calendario de juego). Reemplazados por aritmética de día (`day % N`).
+**S149:** Sistema de muebles borrado; `FurnitureCategory` queda fuera del archivo desde entonces.
+**S151:** Agregados `ToyKind`, `TasteKind` y `WorldPropCategory.Toy`. Retirado `FurnitureCategory` del archivo.
 
 ## Vinculado a
 
@@ -53,12 +36,15 @@ tags: [enum, store, economy]
 ## Conexiones
 
 **Data:**
-- [[FurnitureDefinitionSO]], [[ItemDatabaseSO]], [[ItemDefinitionSO]]
+- [[ItemDatabaseSO]], [[ItemDefinitionSO]]
+- [[ToyTuningSO]] — los juguetes usan `ToyKind`
+- [[ShopOrder]] — usa `TasteKind` y `Role`
 
 **Sistemas:**
 - [[ShopCatalogSO]] — consume Currency, BuyResult, Filter
 - [[StoreManager]] — retorna BuyResult
 - [[StorePanelUITK]] — filtra con StoreItemTypeFilter
+- [[OrderBoardService]] — genera encargos con `TasteKind`
 
 ## Notas (S131 HC-4)
 

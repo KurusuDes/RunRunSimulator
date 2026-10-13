@@ -1,0 +1,215 @@
+.set-root {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--mm-scrim);
+}
+
+.set-panel {
+    width: 1060px;
+    max-width: 94%;
+    height: 700px;
+    max-height: 92%;
+    background-color: var(--mm-surface);
+    border-width: 2px;
+    border-color: var(--mm-frame);
+    border-radius: 14px;
+    padding: 20px;
+}
+
+.set-title {
+    font-size: 32px;
+    color: var(--mm-gold);
+    -unity-font-style: bold;
+    margin-bottom: 14px;
+}
+
+.set-body {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+}
+
+.set-nav {
+    width: 230px;
+    flex-shrink: 0;
+    margin-right: 18px;
+}
+
+.set-tab {
+    padding: 12px 18px;
+    margin-bottom: 8px;
+    font-size: 22px;
+    color: var(--mm-ink-soft);
+    background-color: var(--mm-surface-2);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: rgba(0, 0, 0, 0);
+    -unity-text-align: middle-left;
+}
+
+.set-tab:hover {
+    color: var(--mm-ink);
+    border-color: var(--mm-frame-soft);
+}
+
+.set-tab--active {
+    color: var(--mm-ink);
+    background-color: var(--mm-gold);
+    border-color: var(--mm-frame);
+    -unity-font-style: bold;
+}
+
+.set-content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 6px 14px;
+    background-color: var(--mm-surface-2);
+    border-radius: 10px;
+}
+
+.set-header {
+    font-size: 26px;
+    color: var(--mm-ink);
+    -unity-font-style: bold;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom-width: 2px;
+    border-bottom-color: var(--mm-frame-soft);
+}
+
+.set-note {
+    font-size: 18px;
+    color: var(--mm-warn);
+    margin-bottom: 10px;
+    white-space: normal;
+}
+
+.set-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 54px;
+    padding: 6px 4px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--mm-frame-soft);
+}
+
+.set-row__label {
+    font-size: 22px;
+    color: var(--mm-ink);
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0;
+}
+
+.set-row__control {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 440px;
+    flex-shrink: 0;
+}
+
+.set-row__value {
+    width: 80px;
+    font-size: 21px;
+    color: var(--mm-ink);
+    -unity-font-style: bold;
+    -unity-text-align: middle-right;
+    margin: 0;
+}
+
+.set-dropdown {
+    width: 340px;
+    margin: 0;
+    font-size: 20px;
+}
+
+.set-dropdown .unity-base-popup-field__input {
+    min-height: 38px;
+    background-color: var(--mm-surface);
+    border-color: var(--mm-frame);
+    border-width: 2px;
+    border-radius: 8px;
+    color: var(--mm-ink);
+}
+
+.set-dropdown .unity-base-popup-field__text {
+    color: var(--mm-ink);
+    font-size: 20px;
+}
+
+.set-slider {
+    flex-grow: 1;
+    margin: 0 8px 0 0;
+}
+
+.set-slider .unity-base-slider__tracker {
+    background-color: var(--mm-frame-soft);
+}
+
+.set-slider .unity-base-slider__dragger {
+    background-color: var(--mm-coral);
+    border-color: var(--mm-frame);
+}
+
+.set-toggle {
+    margin: 0;
+}
+
+.set-toggle .unity-toggle__checkmark {
+    width: 28px;
+    height: 28px;
+    background-color: var(--mm-surface);
+    border-color: var(--mm-frame);
+    border-width: 2px;
+    border-radius: 6px;
+    -unity-background-image-tint-color: var(--mm-ink);
+}
+
+.set-toggle:checked > .unity-toggle__input > .unity-toggle__checkmark {
+    background-color: var(--mm-gold);
+}
+
+.set-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 14px;
+}
+
+.set-status {
+    flex-grow: 1;
+    font-size: 20px;
+    color: var(--mm-good);
+    -unity-font-style: bold;
+}
+
+.set-button {
+    height: 46px;
+    min-width: 170px;
+    margin: 0 0 0 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    border-width: 3px;
+    border-color: var(--mm-frame);
+    background-color: var(--mm-surface-2);
+    color: var(--mm-ink);
+}
+
+.set-button:hover {
+    background-color: var(--mm-gold);
+}
+
+.set-button--primary {
+    background-color: var(--mm-coral);
+    color: var(--mm-surface);
+    -unity-font-style: bold;
+}
+
+.set-button--primary:hover {
+    background-color: var(--mm-coral-dark);
+}

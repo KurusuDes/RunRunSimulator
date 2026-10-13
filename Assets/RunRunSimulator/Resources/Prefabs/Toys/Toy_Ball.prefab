@@ -1046,6 +1046,7 @@ GameObject:
   - component: {fileID: 2553461370501473156}
   - component: {fileID: 4425198452249998901}
   - component: {fileID: 3528006787424094946}
+  - component: {fileID: 7645222663132778366}
   m_Layer: 0
   m_Name: Toy_Ball
   m_TagString: Untagged
@@ -1078,7 +1079,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4206848476042279607}
   serializedVersion: 5
-  m_Mass: 0.3
+  m_Mass: 0.5
   m_LinearDamping: 0.3
   m_AngularDamping: 0.6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1129,7 +1130,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.2
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3528006787424094946
 MonoBehaviour:
@@ -1148,7 +1149,33 @@ MonoBehaviour:
   onCarryEnd: {fileID: 0}
   onKick: {fileID: 8956716114004050592}
   onHitCreature: {fileID: 1017900050219103684}
+  onReturnHome: {fileID: 0}
+  onTug: {fileID: 0}
   hitSpeedThreshold: 2.5
+  returnHomeAfterSeconds: 25
+  thrownMemorySeconds: 20
+--- !u!114 &7645222663132778366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4206848476042279607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab769dc8984be584e8992e87195850cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.MessEmitter
+  toy: {fileID: 3528006787424094946}
+  stainPrefab: {fileID: 2022677963312320180, guid: 6f6ddd9dbe69f234cb8f45b71831d975, type: 3}
+  spacing: 3
+  chance: 0.15
+  minGap: 1
+  maxStains: 5
+  minSpeed: 0.5
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &6322910347491127337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,7 +1204,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6274908666437664031}

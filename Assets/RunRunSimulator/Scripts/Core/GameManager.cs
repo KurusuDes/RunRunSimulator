@@ -41,10 +41,14 @@ public class GameManager : MonoBehaviour
     [AssetsOnly, BoxGroup("Setup")]
     [SerializeField] private FurTypeDatabaseSO furTypeDatabase;
 
+    [Required, AssetsOnly, BoxGroup("Setup")]
+    [SerializeField] private SocialTuningSO socialTuning;
+
     [BoxGroup("Setup")]
     [SerializeField] private CloudSyncService cloudSync;
 
     [SerializeField, Min(1f)] private float pushDelaySeconds = 5f;
+    [SerializeField, Min(0f)] private float minPushIntervalSeconds = 30f;
 
     [ShowInInspector, ReadOnly, LabelText("Last Minted ID")]
     [BoxGroup("Mint")]
@@ -52,6 +56,7 @@ public class GameManager : MonoBehaviour
 
     private bool  pushPending;
     private float pushDeadline;
+    private float lastPushTime = float.NegativeInfinity;
 
     private void Awake() => Instance = this;
 
@@ -95,13 +100,14 @@ public class GameManager : MonoBehaviour
     private void RequestPush()
     {
         pushPending  = true;
-        pushDeadline = Time.unscaledTime + pushDelaySeconds;
+        pushDeadline = Mathf.Max(Time.unscaledTime + pushDelaySeconds, lastPushTime + minPushIntervalSeconds);
     }
 
     private void Update()
     {
         if (!pushPending || Time.unscaledTime < pushDeadline) return;
-        pushPending = false;
+        pushPending  = false;
+        lastPushTime = Time.unscaledTime;
         PushToCloud();
     }
 
@@ -124,7 +130,7 @@ public class GameManager : MonoBehaviour
         bool changed = false;
         foreach (var prop in FindObjectsByType<WorldPropInstance>(FindObjectsSortMode.None))
         {
-            if (prop == null || prop.IsHeld || string.IsNullOrEmpty(prop.ItemId)) continue;
+            if (prop == null || prop.IsHeld || !prop.SpawnedAtRuntime || string.IsNullOrEmpty(prop.ItemId)) continue;
             inventory.AddWorldProp(prop.ItemId);
             changed = true;
         }

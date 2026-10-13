@@ -21,8 +21,19 @@ public class NameTag : MonoBehaviour
     [SerializeField] private Color allyNameColor = new Color(0.76f, 1f, 0.6f);
     [SerializeField] private Color rivalNameColor = new Color(0.96f, 0.6f, 0.6f);
     [SerializeField, Min(0f)] private float rivalRevealSpeed = 4f;
+
+    [Header("Focus")]
+    [SerializeField] private bool fadeUnlessLooked = true;
+    [Tooltip("Degrees from the camera's forward within which the tag counts as looked at.")]
+    [SerializeField, Range(1f, 45f)] private float focusAngle = 10f;
+    [SerializeField, Range(0f, 1f)] private float unfocusedOpacity = 0.35f;
+    [SerializeField, Min(0f)] private float focusFadeSpeed = 6f;
+    [Tooltip("Closer than this, the tag shrinks so it doesn't fill the screen.")]
+    [SerializeField, Min(0f)] private float closeShrinkDistance = 3f;
+    [SerializeField, Range(0.1f, 1f)] private float minCloseScale = 0.55f;
     public float ShowDistance { get => showDistance; set => showDistance = value; }
     public float ScreenSizeReferenceDistance { get => screenSizeReferenceDistance; set => screenSizeReferenceDistance = value; }
+    public bool FadeUnlessLooked { get => fadeUnlessLooked; set => fadeUnlessLooked = value; }
 
     private UIDocument    document;
     private VisualElement root;
@@ -43,7 +54,9 @@ public class NameTag : MonoBehaviour
     private Transform      cam;
     private bool           shown = true;
     private float          reveal = 1f;
+    private float          focus = 1f;
     private float          lastOpacity = 1f;
+    private NameTagMode    nameTagMode = NameTagMode.WhenLooked;
 
     private Vector3 baseLocalPos;
     private Vector3 baseLocalScale;
@@ -55,6 +68,19 @@ public class NameTag : MonoBehaviour
         baseLocalPos   = transform.localPosition;
         baseLocalScale = transform.localScale;
     }
+
+    private void OnEnable()
+    {
+        SettingsService.Changed += OnSettingsChanged;
+        nameTagMode = SettingsService.Current.NameTags;
+    }
+
+    private void OnDisable()
+    {
+        SettingsService.Changed -= OnSettingsChanged;
+    }
+
+    private void OnSettingsChanged(GameSettings settings) => nameTagMode = settings.NameTags;
 
     public void Bind(CreatureDNA creature, MoriMochiAgent agent)
     {
@@ -102,17 +128,22 @@ public class NameTag : MonoBehaviour
         }
 
         float distSqr = (cam.position - transform.position).sqrMagnitude;
-        bool  visible = distSqr <= showDistance * showDistance;
+        bool  visible = nameTagMode != NameTagMode.Never && distSqr <= showDistance * showDistance;
         if (visible != shown) SetShown(visible);
         if (!visible) return;
 
         bool  rival  = agent != null && agent.Team == ExpeditionTeam.Rival;
         float target = !rival || ExpeditionNav.IsRevealing(agent.Intent) ? 1f : 0f;
         reveal = Mathf.MoveTowards(reveal, target, rivalRevealSpeed * Time.deltaTime);
-        if (root != null && Mathf.Abs(reveal - lastOpacity) > 0.01f)
+
+        bool looked = !fadeUnlessLooked || nameTagMode == NameTagMode.Always || Vector3.Angle(cam.forward, transform.position - cam.position) <= focusAngle;
+        focus = Mathf.MoveTowards(focus, looked ? 1f : unfocusedOpacity, focusFadeSpeed * Time.deltaTime);
+
+        float opacity = reveal * focus;
+        if (root != null && Mathf.Abs(opacity - lastOpacity) > 0.01f)
         {
-            root.style.opacity = reveal;
-            lastOpacity = reveal;
+            root.style.opacity = opacity;
+            lastOpacity = opacity;
         }
 
         Refresh();
@@ -120,6 +151,7 @@ public class NameTag : MonoBehaviour
         bool penned = agent != null && agent.IsPenned;
         transform.localScale = penned ? baseLocalScale * penScale : baseLocalScale;
         if (screenSizeReferenceDistance > 0f) transform.localScale *= Mathf.Max(1f, Mathf.Sqrt(distSqr) / screenSizeReferenceDistance);
+        if (closeShrinkDistance > 0f) transform.localScale *= Mathf.Clamp(Mathf.Sqrt(distSqr) / closeShrinkDistance, minCloseScale, 1f);
 
         if (transform.parent != null)
         {
@@ -265,11 +297,9 @@ public class NameTag : MonoBehaviour
     private static (string, Color) StatusOf(CreatureDNA dna)
     {
         if (dna.IsDead) return (Loc.Tr("status.dead"), new Color(1f, 0.39f, 0.39f));
-        return dna.BusyState switch
-        {
-            BusyReason.Breeding => (Loc.Tr("status.breeding"), new Color(1f, 0.61f, 0.82f)),
-            _                   => ("", Color.clear),
-        };
+        if (dna.BusyState == BusyReason.Breeding) return (Loc.Tr("status.breeding"), new Color(1f, 0.61f, 0.82f));
+        if (CreatureFrailty.IsFrail(dna)) return (Loc.Tr("status.frail"), new Color(0.7f, 0.7f, 0.7f));
+        return ("", Color.clear);
     }
 
     private static string GenderGlyph(CreatureGender g) => g switch

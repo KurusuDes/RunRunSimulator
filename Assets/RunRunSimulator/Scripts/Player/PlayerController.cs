@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour
 
     private Transform cameraTransform;
     private CinemachineInputAxisController lookAxis;
+    private float[] baseLookGains;
+    private float baseFieldOfView;
 
     private void Awake()
     {
@@ -59,6 +61,38 @@ public class PlayerController : MonoBehaviour
         {
             cameraTransform = cinemachineCamera.transform;
             cinemachineCamera.TryGetComponent(out lookAxis);
+            baseFieldOfView = cinemachineCamera.Lens.FieldOfView;
+        }
+
+        if (lookAxis != null)
+        {
+            var controllers = lookAxis.Controllers;
+            baseLookGains = new float[controllers.Count];
+            for (int i = 0; i < controllers.Count; i++)
+                baseLookGains[i] = controllers[i].Input != null ? controllers[i].Input.Gain : 1f;
+        }
+    }
+
+    private void ApplySettings(GameSettings settings)
+    {
+        if (lookAxis != null && baseLookGains != null)
+        {
+            var controllers = lookAxis.Controllers;
+            int count = Mathf.Min(controllers.Count, baseLookGains.Length);
+            for (int i = 0; i < count; i++)
+            {
+                if (controllers[i].Input == null) continue;
+                bool vertical = controllers[i].Name != null && controllers[i].Name.Contains("Y");
+                float sign = vertical && settings.InvertY ? -1f : 1f;
+                controllers[i].Input.Gain = baseLookGains[i] * settings.LookSensitivity * sign;
+            }
+        }
+
+        if (cinemachineCamera != null)
+        {
+            var lens = cinemachineCamera.Lens;
+            lens.FieldOfView = settings.FieldOfView > 0f ? settings.FieldOfView : baseFieldOfView;
+            cinemachineCamera.Lens = lens;
         }
     }
 
@@ -72,6 +106,8 @@ public class PlayerController : MonoBehaviour
         PlayerInputs.InteractReleased  += OnInteractReleased;
         PlayerInputs.ThrowPressed      += OnThrow;
         UIManager.OnUIFocusChanged     += OnUIFocusChanged;
+        SettingsService.Changed        += ApplySettings;
+        ApplySettings(SettingsService.Current);
     }
 
     private void OnDisable()
@@ -82,6 +118,7 @@ public class PlayerController : MonoBehaviour
         PlayerInputs.InteractReleased  -= OnInteractReleased;
         PlayerInputs.ThrowPressed      -= OnThrow;
         UIManager.OnUIFocusChanged     -= OnUIFocusChanged;
+        SettingsService.Changed        -= ApplySettings;
     }
 
     private void OnMoveChanged(Vector2 move) => moveInput = move;
@@ -141,6 +178,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnInteractPressed()
     {
+        if (PlayerToyTug.Instance != null && PlayerToyTug.Instance.IsActive) return;
         if (state != PlayerStateType.Exploring) return;
 
         if (held != null)
@@ -162,6 +200,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnInteractReleased()
     {
+        if (PlayerToyTug.Instance != null && PlayerToyTug.Instance.IsActive) { grabbing = false; return; }
         if (petTarget != null)
         {
             petTarget.EndPetting();

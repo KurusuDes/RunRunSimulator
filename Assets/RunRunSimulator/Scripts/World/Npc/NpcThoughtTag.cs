@@ -102,7 +102,7 @@ public class NpcThoughtTag : MonoBehaviour
             lastReason    = reason;
             string name   = agent.TargetMM != null && !string.IsNullOrEmpty(agent.TargetMM.CustomName)
                           ? agent.TargetMM.CustomName : Loc.Tr("npc.unnamed");
-            pendingLine   = NpcDialogueBank.Pick(state, reason, name);
+            pendingLine   = NpcDialogueBank.Pick(state, reason, name, agent.ComplainedDirty);
             responseTimer = agent.ReactionDelay;
         }
 

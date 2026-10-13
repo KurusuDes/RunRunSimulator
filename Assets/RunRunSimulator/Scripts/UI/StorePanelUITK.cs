@@ -166,7 +166,10 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
         }
 
         if (emptyLabel != null)
+        {
+            emptyLabel.text = Loc.Tr((StoreRows.Tab)activeTab == StoreRows.Tab.Orders ? "ui.store.empty.orders" : "ui.store.empty");
             emptyLabel.style.display = rows.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        }
 
         Select(rows.Count == 0 ? -1 : Mathf.Clamp(selectedRow, 0, rows.Count - 1));
     }
@@ -182,6 +185,17 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
         var name = new Label(row.Name);
         name.AddToClassList("store-row__name");
         el.Add(name);
+
+        if (row.Buy == null)
+        {
+            var rewardBox = new VisualElement();
+            rewardBox.AddToClassList("store-row__price");
+            var reward = new Label(row.Reward);
+            reward.AddToClassList("store-price__now");
+            rewardBox.Add(reward);
+            el.Add(rewardBox);
+            return el;
+        }
 
         bool maxed = row.Upgrade != null && row.Upgrade.IsMaxed(row.Upgrade.CurrentLevel);
 
@@ -261,6 +275,7 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
 
     private void Purchase(StoreRows.Row row)
     {
+        if (row.Buy == null) return;
         if (store == null) { Debug.LogWarning("[StorePanelUITK] No StoreManager assigned."); return; }
 
         var result = row.Buy.Invoke();

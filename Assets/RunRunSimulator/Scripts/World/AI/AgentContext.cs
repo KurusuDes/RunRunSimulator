@@ -70,6 +70,7 @@ internal class AgentContext
         float target = BaseSpeed * factor;
         if (loaded) target *= Stats.LoadedSpeedFactor;
         if (Time.time < SpeedBoostUntil) target *= SpeedMultiplier;
+        if (CreatureFrailty.IsFrail(Dna)) target *= CreatureFrailty.Penalty;
         if (!Mathf.Approximately(Agent.speed, target)) Agent.speed = target;
     }
 

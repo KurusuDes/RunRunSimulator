@@ -6,7 +6,7 @@ tags: [script, world, agent, internal, brain, fsm]
 
 **Ruta:** `World/AI/AgentBrain.cs`
 
-**Responsabilidad:** Orquestación de la máquina de estados NavMesh del MoriMochiAgent (comportamiento autónomo). Decae necesidades según el tiempo de juego, busca y usa estaciones de necesidad, reacciona al jugador (seguir, acercarse, huir, retirarse), gestiona la mecánica de caricia (petting) y de dar comida con la mano (HandFeed). Expone `Intent`. Es colaborador interno (`internal`) de `MoriMochiAgent`, no componente. Compone con `AgentContext`.
+**Responsabilidad:** Orquestación de la máquina de estados NavMesh del MoriMochiAgent (comportamiento autónomo). Decae y recupera necesidades según el tiempo de juego, busca y usa estaciones de necesidad, reacciona al jugador (seguir, acercarse, huir, retirarse), gestiona la mecánica de caricia (petting) y de dar comida con la mano (HandFeed). Expone `Intent`. Es colaborador interno (`internal`) de `MoriMochiAgent`, no componente. Compone con `AgentContext`.
 
 ## Propiedades Consultables
 
@@ -17,18 +17,21 @@ tags: [script, world, agent, internal, brain, fsm]
 | `CanBePetted` | bool | Reacting + reacción no Flee + el jugador mira al monchi (`IsPlayerFacingMe`) |
 | `Intent` | `CreatureIntent` | Mapeo de estado a intención (Held, Tumbling, SeekingFood, Eating, Resting, Playing, Following, Fleeing, etc.) |
 
-## Necesidades (decay S149)
+## Necesidades (decay y recuperación)
 
-Los valores de decaimiento viven en `MoriMochiAgent` (`healthDecayPerGameMinute`, `energyDecayPerGameMinute`, `affectDecayPerGameMinute`). `AgentBrain.TickNeeds(dt)` los aplica cada frame:
+Los valores viven en `MoriMochiAgent` (`healthDecayPerGameMinute`, `energyDecayPerGameMinute`, `affectDecayPerGameMinute`, `affectRestValue`, `affectRecoveryPerGameMinute`, `energyRestPerGameMinute`, `energyRestCap`). `AgentBrain.TickNeeds(dt)` los aplica cada frame:
 
 ```
 scaledDt = dt * GameClock.NeedsTimeScale   (1 en juego normal; 0 si pausa o no cargado)
-Health  -= healthDecayPerGameMinute * scaledDt
-Affect  -= affectDecayPerGameMinute * scaledDt
-Energy  -= energyDecayPerGameMinute * scaledDt   solo si ctx.IsMoving
+Health  -= healthDecayPerGameMinute * scaledDt                 siempre
+Affect  -> tiende hacia affectRestValue:
+           si está arriba, baja hasta affectRestValue (decay)
+           si está abajo, sube hasta affectRestValue (recovery)
+Energy  -= energyDecayPerGameMinute * scaledDt                 solo si ctx.IsMoving
+Energy  += energyRestPerGameMinute * scaledDt                  si está quieto y Energy < energyRestCap (sin pasar el cap)
 ```
 
-Energía baja solo al moverse. Salud y afecto bajan en reposo.
+Energía baja al moverse y se recupera en reposo hasta `energyRestCap`. Salud baja siempre. Afecto tiende al valor de reposo `affectRestValue`.
 
 ## Estados (FSM)
 
@@ -40,7 +43,7 @@ Energía baja solo al moverse. Salud y afecto bajan en reposo.
 | `TickSeekingNeed()` | Avanza a la estación reservada; al llegar pasa a UsingStation |
 | `TickUsingStation()` | `NeedStation.Refill` hasta llenar; luego roaming |
 | `TickHandFeed()` | Se acerca al jugador, duda (si es tímido por `Sociability`), come y consume el alimento activo del hotbar |
-| `TickAlways(dt)` | Decae necesidades y reduce timers (reacción, petting, feed) |
+| `TickAlways(dt)` | Decae/recupera necesidades y reduce timers (reacción, petting, feed) |
 
 ## Necesidad crítica
 
@@ -76,9 +79,14 @@ Se activa si: el hotbar ofrece comida (`IsOfferingFood`), la salud está por deb
 | `IsPlayerFacingMe()` | Distancia `petRadius` y ángulo `petLookAngle` respecto a la mirada del jugador |
 | `ResetForReuse()` | Limpia timers y banderas para pool |
 
+## Cambios S151
+
+- Recuperación de energía en reposo hasta `energyRestCap` (sin cama).
+- Afecto con valor de reposo `affectRestValue`: baja si está arriba y sube si está abajo, sin pasarse.
+
 ## Cambios S149
 
-- El decaimiento vive ahora en `MoriMochiAgent` (campos públicos) y `AgentBrain` solo lo aplica. Antes estaba como campos del brain con `FormerlySerializedAs`.
+- El decaimiento vive ahora en `MoriMochiAgent` (campos públicos) y `AgentBrain` solo lo aplica.
 - Energía baja solo al moverse (`ctx.IsMoving`).
 - `AgentState.Playing` es un estado navmesh (ver `AgentContext`); `AgentToys` lo usa para juguetes.
 

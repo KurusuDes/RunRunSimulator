@@ -36,6 +36,8 @@ namespace MoriMonchiSimulator
                 objective *= Mathf.Lerp(pricing.CareMinMultiplier, pricing.CareMaxMultiplier, care);
             }
 
+            objective *= ShopCleanliness.Multiplier(pricing);
+
             if (archetype != null) objective *= 1f + archetype.TasteBonus * tasteMatch;
 
             return Mathf.Max(0, Mathf.RoundToInt(objective * budgetMul));

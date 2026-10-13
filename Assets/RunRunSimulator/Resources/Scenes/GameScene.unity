@@ -17942,6 +17942,7 @@ GameObject:
   m_Component:
   - component: {fileID: 513610713}
   - component: {fileID: 513610714}
+  - component: {fileID: 513610715}
   m_Layer: 0
   m_Name: StorageManager
   m_TagString: Untagged
@@ -17979,6 +17980,18 @@ MonoBehaviour:
   catalog: {fileID: 11400000, guid: b991f1724dfc3f94a8d2ab288e18b958, type: 2}
   deliveryBoxPrefab: {fileID: -3509121796563669025, guid: 80cd0ba07c3536543bd4bbf82b19294a, type: 3}
   deliverySpawnPoint: {fileID: 3045775183304592829}
+--- !u!114 &513610715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513610712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dbe2459a060b1d4187b4a28ee003211, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.OrderBoardService
 --- !u!43 &523791117
 Mesh:
   m_ObjectHideFlags: 0
@@ -23168,6 +23181,7 @@ Transform:
   - {fileID: 1315867855}
   - {fileID: 1960713343}
   - {fileID: 1490996666}
+  - {fileID: 825892353}
   m_Father: {fileID: 267156152}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &787092303
@@ -23412,6 +23426,51 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &825892352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 825892353}
+  - component: {fileID: 825892354}
+  m_Layer: 0
+  m_Name: ToyPlayArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &825892353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825892352}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -19.3, y: -0.29999998, z: 12}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 781179439}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &825892354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825892352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9720f1ca5d7c4242b0ce00ebec7657b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.ToyPlayArea
+  radius: 2.7999997
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -25884,8 +25943,10 @@ MonoBehaviour:
   worldState: {fileID: 11400000, guid: 9b4ea237bea2eec4b87dfa149e8628d6, type: 2}
   monchiVisualBank: {fileID: 11400000, guid: bde04aae719e5854687df754fb9d2b93, type: 2}
   furTypeDatabase: {fileID: 11400000, guid: 0942f13ed5b895d41816512ea15bd883, type: 2}
+  socialTuning: {fileID: 11400000, guid: 0a1d9dcc99ebcc64b9e0e6a54aead249, type: 2}
   cloudSync: {fileID: 1443145214}
   pushDelaySeconds: 5
+  minPushIntervalSeconds: 30
 --- !u!4 &1046970363
 Transform:
   m_ObjectHideFlags: 0
@@ -29418,6 +29479,8 @@ GameObject:
   - component: {fileID: 1218711433}
   - component: {fileID: 1218711434}
   - component: {fileID: 1218711435}
+  - component: {fileID: 1218711436}
+  - component: {fileID: 1218711437}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -29449,6 +29512,7 @@ Transform:
   - {fileID: 464847835}
   - {fileID: 1887204491}
   - {fileID: 1327615439}
+  - {fileID: 1259353129}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1218711424
@@ -29475,6 +29539,8 @@ MonoBehaviour:
     - {fileID: 464847833}
     - {fileID: 1887204488}
     - {fileID: 1327615436}
+    - {fileID: 1259353130}
+    - {fileID: 1259353128}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -29499,7 +29565,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 10
     - Name: 
       Entry: 7
       Data: 
@@ -29593,6 +29659,30 @@ MonoBehaviour:
     - Name: $v
       Entry: 10
       Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 10
+    - Name: $v
+      Entry: 10
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 11
+    - Name: $v
+      Entry: 10
+      Data: 9
     - Name: 
       Entry: 8
       Data: 
@@ -29752,6 +29842,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.TransactionPanelUITK
   document: {fileID: 464847834}
+--- !u!114 &1218711436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218711422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c702cbce7abde499f5de89ec8f00fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.TugMeterHUD
+  document: {fileID: 641695214}
+--- !u!114 &1218711437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218711422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 143db3b9765e7974d85fb794ec8e277d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.HudScaleApplier
+  panel: {fileID: 11400000, guid: 3c8a8da8175b6d54a907634fef6a08f4, type: 2}
 --- !u!1 &1224935784
 GameObject:
   m_ObjectHideFlags: 0
@@ -30045,6 +30161,78 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1001 &1259353127
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1218711423}
+    m_Modifications:
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7404966703419428866, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+      propertyPath: m_Name
+      value: PauseSettingsUI
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+--- !u!1 &1259353128 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7518908328487300168, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+  m_PrefabInstance: {fileID: 1259353127}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1259353129 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3642647916383864304, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+  m_PrefabInstance: {fileID: 1259353127}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1259353130 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 150861063443488278, guid: 8183f9745065af34480b8d62aff37f1b, type: 3}
+  m_PrefabInstance: {fileID: 1259353127}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1263194644
 GameObject:
   m_ObjectHideFlags: 0
@@ -32107,6 +32295,7 @@ GameObject:
   - component: {fileID: 1458888898}
   - component: {fileID: 1458888900}
   - component: {fileID: 1458888899}
+  - component: {fileID: 1458888901}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -32198,6 +32387,19 @@ MonoBehaviour:
   throwForce: 40
   throwUpwardBias: 0.15
   throwAimDistance: 30
+--- !u!114 &1458888901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458888892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c237982ee2bc133498a149521a779b64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.PlayerToyTug
+  tuning: {fileID: 11400000, guid: ee6ec9356a6108547a0300fb99fa5998, type: 2}
 --- !u!1 &1462638180
 GameObject:
   m_ObjectHideFlags: 0
@@ -41465,6 +41667,7 @@ MonoBehaviour:
     MotherID: 
     FatherID: 
     ChildrenIDs: []
+    Origins: []
     Gender: 0
     Role: 0
     Element: 0

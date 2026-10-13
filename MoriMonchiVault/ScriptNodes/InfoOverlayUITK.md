@@ -6,7 +6,7 @@ tags: [script, ui, overlay]
 
 **Ruta:** `UI/InfoOverlayUITK.cs`
 
-**Responsabilidad:** Overlay siempre visible. Muestra el reloj (día, hora y bloque), el saldo de Dabloons y de Minerita, un toast de salida o adopción de criaturas, un aviso de la llamada del tío (**S149**), la leyenda de controles (`hints`) y el selector de idioma EN/ES. Solo presenta: lee `GameClock`, `GameManager.CurrentInventory` y los payloads de eventos. El toast de retorno de expedición ya no vive aquí (S145): lo muestra `ExpeditionReturnCardUITK`.
+**Responsabilidad:** Overlay siempre visible. Muestra el reloj (día, hora y bloque), el saldo de Dabloons y de Minerita, un toast de salida o adopción de criaturas, un aviso de la llamada del tío (**S149**), un aviso de encargo completado (**S151**), la leyenda de controles (`hints`) y el selector de idioma EN/ES. Solo presenta: lee `GameClock`, `GameManager.CurrentInventory` y los payloads de eventos. El toast de retorno de expedición ya no vive aquí (S145): lo muestra `ExpeditionReturnCardUITK`.
 
 ## Campos Serializados
 
@@ -20,7 +20,7 @@ tags: [script, ui, overlay]
 
 ## Elementos UXML
 
-`date`, `dabloons`, `material` (saldo de Minerita), `expedition-toast` (reutilizado para el toast de criatura y el aviso del tío), `hints` (contenedor de la leyenda).
+`date`, `dabloons`, `material` (saldo de Minerita), `expedition-toast` (reutilizado para el toast de criatura, el aviso del tío y el aviso de encargo), `hints` (contenedor de la leyenda).
 
 ## Eventos Suscritos (OnEnable / OnDisable)
 
@@ -29,17 +29,20 @@ tags: [script, ui, overlay]
 | `GameEvents.OnInventoryChanged` / `OnInventoryReloaded` | `RefreshDabloons` | Actualiza Dabloons y Minerita |
 | `GameEvents.OnCreatureDeparted` | `HandleCreatureDeparted` | Toast "adoptada" si `IsSold`, si no "perdida" |
 | `GameEvents.OnRescueGiftSent` | `HandleRescueGiftSent` | **(S149)** Toast de la llamada del tío con el nombre de la caja |
+| `GameEvents.OnOrderCompleted` | `HandleOrderCompleted` | **(S151)** Toast de encargo completado con la descripción y la recompensa |
 | `GameEvents.OnDayBlockChanged` / `OnDayStarted` | `RefreshClock(force)` | Reloj |
 | `LocalizationSettings.SelectedLocaleChanged` | `HandleLocaleChanged` | Reconstruye leyenda, reloj y saldos |
+| `SettingsService.Changed` | `HandleSettingsChanged` | **(S151)** Muestra u oculta las filas de la leyenda según `ShowKeyHints` |
 
 ## Comportamiento
 
 - **Reloj:** refresco cada 1 s (tiempo unscaled). Texto localizado (`ui.overlay.clock`) con día, hora, minuto y nombre del bloque.
 - **Toast de criatura:** `ui.overlay.creature.adopted` o `ui.overlay.creature.lost`. Antes de mostrarlo quita las clases `toast--win`, `toast--lose` y `toast--draw`, que ya no se agregan.
 - **Toast del tío (S149):** `ui.overlay.uncle.call` con `box.DisplayName`. Usa el mismo label y temporizador que el toast de criatura.
+- **Toast de encargo (S151):** `ui.orders.done` con `order.Describe()` y `order.Reward`. Mismo label y temporizador.
 - **Duración:** el toast se oculta a los `toastSeconds`, con timer en `Update`.
 - **Saldos:** Dabloons con `ui.overlay.dabloons`; Minerita en el label "material" con `ui.overlay.material`.
-- **Leyenda e idioma:** una fila por hint más los botones EN y ES (`Loc.SetLocale`). El idioma activo lleva `lang-btn--active`.
+- **Leyenda e idioma:** una fila por hint más los botones EN y ES (`Loc.SetLocale`). El idioma activo lleva `lang-btn--active`. Al construir la leyenda aplica `SettingsService.Current.ShowKeyHints` (S151).
 
 ## Vinculado a
 
@@ -54,6 +57,9 @@ tags: [script, ui, overlay]
 - [[CreatureDNA]] — `CustomName`, `IsSold`, `ToStringID`
 - [[CreatureBoxSO]] — `DisplayName` del regalo del tío (S149)
 - [[UncleRescueService]] — emite `RescueGiftSent` (S149)
+- [[ShopOrder]] — `Describe()` y `Reward` del toast de encargo (S151)
+- [[OrderBoardService]] — emite `OrderCompleted` (S151)
+- [[SettingsService]], [[GameSettings]] — `ShowKeyHints` (S151)
 - [[Loc]] — `Tr`, `SetLocale`, `ApplySavedLocale`, `CurrentCode`
 - [[ExpeditionReturnCardUITK]] — tarjeta que reemplaza el toast de retorno
 - [[UiPanels]] — `RootOf`
@@ -64,3 +70,4 @@ tags: [script, ui, overlay]
 - Antes de asignar un toast se quitan las clases de resultado anteriores.
 - S145: `OnExpeditionReturned` y el toast de retorno salieron de este script; el toast solo cubre salida y adopción de criaturas.
 - S149: el toast del tío comparte el mismo label que el de criatura; si llegan dos avisos seguidos, el segundo reemplaza al primero.
+- S151: el toast de encargo también comparte el label; el último aviso que llegue reemplaza al anterior.

@@ -49,11 +49,11 @@ tags: [script, breeding-system, local-incubation]
 5. Llama `HatchLocally(motherID, fatherID)`
 6. Retorna Hatched
 
-## HatchLocally (S149)
+## HatchLocally (S149, ajustado S151)
 
 1. Lee `BreedDecorIDs` de la madre y limpia el estado de cría en ambos padres (`ClearBreedState`).
-2. Convierte cada decoración en `BreedingModifier` consultando `BreedingController.DecorDatabase` (`Get(id)` y `Modifiers`).
-3. Llama `BreedingService.Breed(motherID, fatherID, registry, database, odds, modifiers)` → CreatureDNA hijo. Si devuelve null, actualiza `status` y dispara `RegistryChanged`.
+2. Resuelve cada ID de decoración a `BreedingDecorSO` consultando `BreedingController.DecorDatabase` (`Get(id)`). S151: ya no convierte a `BreedingModifier` aquí; la lista de `BreedingDecorSO` va directo a `BreedingService.Breed`.
+3. Llama `BreedingService.Breed(motherID, fatherID, registry, database, odds, decors)` → CreatureDNA hijo. Si devuelve null, actualiza `status` y dispara `RegistryChanged`.
 4. Asigna nombre (`CreatureNameBank.GetRandomName()`), `Stamp()` y `BirthDay` = día actual de GameClock.
 5. Llama `CreatureGrowth.Hatch(child)` y lo registra en el registry.
 6. Agrega el ID del hijo a `ChildrenIDs` de ambos padres.
@@ -115,10 +115,14 @@ private static void ClearBreedState(CreatureDNA dna)
 
 Reutilizado en StartBreeding cleanup, CancelBreeding, CancelAllBreeding y HatchLocally.
 
+## Cambios S151
+
+- `HatchLocally` pasa `List<BreedingDecorSO>` a `BreedingService.Breed` (antes convertía a `BreedingModifier`). Las decoraciones acreditan cada parte en `CreatureDNA.Origins`.
+
 ## Cambios S149
 
 - `StartBreeding` acepta `decorIds` y los guarda en `BreedDecorIDs` de la madre.
-- `HatchLocally` aplica los modificadores de las decoraciones a la tirada de herencia.
+- `HatchLocally` aplica las decoraciones a la tirada de herencia.
 - `HatchLocally` incrementa `WorldStateSO.BredTotal` y dispara `WorldStateChanged`.
 - `ClearBreedState` limpia `BreedDecorIDs`.
 
@@ -191,7 +195,7 @@ public int EggHatchCost
 - [[GameManager]] — proporciona registry, database
 - [[Wallet]] — deduce Minerita en TryHatch / TryHatchEgg
 - [[NeedsState]] — deduce energía en StartBreeding
-- [[BreedingDecorDatabaseSO]], [[BreedingModifier]] — decoraciones que modifican la herencia (S149)
+- [[BreedingDecorDatabaseSO]], [[BreedingDecorSO]] — decoraciones que modifican la herencia (S149)
 - [[WorldStateSO]] — `BredTotal` (S149)
 
 ## Conexiones

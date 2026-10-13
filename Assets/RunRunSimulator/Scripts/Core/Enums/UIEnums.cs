@@ -11,6 +11,8 @@ public enum UIPanelType
     Transaction      = 7,
     Expedition       = 8,
     ExpeditionReturn = 9,
+    Pause            = 10,
+    Settings         = 11,
 }
 
 public enum PlayerStateType

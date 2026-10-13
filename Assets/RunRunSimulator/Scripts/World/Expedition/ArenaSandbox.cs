@@ -409,7 +409,7 @@ public class ArenaSandbox : MonoBehaviour
         controller.Agent.SetHomeExit(home);
         controller.Agent.SetBlackboard(BoardFor(team));
         if (targetGroup != null) targetGroup.AddMember(controller.transform, 1f, 1.2f);
-        foreach (var tag in controller.GetComponentsInChildren<NameTag>(true)) { tag.ShowDistance = tagShowDistance; tag.ScreenSizeReferenceDistance = tagReferenceDistance; }
+        foreach (var tag in controller.GetComponentsInChildren<NameTag>(true)) { tag.ShowDistance = tagShowDistance; tag.ScreenSizeReferenceDistance = tagReferenceDistance; tag.FadeUnlessLooked = false; }
 
         return controller;
     }

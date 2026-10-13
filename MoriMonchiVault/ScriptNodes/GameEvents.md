@@ -6,9 +6,9 @@ tags: [script, core, events-bus]
 
 **Ruta:** `Core/GameEvents.cs`
 
-**Responsabilidad:** Bus de eventos cross-system estático. 17 eventos: registry/breeding/inventory/navmesh/customer/expedition/creature-lifecycle/world-state/day-cycle/rescue/shop-zone. Llama y evento son pares (ej. `OnRegistryChanged` + método `RegistryChanged()`). Patrón: gameplay dispara evento → GameManager persiste + UI refresca. S131: agregados 4 eventos de reloj (WorldState changed/reloaded, Day started, DayBlock changed). S137: `OnCreatureFormChanged` dispara cuando criatura cambia de forma (Egg→Slime→Adult), re-arma visual. **S149:** se retiran los eventos de muebles (`OnFurnitureChanged`/`OnFurnitureReloaded`, junto con el sistema de muebles); se agregan `OnRescueGiftSent` y `OnShopZoneOpened`.
+**Responsabilidad:** Bus de eventos cross-system estático. 18 eventos: registry/breeding/inventory/navmesh/customer/expedition/creature-lifecycle/world-state/day-cycle/rescue/shop-zone/orders. Llama y evento son pares (ej. `OnRegistryChanged` + método `RegistryChanged()`). Patrón: gameplay dispara evento → GameManager persiste + UI refresca. S131: agregados 4 eventos de reloj (WorldState changed/reloaded, Day started, DayBlock changed). S137: `OnCreatureFormChanged` dispara cuando criatura cambia de forma (Egg→Slime→Adult), re-arma visual. S149: se retiran los eventos de muebles y se agregan `OnRescueGiftSent` y `OnShopZoneOpened`. **S151:** se agrega `OnOrderCompleted` (encargo de tienda completado).
 
-## Eventos (17 totales)
+## Eventos (18 totales)
 
 | Evento | Parámetros | Descripción |
 |--------|-----------|-------------|
@@ -23,12 +23,13 @@ tags: [script, core, events-bus]
 | `OnExpeditionReturned` | `ExpeditionReturn r` | Retorno de arena: resultado, materiales, energía gastada → UI toast |
 | `OnCreatureDeparted` | `CreatureDNA dna` | Criatura partió (muerte/venta) → UI aviso + social graph |
 | `OnCreatureFormChanged` | `CreatureDNA dna` | **(S137)** Criatura cambió Form (Egg→Slime→Adult) → re-arma visual (MonchiVisualizer) |
-| `OnWorldStateChanged` | `WorldStateSO state` | **(S131)** Mutación de estado mundo (día/minuto/tutorial) → persist + cloud push |
+| `OnWorldStateChanged` | `WorldStateSO state` | **(S131)** Mutación de estado mundo (día/minuto/tutorial/encargos) → persist + cloud push |
 | `OnWorldStateReloaded` | `WorldStateSO state` | **(S131)** Reemplazo desde cloud → UI only |
 | `OnDayStarted` | `int day` | **(S131)** Nuevo día comenzó (día incrementado) |
 | `OnDayBlockChanged` | `DayBlockDef block` | **(S131)** Bloque horario cambió → UI reloj, habilita/deshabilita sistemas |
 | `OnRescueGiftSent` | `CreatureBoxSO box` | **(S149)** El tío envió la caja de rescate → aviso en UI (`InfoOverlayUITK`) |
 | `OnShopZoneOpened` | `ShopUpgradeSO expansion, int level` | **(S149)** Una expansión de tienda se abrió en juego → rehorneado de NavMesh |
+| `OnOrderCompleted` | `ShopOrder order` | **(S151)** Un encargo del tablero se completó → aviso en UI (`InfoOverlayUITK`) |
 
 ## Contrato de eventos
 
@@ -37,9 +38,10 @@ tags: [script, core, events-bus]
 - `Reloaded`: Reemplazo desde fuente externa (cloud pull / reset) → UI refresca, NO persist ni cloud push
 - `CreatureDeparted`: Criatura ida (IsDead=true o Sold) → UI desaparece ficha + social graph actualiza
 - `CreatureFormChanged` **(S137)**: Forma cambió → MonchiVisualizer reconstruye visual (Egg/Slime/Adult). Disparado por BreedingController (Lay/Hatch), CreatureGrowth (Hatch/RecordExploration).
-- `WorldStateChanged`: Muta Day/MinuteOfDay → GameManager.PersistWorldState + cloud push (integrado S131)
+- `WorldStateChanged`: Muta Day/MinuteOfDay/encargos → GameManager.PersistWorldState + cloud push (integrado S131)
 - `DayBlockChanged`: Bloque cambió (automático en GameClock) → sistemas reaccionan (clientes open/close, expediciones open/close)
 - `ShopZoneOpened` **(S149)**: Solo se dispara en juego (no en carga). `ShopZone` lo emite; `NavMeshRebaker` rehornea.
+- `OrderCompleted` **(S151)**: Lo dispara `OrderBoardService` tras pagar la recompensa. Va después de `WorldStateChanged`.
 
 **Datos en payload:**
 - El evento transporta la data (registry, inventario, resultado, criatura, estado, bloque, etc.)
@@ -62,7 +64,7 @@ tags: [script, core, events-bus]
 
 ### OnWorldStateChanged / WorldStateChanged(WorldStateSO state)
 
-**Disparado por:** GameClock cuando cambia Day o MinuteOfDay (cada frame si hay movimiento de tiempo).
+**Disparado por:** GameClock cuando cambia Day o MinuteOfDay (cada frame si hay movimiento de tiempo). También `OrderBoardService` al re-tirar o completar encargos (S151).
 
 **Suscriptores:**
 - `GameManager.PersistWorldState()` → `SaveSystem.SaveWorldState(state)` + RequestPush
@@ -75,6 +77,7 @@ tags: [script, core, events-bus]
 
 **Suscriptores:**
 - `GameClock.HandleWorldStateReloaded()` → fija `state = reloaded`, `blockIndex`, `loaded = true`, dispara DayBlockChanged
+- `OrderBoardService` → re-tira encargos si el día cambió (S151)
 
 **Invariantes:** Reemplazo wholesale (no mergea local).
 
@@ -83,7 +86,8 @@ tags: [script, core, events-bus]
 **Disparado por:** GameClock cuando Day incrementa.
 
 **Suscriptores:**
-- (Actualmente ninguno, reservado para expansión: NPC diarios, events, reset de cooldowns)
+- `OrderBoardService` → re-tira los 3 encargos del día (S151)
+- (Resto reservado para expansión: NPC diarios, events, reset de cooldowns)
 
 **Invariantes:** Dispara 1x por día (cuando MinuteOfDay wraps ≥ 1440).
 
@@ -112,6 +116,14 @@ tags: [script, core, events-bus]
 
 **Suscriptores:** `NavMeshRebaker.OnShopZoneOpened` → programa rehorneado.
 
+## S151: Encargos de tienda
+
+### OnOrderCompleted / OrderCompleted(ShopOrder order)
+
+**Disparado por:** `OrderBoardService.OnCustomerSold` tras quitar el encargo de `WorldStateSO.Orders` y acreditar `Wallet.Add(Dabloons, Reward)`.
+
+**Suscriptores:** `InfoOverlayUITK.HandleOrderCompleted`.
+
 ## Cambios Históricos
 
 **S93:** Poda de 15 → 10 eventos.
@@ -120,6 +132,7 @@ tags: [script, core, events-bus]
 **S131:** 4 eventos de reloj agregados (WorldStateChanged, WorldStateReloaded, DayStarted, DayBlockChanged).
 **S137:** `OnCreatureFormChanged` agregado (Egg/Slime/Adult).
 **S149:** Eliminados `OnFurnitureChanged` y `OnFurnitureReloaded` (sistema de muebles borrado). Agregados `OnRescueGiftSent` y `OnShopZoneOpened`.
+**S151:** Agregado `OnOrderCompleted` (tablero de encargos). Total 18.
 
 ## Vinculado a
 
@@ -137,6 +150,7 @@ tags: [script, core, events-bus]
 - [[CreatureGrowth]] — dispara FormChanged (S137)
 - [[UncleRescueService]] — dispara RescueGiftSent (S149)
 - [[ShopZone]] — dispara ShopZoneOpened (S149)
+- [[OrderBoardService]] — escucha WorldStateReloaded, DayStarted, CustomerSold; dispara WorldStateChanged y OrderCompleted (S151)
 
 **Tiempo (S131):**
 - [[GameClock]] — dispara DayStarted, DayBlockChanged, suscribe WorldStateReloaded
@@ -144,7 +158,7 @@ tags: [script, core, events-bus]
 - [[DayScheduleSO]] — payload de DayBlockDef
 
 **UI/Systems:**
-- [[InfoOverlayUITK]], [[CreatureGridUI]] — reaccionan a RegistryChanged, RegistryReloaded (InfoOverlayUITK también a RescueGiftSent)
+- [[InfoOverlayUITK]], [[CreatureGridUI]] — reaccionan a RegistryChanged, RegistryReloaded (InfoOverlayUITK también a RescueGiftSent y OrderCompleted)
 - [[MonchiVisualizer]] — reacciona a CreatureFormChanged para re-armar visual (S137)
 - [[NpcController]] — reacciona a DayBlockChanged para spawn customer
 - [[NavMeshRebaker]] — reacciona a WorldStateReloaded y ShopZoneOpened; emite NavMeshWillRebake / NavMeshRebaked
@@ -152,7 +166,7 @@ tags: [script, core, events-bus]
 
 ## Notas (S137 HC-4 + Ciclo de Vida)
 
-- **Densidad:** 17 eventos, cada uno muy específico. No hay eventos "catch-all".
+- **Densidad:** 18 eventos, cada uno muy específico. No hay eventos "catch-all".
 - **Changed→Persist:** Patrón: gameplay dispara Changed → GameManager suscriptor persiste. No hay gaming code que calle SaveSystem directo.
 - **FormChanged→Visualizer:** Desacoplamiento: CreatureGrowth no conoce MonchiVisualizer; el evento es el puente.
 - **World state:** Ahora unificado en SO único, eventos claros. Antes era desacoplado.

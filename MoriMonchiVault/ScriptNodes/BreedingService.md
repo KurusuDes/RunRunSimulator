@@ -6,7 +6,7 @@ tags: [script, genetics]
 
 **Ruta:** `Systems/Breeding/BreedingService.cs`
 
-**Responsabilidad:** Lógica local de cruce. Hereda 5 partes genéticas (BodyShape/Horn/Back/Wing/Face) desde árbol genealógico, colores, FurType, género, rol, elemento, IsShiny, diales (Sociability/Boldness) y potenciales de partes. Valida género, muerte, busy state, `MaxBreedCount = 4`. Retorna hijo `CreatureDNA` o null si falla validación. **S129:** Eliminada herencia de stats base. **S149:** El cruce acepta `BreedingModifier` opcionales que alteran los pesos de herencia (vía `BreedingOdds.From`), y las partes de reserva se tiran con `PartPool.Rollable`.
+**Responsabilidad:** Lógica local de cruce. Hereda 5 partes genéticas (BodyShape/Horn/Back/Wing/Face) desde árbol genealógico, colores, FurType, género, rol, elemento, IsShiny, diales (Sociability/Boldness) y potenciales de partes. Valida género, muerte, busy state, `MaxBreedCount = 4`. Retorna hijo `CreatureDNA` o null si falla validación. **S129:** Eliminada herencia de stats base. **S149:** El cruce acepta decoraciones de cría que alteran los pesos de herencia (vía `BreedingOdds.From`), y las partes de reserva se tiran con `PartPool.Rollable`. **S151:** el cruce recibe las decoraciones como `BreedingDecorSO` (ya no `BreedingModifier`), registra la procedencia de cada parte en `CreatureDNA.Origins` (`PartOrigin`) y acredita la decoración con `BreedingAttribution`.
 
 ## Método Principal
 
@@ -17,7 +17,7 @@ public static CreatureDNA Breed(
     CreatureRegistrySO     registry,
     CreatureDatabaseSO     partDb,
     InheritanceOddsTableSO odds,
-    IEnumerable<BreedingModifier> modifiers = null)   // S149
+    IReadOnlyList<BreedingDecorSO> decors = null)   // S151: antes IEnumerable<BreedingModifier>
 ```
 
 **Validaciones:**
@@ -35,11 +35,11 @@ public static CreatureDNA Breed(
 
 ### Odds efectivos (S149)
 
-Antes de tirar, `BreedingOdds.From(odds, modifiers)` construye los pesos efectivos. Los modificadores (decoraciones) suman deltas a los pesos base de `InheritanceOddsTableSO`, con mínimo 0.
+Antes de tirar, las decoraciones se aplanan en `BreedingModifier` (`decor.Modifiers`) y `BreedingOdds.From(odds, modifiers)` construye los pesos efectivos. Los modificadores suman deltas a los pesos base de `InheritanceOddsTableSO`, con mínimo 0.
 
 ### Partes Genéticas (5 slots)
 
-Heredan del árbol genealógico vía `ResolveSlot(PartRole role, ...)` usando `effective.Roll()`. Los valores de referencia (sin modificadores) son:
+Cada slot llama `ResolveSlot(PartRole role, ...)`: tira el origen con `effective.Roll()` y devuelve el ID de la parte. Además agrega un `PartOrigin` a la lista del hijo (S151) con: slot de origen, lado materno, ID del ancestro y `DecorID` (resultado de `BreedingAttribution.CreditFor`). Los valores de referencia (sin modificadores) son:
 - **Parent (40%):** Una parte del padre elegido al azar (lado materno o paterno según `PickMotherSide`)
 - **Grandparent (20%):** Una parte de un abuelo (dos generaciones de ancestros vía `ExpandGenerations`)
 - **GreatGrandparent (10%):** Una parte de bisabuelo
@@ -65,6 +65,12 @@ BodyShapeID, HornID, BackID, WingID, FaceID
 - **Potenciales de partes:** `InheritPotential` promedio de padres + ruido, clamp `PotentialMin`-`PotentialMax` (1-10)
 - **Diales:** `odds.RollDial()` elige entre promedio con jitter (`DialJitter`), copia de un padre, o diales nuevos (`CreatureGenerator.RandomDial`)
 
+## Cambios S151
+
+- Firma: `decors` es `IReadOnlyList<BreedingDecorSO>`; el método aplana sus `Modifiers`.
+- `CreatureDNA.Origins` se llena con un `PartOrigin` por slot (5 entradas).
+- `DecorID` por parte se calcula con [[BreedingAttribution]].
+
 ## Cambios S129
 
 - **ELIMINADO:** Herencia de stats base (Constitution, Attack, Speed, Defense, Luck, Evasion)
@@ -72,7 +78,7 @@ BodyShapeID, HornID, BackID, WingID, FaceID
 
 ## Cambios S149
 
-- Parámetro `modifiers` (opcional) para decoraciones de cría.
+- Parámetro de decoraciones (opcional) para decoraciones de cría.
 - `Breed` usa `BreedingOdds` en lugar de leer la tabla directamente.
 - Partes de reserva (Mutation/Base) filtradas con `PartPool.Rollable`.
 
@@ -81,4 +87,4 @@ BodyShapeID, HornID, BackID, WingID, FaceID
 [[Index/02 - Genetics & Breeding]]
 [[Index/28 - Cimientos y camino a Game Ready]]
 
-**Conexiones:** [[CreatureDNA]], [[InheritanceOddsTableSO]], [[BreedingOdds]], [[BreedingModifier]], [[CreatureRegistrySO]], [[CreatureDatabaseSO]], [[ColorGenetics]], [[CreatureGenerator]], [[PartPool]], [[IncubationService]], [[BreedingController]]
+**Conexiones:** [[CreatureDNA]], [[PartOrigin]] (S151), [[BreedingAttribution]] (S151), [[InheritanceOddsTableSO]], [[BreedingOdds]], [[BreedingModifier]], [[BreedingDecorSO]], [[CreatureRegistrySO]], [[CreatureDatabaseSO]], [[ColorGenetics]], [[CreatureGenerator]], [[PartPool]], [[IncubationService]], [[BreedingController]]

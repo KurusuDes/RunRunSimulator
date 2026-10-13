@@ -418,7 +418,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4464503192464181230}
@@ -986,6 +986,7 @@ GameObject:
   - component: {fileID: 3989026216160337158}
   - component: {fileID: 8676888454818413954}
   - component: {fileID: 3485921239537568962}
+  - component: {fileID: 4147310118013298000}
   m_Layer: 0
   m_Name: Toy_Chew
   m_TagString: Untagged
@@ -1069,7 +1070,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.55, y: 0.16, z: 0.16}
+  m_Size: {x: 1.1, y: 0.32, z: 0.32}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3485921239537568962
 MonoBehaviour:
@@ -1088,4 +1089,30 @@ MonoBehaviour:
   onCarryEnd: {fileID: 0}
   onKick: {fileID: 0}
   onHitCreature: {fileID: 0}
+  onReturnHome: {fileID: 0}
+  onTug: {fileID: 0}
   hitSpeedThreshold: 2.5
+  returnHomeAfterSeconds: 25
+  thrownMemorySeconds: 20
+--- !u!114 &4147310118013298000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5705197648943313294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab769dc8984be584e8992e87195850cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.MessEmitter
+  toy: {fileID: 3485921239537568962}
+  stainPrefab: {fileID: 2022677963312320180, guid: 6f6ddd9dbe69f234cb8f45b71831d975, type: 3}
+  spacing: 3
+  chance: 0.15
+  minGap: 1
+  maxStains: 5
+  minSpeed: 0.5
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295

@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Theme.uss" />
+    <Style src="SettingsPanelUITKStyle.uss" />
+    <ui:VisualElement name="root" class="mm-theme set-root">
+        <ui:VisualElement name="panel" class="set-panel">
+            <ui:Label name="title" text="Ajustes" class="set-title" />
+            <ui:VisualElement name="body" class="set-body">
+                <ui:VisualElement name="nav" class="set-nav" />
+                <ui:ScrollView name="content" class="set-content" mode="Vertical" />
+            </ui:VisualElement>
+            <ui:VisualElement name="footer" class="set-footer">
+                <ui:Label name="status" text="" class="set-status" picking-mode="Ignore" />
+                <ui:Button name="apply-button" text="Aplicar" class="set-button set-button--primary" />
+                <ui:Button name="reset-button" text="Restablecer sección" class="set-button" />
+                <ui:Button name="back-button" text="Volver" class="set-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

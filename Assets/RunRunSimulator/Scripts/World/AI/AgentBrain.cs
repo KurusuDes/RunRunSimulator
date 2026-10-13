@@ -191,8 +191,14 @@ internal class AgentBrain
         float scaledDt = dt * (GameClock.Instance != null ? GameClock.Instance.NeedsTimeScale : 1f);
 
         ctx.Dna.Needs.AddHealth(-owner.healthDecayPerGameMinute * scaledDt);
-        ctx.Dna.Needs.AddAffect(-owner.affectDecayPerGameMinute * scaledDt);
+        float affect = ctx.Dna.Needs.Affect;
+        if (affect > owner.affectRestValue)
+            ctx.Dna.Needs.AddAffect(-Mathf.Min(owner.affectDecayPerGameMinute * scaledDt, affect - owner.affectRestValue));
+        else if (affect < owner.affectRestValue)
+            ctx.Dna.Needs.AddAffect(Mathf.Min(owner.affectRecoveryPerGameMinute * scaledDt, owner.affectRestValue - affect));
         if (ctx.IsMoving) ctx.Dna.Needs.AddEnergy(-owner.energyDecayPerGameMinute * scaledDt);
+        else if (ctx.Dna.Needs.Energy < owner.energyRestCap)
+            ctx.Dna.Needs.AddEnergy(Mathf.Min(owner.energyRestPerGameMinute * scaledDt, owner.energyRestCap - ctx.Dna.Needs.Energy));
     }
 
     private bool TryEnterNeedSeeking()
