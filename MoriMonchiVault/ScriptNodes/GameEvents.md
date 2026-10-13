@@ -6,9 +6,9 @@ tags: [script, core, events-bus]
 
 **Ruta:** `Core/GameEvents.cs`
 
-**Responsabilidad:** Bus de eventos cross-system estático. 18 eventos: registry/breeding/inventory/navmesh/customer/expedition/creature-lifecycle/world-state/day-cycle/rescue/shop-zone/orders. Llama y evento son pares (ej. `OnRegistryChanged` + método `RegistryChanged()`). Patrón: gameplay dispara evento → GameManager persiste + UI refresca. S131: agregados 4 eventos de reloj (WorldState changed/reloaded, Day started, DayBlock changed). S137: `OnCreatureFormChanged` dispara cuando criatura cambia de forma (Egg→Slime→Adult), re-arma visual. S149: se retiran los eventos de muebles y se agregan `OnRescueGiftSent` y `OnShopZoneOpened`. **S151:** se agrega `OnOrderCompleted` (encargo de tienda completado).
+**Responsabilidad:** Bus de eventos cross-system estático. 21 eventos: registry/breeding/inventory/navmesh/customer/expedition/creature-lifecycle/world-state/day-cycle/rescue/shop-zone/orders/tienda-cajas/estaciones/metas. Llama y evento son pares (ej. `OnRegistryChanged` + método `RegistryChanged()`). Patrón: gameplay dispara evento → GameManager persiste + UI refresca. S131: agregados 4 eventos de reloj (WorldState changed/reloaded, Day started, DayBlock changed). S137: `OnCreatureFormChanged` dispara cuando criatura cambia de forma (Egg→Slime→Adult), re-arma visual. S149: se retiran los eventos de muebles y se agregan `OnRescueGiftSent` y `OnShopZoneOpened`. S151: se agrega `OnOrderCompleted` (encargo de tienda completado). **S152:** se agregan `OnCreatureBoxOrdered`, `OnStationRefilled` y `OnGoalCompleted`.
 
-## Eventos (18 totales)
+## Eventos (21 totales)
 
 | Evento | Parámetros | Descripción |
 |--------|-----------|-------------|
@@ -30,6 +30,9 @@ tags: [script, core, events-bus]
 | `OnRescueGiftSent` | `CreatureBoxSO box` | **(S149)** El tío envió la caja de rescate → aviso en UI (`InfoOverlayUITK`) |
 | `OnShopZoneOpened` | `ShopUpgradeSO expansion, int level` | **(S149)** Una expansión de tienda se abrió en juego → rehorneado de NavMesh |
 | `OnOrderCompleted` | `ShopOrder order` | **(S151)** Un encargo del tablero se completó → aviso en UI (`InfoOverlayUITK`) |
+| `OnCreatureBoxOrdered` | `CreatureBoxSO box` | **(S152)** Se encargó una caja de criatura en la tienda (con cobro) → paso del tutorial |
+| `OnStationRefilled` | `SupplyKind kind` | **(S152)** Una estación de necesidades se rellenó → paso del tutorial |
+| `OnGoalCompleted` | `GoalSO goal` | **(S152)** Una meta de tienda se cumplió → toast en UI (`InfoOverlayUITK`) |
 
 ## Contrato de eventos
 
@@ -38,10 +41,11 @@ tags: [script, core, events-bus]
 - `Reloaded`: Reemplazo desde fuente externa (cloud pull / reset) → UI refresca, NO persist ni cloud push
 - `CreatureDeparted`: Criatura ida (IsDead=true o Sold) → UI desaparece ficha + social graph actualiza
 - `CreatureFormChanged` **(S137)**: Forma cambió → MonchiVisualizer reconstruye visual (Egg/Slime/Adult). Disparado por BreedingController (Lay/Hatch), CreatureGrowth (Hatch/RecordExploration).
-- `WorldStateChanged`: Muta Day/MinuteOfDay/encargos → GameManager.PersistWorldState + cloud push (integrado S131)
+- `WorldStateChanged`: Muta Day/MinuteOfDay/encargos/metas/tutorial → GameManager.PersistWorldState + cloud push (integrado S131)
 - `DayBlockChanged`: Bloque cambió (automático en GameClock) → sistemas reaccionan (clientes open/close, expediciones open/close)
 - `ShopZoneOpened` **(S149)**: Solo se dispara en juego (no en carga). `ShopZone` lo emite; `NavMeshRebaker` rehornea.
 - `OrderCompleted` **(S151)**: Lo dispara `OrderBoardService` tras pagar la recompensa. Va después de `WorldStateChanged`.
+- `GoalCompleted` **(S152)**: Lo dispara `GoalService` tras pagar la recompensa y marcar la meta. Va antes de `WorldStateChanged`.
 
 **Datos en payload:**
 - El evento transporta la data (registry, inventario, resultado, criatura, estado, bloque, etc.)
@@ -64,7 +68,7 @@ tags: [script, core, events-bus]
 
 ### OnWorldStateChanged / WorldStateChanged(WorldStateSO state)
 
-**Disparado por:** GameClock cuando cambia Day o MinuteOfDay (cada frame si hay movimiento de tiempo). También `OrderBoardService` al re-tirar o completar encargos (S151).
+**Disparado por:** GameClock cuando cambia Day o MinuteOfDay (cada frame si hay movimiento de tiempo). También `OrderBoardService` al re-tirar o completar encargos (S151), `GoalService` al completar metas o sumar progreso (S152), `StationSupply` al cruzar decena y `TutorialDirector` al avanzar paso (S152).
 
 **Suscriptores:**
 - `GameManager.PersistWorldState()` → `SaveSystem.SaveWorldState(state)` + RequestPush
@@ -78,6 +82,7 @@ tags: [script, core, events-bus]
 **Suscriptores:**
 - `GameClock.HandleWorldStateReloaded()` → fija `state = reloaded`, `blockIndex`, `loaded = true`, dispara DayBlockChanged
 - `OrderBoardService` → re-tira encargos si el día cambió (S151)
+- `GoalService`, `TutorialDirector`, `StationSupply`, `StoreManager` → releen su parte del estado (S152 / previos)
 
 **Invariantes:** Reemplazo wholesale (no mergea local).
 
@@ -87,6 +92,8 @@ tags: [script, core, events-bus]
 
 **Suscriptores:**
 - `OrderBoardService` → re-tira los 3 encargos del día (S151)
+- `StoreManager` → restock diario (`RestockIfNeeded`)
+- `InfoOverlayUITK` → refresca reloj
 - (Resto reservado para expansión: NPC diarios, events, reset de cooldowns)
 
 **Invariantes:** Dispara 1x por día (cuando MinuteOfDay wraps ≥ 1440).
@@ -114,7 +121,7 @@ tags: [script, core, events-bus]
 
 **Disparado por:** `ShopZone` al pasar de cerrada a abierta en juego.
 
-**Suscriptores:** `NavMeshRebaker.OnShopZoneOpened` → programa rehorneado.
+**Suscriptores:** `NavMeshRebaker.OnShopZoneOpened` → programa rehorneado; `GoalService.OnShopZoneOpened` → re-evalúa metas de tipo expansión (S152).
 
 ## S151: Encargos de tienda
 
@@ -122,7 +129,27 @@ tags: [script, core, events-bus]
 
 **Disparado por:** `OrderBoardService.OnCustomerSold` tras quitar el encargo de `WorldStateSO.Orders` y acreditar `Wallet.Add(Dabloons, Reward)`.
 
-**Suscriptores:** `InfoOverlayUITK.HandleOrderCompleted`.
+**Suscriptores:** `InfoOverlayUITK.HandleOrderCompleted`, `GoalService` (contador `orders`, S152).
+
+## S152: Caja, estación y metas
+
+### OnCreatureBoxOrdered / CreatureBoxOrdered(CreatureBoxSO box)
+
+**Disparado por:** `StoreManager.BuyCreatureBox` tras spawnear la `DeliveryBox` (solo compra exitosa con cobro o gratis; no el regalo del tío).
+
+**Suscriptores:** `TutorialDirector.OnBoxOrdered` (señal `BoxOrdered`).
+
+### OnStationRefilled / StationRefilled(SupplyKind kind)
+
+**Disparado por:** `StationSupply.Interact()` tras rellenar y persistir.
+
+**Suscriptores:** `TutorialDirector.OnStationRefilled` (señal `FoodRefilled` si `kind == Food`).
+
+### OnGoalCompleted / GoalCompleted(GoalSO goal)
+
+**Disparado por:** `GoalService.Apply()` al marcar la meta y pagar su recompensa.
+
+**Suscriptores:** `InfoOverlayUITK.HandleGoalCompleted` (toast).
 
 ## Cambios Históricos
 
@@ -133,6 +160,7 @@ tags: [script, core, events-bus]
 **S137:** `OnCreatureFormChanged` agregado (Egg/Slime/Adult).
 **S149:** Eliminados `OnFurnitureChanged` y `OnFurnitureReloaded` (sistema de muebles borrado). Agregados `OnRescueGiftSent` y `OnShopZoneOpened`.
 **S151:** Agregado `OnOrderCompleted` (tablero de encargos). Total 18.
+**S152:** Agregados `OnCreatureBoxOrdered`, `OnStationRefilled` y `OnGoalCompleted`. Total 21.
 
 ## Vinculado a
 
@@ -151,6 +179,9 @@ tags: [script, core, events-bus]
 - [[UncleRescueService]] — dispara RescueGiftSent (S149)
 - [[ShopZone]] — dispara ShopZoneOpened (S149)
 - [[OrderBoardService]] — escucha WorldStateReloaded, DayStarted, CustomerSold; dispara WorldStateChanged y OrderCompleted (S151)
+- [[StoreManager]] — dispara CreatureBoxOrdered (S152)
+- [[StationSupply]] — dispara StationRefilled (S152)
+- [[GoalService]] — escucha CustomerSold, ExpeditionReturned, OrderCompleted, BreedingCompleted, ShopZoneOpened, WorldStateReloaded; dispara GoalCompleted (S152)
 
 **Tiempo (S131):**
 - [[GameClock]] — dispara DayStarted, DayBlockChanged, suscribe WorldStateReloaded
@@ -158,15 +189,16 @@ tags: [script, core, events-bus]
 - [[DayScheduleSO]] — payload de DayBlockDef
 
 **UI/Systems:**
-- [[InfoOverlayUITK]], [[CreatureGridUI]] — reaccionan a RegistryChanged, RegistryReloaded (InfoOverlayUITK también a RescueGiftSent y OrderCompleted)
+- [[InfoOverlayUITK]], [[CreatureGridUI]] — reaccionan a RegistryChanged, RegistryReloaded (InfoOverlayUITK también a RescueGiftSent, OrderCompleted y GoalCompleted)
 - [[MonchiVisualizer]] — reacciona a CreatureFormChanged para re-armar visual (S137)
 - [[NpcController]] — reacciona a DayBlockChanged para spawn customer
 - [[NavMeshRebaker]] — reacciona a WorldStateReloaded y ShopZoneOpened; emite NavMeshWillRebake / NavMeshRebaked
+- [[TutorialDirector]] — reacciona a CreatureBoxOrdered, StationRefilled, RegistryChanged, ExpeditionReturned, WorldStateChanged/Reloaded (S152)
 - [[UIManager]] — reacciona a múltiples para refresh
 
 ## Notas (S137 HC-4 + Ciclo de Vida)
 
-- **Densidad:** 18 eventos, cada uno muy específico. No hay eventos "catch-all".
+- **Densidad:** 21 eventos, cada uno muy específico. No hay eventos "catch-all".
 - **Changed→Persist:** Patrón: gameplay dispara Changed → GameManager suscriptor persiste. No hay gaming code que calle SaveSystem directo.
 - **FormChanged→Visualizer:** Desacoplamiento: CreatureGrowth no conoce MonchiVisualizer; el evento es el puente.
 - **World state:** Ahora unificado en SO único, eventos claros. Antes era desacoplado.

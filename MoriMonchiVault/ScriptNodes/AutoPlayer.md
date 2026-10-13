@@ -6,7 +6,7 @@ tags: [script, dev, testing, autoplayer]
 
 **Ruta:** `Systems/Dev/AutoPlayer.cs`
 
-**Responsabilidad:** Bot de testing automatizado (dev) ejecutor de 17 pasos: onboarding (compra caja, apertura) + 3 eclosiones + expedición arena + ciclo de cría/venta/mejora. Singleton `DontDestroyOnLoad`. Refactorizado S138: delegó pasos 1-10 a `AutoPlayerOpeningSteps`, pasos 11-17 a `AutoPlayerLoopSteps`. Orquestador delgado.
+**Responsabilidad:** Bot de testing automatizado (dev) ejecutor de 17 pasos: onboarding (compra caja, apertura) + 3 eclosiones + expedición arena + ciclo de cría/venta/mejora. Singleton `DontDestroyOnLoad`. Refactorizado S138: delegó pasos 1-10 a `AutoPlayerOpeningSteps`, pasos 11-17 a `AutoPlayerLoopSteps`. Orquestador delgado. **S152:** usa los nombres de escena de `SceneFlow` (`ArenaScene`, `StoreScene`) en lugar de cadenas propias.
 
 **S138:** División en colaboradores; carga pasos internos en `Sequence()` vía `new AutoPlayerOpeningSteps(this)` + `new AutoPlayerLoopSteps(this)`.
 
@@ -62,7 +62,7 @@ tags: [script, dev, testing, autoplayer]
 - `Fail(string reason)` — asigna `failed=true`, Status="FALLA paso X · reason", Debug.Break()
 - `Ok(string name, string data)` — Status="OK paso X · name · data", Debug.Log()
 - `ExpeditionsUntil(Func<bool> condition, int max, string why, List<string> occupyIds=null) → IEnumerator` — itera expediciones hasta lograr condición
-- `PlayExpedition(List<string> teamIds) → IEnumerator` — lanza expedición, espera resultado
+- `PlayExpedition(List<string> teamIds) → IEnumerator` — lanza expedición, espera resultado (espera `SceneFlow.ArenaScene`, luego `SceneFlow.StoreScene` con el resultado)
 
 ## Suscripciones
 
@@ -82,4 +82,4 @@ tags: [script, dev, testing, autoplayer]
 - [[Index/23 - Arena Sandbox y Expedicion]]
 - [[Index/28 - Currency & Monetization]] (mejoras)
 
-**Conexiones:** [[AutoPlayerOpeningSteps]], [[AutoPlayerLoopSteps]], [[AutoPlayerQuery]], [[GameEvents]], [[GameManager]], [[Wallet]], [[BreedingController]], [[StoreManager]], [[MoriMochiSpawner]], [[CloudSyncService]]
+**Conexiones:** [[AutoPlayerOpeningSteps]], [[AutoPlayerLoopSteps]], [[AutoPlayerQuery]], [[GameEvents]], [[GameManager]], [[Wallet]], [[BreedingController]], [[StoreManager]], [[MoriMochiSpawner]], [[CloudSyncService]], [[SceneFlow]] (S152)
