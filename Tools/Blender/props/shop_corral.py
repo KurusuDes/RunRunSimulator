@@ -47,7 +47,7 @@ def make_materials():
         rgb = [srgb_to_linear(int(hx[i:i + 2], 16) / 255.0) for i in (0, 2, 4)]
         m = bpy.data.materials.new(name)
         m.use_nodes = True
-        bsdf = m.node_tree.nodes.get("Principled BSDF")
+        bsdf = m.node_tree.nodes.get("Principled BSDF") or m.node_tree.nodes.new("ShaderNodeBsdfPrincipled")
         bsdf.inputs["Base Color"].default_value = (rgb[0], rgb[1], rgb[2], 1.0)
         bsdf.inputs["Roughness"].default_value = 0.85
         m.diffuse_color = (rgb[0], rgb[1], rgb[2], 1.0)

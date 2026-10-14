@@ -37,6 +37,7 @@ MoriMonchiVault/
 | **Demo Brawl 3v3 arcade (S142): ala = básico + movilidad, cuerno/espalda = habilidades con cooldown en 10 familias, personalidad = postura, último en pie, muerte súbita, VFX con íconos pixel art** ⭐ | [[Index/32 - Demo Brawl 3v3 arcade]] | `Scripts/World/Brawl/` (BrawlFighter, BrawlBrain, BrawlSkillJudge, BrawlWing, BrawlSkillCaster, BrawlMatch, BrawlVfx…), `Scripts/Data/Brawl/`, `Scripts/UI/BrawlHud*` |
 | **Contenido que falta para el core loop (S147): inventario + P0/P1/P2 + decisiones** | [[Index/33 - Contenido para el core loop]] | — |
 | **ROADMAP DE CIERRE DEL GAMEPLAY (S149): checklist viva A-H, se marca al cerrar cada ítem** ⭐ | [[Index/34 - Roadmap de cierre del gameplay]] | — (lista viva; `25`/`28`/`33` quedan como mapa y diseño) |
+| **CRECIMIENTO DE LA TIENDA (4 etapas, 16 zonas con 3 niveles) + OUTER WORLD (misiones y NPCs, draft) (S153)** ⭐ | [[Index/35 - Crecimiento de la tienda y Outer World]] | arte en `Tools/Blender/props/README_props.md` |
 | **Combate v3 Dragon RPS (S92-S95 — 🪦 FALLIDO S96, código en pie)** | [[Index/21 - Combate v3 - Dragon RPS]] | `Scripts/DragonRps/` (DragonRpsRules, DragonRpsMatch, DragonRpsSession, etc.) |
 | **Combate prototipo táctico S77-S88 (NO VALIDÓ — DEMOLIDO S93)** | [[Index/09b - Session Digest (S8-S88)]] (timeline S77-S88); código, escena, assets, nota `Index/20` y ScriptNodes borrados — recuperables en git `3cc5eb5` | — |
 | **Combate viejo 3v3 (DEMOLIDO S75 — solo historia)** | [[Index/03 - Combat]] (historico), [[Index/09b - Session Digest (S8-S88)]] | — |

@@ -52,7 +52,8 @@ Leyenda: `[x]` hecho · `[ ]` falta · ~~tachado~~ = se cae por una decisión. O
 - [x] D3 · ✅ S149 Comprar una expansión en la PC abre el área: se levantan los muros (MMF de Feel) y el NavMesh se rehornea una vez (`NavMeshRebaker`). Pestaña de la PC: "Expansiones"
 - [x] D4 · ✅ S149 Lista v1: **base** (local, patio, vitrina, incubadora, comedero, cama) · **Criadero** (lote oeste; 60 abre con 1 corral, 90/140/200 suman corrales) · **Sala de juegos** (lote este; 120, estación de juego). Precios provisionales de la IA
 - [x] D5 · ✅ S149 Quitar el Ring
-- [ ] D6 · Arte real del equipamiento de cada zona (hoy hay cubos de ProBuilder)
+- [x] D6 · ✅ S153 Arte real del equipamiento y de la arquitectura: 30 piezas Blender estilo KayKit (estaciones, mostrador, vitrina, corral, incubadora + repisa, pedestales, tablero, trastienda, fachada y calle) + edificio, patio, calle y zonas en madera de cuento (Juan: "los props están perfectos"; estética v2 aprobada). Pipeline y brief en `Tools/Blender/props/README_props.md`
+- [ ] D7 · **Crecimiento por 4 etapas** con zonas de 3 niveles (Juan S153, aprobado): plan y material a crear en [[Index/35 - Crecimiento de la tienda y Outer World]] Parte 1
 
 ## E · Zona de breeding
 
@@ -68,7 +69,7 @@ Leyenda: `[x]` hecho · `[ ]` falta · ~~tachado~~ = se cae por una decisión. O
 - [ ] E8 · **Puff a la Huevera**: las parejas se forman solas (como hoy); cuando terminan de aparearse, el jugador se acerca y con **E** la pareja se separa y el huevo hace *puff* y aparece en la repisa. En el corral ya no se eclosiona nada
 - [ ] E9 · **Huevera = repisa sobre la incubadora**: el jugador elige qué huevo de la repisa pasa a la incubadora y decide si empezar la eclosión pagando Minerita (reusa `IncubatorContainer` y el modelo `ShopIncubator`, S152)
 - [ ] E10 · **Repisa llena = sin cortejo**: si la repisa está llena, los MoriMonchis de los corrales dejan de cortejar hasta que haya lugar
-- [ ] E11 · Arte: corral grande (sale de `Tools/Blender/props/shop_corral.py`, S152) + repisa de huevos
+- [x] E11 · ✅ S153 Arte: corral (`ShopCorral`, tamaño actual 2.8 m; se agranda con E7) + repisa de huevos (`ShopEggShelf`, 6 nidos) al lado de la incubadora
 
 ## F · Juguetes y vida social (lo más importante para Juan)
 

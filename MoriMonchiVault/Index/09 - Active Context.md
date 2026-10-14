@@ -4,6 +4,31 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-14 (Session 153 — **arte de toda la tienda (D6 + E11): 30 props Blender estilo KayKit + edificio y entorno en madera de cuento; plan de crecimiento en 4 etapas; draft del outer world** — 1 `.cs` creado; compila 0 errores; probado en Play por sondas y capturas)
+
+**Focus:** Juan: "ya tenemos espacio, procede a crear todos los assets"; luego "incluyendo los diseños de la tienda"; tras ver el artifact: props "perfectos", pidió estética de **madera y fantasía, tienda de mascotas, sin rojo ni damero**; después pidió plantear la tienda en **4 etapas con zonas mejorables** (dabloons = tienda, Minerita = MoriMonchis) y al cierre preparar el **outer world** (misiones y NPCs).
+
+**Hecho:**
+1. **Pipeline de props**: `Tools/Blender/props/props_common.py` (helpers, paleta `SH_*`, export, hoja de contacto con MoriMochi a escala de juego 0.7 = 0,99 m) + `README_props.md` (hoja de ruta, vara KayKit, tandas 1-3). Blender 4.5 en `C:\Program Files\Blender Foundation\Blender 4.5`. Los scripts S152 (`shop_pc/incubator/corral.py`) arreglados para 4.5.
+2. **Tanda 1 (props, 7 agentes Opus en paralelo)**: comedero, bebedero, cama, estación de juego, caja registradora, vitrina, cartel de zona bloqueada, repisa de huevos, pedestal, tablero de crianza (de pie), fichero, radio, baúl, mesita, trapeador, snack + los 3 de S152. Colocados como hijo `ShopModel` (o `ShopShelf`) en los prefabs (corral, incubadora, vitrina, estaciones, Mop, Snack) o en escena (caja registradora: su prefab tiene un script faltante y no guarda; carteles; PC; tablero; mesitas). El cubo viejo queda con el renderer apagado; colliders, obstáculos y puntos de interacción intactos. PC y tablero ya no son lanzables (sin `ThrowableObject`/`Rigidbody`).
+3. **Tanda 2-3 (entorno)**: `ShopBuilding`, `ShopYard`, `ShopStreet`, `ShopZoneCriadero`, `ShopZoneSalaJuegos` modelados sobre la geometría exportada de ProBuilder (OBJ en coordenadas Blender, desvío ≤ 2 cm) y colocados en el origen del mundo; renderers de PetShop/Parque/Street/BaseFloor/zonas y de `NAVMESH_SURFACES` apagados. Fachada: letrero MoriMonchis, toldos, faroles, bancas, maceteros, buzón (`ENVIROMENT/ShopFacade`). v2 de estética aprobada.
+4. **Materiales**: `Materials/Shop/SH_*` (Toon/Toon, plantilla `SC_Burlap`, sombra sin color de luz, GI 0.6) y `Materials/Shop/Env/*_Env` sin contorno para arquitectura; remapeo por nombre en cada FBX.
+5. **Artifacts**: "Props de la tienda" (https://claude.ai/artifact/UjhpKaJfqjJLVF5EiLWVng, aprobar/sugerir por pieza, v2) y "Crecimiento de la tienda" (https://claude.ai/artifact/Rmzss7PkezmcKob4M5KE4N).
+6. **Diseño**: [[Index/35 - Crecimiento de la tienda y Outer World]] — Parte 1 aprobada (4 etapas, 16 zonas × 3 niveles, regla de monedas, material a crear); Parte 2 draft del outer world con 5 decisiones para Juan. `Index/34`: D6 y E11 ✅, D7 nuevo.
+
+**Quirks ⚠️:** (1) **FBX sin UV → tangentes paralelas a la normal → el shader Toon pinta NEGRAS las caras +X**: `ShopModelUvPostprocessor` genera UV en caja (y fuerza Read/Write) para todo `Models/Shop/`. (2) Ejes Blender→Unity con export `-Z forward, Y up`: Unity(X,Y,Z) = (−bx, bz, −by); el frente de un prop (−Y en Blender) mira a +Z en Unity; rotY Unity = −rotZ Blender. (3) Las `NavMeshSurface*` tienen renderers con materiales viejos (piso rojo) que tapaban el modelo: apagados. (4) `WaterStation` es variante de `FeederStation`: hereda su `ShopModel` (apagado en la variante, usa `ShopModelWater`). (5) `ChasRegister.prefab` tiene un script faltante: no se puede guardar el prefab. (6) El `execute_code` del MCP mostró en su historial código de otra sesión (AxieDarknessArise, `ADR.EditorTools`) que falló al compilar aquí: el pin de instancia de otras sesiones puede apuntar a este editor.
+
+**Siguiente paso (S154, propuesta):**
+1. Abrir con las **5 decisiones del outer world** (`Index/35` 2.3) y las 4 de etapas (1.4, con valores por defecto).
+2. **Etapas como dato** + niveles de zona (Parte 1.5 código) e implementar N2/N3 de las zonas existentes; E7-E10 de la cría.
+3. **Arte por nivel y kit modular** (Parte 1.5 arte) con agentes Opus y el mismo pipeline.
+4. Pendientes: C6 primera build; caja registradora y letrero aún con coral (props aprobados; preguntar).
+
+**Archivos `.cs` S153 — creados (1):** `Editor/ShopModelUvPostprocessor.cs`
+**Modificados (0).**
+
+---
+
 **Session:** 2026-10-13 (Session 152 — **bloque C de `Index/34`: título + flujo de escenas, tutorial, metas; título animado con diorama; 3 props en Blender estilo KayKit; rediseño de la cría** — 10 `.cs` creados, 12 modificados; compila 0 errores; probado en Play por sondas y 6 capturas)
 
 **Focus:** Juan: "sigue con el bloque C". Luego pidió el título "woah" (animado) y modelar en Blender lo que falta de la tienda "en la línea de KayKit, que encaje con los MoriMonchis".
