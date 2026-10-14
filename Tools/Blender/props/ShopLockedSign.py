@@ -74,7 +74,7 @@ def build_lock():
     bw, bh, bd = 0.6, 0.48, 0.2
     y = -0.015
     rings = rbox_rings(bw, bh, bd, 0.15, 0.05, seg=3, Rb=0.045, segb=3, z0=-bd / 2)
-    finish("LockBody", loft(rings, 4, matrix=face_m(0, y, zc)), "SH_Coral", angle=50)
+    finish("LockBody", loft(rings, 4, matrix=face_m(0, y, zc)), "SH_Teal", angle=50)
     plate = rbox_rings(0.28, 0.3, 0.024, 0.1, 0.012, seg=2)
     finish("LockPlate", loft(plate, 4, cap0=False, matrix=face_m(0, y - bd / 2 + 0.008, zc - 0.01)), "SH_Straw", angle=55)
     kh = bmesh.new()

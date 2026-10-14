@@ -30,15 +30,91 @@ WALLS = {
     "NE": Wall("x", X_NE_END, XE_OUT, YNE_IN, -1, T, ZT, FIN, GOUT),
 }
 PILASTERS = {
-    "W": [-34.0, -30.0, -26.0, -21.6],
-    "S": [20.0, 24.0, 28.0, X_SPLIT, 36.0, 40.2],
+    "W": [-34.0, -26.0],
+    "S": [20.0, 28.0, 36.0],
     "NW": [19.8],
-    "E": [-34.0, -30.0, -27.0],
+    "E": [-34.0, -30.0],
     "NE": [40.5],
 }
 
 
 FENCE_H = 1.56
+HOLES = {"W": [-20.5, -29.5], "S": [40.9, 31.9, 22.9], "E": [-27.5]}
+
+
+def cut_hole(B, w, u0, u1, z1, vpad=0.16):
+    ua = 0 if w.axis == "x" else 1
+    pa = 1 - ua
+    lo, hi = sorted((w.P(0, -vpad, 0)[pa], w.P(0, w.T + vpad, 0)[pa]))
+    for bm in B.values():
+        def near():
+            return [f for f in bm.faces if all(lo <= v.co[pa] <= hi for v in f.verts)]
+        for val, k in ((u0, ua), (u1, ua), (z1, 2)):
+            fs = []
+            for f in near():
+                cs = [v.co[k] for v in f.verts]
+                if not (min(cs) < val - 1e-5 and max(cs) > val + 1e-5):
+                    continue
+                if k == 2:
+                    if not (u0 < f.calc_center_median()[ua] < u1):
+                        continue
+                elif min(v.co.z for v in f.verts) >= z1:
+                    continue
+                fs.append(f)
+            if not fs:
+                continue
+            es = list({e for f in fs for e in f.edges})
+            vs = list({v for f in fs for v in f.verts})
+            co, no = [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]
+            co[k], no[k] = val, 1.0
+            bmesh.ops.bisect_plane(bm, geom=vs + es + fs, dist=1e-6, plane_co=co, plane_no=no)
+        dead = []
+        for f in near():
+            c = f.calc_center_median()
+            if u0 < c[ua] < u1 and c.z < z1:
+                dead.append(f)
+        if dead:
+            bmesh.ops.delete(bm, geom=dead, context="FACES")
+
+
+def wrad(w, ru, rv, rz):
+    return (ru, rv, rz) if w.axis == "x" else (rv, ru, rz)
+
+
+def wpaw(bm, w, uc, zc, v, s=1.0):
+    ellipsoid_bm(w.P(uc, v, zc - 0.022 * s), wrad(w, 0.05 * s, 0.014, 0.04 * s), 6, 3, bm=bm)
+    for du, dz, r in ((-0.06, 0.028, 0.02), (-0.023, 0.062, 0.021), (0.023, 0.062, 0.021), (0.06, 0.028, 0.02)):
+        ellipsoid_bm(w.P(uc + du * s, v, zc + dz * s), wrad(w, r * s, 0.012, r * s * 1.12), 5, 3, bm=bm)
+
+
+PHW, PW = 0.8, 0.36
+
+
+def portal(B, w, uc):
+    for sg in (-1, 1):
+        a, b = sorted((uc + sg * PHW, uc + sg * (PHW + PW)))
+        p, q = w.P(a, -0.08, GOUT - 0.01), w.P(b, w.T + 0.08, 2.72)
+        post3(B, [min(p[i], q[i]) for i in range(3)], [max(p[i], q[i]) for i in range(3)])
+        a, b = sorted((uc + sg * PHW, uc + sg * (PHW + PW + 0.05)))
+        w.box(B["SH_Stone"], a, b, -0.12, w.T + 0.12, GOUT - 0.01, FIN + 0.3, r=0.05, segs=1)
+    L = PHW + PW + 0.14
+    du = w.P(1, 0, 0) - w.P(0, 0, 0)
+    dv = w.P(0, 1, 0) - w.P(0, 0, 0)
+    o = w.P(uc, 0, 0)
+    M = Matrix(((0, dv.x, du.x, o.x), (0, dv.y, du.y, o.y), (1, dv.z, du.z, o.z), (0, 0, 0, 1)))
+    us = [-L + 2 * L * k / 6 for k in range(7)]
+    zb = [2.26 + 0.2 * (1 - (u / L) ** 2) for u in us]
+    for mat, h, dz, d, m in (("SH_Timber", 0.2, 0.1, w.T + 0.06, 2), ("SH_Walnut", 0.06, 0.2, w.T + 0.1, 1)):
+        bm = B[mat]
+        before = set(bm.faces)
+        loft([(h, d, 0.025 if h < 0.1 else 0.06, u, z + dz, w.T / 2) for u, z in zip(us, zb)], m, bm=bm, matrix=M)
+        if M.determinant() < 0:
+            bmesh.ops.reverse_faces(bm, faces=[f for f in bm.faces if f not in before])
+    wpaw(B["SH_Gold"], w, uc, 2.56, -0.033, 1.1)
+    lantern(B, w.P(uc + PHW + PW / 2, -0.08, 1.95), w.n)
+    w.box(B["SH_Stone"], uc - PHW, uc + PHW, -0.06, w.T + 0.06, GOUT - 0.01, FIN + 0.015, r=0.04, segs=1)
+
+
 
 
 def build_walls(rng):
@@ -73,6 +149,10 @@ def build_walls(rng):
     for x, y in ((XW_OUT - 0.2, YS_OUT - 0.15), (XE_OUT + 0.18, YS_OUT - 0.2), (XE_OUT + 0.2, YNE_OUT + 0.18)):
         mushroom(B, x, y, GOUT, 1.1, "SH_Plum")
         mushroom(B, x + 0.2, y + 0.06, GOUT, 0.7, "SH_Gold")
+    for k, ucs in HOLES.items():
+        for uc in ucs:
+            cut_hole(B, W[k], uc - PHW - PW / 2, uc + PHW + PW / 2, 99.0)
+            portal(B, W[k], uc)
     return B.done("Walls")
 
 
@@ -186,7 +266,8 @@ dev_f2 = check_floor([o for o in floors if not o.name.endswith("Grass")], [DECK,
 skips = {k: v + [] for k, v in PILASTERS.items()}
 for k, w in WALLS.items():
     a, b = {"W": (YS_IN, YNW_IN), "S": (XW_IN, XE_IN), "NW": (XW_IN, X_BLD_W), "E": (YS_IN, YNE_IN), "NE": (X_BLD_E, XE_IN)}[k]
-    check_wall(walls, w, a + 0.3, b - 0.3, skip=PILASTERS[k], label="inner_" + k)
+    skip = PILASTERS[k] + [uc + d for uc in HOLES.get(k, []) for d in (-1.1, -0.55, 0.0, 0.55, 1.1)]
+    check_wall(walls, w, a + 0.3, b - 0.3, skip=skip, label="inner_" + k)
 parts_report()
 ob = join_all("ShopYard")
 report(ob)
@@ -199,6 +280,9 @@ views = [
     ("care", 160, 45, (41.6, -31.5, 0.4), 10.0),
     ("corner", 225, 35, (17.6, -36.9, 0.6), 5.5),
     ("ext", 20, 25, (30.5, -38.6, 0.4), 9.0),
+    ("gateN", 200, 40, (31.9, -38.3, 1.1), 4.5),
+    ("gateW", 250, 40, (15.7, -20.5, 1.1), 4.5),
+    ("gateE", 250, 35, (45.3, -27.5, 1.1), 4.5),
 ]
 dragons = [(20.0, -31.2, FIN, 190.0), (39.6, -30.8, FIN, 160.0), (17.6, -36.0, FIN, 220.0), (30.0, -39.8, GOUT, 20.0)]
 env_preview(ob, out, ["Parque"], views, dragons, C, 32.0)

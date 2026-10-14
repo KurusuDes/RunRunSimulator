@@ -48,7 +48,7 @@ def build_counter():
     panel = rbox_rings(pw, ph, 0.03, 0.06, 0.014, seg=2)
     finish("FrontPanel", loft(panel, 3, cap0=False, matrix=face_m(0, yf + 0.008, zc)), "SH_Cream", angle=55)
     prof = [(0.0, 0.0), (0.13, 0.0), (0.135, 0.02), (0.128, 0.034), (0.11, 0.036), (0.1, 0.03), (0.0, 0.03)]
-    finish("Coin", lathe_bm(prof, 20, matrix=face_m(0, yf - 0.018, zc)), "SH_Coral", angle=50)
+    finish("Coin", lathe_bm(prof, 20, matrix=face_m(0, yf - 0.018, zc)), "SH_Gold", angle=50)
     finish("CoinSign", dollar_bm(0, yf - 0.05, zc, 1.6, r=0.012), "SH_Cream", angle=70)
     for sx in (-1, 1):
         side = rbox_rings(0.44, 0.46, 0.03, 0.06, 0.014, seg=2)
@@ -64,7 +64,7 @@ def build_counter():
     bm = bmesh.new()
     for sx in (-1, 1):
         lathe_bm(prof, 12, bm=bm, matrix=face_m(sx * 0.06, BD / 2 + 0.018, zc, facing=1))
-    finish("BackKnobs", bm, "SH_Coral", angle=60)
+    finish("BackKnobs", bm, "SH_Gold", angle=60)
 
 
 def build_register():
@@ -74,7 +74,7 @@ def build_register():
     yb = REG_Y + 0.25
     df = rbox_rings(0.46, 0.075, 0.025, 0.03, 0.01, seg=2)
     finish("DrawerFront", loft(df, 2, cap0=False, matrix=face_m(0, yb - 0.006, z0 + 0.065, facing=1)), "SH_Cream", angle=55)
-    finish("DrawerKnob", ellipsoid_bm((0, yb + 0.03, z0 + 0.065), (0.04, 0.03, 0.03), 10, 6), "SH_Coral", angle=80)
+    finish("DrawerKnob", ellipsoid_bm((0, yb + 0.03, z0 + 0.065), (0.04, 0.03, 0.03), 10, 6), "SH_Gold", angle=80)
 
     zb = z0 + 0.12
     rings = rbox_rings(0.54, SLOPE_Y1 - SLOPE_Y0, 1.0, 0.06, 0.05, seg=3, Rb=0.0, cy=(SLOPE_Y0 + SLOPE_Y1) / 2)
@@ -108,7 +108,7 @@ def build_register():
             kr = rbox_rings(size, size + pitch - 0.004, 0.045, 0.026, 0.018, seg=2, z0=-0.02)
             loft(kr, 2, cap0=False, bm=big, matrix=Matrix.Translation((0.135, REG_Y + yc, zc)) @ rot)
     finish("Keys", keys, "SH_Cream", angle=55)
-    finish("BigKey", big, "SH_Coral", angle=55)
+    finish("BigKey", big, "SH_Gold", angle=55)
 
     ty = SLOPE_Y0 + 0.065
     tz = zb + BODY_H0 - 0.05
@@ -119,7 +119,7 @@ def build_register():
         finish("Window", loft(win, 2, cap0=False, matrix=face_m(0, yy - f * 0.006, tz + 0.075, facing=f)), "SH_Cream", angle=55)
     fz = tz + 0.13 - 0.01
     flag = rbox_rings(0.2, 0.15, 0.04, 0.05, 0.018, seg=2)
-    finish("Flag", loft(flag, 3, matrix=face_m(0, ty + 0.02, fz + 0.075)), "SH_Coral", angle=50)
+    finish("Flag", loft(flag, 3, matrix=face_m(0, ty + 0.02, fz + 0.075)), "SH_Gold", angle=50)
     bm = dollar_bm(0, ty - 0.022, fz + 0.075, 1.15, facing=-1, r=0.013)
     dollar_bm(0, ty + 0.022, fz + 0.075, 1.15, facing=1, r=0.013, bm=bm)
     finish("FlagSign", bm, "SH_Cream", angle=70)
@@ -134,7 +134,7 @@ def build_register():
     bm = tube_bm(arm, 0.018, 8)
     tube_bm([(hx + 0.04, hy + 0.1, hz - 0.075), (hx + 0.12, hy + 0.1, hz - 0.075)], 0.017, 8, bm=bm)
     finish("CrankArm", bm, "SH_Cream", angle=60)
-    finish("CrankKnob", ellipsoid_bm((hx + 0.14, hy + 0.1, hz - 0.075), (0.042, 0.038, 0.038), 10, 6), "SH_Coral", angle=80)
+    finish("CrankKnob", ellipsoid_bm((hx + 0.14, hy + 0.1, hz - 0.075), (0.042, 0.038, 0.038), 10, 6), "SH_Gold", angle=80)
 
 
 def build_bell():
@@ -143,7 +143,7 @@ def build_bell():
     finish("BellBase", lathe_bm(prof, 16, matrix=Matrix.Translation((x, y, z))), "SH_Cream", angle=50)
     prof = [(0.062, 0.018), (0.064, 0.03), (0.056, 0.058), (0.04, 0.08), (0.02, 0.09), (0.0, 0.093)]
     prof = [(0.0, 0.018)] + prof
-    finish("BellDome", lathe_bm(prof, 16, matrix=Matrix.Translation((x, y, z))), "SH_Coral", angle=60)
+    finish("BellDome", lathe_bm(prof, 16, matrix=Matrix.Translation((x, y, z))), "SH_Gold", angle=60)
     finish("BellNub", ellipsoid_bm((x, y, z + 0.1), (0.018, 0.018, 0.016), 8, 5), "SH_Cream", angle=80)
 
 

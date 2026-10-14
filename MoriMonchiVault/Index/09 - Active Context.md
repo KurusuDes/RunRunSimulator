@@ -4,6 +4,28 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-14 (Session 154 — **arte de las etapas (Index/35 Parte 1.5): 52 piezas Blender + kit modular, lotes de vista previa de etapas 3-4 pegados a la tienda y caminables, pasto estilo BotW + bosque, video de crecimiento; fix del NavMesh roto desde S153** — 1 `.cs` creado, 2 modificados, 2 shaders; compila 0 errores; verificado en Play por sondas de NavMesh y capturas)
+
+**Focus:** Juan: "procede con los props de las etapas", luego "ponlos en escena para visualizar", "que cada módulo se una a la tienda", "reutiliza bosque y pasto, pasto tipo Zelda BotW" y "motion graphics de cómo crece la tienda".
+
+**Hecho:**
+1. **Tandas 4-6 de props (13 agentes Opus, `README_props.md` tandas 4-6):** kit modular `ZoneKit*` (piso 3×3, pared lisa/ventana/puerta, esquina, remate con hiedra; franja de acento `SH_Sage` recoloreable), piezas por nivel (`ShopShowcaseL2/L3`, `ShopCounterExt`, `ShopFeederDouble`, `ShopWaterDouble`, `ShopBedCanopy`, `ShopOrderBoard`, `ShopSandbox`, `ShopHoseReel`, `ShopPuddle`, `ShopPlayMat`), etapa 3 (Guardería, Baño, Cocina, Almacén) y etapa 4 (Escenario, Gimnasio, Clínica, Linaje), 4 piezas por sala. Recolor sin coral de `ShopRegister`/`ShopSignMain`/`ShopLockedSign`. Remapeo de materiales `SH_*` (kit → `_Env`). Artifact de props v3 con recorrido: https://claude.ai/artifact/UjhpKaJfqjJLVF5EiLWVng
+2. **Escena:** grupos `Level2`/`Level3` (inactivos) bajo cada zona actual con sus piezas; `PREVIEW_ETAPAS` con 8 lotes 9×9 pegados (Almacén/Guardería al oeste, Baño/Cocina/Linaje al este, Escenario/Gimnasio/Clínica al norte del patio), sin la pared del lado de la puerta, colliders propios, `Piso` con `NavMeshModifier` y `Umbrales` invisibles en cada puerta. Puertas abiertas en el Criadero (oeste), la Sala (este) y la cerca del patio (6): FBX re-exportados + colliders partidos (`Wall_W_Puerta`, `Wall_E_Puerta`, `ParqueColliders`; MeshCollider de `Parque` apagado).
+3. **Bug S153 arreglado:** `NavMeshSurface` usa RenderMeshes y S153 apagó los renderers de los pisos de navegación → NavMesh de 28 tris. Ahora esos renderers están encendidos con `NavMeshInvisible.mat` (shader `MoriMonchi/NavMeshInvisible`). Verificado: patio → 6 lotes `PathComplete`; Almacén y Baño quedan parciales mientras Criadero/Sala estén cerrados.
+4. **Pasto y bosque:** `ArenaGrass.shader` (compartido) con ráfagas en bandas, brillo de ráfaga, manchas de color y translucidez de punta; trample seguro si no hay mapa. `ArenaGrassBlades` con briznas curvas (`segments`). `ShopGrassField` (nuevo, `WORLD/ShopGrass`): patio corto (0,16-0,30) y afuera alto (0,35-0,75), ~660k vértices. `ShopMeadow` + `ShopForest` (238 árboles Synty con `ArenaPalette` y rampas en `Materials/Shop/Forest`).
+5. **Video:** `Tools/Trailer/growth_reel.csx` (render por tramos con `EditorPrefs MM_GrowthChunk`, restaura la escena), `growth_synth.py` (música + pops sincronizados con `growth/pops.txt`), `make_growth.sh` (títulos ffmpeg). Salida en `Tools/Trailer/growth/` (no se commitea).
+
+**Quirks ⚠️:** (1) Un shader sin pass da error y pinta magenta: el invisible necesita un pass con `ColorMask 0`. (2) `replay` de `execute_code` puede reejecutarse varias veces: el render por tramos con contador en `EditorPrefs` lo vuelve idempotente. (3) El tiempo de viento del pasto en el render de edición corre en tiempo real, no en tiempo de video. (4) El MCP `Artifact` rechazó imágenes desde el scratchpad ("symlink"); publicar desde `Captures/`.
+
+**Siguiente paso (S155, propuesta):**
+1. **Pasto nivel toon triple A** (Juan: "en lugar de sumar, resta"): investigar referentes (BotW/TotK, Genshin, Ghibli-like, Sable) y probar: normales esféricas/de terreno en vez de por brizna, color de raíz igual al suelo, gradiente y sombra suave, densidad/altura menor y variada, bordes que se funden, flores y matas; comparar capturas antes/después.
+2. Sidekick Synty: Juan lo agrega a My Assets y lo importamos (base de jugador y NPCs).
+3. Pendientes: briznas que se aparten al pasar (trample en la tienda), código de etapas y niveles (Index/35 1.5 código), C6 primera build.
+
+**Archivos `.cs` S154 — creados (1):** `World/Store/ShopGrassField.cs` · **modificados (2):** `World/Expedition/ArenaGrassBlades.cs`, `World/Expedition/ArenaGrassField.cs` · **shaders:** `Shaders/ArenaGrass.shader` (mod), `Shaders/NavMeshInvisible.shader` (nuevo)
+
+---
+
 **Session:** 2026-10-14 (Session 153 — **arte de toda la tienda (D6 + E11): 30 props Blender estilo KayKit + edificio y entorno en madera de cuento; plan de crecimiento en 4 etapas; draft del outer world** — 1 `.cs` creado; compila 0 errores; probado en Play por sondas y capturas)
 
 **Focus:** Juan: "ya tenemos espacio, procede a crear todos los assets"; luego "incluyendo los diseños de la tienda"; tras ver el artifact: props "perfectos", pidió estética de **madera y fantasía, tienda de mascotas, sin rojo ni damero**; después pidió plantear la tienda en **4 etapas con zonas mejorables** (dabloons = tienda, Minerita = MoriMonchis) y al cierre preparar el **outer world** (misiones y NPCs).

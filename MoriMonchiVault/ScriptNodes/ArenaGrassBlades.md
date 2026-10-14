@@ -6,68 +6,66 @@ tags: [script, world, expedition, graphics, math]
 
 **Ruta:** `World/Expedition/ArenaGrassBlades.cs`
 
-**Responsabilidad:** Utilidad estática (matemática pura) que arma una malla de briznas de pasto. Recibe lista de raíces (Vector3), parámetros de altura/ancho/inclinación, y **S117:** opcionalmente lista de heightScales por densidad procedural, genera malla con 3 vértices + 1 triángulo por brizna. Una brizna es un triángulo isóceles simple (base en raíz, punta inclinada), con normal suavizada y color aleatorio por hue. Sin estado, sin referencias.
+**Responsabilidad:** Utilidad estatica (matematica pura) que arma una malla de briznas de pasto. Recibe lista de raices (Vector3), parametros de altura/ancho/inclinacion, **S117:** opcionalmente lista de heightScales por densidad procedural, y **S154:** opcionalmente `segments` para que cada brizna sea curva (varios niveles de vertices en lugar de un triangulo). Sin estado, sin referencias.
 
-**Método público estático:**
+**Metodo publico estatico:**
 
-- `Build(IReadOnlyList<Vector3> roots, System.Random rng, Vector2 heightRange, Vector2 widthRange, float tilt, Vector3 origin, IReadOnlyList<float> heightScales = null) → Mesh`
-  - Valida roots != null && Count > 0, retorna null si falla
-  - **S117:** heightScales opcional: si presente, aplica scale[i] * height a cada brizna
-  - Retorna Mesh(name="ArenaGrassBlades", hideFlags.DontSave) con IndexFormat seleccionado (UInt32 si >65k verts)
+- `Build(IReadOnlyList<Vector3> roots, System.Random rng, Vector2 heightRange, Vector2 widthRange, float tilt, Vector3 origin, IReadOnlyList<float> heightScales = null, int segments = 1) → Mesh`
+  - Valida `roots != null && Count > 0`, retorna null si falla
+  - **S117:** heightScales opcional: si presente, aplica `scale[i] * height` a cada brizna
+  - **S154:** `segments` se clampa a minimo 1. Con `segments = 1` el resultado es identico al de antes (3 vertices, 1 triangulo y el mismo consumo de RNG)
+  - Retorna Mesh (name `ArenaGrassBlades`, hideFlags DontSave) con IndexFormat UInt32 si supera 65k vertices, UInt16 si no
 
 **Algoritmo Build():**
 
-1. **Inicialización:**
-   - Aloca vertices, normals, uvs, colors, triangles (capacity = roots.Count * 3)
+1. **Inicializacion:** calcula `vertsPerBlade = segments * 2 + 1` y `trisPerBlade = (segments * 2 - 1) * 3`; aloca listas de vertices, normales, UVs, colores y triangulos con esa capacidad.
 
-2. **Loop por raíz (i < roots.Count):**
+2. **Loop por raiz (i < roots.Count):**
    - Samplea height, width, yaw aleatorios del RNG
-   - **S117:** si heightScales != null y i < Count: `height *= heightScales[i]` (modulación por densidad)
+   - **S117:** si heightScales != null y i < Count: `height *= heightScales[i]`
    - Calcula sideAxis perpendicular al yaw (horizontal)
-   - Samplea leanAngle, leanDirection (inclinación)
-   - Computa leanAxis (dirección de inclinación)
+   - Samplea leanAngle y leanDirection; computa leanAxis y `tipOffset = leanAxis * sin(leanAngle) * height`
+   - Normal constante para toda la brizna: `normalize(up + sideAxis * 0.25)`
+   - Color por brizna: `Color(hue, hue, hue, 1)` con hue aleatorio (escala de grises)
 
-3. **Geometría de brizna:**
-   - `rootLeft = root + sideAxis * (width * 0.5)`
-   - `rootRight = root - sideAxis * (width * 0.5)`
-   - `tip = root + up * height + leanAxis * (sin(leanAngle) * height)`
-   - 3 vértices: rootLeft, rootRight, tip
+3. **Geometria de la brizna (S154, por segmento k = 0..segments-1):**
+   - `t = k / segments`
+   - `center = root + up * (height * t) + tipOffset * t²` (la curva del lean crece cuadratica)
+   - `halfWidth = width * 0.5 * (1 - t)` (se estrecha hacia la punta)
+   - Dos vertices laterales `center ± sideAxis * halfWidth`, UVs `(0, t)` y `(1, t)`
+   - Al final, un vertice de punta `root + up * height + tipOffset`, UV `(0.5, 1)`
 
-4. **Normales y UVs:**
-   - Normal (constante para los 3): `(up + sideAxis * 0.25).normalized` — suavizador 0.25 en sideAxis
-   - UVs triángulo: (0,0), (1,0), (0.5,1) — base ancha, punta al medio
+4. **Triangulacion:**
+   - Entre cada par de niveles consecutivos: 2 triangulos (franja izquierda-derecha)
+   - Ultimo nivel: 1 triangulo que cierra en la punta
+   - Con `segments = 1` queda solo el triangulo de la punta, como antes
 
-5. **Color aleatorio:**
-   - Samplea hue único por brizna
-   - `Color(hue, hue, hue, 1)` — escala de grises procedural
-
-6. **Triángulo:**
-   - Winding: baseIndex, baseIndex+2, baseIndex+1 (CCW cuando mira desde adelante)
-
-7. **Finalización:**
-   - SetVertices, SetNormals, SetUVs, SetColors, SetTriangles
-   - RecalculateBounds()
+5. **Finalizacion:** SetVertices, SetNormals, SetUVs, SetColors, SetTriangles, RecalculateBounds()
 
 **Internals:**
-- **Coordenadas relativas:** root se calcula como `roots[i] - origin` (para aplicar offset del chunk en Sow)
-- **Aproximación visual:** solo 3 verts/brizna, sin LOD (simplicidad vs rendering cost)
-- **Hue escala:** color en escala 0-1 (shader debe interpretarlo)
-- **S117:** heightScales modula altura per-brizna según densidad procedural (grumos más altos, sueltas más bajas)
+- **Coordenadas relativas:** root se calcula como `roots[i] - origin` (para aplicar offset del chunk)
+- **Costo:** con `segments = N` cada brizna usa `2N + 1` vertices y `2N - 1` triangulos. Con 3 vertices por brizna el costo es el minimo
+- **Hue escala:** color en escala 0-1 (el shader debe interpretarlo)
 
 **Invariantes:**
-- **Determinismo:** RNG producido externamente (Sow pasa seed-based System.Random)
-- **Sin estado:** Build() es función pura, ningún side effect
-- **Malla única:** se crea una nueva Mesh por cada chunk (no reutilización)
-- **IndexFormat adaptive:** elige UInt16 si <= 65k, UInt32 si mayor (evita overflow)
-- **Triangulación simple:** 1 triángulo/brizna, sin degenerados
-- **Normals constantes:** economía (no cálculo per-vertex), suficiente para look billboard
-- **S117:** heightScales alineado con roots (ambos crecen en Build de ArenaGrassField)
+- **Determinismo:** RNG producido externamente (Sow pasa seed-based System.Random); el numero de muestras por brizna no depende de `segments`
+- **Sin estado:** Build() es funcion pura, ningun side effect
+- **Malla unica:** se crea una nueva Mesh por cada chunk (no reutilizacion)
+- **IndexFormat adaptive:** UInt16 si <= 65k verts, UInt32 si mayor (evita overflow)
+- **Normales constantes por brizna:** economia, suficiente para look billboard
+- **heightScales alineado con roots:** ambos crecen juntos en Build de ArenaGrassField y ShopGrassField
+- **Segments sin tope aqui:** el tope 1-4 vive en el campo serializado de ArenaGrassField; ShopGrassField pasa el valor del area tal cual (solo se clampa a 1)
+
+**Shader asociado:** `Shaders/ArenaGrass.shader`. Desde S154 el shader tiene rafagas (`_Gust*`), manchas (`_Patch*`), translucidez de punta (`_TipGlow*`) y trample seguro si `_ArenaTrampleArea.z <= 0`. Los UV `(0, t)` / `(1, t)` alimentan el gradiente a lo largo de la brizna.
 
 **S117 Cambios:**
+- Parametro `IReadOnlyList<float> heightScales` opcional
+- Aplicacion de `scale[i] * height` para modular altura segun densidad (ArenaGrassCover.Sample)
 
-- Parámetro `IReadOnlyList<float> heightScales` opcional
-- Aplicación de scale[i] * height para modular altura según densidad (ArenaGrassCover.Sample)
+**S154 Cambios:**
+- Parametro `int segments = 1` opcional; briznas curvas con estrechamiento y lean cuadratico
+- Con `segments = 1` se conserva el comportamiento anterior
 
-**Conexiones:** [[ArenaGrassField]] (cliente único)
+**Conexiones:** [[ArenaGrassField]] (cliente de arena), [[ShopGrassField]] (cliente de tienda)
 
-**Vinculado a:** [[Index/23 - Arena Sandbox & Expedicion]], [[Index/22 - Bajada Nocturna y Linaje]], S117
+**Vinculado a:** [[Index/23 - Arena Sandbox & Expedicion]], [[Index/22 - Bajada Nocturna y Linaje]], S117, S154

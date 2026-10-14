@@ -112,3 +112,52 @@ Juan: "me encanta el diseño y los props; el look debe parecer una **tienda de m
 - Exterior: fachada de tablas `SH_Honey`/`SH_Oak` con entramado `SH_Timber`, base de piedra, aleros de madera; patio con cerca de madera rustica (no muros coral), pasto `SH_Grass`/`SH_Leaf`, caminos de piedra.
 - Paleta nueva ya disponible en `props_common.PALETTE` (`SH_Honey`, `SH_Oak`, `SH_Walnut`, `SH_Timber`, `SH_Parchment`, `SH_Stone`, `SH_StoneDark`, `SH_Sage`, `SH_Moss`, `SH_Teal`, `SH_Plum`, `SH_Gold`, `SH_Leaf`).
 - Mismas reglas de colision, coordenadas de mundo y presupuesto que la tanda 2 (edificio < 50k tris con los adornos).
+
+---
+
+# Tandas 4-6 (S154): arte de las etapas (Index/35 Parte 1.5)
+
+Mismo pipeline, misma vara KayKit y misma paleta de madera de cuento de la tanda 3. Juan: "los props de la ultima sesion fueron muy buenos" -> ese es el nivel minimo. **Cero `SH_Coral`** en piezas nuevas (acentos: `SH_Sage`, `SH_Teal`, `SH_Plum`, `SH_Gold`, `SH_Moss`, `SH_Sky`, `SH_Lilac`, `SH_Straw`, `SH_Peach` con mesura).
+Referencias aprobadas para copiar lenguaje: `ShopShowcase.py`, `ShopFeeder.py`, `ShopBed.py`, `ShopEggShelf.py`, `shop_incubator.py`, `ShopZoneCriadero.py` + `env_kit_e2.py` (arquitectura).
+Salida de hojas de contacto: `<scratchpad>/props_t4/`. Cada agente escribe SOLO sus scripts y sus FBX.
+
+## Tanda 4 · kit modular + piezas por nivel de zonas existentes
+| # | Nombre | Que es | Huella / alto | Idea |
+|---|--------|--------|---------------|------|
+| K1 | `ZoneKitFloor` | Baldosa de piso de lote 3 x 3 m | 3.0 x 3.0, cara de arriba en z = 0, grosor 0.15 hacia abajo | tablones anchos `SH_Oak`/`SH_Honey` con junta hundida y clavitos; bordes que encajan sin costura con la vecina |
+| K2 | `ZoneKitWall` | Pared lisa de 3 m | 3.0 (eje X) x 0.3 x 2.7, origen centro de la base, cara interior = -Y | entramado como `env_kit_e2` tanda 3: zocalo `SH_Walnut`, friso de tablas `SH_Honey`, franja de acento (parte aparte en `SH_Sage`, se recolorea por sala en Unity), revoque `SH_Parchment`, postes/vigas `SH_Timber`; exterior tablas `SH_Honey` + base de piedra |
+| K3 | `ZoneKitWallWindow` | Pared con ventana | igual que K2 | ventana con marco gordo y arco tallado, vidrio `SH_Glass`, maceterito |
+| K4 | `ZoneKitWallDoor` | Pared con puerta abierta | igual que K2, hueco 1.6 ancho x 2.2 alto centrado | marco tallado, sin hoja (paso libre) |
+| K5 | `ZoneKitCorner` | Pilar de esquina | 0.4 x 0.4 x 2.85 | poste `SH_Timber` con capitel y base de piedra, extremos redondeados |
+| K6 | `ZoneKitTrimIvy` | Remate superior con hiedra | 3.0 x 0.4 x ~0.2, se apoya en z = 2.7 | viga redondeada `SH_Walnut` + guirnalda `SH_Leaf`/`SH_Moss` |
+| N1 | `ShopShowcaseL2` | Vitrina nivel 2 (5 lugares) | 4.0 x 3.0 | misma familia que `ShopShowcase` (alfombra NO coral: `SH_Sage`/`SH_Gold`) |
+| N2 | `ShopShowcaseL3` | Vitrina nivel 3 (8 lugares) | 5.0 x 3.6 | idem, mas lujosa: escalon y cartel doble |
+| N3 | `ShopCounterExt` | Tramo extra de mostrador (2.º y 3.er cliente) | 1.0 x 0.8 / ~1.0 | mostrador como el de `ShopRegister` sin maquina: campanita, frasco de propinas |
+| N4 | `ShopFeederDouble` | Comedero doble (cuidado N2) | <= 1.4 x 0.8 / 0.5-0.7 | dos tolvas en una base comun |
+| N5 | `ShopWaterDouble` | Bebedero doble (cuidado N2) | <= 1.4 x 0.8 / 0.6-0.8 | dos garrafones en una base comun |
+| N6 | `ShopBedCanopy` | 2.ª cama, de lujo (cuidado N3) | 1.0 x 1.0 / ~1.4 | cama redonda con dosel de tela en arco y estrellitas |
+| N7 | `ShopOrderBoard` | Pizarra de pedidos (oficina N2/N3) | 1.0 x 0.08 x 0.7 colgada, origen centro del tablero | 5 ganchos con fichas, campanita dorada de "pedido especial" |
+| N8 | `ShopSandbox` | Arenero (patio N2) | 2.0 x 2.0 / 0.35 | marco de troncos, arena `SH_Straw`, palita y balde |
+| N9 | `ShopHoseReel` | Manguera fija (patio N3) | 0.6 x 0.4 / 0.8 | poste con grifo y carrete con manguera gorda enroscada `SH_Moss` |
+| N10 | `ShopPuddle` | Charco (patio N3) | 1.2 x 0.8 / 0.02 | forma organica plana `SH_Water` con borde claro |
+| N11 | `ShopPlayMat` | Area grande de juego (sala N2) | 3.0 x 3.0 / 0.08 | alfombra acolchada redonda tejida + 2 cojines gordos |
+| R1 | `ShopRegister`, `ShopSignMain`, `ShopLockedSign` | Recolor sin coral (decision S154) | sin cambios de forma | coral -> `SH_Gold`/`SH_Plum`/`SH_Sage` segun la pieza |
+
+## Tanda 5 · equipamiento de la etapa 3
+| Zona | Props (huella / alto aprox.) |
+|------|------------------------------|
+| Guarderia | `ShopCrib` cuna 1.0 x 0.7 / 0.8 con movil de estrellas · `ShopRockingChair` mecedora 0.7 x 0.9 / 1.0 · `ShopToyChest` baul de juguetes 0.7 x 0.45 / 0.5 · `ShopNightLamp` lampara-hongo 0.3 / 0.6 |
+| Bano y peluqueria | `ShopBathtub` banera con patas 1.4 x 0.8 / 0.7 con burbujas · `ShopDryer` secador de casco de pie 0.6 / 1.4 · `ShopGroomTable` mesa de peluqueria con espejo 1.0 x 0.6 / 1.5 · `ShopTowelRack` toallero 0.8 x 0.3 / 1.0 |
+| Cocina de snacks | `ShopStove` horno de lena 1.0 x 0.7 / 1.1 · `ShopKitchenCounter` mesada con tabla y bowls 1.6 x 0.7 / 0.95 · `ShopRecipeShelf` estante de frascos de recetas 1.2 x 0.35 / 1.6 |
+| Almacen | `ShopStorageShelf` estanteria con cajas y sacos 2.0 x 0.6 / 2.0 · `ShopSackPile` pila de sacos 1.0 x 0.8 / 0.6 · `ShopBarrel` barril 0.6 / 0.8 · `ShopHandTruck` carretilla 0.6 x 0.6 / 1.2 |
+
+## Tanda 6 · equipamiento de la etapa 4 (se corta si falta tiempo)
+Escenario (tarima con telon, focos, banderines) · Gimnasio (pesas gordas, cinta, colchoneta, saco) · Clinica (camilla, botiquin, biombo, bascula) · Sala del linaje (arbol genealogico tallado, pedestales de retrato, vitrina de trofeos).
+
+### Tanda 6 · detalle (S154)
+| Zona | Props (huella / alto aprox.) |
+|------|------------------------------|
+| Escenario | `ShopStage` tarima con telon en arco 3.0 x 2.0 / tarima 0.4, arco 3.2 · `ShopSpotlight` foco de pie 0.5 / 1.6 · `ShopJudgeTable` mesa del jurado con campanita y cartelitos 1.6 x 0.6 / 0.8 · `ShopPrizePodium` podio 1-2-3 1.5 x 0.6 / 0.6 |
+| Gimnasio | `ShopDumbbellRack` rack con pesas gordas 1.2 x 0.5 / 0.8 · `ShopRunWheel` rueda para correr 1.4 diametro x 0.8 · `ShopGymMat` colchoneta 2.0 x 1.2 / 0.12 · `ShopPunchBag` saco colgado de poste 0.8 x 0.8 / 1.8 |
+| Clinica | `ShopExamTable` camilla 1.4 x 0.7 / 0.8 · `ShopMedCabinet` botiquin-armario con cruz (cruz `SH_Sage`/`SH_Teal`, nunca roja) 0.9 x 0.4 / 1.6 · `ShopFolderScreen` biombo 1.4 x 0.3 / 1.5 · `ShopScale` bascula 0.6 x 0.6 / 1.2 |
+| Sala del linaje | `ShopFamilyTree` arbol genealogico tallado de pie con medallones 2.4 x 0.5 / 2.6 · `ShopPortraitPedestal` pedestal con retrato enmarcado 0.5 x 0.5 / 1.3 · `ShopTrophyCase` vitrina de trofeos 1.4 x 0.5 / 1.8 · `ShopLineageBook` atril con libro abierto 0.6 x 0.5 / 1.1 |

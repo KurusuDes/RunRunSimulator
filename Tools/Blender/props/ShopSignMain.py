@@ -101,7 +101,7 @@ def build_text():
     bmesh.ops.delete(bm, geom=hidden, context="FACES")
     bmesh.ops.dissolve_limit(bm, angle_limit=math.radians(4), verts=list(bm.verts), edges=list(bm.edges))
     print("TEXT height", round((max(ys) - min(ys)) * s, 3), "scale", round(s, 3))
-    fin("Letters", bm, "SH_Coral", angle=60)
+    fin("Letters", bm, "SH_Plum", angle=60)
 
 
 def offset2d(pts, d):
@@ -154,7 +154,7 @@ def heart_outline(size, n=24):
 
 def build_heart():
     m = face_m(BW / 2 - 0.32, YF + 0.02, BH - 0.02) @ Matrix.Rotation(math.radians(-14), 4, "Z")
-    fin("Heart", badge_bm(heart_outline(0.5), 0.1, 0.035, 2, matrix=m), "SH_Coral", angle=60)
+    fin("Heart", badge_bm(heart_outline(0.5), 0.1, 0.035, 2, matrix=m), "SH_Plum", angle=60)
 
 
 HS = 1.2
@@ -191,7 +191,7 @@ def build_head():
     bm = bmesh.new()
     for sx in (-1, 1):
         ellipsoid_bm((hx + sx * 0.27, hy - 0.22, hz - 0.08), (0.06, 0.03, 0.035), 8, 4, bm=bm)
-    fin("Cheeks", bm, "SH_Coral", angle=80)
+    fin("Cheeks", bm, "SH_Cream", angle=80)
     piv = Vector((hx, YF, BH))
     m = Matrix.Translation(piv) @ Matrix.Scale(HS, 4) @ Matrix.Translation(-piv)
     for ob in PARTS[first:]:

@@ -6,15 +6,19 @@ namespace MoriMonchiSimulator
 
 public static class ArenaGrassBlades
 {
-    public static Mesh Build(IReadOnlyList<Vector3> roots, System.Random rng, Vector2 heightRange, Vector2 widthRange, float tilt, Vector3 origin, IReadOnlyList<float> heightScales = null)
+    public static Mesh Build(IReadOnlyList<Vector3> roots, System.Random rng, Vector2 heightRange, Vector2 widthRange, float tilt, Vector3 origin, IReadOnlyList<float> heightScales = null, int segments = 1)
     {
         if (roots == null || roots.Count == 0) return null;
 
-        var vertices = new List<Vector3>(roots.Count * 3);
-        var normals = new List<Vector3>(roots.Count * 3);
-        var uvs = new List<Vector2>(roots.Count * 3);
-        var colors = new List<Color>(roots.Count * 3);
-        var triangles = new List<int>(roots.Count * 3);
+        segments = Mathf.Max(1, segments);
+        int vertsPerBlade = segments * 2 + 1;
+        int trisPerBlade = (segments * 2 - 1) * 3;
+
+        var vertices = new List<Vector3>(roots.Count * vertsPerBlade);
+        var normals = new List<Vector3>(roots.Count * vertsPerBlade);
+        var uvs = new List<Vector2>(roots.Count * vertsPerBlade);
+        var colors = new List<Color>(roots.Count * vertsPerBlade);
+        var triangles = new List<int>(roots.Count * trisPerBlade);
 
         for (int i = 0; i < roots.Count; i++)
         {
@@ -34,33 +38,50 @@ public static class ArenaGrassBlades
 
             var tipOffset = leanAxis * (Mathf.Sin(leanAngle) * height);
 
-            var rootLeft = root + sideAxis * (width * 0.5f);
-            var rootRight = root - sideAxis * (width * 0.5f);
-            var tip = root + Vector3.up * height + tipOffset;
-
-            int baseIndex = vertices.Count;
-            vertices.Add(rootLeft);
-            vertices.Add(rootRight);
-            vertices.Add(tip);
-
             var normal = (Vector3.up + sideAxis * 0.25f).normalized;
-            normals.Add(normal);
-            normals.Add(normal);
-            normals.Add(normal);
-
-            uvs.Add(new Vector2(0f, 0f));
-            uvs.Add(new Vector2(1f, 0f));
-            uvs.Add(new Vector2(0.5f, 1f));
 
             float hue = (float)rng.NextDouble();
             var bladeColor = new Color(hue, hue, hue, 1f);
-            colors.Add(bladeColor);
-            colors.Add(bladeColor);
+
+            int baseIndex = vertices.Count;
+            for (int k = 0; k < segments; k++)
+            {
+                float t = (float)k / segments;
+                var center = root + Vector3.up * (height * t) + tipOffset * (t * t);
+                float halfWidth = width * 0.5f * (1f - t);
+                vertices.Add(center + sideAxis * halfWidth);
+                vertices.Add(center - sideAxis * halfWidth);
+                uvs.Add(new Vector2(0f, t));
+                uvs.Add(new Vector2(1f, t));
+                normals.Add(normal);
+                normals.Add(normal);
+                colors.Add(bladeColor);
+                colors.Add(bladeColor);
+            }
+
+            vertices.Add(root + Vector3.up * height + tipOffset);
+            uvs.Add(new Vector2(0.5f, 1f));
+            normals.Add(normal);
             colors.Add(bladeColor);
 
-            triangles.Add(baseIndex + 0);
-            triangles.Add(baseIndex + 2);
-            triangles.Add(baseIndex + 1);
+            for (int k = 0; k < segments - 1; k++)
+            {
+                int bl = baseIndex + k * 2;
+                int br = bl + 1;
+                int tl = bl + 2;
+                int tr = bl + 3;
+                triangles.Add(bl);
+                triangles.Add(tl);
+                triangles.Add(br);
+                triangles.Add(br);
+                triangles.Add(tl);
+                triangles.Add(tr);
+            }
+
+            int last = baseIndex + (segments - 1) * 2;
+            triangles.Add(last);
+            triangles.Add(baseIndex + segments * 2);
+            triangles.Add(last + 1);
         }
 
         var mesh = new Mesh

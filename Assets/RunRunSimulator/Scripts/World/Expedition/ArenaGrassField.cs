@@ -24,6 +24,7 @@ public class ArenaGrassField : MonoBehaviour
     [SerializeField] private Vector2 heightRange = new Vector2(0.12f, 0.26f);
     [SerializeField] private Vector2 widthRange = new Vector2(0.045f, 0.075f);
     [SerializeField] private float tilt = 0.25f;
+    [SerializeField, Range(1, 4)] private int segments = 1;
 
     [Title("Cobertura")]
     [SerializeField] private ArenaGrassCover.Settings cover = ArenaGrassCover.Settings.Default;
@@ -152,7 +153,7 @@ public class ArenaGrassField : MonoBehaviour
 
                 totalBlades += roots.Count;
 
-                var mesh = ArenaGrassBlades.Build(roots, rng, heightRange, widthRange, tilt, chunkCenter, heights);
+                var mesh = ArenaGrassBlades.Build(roots, rng, heightRange, widthRange, tilt, chunkCenter, heights, segments);
                 if (mesh == null) continue;
 
                 var chunk = new GameObject("GrassChunk") { hideFlags = HideFlags.DontSave };
@@ -253,7 +254,7 @@ public class ArenaGrassField : MonoBehaviour
                 continue;
             }
 
-            var mesh = ArenaGrassBlades.Build(rootsFiltradas, new System.Random(seed + c), heightRange, widthRange, tilt, chunk.Center, heightsFiltradas);
+            var mesh = ArenaGrassBlades.Build(rootsFiltradas, new System.Random(seed + c), heightRange, widthRange, tilt, chunk.Center, heightsFiltradas, segments);
             if (filter != null) filter.sharedMesh = mesh;
 
             chunk.Roots = rootsFiltradas;

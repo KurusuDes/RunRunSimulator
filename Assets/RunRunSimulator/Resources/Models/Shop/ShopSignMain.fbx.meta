@@ -27,6 +27,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: SH_Plum
+    second: {fileID: 2100000, guid: 0000f5b7998291b4caeddd6b8d52ab68, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: SH_WoodDark
     second: {fileID: 2100000, guid: 7475d9b08750b7e41acd34877d27083d, type: 2}
   materials:

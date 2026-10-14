@@ -20,6 +20,16 @@ Shader "MoriMonchi/ArenaGrass"
         _ShadeTint ("Shade Tint", Color) = (0.58,0.56,0.68,1)
         _ShadeLight ("Shade Light", Range(0,1)) = 0.45
         _LitLight ("Lit Light", Range(0,2)) = 0.72
+        _GustDir ("Gust Direction", Vector) = (1,0,0.35,0)
+        _GustScale ("Gust Scale", Float) = 0.07
+        _GustSpeed ("Gust Speed", Float) = 2.2
+        _GustStrength ("Gust Strength", Float) = 0.32
+        _GustSheen ("Gust Sheen", Range(0,1)) = 0.28
+        _PatchScale ("Patch Scale", Float) = 0.045
+        _PatchTint ("Patch Tint", Color) = (1.12,1.06,0.78,1)
+        _PatchAmount ("Patch Amount", Range(0,1)) = 0.35
+        _TipGlow ("Tip Glow", Range(0,1)) = 0.3
+        _TipGlowColor ("Tip Glow Color", Color) = (1,0.95,0.6,1)
     }
 
     SubShader
@@ -60,6 +70,16 @@ Shader "MoriMonchi/ArenaGrass"
                 half4 _ShadeTint;
                 half _ShadeLight;
                 half _LitLight;
+                float4 _GustDir;
+                float _GustScale;
+                float _GustSpeed;
+                float _GustStrength;
+                half _GustSheen;
+                float _PatchScale;
+                half4 _PatchTint;
+                half _PatchAmount;
+                half _TipGlow;
+                half4 _TipGlowColor;
             CBUFFER_END
 
             float4 _ArenaFogCenter;
@@ -92,10 +112,29 @@ Shader "MoriMonchi/ArenaGrass"
                 float3 normalWS : TEXCOORD2;
                 float fogFactor : TEXCOORD3;
                 half2 blade : TEXCOORD4;
+                half gust : TEXCOORD5;
             };
+
+            float Hash21(float2 p)
+            {
+                return frac(sin(dot(p, float2(127.1, 311.7))) * 43758.5453);
+            }
+
+            float ValueNoise(float2 p)
+            {
+                float2 i = floor(p);
+                float2 f = frac(p);
+                float2 u = f * f * (3.0 - 2.0 * f);
+                float a = Hash21(i);
+                float b = Hash21(i + float2(1.0, 0.0));
+                float c = Hash21(i + float2(0.0, 1.0));
+                float d = Hash21(i + float2(1.0, 1.0));
+                return lerp(lerp(a, b, u.x), lerp(c, d, u.x), u.y);
+            }
 
             float4 SampleTrample(float3 positionWS)
             {
+                if (_ArenaTrampleArea.z <= 0.0) return 0.0;
                 float2 uv = (positionWS.xz - _ArenaTrampleArea.xy) * _ArenaTrampleArea.zw;
                 if (any(uv < 0.0) || any(uv > 1.0)) return 0.0;
                 return SAMPLE_TEXTURE2D_LOD(_ArenaTrampleTex, sampler_ArenaTrampleTex, uv, 0);
@@ -120,6 +159,12 @@ Shader "MoriMonchi/ArenaGrass"
                 positionWS.x += sway * _WindStrength * curve * breeze;
                 positionWS.z += cos(phase * 0.8) * _WindStrength * 0.5 * curve * breeze;
 
+                float2 gustDir = _GustDir.xz / max(length(_GustDir.xz), 0.0001);
+                float2 gustPerp = float2(-gustDir.y, gustDir.x);
+                float2 gustCoord = float2(dot(positionWS.xz, gustDir) - _Time.y * _GustSpeed, dot(positionWS.xz, gustPerp) * 0.45) * _GustScale;
+                float gust = smoothstep(0.4, 0.8, ValueNoise(gustCoord));
+                positionWS.xz += gustDir * curve * gust * _GustStrength * breeze;
+
                 positionWS.xz += clamp(trample.rg, -1.0, 1.0) * _TrampleBend * curve;
                 positionWS.y -= flatten * _TrampleFlatten * height;
 
@@ -129,6 +174,7 @@ Shader "MoriMonchi/ArenaGrass"
                 output.uv = input.uv;
                 output.fogFactor = ComputeFogFactor(output.positionCS.z);
                 output.blade = half2(input.color.r, flatten);
+                output.gust = gust;
                 return output;
             }
 
@@ -140,6 +186,8 @@ Shader "MoriMonchi/ArenaGrass"
 
                 half3 ramp = SAMPLE_TEXTURE2D(_Ramp, sampler_Ramp, float2(key, 0.5)).rgb;
                 half3 albedo = lerp(_BaseColor.rgb * key, ramp, _RampInfluence) * _Tint.rgb;
+                half patch = smoothstep(0.3, 0.7, ValueNoise(input.positionWS.xz * _PatchScale));
+                albedo = lerp(albedo, albedo * _PatchTint.rgb, patch * _PatchAmount);
                 albedo *= lerp(1.0, 1.0 - _TrampleShade, input.blade.y);
 
                 float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
@@ -151,6 +199,12 @@ Shader "MoriMonchi/ArenaGrass"
                 half3 ambient = SampleSH(normalWS);
 
                 half3 color = lerp(albedo * _ShadeTint.rgb * (mainLight.color * _ShadeLight + ambient), albedo * (mainLight.color * _LitLight + ambient), lit);
+
+                color *= 1.0 + _GustSheen * input.gust * along;
+
+                half3 viewDirWS = normalize(_WorldSpaceCameraPos - input.positionWS);
+                half backlight = saturate(dot(-viewDirWS, mainLight.direction) * 0.5 + 0.5);
+                color += _TipGlowColor.rgb * mainLight.color * _TipGlow * along * along * backlight * backlight;
 
                 float dFog = distance(input.positionWS.xz, _ArenaFogCenter.xz);
                 float tFog = 0.0;

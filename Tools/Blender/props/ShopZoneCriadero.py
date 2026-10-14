@@ -18,12 +18,113 @@ WALLS = {
     "W": Wall("y", FY0, FY1, XW_IN, -1, T, ZT, FT, G),
     "N": Wall("x", FX0, FX1, YN_IN, +1, T, ZT, FT, G),
 }
-PILASTERS = {"W": [-13.05, -19.95], "N": [41.8], "S": []}
+DOOR_W = -13.5
+PILASTERS = {"W": [-19.95], "N": [41.8], "S": []}
 INNER = {"S2": ("S", FX0, DOOR[0]), "S1": ("S", DOOR[1], XW_IN), "W": ("W", YN_IN, YS_IN), "N": ("N", FX0, XW_IN)}
 
 
-POSTS = {"S2": [FX0 + 0.14, DOOR[0] - 0.16], "S1": [DOOR[1] + 0.16, XW_IN], "W": [YN_IN, -19.95, -13.05, YS_IN],
+POSTS = {"S2": [FX0 + 0.14, DOOR[0] - 0.16], "S1": [DOOR[1] + 0.16, XW_IN], "W": [YN_IN, -19.95, YS_IN],
          "N": [FX0 + 0.14, 41.8, XW_IN]}
+
+
+DHW, DH, DFW, DRISE, ND = 0.8, 2.2, 0.14, 0.2, 10
+DRO = DHW + DFW
+
+
+def seg_arch(c, zl, s, n):
+    us = [-c + 2 * c * k / n for k in range(n + 1)]
+    if s < 1e-4:
+        return [(u, zl) for u in us]
+    R = (c * c + s * s) / (2 * s)
+    zc = zl + s - R
+    return [(u, zc + math.sqrt(max(R * R - u * u, 0.0))) for u in us]
+
+
+def door_contour(o):
+    c = DHW + o
+    return [(-c, 0.0)] + seg_arch(c, DH + o, DRISE * max(o, 0.0) / DFW, ND) + [(c, 0.0)]
+
+
+def cut_hole(B, w, u0, u1, z1, vpad=0.16):
+    ua = 0 if w.axis == "x" else 1
+    pa = 1 - ua
+    lo, hi = sorted((w.P(0, -vpad, 0)[pa], w.P(0, w.T + vpad, 0)[pa]))
+    for bm in B.values():
+        def near():
+            return [f for f in bm.faces if all(lo <= v.co[pa] <= hi for v in f.verts)]
+        for val, k in ((u0, ua), (u1, ua), (z1, 2)):
+            fs = []
+            for f in near():
+                cs = [v.co[k] for v in f.verts]
+                if not (min(cs) < val - 1e-5 and max(cs) > val + 1e-5):
+                    continue
+                if k == 2:
+                    if not (u0 < f.calc_center_median()[ua] < u1):
+                        continue
+                elif min(v.co.z for v in f.verts) >= z1:
+                    continue
+                fs.append(f)
+            if not fs:
+                continue
+            es = list({e for f in fs for e in f.edges})
+            vs = list({v for f in fs for v in f.verts})
+            co, no = [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]
+            co[k], no[k] = val, 1.0
+            bmesh.ops.bisect_plane(bm, geom=vs + es + fs, dist=1e-6, plane_co=co, plane_no=no)
+        dead = []
+        for f in near():
+            c = f.calc_center_median()
+            if u0 < c[ua] < u1 and c.z < z1:
+                dead.append(f)
+        if dead:
+            bmesh.ops.delete(bm, geom=dead, context="FACES")
+
+
+def wring(bm, w, uc, z0, inner, outer, v0, v1):
+    def q(p, v):
+        return (uc + p[0], v, z0 + p[1])
+    for i in range(len(inner) - 1):
+        a, b, c, d = inner[i], inner[i + 1], outer[i], outer[i + 1]
+        w.face(bm, [q(a, v0), q(b, v0), q(d, v0), q(c, v0)], w.n)
+        w.face(bm, [q(a, v1), q(b, v1), q(d, v1), q(c, v1)], -w.n)
+        mi = w.P(uc + (a[0] + b[0]) / 2, 0, z0 + (a[1] + b[1]) / 2)
+        mo = w.P(uc + (c[0] + d[0]) / 2, 0, z0 + (c[1] + d[1]) / 2)
+        w.face(bm, [q(a, v0), q(b, v0), q(b, v1), q(a, v1)], mi - mo)
+        w.face(bm, [q(c, v0), q(d, v0), q(d, v1), q(c, v1)], mo - mi)
+
+
+def wrad(w, ru, rv, rz):
+    return (ru, rv, rz) if w.axis == "x" else (rv, ru, rz)
+
+
+def wpaw(bm, w, uc, zc, v, s=1.0):
+    ellipsoid_bm(w.P(uc, v, zc - 0.022 * s), wrad(w, 0.05 * s, 0.014, 0.04 * s), 8, 4, bm=bm)
+    for du, dz, r in ((-0.06, 0.028, 0.02), (-0.023, 0.062, 0.021), (0.023, 0.062, 0.021), (0.06, 0.028, 0.02)):
+        ellipsoid_bm(w.P(uc + du * s, v, zc + dz * s), wrad(w, r * s, 0.012, r * s * 1.12), 6, 3, bm=bm)
+
+
+def wrosette(bm, w, uc, zc, v, d):
+    M = Matrix.Translation(w.P(uc, v, zc)) @ Vector(d).to_track_quat("Z", "Y").to_matrix().to_4x4()
+    lathe_bm([(0.0, 0.0), (0.058, 0.0), (0.064, 0.016), (0.05, 0.032), (0.024, 0.04), (0.0, 0.042)], 8, bm=bm, matrix=M)
+
+
+def door_frame(B, w, uc, v_sill=0.15):
+    z0 = w.fin
+    wring(B["SH_Timber"], w, uc, z0, door_contour(0.0), door_contour(DFW), -0.045, w.T + 0.045)
+    wring(B["SH_Walnut"], w, uc, z0, door_contour(DFW - 0.04), door_contour(DFW + 0.014), -0.065, w.T + 0.065)
+    for sg in (-1, 1):
+        a, b = sorted((uc + sg * (DHW + 0.012), uc + sg * (DRO + 0.05)))
+        w.box(B["SH_Stone"], a, b, -0.09, w.T + 0.09, w.gout - 0.01, z0 + 0.4, r=0.05, segs=1)
+        a, b = sorted((uc + sg * (DHW + 0.012), uc + sg * (DRO + 0.035)))
+        w.box(B["SH_Walnut"], a, b, -0.095, w.T + 0.095, z0 + DH - 0.22, z0 + DH - 0.1, r=0.035, segs=1)
+        for v, d in ((-0.062, w.n), (w.T + 0.062, -w.n)):
+            wrosette(B["SH_Walnut"], w, uc + sg * (DHW + DFW * 0.42), z0 + DH + DFW * 0.42, v, d)
+    w.box(B["SH_Walnut"], uc - 0.12, uc + 0.12, -0.085, w.T + 0.085, z0 + DH + 0.06, z0 + DH + 0.44, r=0.035, segs=1)
+    wpaw(B["SH_Gold"], w, uc, z0 + DH + 0.24, -0.088)
+    wpaw(B["SH_Gold"], w, uc, z0 + DH + 0.24, w.T + 0.088)
+    w.box(B["SH_Timber"], uc - DHW, uc + DHW, v_sill, w.T, w.gout - 0.01, z0, r=0.03, segs=1)
+    lantern(B, w.P(uc + 1.22, 0.0, z0 + DH), w.n)
+    lantern(B, w.P(uc - 1.22, w.T + 0.02, z0 + DH), -w.n)
 
 
 def barn_x(B, w, u0, u1, z0, z1, m="SH_Timber"):
@@ -87,6 +188,8 @@ def build_walls(rng):
     mushroom(B, XW_OUT + 0.18, YN_OUT - 0.2, G, 1.1, "SH_Plum")
     mushroom(B, XW_OUT + 0.22, YN_OUT + 0.12, G, 0.75, "SH_Gold")
     mushroom(B, XW_OUT + 0.2, -15.8, G, 0.9, "SH_Gold")
+    cut_hole(B, W["W"], DOOR_W - DRO, DOOR_W + DRO, FT + DH)
+    door_frame(B, W["W"], DOOR_W)
     return B.done("Walls")
 
 
@@ -142,7 +245,8 @@ floors = build_floor(rng)
 decor = build_decor(rng)
 check_floor(floors, [(EDGE_X + 0.05, XW_IN - 0.05, YN_IN + 0.05, YS_IN - 0.05)], FT, step=0.3, label="planks")
 for key, (k, u0, u1) in INNER.items():
-    check_wall(walls, WALLS[k], u0 + 0.35, u1 - 0.35, skip=PILASTERS[k], label="inner_" + key)
+    skip = PILASTERS[k] + ([DOOR_W + d for d in (-1.1, -0.55, 0.0, 0.55, 1.1)] if k == "W" else [])
+    check_wall(walls, WALLS[k], u0 + 0.35, u1 - 0.35, skip=skip, label="inner_" + key)
 parts_report()
 ob = join_all("ShopZoneCriadero")
 report(ob)
@@ -155,6 +259,8 @@ views = [
     ("inside", 200, 40, (41.5, -9.0, 0.2), 7.0),
     ("corner", 135, 35, (44.9, -20.9, 0.6), 5.5),
     ("top", 200, 75, (41.4, -14.5, 0.0), 12.0),
+    ("doorW_in", 270, 50, (45.9, -13.5, 0.9), 5.0),
+    ("doorW_out", 90, 25, (46.1, -13.5, 0.9), 5.0),
 ]
 dragons = [(41.4, -9.4, FT, 200.0), (41.5, -5.9, G, 20.0), (44.4, -20.4, FT, 135.0), (37.6, -13.0, FT, 250.0)]
 env_preview(ob, out, ["ZONE_Criadero"], views, dragons, (41.4, -14.5, 0.0), 17.0)
