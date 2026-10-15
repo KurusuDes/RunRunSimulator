@@ -20,7 +20,12 @@ public class ShopGrassField : MonoBehaviour
         public float Tilt;
         public int Segments;
         public ArenaGrassCover.Settings Cover;
+        public Material Material;
+        public float EdgeFade;
+        public float FlowerDensity;
     }
+
+    private const float EdgeStep = 0.25f;
 
     [Title("Semilla")]
     [SerializeField] private int seed = 11;
@@ -34,6 +39,20 @@ public class ShopGrassField : MonoBehaviour
 
     [Title("Areas")]
     [SerializeField] private List<Area> areas = new List<Area>();
+
+    [Title("Flores")]
+    [SerializeField] private List<Color> flowerColors = new List<Color>
+    {
+        new Color(0.97f, 0.95f, 0.88f),
+        new Color(1f, 0.88f, 0.45f),
+        new Color(0.78f, 0.66f, 0.92f),
+        new Color(0.62f, 0.8f, 0.95f),
+        new Color(0.98f, 0.7f, 0.8f)
+    };
+    [SerializeField] private float flowerClusterSize = 3.5f;
+    [SerializeField, Range(0f, 1f)] private float flowerClusterChance = 0.45f;
+    [SerializeField] private Vector2 flowerStemHeight = new Vector2(0.18f, 0.32f);
+    [SerializeField] private Vector2 flowerHeadSize = new Vector2(0.05f, 0.08f);
 
     [Title("Exclusiones")]
     [SerializeField] private float exclusionMargin = 0.4f;
@@ -81,6 +100,8 @@ public class ShopGrassField : MonoBehaviour
         grassField.transform.SetParent(transform, false);
 
         var rng = new System.Random(seed);
+        var rngEdge = new System.Random(seed + 7);
+        var rngFlower = new System.Random(seed + 13);
         var colliders = CollectColliders();
         int totalBlades = 0;
 
@@ -91,6 +112,8 @@ public class ShopGrassField : MonoBehaviour
 
             var cover = area.Cover.clumpSpacing > 0f ? area.Cover : ArenaGrassCover.Settings.Default;
             var blocked = BuildBlockedRects(area, colliders);
+            var material = area.Material != null ? area.Material : bladeMaterial;
+            float fade = Mathf.Max(0f, area.EdgeFade);
 
             for (float chunkX = area.Rect.xMin; chunkX < area.Rect.xMax; chunkX += chunkSize)
             {
@@ -99,57 +122,173 @@ public class ShopGrassField : MonoBehaviour
                     var chunkRect = Rect.MinMaxRect(chunkX, chunkZ, Mathf.Min(chunkX + chunkSize, area.Rect.xMax), Mathf.Min(chunkZ + chunkSize, area.Rect.yMax));
                     var chunkCenter = new Vector3(chunkRect.center.x, area.Height, chunkRect.center.y);
 
+                    var filterRect = Rect.MinMaxRect(chunkRect.xMin - fade, chunkRect.yMin - fade, chunkRect.xMax + fade, chunkRect.yMax + fade);
                     var nearBlocked = new List<Rect>();
                     for (int i = 0; i < blocked.Count; i++)
-                        if (chunkRect.Overlaps(blocked[i])) nearBlocked.Add(blocked[i]);
+                        if (filterRect.Overlaps(blocked[i])) nearBlocked.Add(blocked[i]);
 
-                    int candidateCount = Mathf.RoundToInt(area.Density * chunkRect.width * chunkRect.height);
-                    var roots = new List<Vector3>(candidateCount);
-                    var heights = new List<float>(candidateCount);
+                    if (totalBlades < maxBlades)
+                        totalBlades += SowGrassChunk(area, material, chunkRect, chunkCenter, nearBlocked, cover, rng, rngEdge, maxBlades - totalBlades);
 
-                    for (int i = 0; i < candidateCount; i++)
-                    {
-                        float x = (float)(rng.NextDouble() * chunkRect.width + chunkRect.xMin);
-                        float z = (float)(rng.NextDouble() * chunkRect.height + chunkRect.yMin);
-                        var point = new Vector2(x, z);
-
-                        if (IsBlocked(point, nearBlocked)) continue;
-
-                        float density = ArenaGrassCover.Sample(point, seed, in cover, out float heightScale);
-                        if (rng.NextDouble() >= density) continue;
-                        roots.Add(new Vector3(x, area.Height, z));
-                        heights.Add(heightScale);
-                    }
-
-                    if (roots.Count == 0) continue;
-
-                    if (totalBlades + roots.Count > maxBlades)
-                    {
-                        int remaining = maxBlades - totalBlades;
-                        if (remaining <= 0) return;
-                        roots.RemoveRange(remaining, roots.Count - remaining);
-                        heights.RemoveRange(remaining, heights.Count - remaining);
-                    }
-
-                    totalBlades += roots.Count;
-
-                    var mesh = ArenaGrassBlades.Build(roots, rng, area.HeightRange, area.WidthRange, area.Tilt, chunkCenter, heights, area.Segments);
-                    if (mesh == null) continue;
-
-                    var chunk = new GameObject("GrassChunk") { hideFlags = HideFlags.DontSave };
-                    chunk.transform.SetParent(grassField.transform, false);
-                    chunk.transform.position = chunkCenter;
-
-                    chunk.AddComponent<MeshFilter>().sharedMesh = mesh;
-
-                    var renderer = chunk.AddComponent<MeshRenderer>();
-                    renderer.sharedMaterial = bladeMaterial;
-                    renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                    renderer.receiveShadows = true;
-
-                    if (totalBlades >= maxBlades) return;
+                    if (area.FlowerDensity > 0f)
+                        SowFlowerChunk(area, material, chunkRect, chunkCenter, nearBlocked, rngFlower);
                 }
             }
+        }
+    }
+
+    private int SowGrassChunk(Area area, Material material, Rect chunkRect, Vector3 chunkCenter, List<Rect> nearBlocked, ArenaGrassCover.Settings cover, System.Random rng, System.Random rngEdge, int remaining)
+    {
+        int candidateCount = Mathf.RoundToInt(area.Density * chunkRect.width * chunkRect.height);
+        var roots = new List<Vector3>(candidateCount);
+        var heights = new List<float>(candidateCount);
+
+        for (int i = 0; i < candidateCount; i++)
+        {
+            float x = (float)(rng.NextDouble() * chunkRect.width + chunkRect.xMin);
+            float z = (float)(rng.NextDouble() * chunkRect.height + chunkRect.yMin);
+            var point = new Vector2(x, z);
+
+            if (IsBlocked(point, nearBlocked)) continue;
+
+            float density = ArenaGrassCover.Sample(point, seed, in cover, out float heightScale);
+            if (rng.NextDouble() >= density) continue;
+
+            if (area.EdgeFade > 0f)
+            {
+                float s = EdgeSmooth(point, area, nearBlocked);
+                if (rngEdge.NextDouble() > Mathf.Lerp(0.35f, 1f, s)) continue;
+                heightScale *= Mathf.Lerp(0.3f, 1f, s);
+            }
+
+            roots.Add(new Vector3(x, area.Height, z));
+            heights.Add(heightScale);
+        }
+
+        if (roots.Count == 0) return 0;
+
+        if (roots.Count > remaining)
+        {
+            roots.RemoveRange(remaining, roots.Count - remaining);
+            heights.RemoveRange(remaining, heights.Count - remaining);
+        }
+
+        var mesh = ArenaGrassBlades.Build(roots, rng, area.HeightRange, area.WidthRange, area.Tilt, chunkCenter, heights, area.Segments);
+        if (mesh == null) return 0;
+
+        CreateChunk("GrassChunk", mesh, material, chunkCenter);
+        return roots.Count;
+    }
+
+    private void SowFlowerChunk(Area area, Material material, Rect chunkRect, Vector3 chunkCenter, List<Rect> nearBlocked, System.Random rngFlower)
+    {
+        if (flowerColors == null || flowerColors.Count == 0) return;
+
+        float clusterSize = Mathf.Max(0.1f, flowerClusterSize);
+        int candidateCount = Mathf.RoundToInt(area.FlowerDensity * chunkRect.width * chunkRect.height);
+        var roots = new List<Vector3>(candidateCount);
+        var colors = new List<Color>(candidateCount);
+
+        for (int i = 0; i < candidateCount; i++)
+        {
+            float x = (float)(rngFlower.NextDouble() * chunkRect.width + chunkRect.xMin);
+            float z = (float)(rngFlower.NextDouble() * chunkRect.height + chunkRect.yMin);
+            var point = new Vector2(x, z);
+
+            if (IsBlocked(point, nearBlocked)) continue;
+
+            int cellX = Mathf.FloorToInt(x / clusterSize);
+            int cellZ = Mathf.FloorToInt(z / clusterSize);
+            if (CellHash(cellX, cellZ, seed) >= flowerClusterChance) continue;
+
+            var cellCenter = new Vector2((cellX + 0.5f) * clusterSize, (cellZ + 0.5f) * clusterSize);
+            float normalized = Mathf.Clamp01(Vector2.Distance(point, cellCenter) / (0.5f * clusterSize));
+            if (rngFlower.NextDouble() > 1.0 - normalized) continue;
+
+            if (area.EdgeFade > 0f && EdgeSmooth(point, area, nearBlocked) < 0.6f) continue;
+
+            var baseColor = flowerColors[Mathf.Min((int)(CellHash(cellX, cellZ, seed + 101) * flowerColors.Count), flowerColors.Count - 1)];
+            float brightness = Mathf.Lerp(0.92f, 1.05f, (float)rngFlower.NextDouble());
+
+            roots.Add(new Vector3(x, area.Height, z));
+            colors.Add(new Color(baseColor.r * brightness, baseColor.g * brightness, baseColor.b * brightness, 1f));
+        }
+
+        var mesh = MeadowFlowers.Build(roots, colors, rngFlower, flowerStemHeight, flowerHeadSize, chunkCenter);
+        if (mesh == null) return;
+
+        CreateChunk("FlowerChunk", mesh, material, chunkCenter);
+    }
+
+    private void CreateChunk(string chunkName, Mesh mesh, Material material, Vector3 position)
+    {
+        var chunk = new GameObject(chunkName) { hideFlags = HideFlags.DontSave };
+        chunk.transform.SetParent(grassField.transform, false);
+        chunk.transform.position = position;
+
+        chunk.AddComponent<MeshFilter>().sharedMesh = mesh;
+
+        var renderer = chunk.AddComponent<MeshRenderer>();
+        renderer.sharedMaterial = material;
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        renderer.receiveShadows = true;
+    }
+
+    private float EdgeSmooth(Vector2 point, Area area, List<Rect> nearBlocked)
+    {
+        float fade = area.EdgeFade;
+        float edge = fade;
+
+        for (int i = 0; i < nearBlocked.Count; i++)
+            edge = Mathf.Min(edge, DistanceToRect(point, nearBlocked[i]));
+
+        var directions = new[] { Vector2.right, Vector2.left, Vector2.up, Vector2.down };
+        for (int d = 0; d < directions.Length; d++)
+        {
+            for (float distance = EdgeStep; distance < edge; distance += EdgeStep)
+            {
+                if (!InsideAnyArea(point + directions[d] * distance, area.Height))
+                {
+                    edge = distance;
+                    break;
+                }
+            }
+        }
+
+        float f = Mathf.Clamp01(edge / fade);
+        return f * f * (3f - 2f * f);
+    }
+
+    private bool InsideAnyArea(Vector2 point, float height)
+    {
+        for (int i = 0; i < areas.Count; i++)
+        {
+            var other = areas[i];
+            if (other.Density <= 0f || other.Rect.width <= 0f || other.Rect.height <= 0f) continue;
+            if (Mathf.Abs(other.Height - height) >= 0.1f) continue;
+            if (other.Rect.Contains(point)) return true;
+        }
+        return false;
+    }
+
+    private static float DistanceToRect(Vector2 point, Rect rect)
+    {
+        float dx = Mathf.Max(Mathf.Max(rect.xMin - point.x, 0f), point.x - rect.xMax);
+        float dz = Mathf.Max(Mathf.Max(rect.yMin - point.y, 0f), point.y - rect.yMax);
+        return Mathf.Sqrt(dx * dx + dz * dz);
+    }
+
+    private static float CellHash(int x, int z, int salt)
+    {
+        unchecked
+        {
+            uint h = (uint)(x * 73856093 ^ z * 19349663 ^ salt * 83492791);
+            h ^= h >> 16;
+            h *= 0x7feb352dU;
+            h ^= h >> 15;
+            h *= 0x846ca68bU;
+            h ^= h >> 16;
+            return (h >> 8) / 16777216f;
         }
     }
 

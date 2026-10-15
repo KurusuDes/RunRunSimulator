@@ -4,6 +4,27 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-14 (Session 155 — **pasto toon "que resta" + flores procedurales en la tienda** — 1 `.cs` creado, 1 modificado, 1 shader; compila 0 errores; verificado con capturas antes/después en `Captures/S155/comparacion_antes_despues.png`)
+
+**Focus:** Juan: "empezamos con la mejora del pasto y flora de las áreas verdes"; eligió flores procedurales, mejora global del shader y capturas antes/después.
+
+**Hecho:**
+1. **Shader `ArenaGrass` (global, tienda + arena):** normal de terreno (`_NormalBlend` 0.85 por defecto → el campo se ilumina como masa), raíz del color del suelo en luz y sombra (`_RootColor`/`_RootShadeColor`/`_RootBlend`/`_RootHeight`, por defecto apagado), `_Saturation`, `_TipColor`/`_TipColorBlend`, manchas de tono de baja frecuencia (`_HueScale`/`_HueColor`/`_HueAmount`), `_BladeVariation`, y **flores en la misma técnica**: vertex color alpha < 0.5 = pétalo (albedo = color de vértice × `_FlowerTint`, `_FlowerLift` aclara la sombra).
+2. **`ShopGrassField`:** por área `Material` (null = `bladeMaterial`), `EdgeFade` (el pasto se acorta y raleaa hacia colliders/exclusiones y hacia el borde de la UNIÓN de áreas, sin costuras entre vecinas) y `FlowerDensity`; flores en racimos de un color por celda (`flowerColors` 5 pasteles sin rojo, `flowerClusterSize/Chance`, `flowerStemHeight`, `flowerHeadSize`), RNG propios (seed+7 bordes, seed+13 flores), las flores no cuentan para `maxBlades`.
+3. **`MeadowFlowers` (nuevo, estático):** tallo de 2 segmentos + corola de 5 pétalos casi horizontal + corazón amarillo, UV.y = 1 en la corola para que el viento la mueva con la punta.
+4. **Escena/assets:** `ShopGrassMeadow.mat` (raíz = `SH_Moss_Env`) para afuera; `ShopGrassBlades.mat` (raíz = `SH_Grass_Env`) para el patio. Áreas de afuera extendidas hasta el borde de la pradera (-75..15 × -23..67), densidad 24, alto 0.22-0.5, ancho 0.08-0.13, matas (`looseDensity` 0.3). Patio densidad 100, alto 0.14-0.26. `ShopGrassRamp.png` en Clamp. Costo: pasto 658k → 609k vértices con ~1,6× más superficie; flores +46k. Siembra ~1,8 s.
+
+**Quirks ⚠️:** (1) Flores pastel saturan a blanco con la luz de la tienda: `_FlowerTint` ~0.66-0.8 las devuelve a color. (2) Sembrar con mucha densidad tarda y el MCP corta por timeout aunque el código sí corrió: verificar con una segunda llamada antes de reintentar.
+
+**Siguiente paso (S156, propuesta):**
+1. Juan decide: luz/suelo del patio (sobreexpuesto por la luz y el suelo claro, no por el pasto) + piedras del camino (el pasto crece encima) **o** llevar la mejora a la arena (fijar `_RootColor` por paleta en `ArenaPaletteApplier` y capturar).
+2. Tamaño de flor (hoy corola 0.12-0.17) según lo que diga Juan; plano gris visible detrás de la pradera.
+3. Pendientes heredados: Sidekick Synty, trample en la tienda, código de etapas y niveles (Index/35 1.5), C6 primera build.
+
+**Archivos `.cs` S155 — creados (1):** `World/Store/MeadowFlowers.cs` · **modificados (1):** `World/Store/ShopGrassField.cs` · **shaders:** `Shaders/ArenaGrass.shader` (mod)
+
+---
+
 **Session:** 2026-10-14 (Session 154 — **arte de las etapas (Index/35 Parte 1.5): 52 piezas Blender + kit modular, lotes de vista previa de etapas 3-4 pegados a la tienda y caminables, pasto estilo BotW + bosque, video de crecimiento; fix del NavMesh roto desde S153** — 1 `.cs` creado, 2 modificados, 2 shaders; compila 0 errores; verificado en Play por sondas de NavMesh y capturas)
 
 **Focus:** Juan: "procede con los props de las etapas", luego "ponlos en escena para visualizar", "que cada módulo se una a la tienda", "reutiliza bosque y pasto, pasto tipo Zelda BotW" y "motion graphics de cómo crece la tienda".

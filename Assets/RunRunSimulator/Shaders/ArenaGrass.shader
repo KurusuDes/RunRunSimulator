@@ -30,6 +30,20 @@ Shader "MoriMonchi/ArenaGrass"
         _PatchAmount ("Patch Amount", Range(0,1)) = 0.35
         _TipGlow ("Tip Glow", Range(0,1)) = 0.3
         _TipGlowColor ("Tip Glow Color", Color) = (1,0.95,0.6,1)
+        _NormalBlend ("Terrain Normal Blend", Range(0,1)) = 0.85
+        _RootColor ("Root Color (ground)", Color) = (0.43,0.56,0.35,1)
+        _RootShadeColor ("Root Shade Color (ground shade)", Color) = (0.345,0.437,0.289,1)
+        _RootBlend ("Root Blend", Range(0,1)) = 0
+        _RootHeight ("Root Height", Range(0.01,1)) = 0.35
+        _Saturation ("Saturation", Range(0,2)) = 1
+        _TipColor ("Tip Color", Color) = (1,1,1,1)
+        _TipColorBlend ("Tip Color Blend", Range(0,1)) = 0
+        _HueScale ("Hue Noise Scale", Float) = 0.12
+        _HueColor ("Hue Patch Color", Color) = (0.85,1.0,0.8,1)
+        _HueAmount ("Hue Amount", Range(0,1)) = 0
+        _BladeVariation ("Blade Variation", Range(0,0.3)) = 0.05
+        _FlowerTint ("Flower Tint", Color) = (1,1,1,1)
+        _FlowerLift ("Flower Lift", Range(0,1)) = 0.15
     }
 
     SubShader
@@ -80,6 +94,20 @@ Shader "MoriMonchi/ArenaGrass"
                 half _PatchAmount;
                 half _TipGlow;
                 half4 _TipGlowColor;
+                half _NormalBlend;
+                half4 _RootColor;
+                half4 _RootShadeColor;
+                half _RootBlend;
+                half _RootHeight;
+                half _Saturation;
+                half4 _TipColor;
+                half _TipColorBlend;
+                float _HueScale;
+                half4 _HueColor;
+                half _HueAmount;
+                half _BladeVariation;
+                half4 _FlowerTint;
+                half _FlowerLift;
             CBUFFER_END
 
             float4 _ArenaFogCenter;
@@ -113,6 +141,7 @@ Shader "MoriMonchi/ArenaGrass"
                 float fogFactor : TEXCOORD3;
                 half2 blade : TEXCOORD4;
                 half gust : TEXCOORD5;
+                half4 vcolor : TEXCOORD6;
             };
 
             float Hash21(float2 p)
@@ -170,24 +199,39 @@ Shader "MoriMonchi/ArenaGrass"
 
                 output.positionWS = positionWS;
                 output.positionCS = TransformWorldToHClip(positionWS);
-                output.normalWS = TransformObjectToWorldNormal(input.normalOS);
+                output.normalWS = normalize(lerp(TransformObjectToWorldNormal(input.normalOS), float3(0.0, 1.0, 0.0), _NormalBlend));
                 output.uv = input.uv;
                 output.fogFactor = ComputeFogFactor(output.positionCS.z);
                 output.blade = half2(input.color.r, flatten);
                 output.gust = gust;
+                output.vcolor = input.color;
                 return output;
             }
 
             half4 Frag(Varyings input) : SV_Target
             {
                 half along = saturate(input.uv.y);
-                half variation = lerp(0.95, 1.05, input.blade.x);
+                half isFlower = input.vcolor.a < 0.5 ? 1.0 : 0.0;
+                half variation = lerp(1.0 - _BladeVariation, 1.0 + _BladeVariation, input.blade.x);
                 half key = saturate(lerp(_RootShade, _TipLift, along) * variation);
 
-                half3 ramp = SAMPLE_TEXTURE2D(_Ramp, sampler_Ramp, float2(key, 0.5)).rgb;
-                half3 albedo = lerp(_BaseColor.rgb * key, ramp, _RampInfluence) * _Tint.rgb;
-                half patch = smoothstep(0.3, 0.7, ValueNoise(input.positionWS.xz * _PatchScale));
-                albedo = lerp(albedo, albedo * _PatchTint.rgb, patch * _PatchAmount);
+                half3 albedo;
+                if (isFlower > 0.5)
+                {
+                    albedo = input.vcolor.rgb * _FlowerTint.rgb;
+                }
+                else
+                {
+                    half3 ramp = SAMPLE_TEXTURE2D(_Ramp, sampler_Ramp, float2(key, 0.5)).rgb;
+                    albedo = lerp(_BaseColor.rgb * key, ramp, _RampInfluence) * _Tint.rgb;
+                    half luma = dot(albedo, half3(0.2126, 0.7152, 0.0722));
+                    albedo = lerp(luma.xxx, albedo, _Saturation);
+                    albedo = lerp(albedo, albedo * _TipColor.rgb, smoothstep(0.4, 1.0, along) * _TipColorBlend);
+                    half patch = smoothstep(0.3, 0.7, ValueNoise(input.positionWS.xz * _PatchScale));
+                    albedo = lerp(albedo, albedo * _PatchTint.rgb, patch * _PatchAmount);
+                    half hn = ValueNoise(input.positionWS.xz * _HueScale + 17.3);
+                    albedo = lerp(albedo, albedo * _HueColor.rgb, smoothstep(0.35, 0.75, hn) * _HueAmount);
+                }
                 albedo *= lerp(1.0, 1.0 - _TrampleShade, input.blade.y);
 
                 float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
@@ -198,13 +242,20 @@ Shader "MoriMonchi/ArenaGrass"
                 half lit = smoothstep(_ToonStep - _ToonFeather, _ToonStep + _ToonFeather, wrapped * attenuation);
                 half3 ambient = SampleSH(normalWS);
 
-                half3 color = lerp(albedo * _ShadeTint.rgb * (mainLight.color * _ShadeLight + ambient), albedo * (mainLight.color * _LitLight + ambient), lit);
+                half3 litColor = albedo * (mainLight.color * _LitLight + ambient);
+                half3 shadeColor = albedo * _ShadeTint.rgb * (mainLight.color * _ShadeLight + ambient);
+                shadeColor = lerp(shadeColor, litColor, _FlowerLift * isFlower);
+                half3 color = lerp(shadeColor, litColor, lit);
 
                 color *= 1.0 + _GustSheen * input.gust * along;
 
+                half rootT = (1.0 - smoothstep(0.0, _RootHeight, along)) * _RootBlend * (1.0 - isFlower);
+                half3 groundLit = lerp(_RootShadeColor.rgb, _RootColor.rgb, lit) * (mainLight.color * 0.5 + 0.5);
+                color = lerp(color, groundLit, rootT);
+
                 half3 viewDirWS = normalize(_WorldSpaceCameraPos - input.positionWS);
                 half backlight = saturate(dot(-viewDirWS, mainLight.direction) * 0.5 + 0.5);
-                color += _TipGlowColor.rgb * mainLight.color * _TipGlow * along * along * backlight * backlight;
+                color += _TipGlowColor.rgb * mainLight.color * _TipGlow * lerp(1.0, 0.5, isFlower) * along * along * backlight * backlight;
 
                 float dFog = distance(input.positionWS.xz, _ArenaFogCenter.xz);
                 float tFog = 0.0;

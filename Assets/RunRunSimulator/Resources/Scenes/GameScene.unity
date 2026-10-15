@@ -59384,9 +59384,9 @@ MonoBehaviour:
       width: 22.4
       height: 12.6
     Height: 0
-    Density: 150
-    HeightRange: {x: 0.16, y: 0.3}
-    WidthRange: {x: 0.04, y: 0.065}
+    Density: 100
+    HeightRange: {x: 0.14, y: 0.26}
+    WidthRange: {x: 0.06, y: 0.1}
     Tilt: 0.25
     Segments: 2
     Cover:
@@ -59398,6 +59398,9 @@ MonoBehaviour:
       patchDensity: 0.8
       looseDensity: 0.9
       looseHeight: 0.85
+    Material: {fileID: 2100000, guid: 052ce51eaba6b8a4dbf74fafb12eeb3f, type: 2}
+    EdgeFade: 1.2
+    FlowerDensity: 4
   - Name: PatioEste
     Rect:
       serializedVersion: 2
@@ -59406,9 +59409,9 @@ MonoBehaviour:
       width: 7.1000004
       height: 7.5
     Height: 0
-    Density: 150
-    HeightRange: {x: 0.16, y: 0.3}
-    WidthRange: {x: 0.04, y: 0.065}
+    Density: 100
+    HeightRange: {x: 0.14, y: 0.26}
+    WidthRange: {x: 0.06, y: 0.1}
     Tilt: 0.25
     Segments: 2
     Cover:
@@ -59420,94 +59423,119 @@ MonoBehaviour:
       patchDensity: 0.8
       looseDensity: 0.9
       looseHeight: 0.85
+    Material: {fileID: 2100000, guid: 052ce51eaba6b8a4dbf74fafb12eeb3f, type: 2}
+    EdgeFade: 1.2
+    FlowerDensity: 4
   - Name: AfueraOeste
     Rect:
       serializedVersion: 2
-      x: -62
-      y: -10
-      width: 15.400002
-      height: 64
+      x: -75
+      y: -23
+      width: 28.400002
+      height: 90
     Height: -0.44
-    Density: 38
-    HeightRange: {x: 0.35, y: 0.75}
-    WidthRange: {x: 0.06, y: 0.1}
+    Density: 24
+    HeightRange: {x: 0.22, y: 0.5}
+    WidthRange: {x: 0.08, y: 0.13}
     Tilt: 0.35
-    Segments: 3
+    Segments: 2
     Cover:
-      clumpSpacing: 4
-      clumpRadius: 1.8
-      haloDensity: 0.5
-      patchScale: 9
-      patchThreshold: 0.45
-      patchDensity: 0.95
-      looseDensity: 0.85
-      looseHeight: 0.7
+      clumpSpacing: 4.5
+      clumpRadius: 2.2
+      haloDensity: 0.55
+      patchScale: 10
+      patchThreshold: 0.42
+      patchDensity: 1
+      looseDensity: 0.3
+      looseHeight: 0.55
+    Material: {fileID: 2100000, guid: 1b2e69e563ede8c478f5ecd0b3bed79a, type: 2}
+    EdgeFade: 2.5
+    FlowerDensity: 2
   - Name: AfueraEste
     Rect:
       serializedVersion: 2
       x: -15.4
-      y: -10
-      width: 17.4
-      height: 64
+      y: -23
+      width: 30.4
+      height: 90
     Height: -0.44
-    Density: 38
-    HeightRange: {x: 0.35, y: 0.75}
-    WidthRange: {x: 0.06, y: 0.1}
+    Density: 24
+    HeightRange: {x: 0.22, y: 0.5}
+    WidthRange: {x: 0.08, y: 0.13}
     Tilt: 0.35
-    Segments: 3
+    Segments: 2
     Cover:
-      clumpSpacing: 4
-      clumpRadius: 1.8
-      haloDensity: 0.5
-      patchScale: 9
-      patchThreshold: 0.45
-      patchDensity: 0.95
-      looseDensity: 0.85
-      looseHeight: 0.7
+      clumpSpacing: 4.5
+      clumpRadius: 2.2
+      haloDensity: 0.55
+      patchScale: 10
+      patchThreshold: 0.42
+      patchDensity: 1
+      looseDensity: 0.3
+      looseHeight: 0.55
+    Material: {fileID: 2100000, guid: 1b2e69e563ede8c478f5ecd0b3bed79a, type: 2}
+    EdgeFade: 2.5
+    FlowerDensity: 2
   - Name: AfueraNorte
     Rect:
       serializedVersion: 2
       x: -46.6
       y: 43.1
       width: 31.199999
-      height: 10.900002
+      height: 23.900002
     Height: -0.44
-    Density: 38
-    HeightRange: {x: 0.35, y: 0.75}
-    WidthRange: {x: 0.06, y: 0.1}
+    Density: 24
+    HeightRange: {x: 0.22, y: 0.5}
+    WidthRange: {x: 0.08, y: 0.13}
     Tilt: 0.35
-    Segments: 3
+    Segments: 2
     Cover:
-      clumpSpacing: 4
-      clumpRadius: 1.8
-      haloDensity: 0.5
-      patchScale: 9
-      patchThreshold: 0.45
-      patchDensity: 0.95
-      looseDensity: 0.85
-      looseHeight: 0.7
+      clumpSpacing: 4.5
+      clumpRadius: 2.2
+      haloDensity: 0.55
+      patchScale: 10
+      patchThreshold: 0.42
+      patchDensity: 1
+      looseDensity: 0.3
+      looseHeight: 0.55
+    Material: {fileID: 2100000, guid: 1b2e69e563ede8c478f5ecd0b3bed79a, type: 2}
+    EdgeFade: 2.5
+    FlowerDensity: 2
   - Name: AfueraSur
     Rect:
       serializedVersion: 2
       x: -46.6
-      y: -10
+      y: -23
       width: 31.199999
-      height: 2.9
+      height: 15.9
     Height: -0.44
-    Density: 38
-    HeightRange: {x: 0.35, y: 0.75}
-    WidthRange: {x: 0.06, y: 0.1}
+    Density: 24
+    HeightRange: {x: 0.22, y: 0.5}
+    WidthRange: {x: 0.08, y: 0.13}
     Tilt: 0.35
-    Segments: 3
+    Segments: 2
     Cover:
-      clumpSpacing: 4
-      clumpRadius: 1.8
-      haloDensity: 0.5
-      patchScale: 9
-      patchThreshold: 0.45
-      patchDensity: 0.95
-      looseDensity: 0.85
-      looseHeight: 0.7
+      clumpSpacing: 4.5
+      clumpRadius: 2.2
+      haloDensity: 0.55
+      patchScale: 10
+      patchThreshold: 0.42
+      patchDensity: 1
+      looseDensity: 0.3
+      looseHeight: 0.55
+    Material: {fileID: 2100000, guid: 1b2e69e563ede8c478f5ecd0b3bed79a, type: 2}
+    EdgeFade: 2.5
+    FlowerDensity: 2
+  flowerColors:
+  - {r: 0.97, g: 0.94, b: 0.84, a: 1}
+  - {r: 1, g: 0.8, b: 0.32, a: 1}
+  - {r: 0.72, g: 0.56, b: 0.92, a: 1}
+  - {r: 0.52, g: 0.73, b: 0.96, a: 1}
+  - {r: 0.97, g: 0.6, b: 0.76, a: 1}
+  flowerClusterSize: 3.5
+  flowerClusterChance: 0.55
+  flowerStemHeight: {x: 0.36, y: 0.5}
+  flowerHeadSize: {x: 0.12, y: 0.17}
   exclusionMargin: 0.4
   exclusions:
   - serializedVersion: 2
