@@ -34,28 +34,28 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 5
+      Data: 8
     - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 1
-      Data: BS3-H14-BK4-W3-FC0-F499B2-639262548642752310
+      Data: BS1-H10-BK3-W0-FC0-72ADFB-639262877624731681
     - Name: $v
       Entry: 7
       Data: 2|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
     - Name: BodyShapeID
       Entry: 1
-      Data: BS3
+      Data: BS1
     - Name: HornID
       Entry: 1
-      Data: H14
+      Data: H10
     - Name: BackID
       Entry: 1
-      Data: BK4
+      Data: BK3
     - Name: WingID
       Entry: 1
-      Data: W3
+      Data: W0
     - Name: FaceID
       Entry: 1
       Data: FC0
@@ -64,13 +64,13 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.956862748
+      Data: 0.447058827
     - Name: 
       Entry: 4
-      Data: 0.6
+      Data: 0.6784314
     - Name: 
       Entry: 4
-      Data: 0.698039234
+      Data: 0.9843137
     - Name: 
       Entry: 4
       Data: 1
@@ -82,13 +82,13 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
+      Data: 0.558948159
+    - Name: 
+      Entry: 4
+      Data: 0.5360557
+    - Name: 
+      Entry: 4
       Data: 1
-    - Name: 
-      Entry: 4
-      Data: 0.74806565
-    - Name: 
-      Entry: 4
-      Data: 0.682991862
     - Name: 
       Entry: 4
       Data: 1
@@ -97,22 +97,22 @@ MonoBehaviour:
       Data: 
     - Name: FurType
       Entry: 3
-      Data: 2
+      Data: 34
     - Name: IsShiny
       Entry: 5
       Data: false
     - Name: CustomName
       Entry: 1
-      Data: Itchy Grub
+      Data: Wiggly Droob
     - Name: Timestamp
       Entry: 3
-      Data: 639262548642752310
+      Data: 639262877624731681
     - Name: BirthDate
       Entry: 7
       Data: System.DateTime, mscorlib
     - Name: 
       Entry: 3
-      Data: 5250948567070140214
+      Data: 5250948896052119585
     - Name: 
       Entry: 8
       Data: 
@@ -130,7 +130,16 @@ MonoBehaviour:
       Data: 3|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 0
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: BS1-H10-BK2-W0-FC0-C3B898-639262884116125945
+    - Name: 
+      Entry: 1
+      Data: BS3-H4-BK1-W3-FC1-AFC7DA-639262889174178403
+    - Name: 
+      Entry: 1
+      Data: BS1-H10-BK2-W2-FC1-7DAEF0-639262891879052032
     - Name: 
       Entry: 13
       Data: 
@@ -155,19 +164,19 @@ MonoBehaviour:
       Data: 2
     - Name: Role
       Entry: 3
-      Data: 0
+      Data: 2
     - Name: Element
       Entry: 3
       Data: 3
     - Name: Sociability
       Entry: 4
-      Data: 0.8228564
+      Data: 0.822865248
     - Name: Boldness
       Entry: 4
-      Data: 0.7823322
+      Data: 0.7543261
     - Name: BreedCount
       Entry: 3
-      Data: 0
+      Data: 3
     - Name: Generation
       Entry: 3
       Data: 1
@@ -185,22 +194,22 @@ MonoBehaviour:
       Data: 1
     - Name: HornPotential
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: BackPotential
       Entry: 3
-      Data: 1
+      Data: 3
     - Name: WingPotential
       Entry: 3
-      Data: 3
+      Data: 1
     - Name: IsDead
       Entry: 5
       Data: false
     - Name: Form
       Entry: 3
-      Data: 2
+      Data: 0
     - Name: Explorations
       Entry: 3
-      Data: 1
+      Data: 3
     - Name: Battles
       Entry: 3
       Data: 0
@@ -209,19 +218,19 @@ MonoBehaviour:
       Data: 5|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 57.9362755
+      Data: 60.16769
     - Name: Energy
       Entry: 4
-      Data: 52.09604
+      Data: 30.6472931
     - Name: Affect
       Entry: 4
-      Data: -13.8414392
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
     - Name: BusyState
       Entry: 3
-      Data: 0
+      Data: 2
     - Name: SaleDate
       Entry: 7
       Data: System.DateTime, mscorlib
@@ -233,10 +242,10 @@ MonoBehaviour:
       Data: 
     - Name: BreedReadyAt
       Entry: 3
-      Data: 0
+      Data: 28481
     - Name: BreedPartnerID
       Entry: 1
-      Data: 
+      Data: BS1-H4-BK2-W3-FC1-E0C288-639262877624812709
     - Name: BreedDecorIDs
       Entry: 7
       Data: 6|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
@@ -266,37 +275,37 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: BS0-H5-BK0-W2-FC0-F59AFD-639262548642780393
+      Data: BS1-H14-BK2-W3-FC1-C780F6-639262877624787373
     - Name: $v
       Entry: 7
       Data: 7|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
     - Name: BodyShapeID
       Entry: 1
-      Data: BS0
+      Data: BS1
     - Name: HornID
       Entry: 1
-      Data: H5
+      Data: H14
     - Name: BackID
       Entry: 1
-      Data: BK0
+      Data: BK2
     - Name: WingID
       Entry: 1
-      Data: W2
+      Data: W3
     - Name: FaceID
       Entry: 1
-      Data: FC0
+      Data: FC1
     - Name: BaseColor
       Entry: 7
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.9607843
+      Data: 0.78039217
     - Name: 
       Entry: 4
-      Data: 0.6039216
+      Data: 0.5019608
     - Name: 
       Entry: 4
-      Data: 0.992156863
+      Data: 0.9647059
     - Name: 
       Entry: 4
       Data: 1
@@ -311,10 +320,10 @@ MonoBehaviour:
       Data: 1
     - Name: 
       Entry: 4
-      Data: 0.6673913
+      Data: 0.592276454
     - Name: 
       Entry: 4
-      Data: 0.867225349
+      Data: 0.966691
     - Name: 
       Entry: 4
       Data: 1
@@ -323,22 +332,22 @@ MonoBehaviour:
       Data: 
     - Name: FurType
       Entry: 3
-      Data: 8
+      Data: 22
     - Name: IsShiny
       Entry: 5
       Data: false
     - Name: CustomName
       Entry: 1
-      Data: Smelly Fuzz
+      Data: Crusty Sprout
     - Name: Timestamp
       Entry: 3
-      Data: 639262548642780393
+      Data: 639262877624787373
     - Name: BirthDate
       Entry: 7
       Data: System.DateTime, mscorlib
     - Name: 
       Entry: 3
-      Data: 5250948567070168297
+      Data: 5250948896052175277
     - Name: 
       Entry: 8
       Data: 
@@ -378,19 +387,19 @@ MonoBehaviour:
       Data: 
     - Name: Gender
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: Role
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: Element
       Entry: 3
       Data: 3
     - Name: Sociability
       Entry: 4
-      Data: 0.416135818
+      Data: 0.26554504
     - Name: Boldness
       Entry: 4
-      Data: 0.292820364
+      Data: 0.366459876
     - Name: BreedCount
       Entry: 3
       Data: 0
@@ -414,19 +423,19 @@ MonoBehaviour:
       Data: 2
     - Name: BackPotential
       Entry: 3
-      Data: 3
+      Data: 1
     - Name: WingPotential
       Entry: 3
-      Data: 2
+      Data: 3
     - Name: IsDead
       Entry: 5
       Data: false
     - Name: Form
       Entry: 3
-      Data: 2
+      Data: 0
     - Name: Explorations
       Entry: 3
-      Data: 1
+      Data: 3
     - Name: Battles
       Entry: 3
       Data: 0
@@ -435,13 +444,13 @@ MonoBehaviour:
       Data: 10|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 59.76899
+      Data: 50.2304077
     - Name: Energy
       Entry: 4
-      Data: 42.3744736
+      Data: 59.5285072
     - Name: Affect
       Entry: 4
-      Data: -4.67999268
+      Data: -26.60746
     - Name: 
       Entry: 8
       Data: 
@@ -492,37 +501,37 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: BS1-H9-BK9-W5-FC1-8EDCEC-639262548642790466
+      Data: BS0-H3-BK7-W1-FC0-FCB170-639262877624797624
     - Name: $v
       Entry: 7
       Data: 12|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
     - Name: BodyShapeID
       Entry: 1
-      Data: BS1
+      Data: BS0
     - Name: HornID
       Entry: 1
-      Data: H9
+      Data: H3
     - Name: BackID
       Entry: 1
-      Data: BK9
+      Data: BK7
     - Name: WingID
       Entry: 1
-      Data: W5
+      Data: W1
     - Name: FaceID
       Entry: 1
-      Data: FC1
+      Data: FC0
     - Name: BaseColor
       Entry: 7
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.5568628
+      Data: 0.9882353
     - Name: 
       Entry: 4
-      Data: 0.8627451
+      Data: 0.694117665
     - Name: 
       Entry: 4
-      Data: 0.9254902
+      Data: 0.4392157
     - Name: 
       Entry: 4
       Data: 1
@@ -534,13 +543,13 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.66144073
-    - Name: 
-      Entry: 4
-      Data: 0.7798645
-    - Name: 
-      Entry: 4
       Data: 1
+    - Name: 
+      Entry: 4
+      Data: 0.9736905
+    - Name: 
+      Entry: 4
+      Data: 0.5277778
     - Name: 
       Entry: 4
       Data: 1
@@ -549,22 +558,22 @@ MonoBehaviour:
       Data: 
     - Name: FurType
       Entry: 3
-      Data: 42
+      Data: 31
     - Name: IsShiny
       Entry: 5
       Data: false
     - Name: CustomName
       Entry: 1
-      Data: Wobbly Snort
+      Data: Jumpy Gloob
     - Name: Timestamp
       Entry: 3
-      Data: 639262548642790466
+      Data: 639262877624797624
     - Name: BirthDate
       Entry: 7
       Data: System.DateTime, mscorlib
     - Name: 
       Entry: 3
-      Data: 5250948567070178370
+      Data: 5250948896052185528
     - Name: 
       Entry: 8
       Data: 
@@ -604,19 +613,19 @@ MonoBehaviour:
       Data: 
     - Name: Gender
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: Role
       Entry: 3
-      Data: 0
+      Data: 1
     - Name: Element
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: Sociability
       Entry: 4
-      Data: 0.3802645
+      Data: 0.186904818
     - Name: Boldness
       Entry: 4
-      Data: 0.237852573
+      Data: 0.468203425
     - Name: BreedCount
       Entry: 3
       Data: 0
@@ -637,7 +646,7 @@ MonoBehaviour:
       Data: 1
     - Name: HornPotential
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: BackPotential
       Entry: 3
       Data: 2
@@ -649,10 +658,10 @@ MonoBehaviour:
       Data: false
     - Name: Form
       Entry: 3
-      Data: 2
+      Data: 0
     - Name: Explorations
       Entry: 3
-      Data: 1
+      Data: 3
     - Name: Battles
       Entry: 3
       Data: 0
@@ -661,13 +670,13 @@ MonoBehaviour:
       Data: 15|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 59.75675
+      Data: 36.4334221
     - Name: Energy
       Entry: 4
-      Data: 51.8274956
+      Data: 88.80923
     - Name: Affect
       Entry: 4
-      Data: -23.7527142
+      Data: 4.351613
     - Name: 
       Entry: 8
       Data: 
@@ -718,22 +727,22 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: BS2-H7-BK3-W4-FC0-95DDFE-639262548642790466
+      Data: BS3-H8-BK1-W5-FC0-E77EA9-639262877624807650
     - Name: $v
       Entry: 7
       Data: 17|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
     - Name: BodyShapeID
       Entry: 1
-      Data: BS2
+      Data: BS3
     - Name: HornID
       Entry: 1
-      Data: H7
+      Data: H8
     - Name: BackID
       Entry: 1
-      Data: BK3
+      Data: BK1
     - Name: WingID
       Entry: 1
-      Data: W4
+      Data: W5
     - Name: FaceID
       Entry: 1
       Data: FC0
@@ -742,13 +751,13 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.58431375
+      Data: 0.905882359
     - Name: 
       Entry: 4
-      Data: 0.8666667
+      Data: 0.494117647
     - Name: 
       Entry: 4
-      Data: 0.996078432
+      Data: 0.6627451
     - Name: 
       Entry: 4
       Data: 1
@@ -760,13 +769,13 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.648622036
-    - Name: 
-      Entry: 4
-      Data: 0.7209055
-    - Name: 
-      Entry: 4
       Data: 1
+    - Name: 
+      Entry: 4
+      Data: 0.6408658
+    - Name: 
+      Entry: 4
+      Data: 0.6136364
     - Name: 
       Entry: 4
       Data: 1
@@ -775,28 +784,28 @@ MonoBehaviour:
       Data: 
     - Name: FurType
       Entry: 3
-      Data: 42
+      Data: 23
     - Name: IsShiny
       Entry: 5
       Data: false
     - Name: CustomName
       Entry: 1
-      Data: Jumpy Tadpole
+      Data: Munchy Snort
     - Name: Timestamp
       Entry: 3
-      Data: 639262548642790466
+      Data: 639262877624807650
     - Name: BirthDate
       Entry: 7
       Data: System.DateTime, mscorlib
     - Name: 
       Entry: 3
-      Data: 5250948567070178370
+      Data: 5250948896052195554
     - Name: 
       Entry: 8
       Data: 
     - Name: BirthDay
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: MotherID
       Entry: 1
       Data: 
@@ -833,16 +842,16 @@ MonoBehaviour:
       Data: 2
     - Name: Role
       Entry: 3
-      Data: 0
+      Data: 2
     - Name: Element
       Entry: 3
-      Data: 1
+      Data: 3
     - Name: Sociability
       Entry: 4
-      Data: 0.193501
+      Data: 0.2619713
     - Name: Boldness
       Entry: 4
-      Data: 0.31603086
+      Data: 0.652004957
     - Name: BreedCount
       Entry: 3
       Data: 0
@@ -863,22 +872,22 @@ MonoBehaviour:
       Data: 1
     - Name: HornPotential
       Entry: 3
-      Data: 2
+      Data: 3
     - Name: BackPotential
       Entry: 3
       Data: 1
     - Name: WingPotential
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: IsDead
       Entry: 5
       Data: false
     - Name: Form
       Entry: 3
-      Data: 1
+      Data: 0
     - Name: Explorations
       Entry: 3
-      Data: 0
+      Data: 3
     - Name: Battles
       Entry: 3
       Data: 0
@@ -887,13 +896,13 @@ MonoBehaviour:
       Data: 20|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 96.15864
+      Data: 44.7239265
     - Name: Energy
       Entry: 4
-      Data: 100
+      Data: 47.4406776
     - Name: Affect
       Entry: 4
-      Data: -57.02159
+      Data: -16.8415318
     - Name: 
       Entry: 8
       Data: 
@@ -944,22 +953,22 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: BS2-H13-BK12-W4-FC1-E876C0-639262548642795528
+      Data: BS1-H4-BK2-W3-FC1-E0C288-639262877624812709
     - Name: $v
       Entry: 7
       Data: 22|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
     - Name: BodyShapeID
       Entry: 1
-      Data: BS2
+      Data: BS1
     - Name: HornID
       Entry: 1
-      Data: H13
+      Data: H4
     - Name: BackID
       Entry: 1
-      Data: BK12
+      Data: BK2
     - Name: WingID
       Entry: 1
-      Data: W4
+      Data: W3
     - Name: FaceID
       Entry: 1
       Data: FC1
@@ -968,13 +977,13 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0.9098039
+      Data: 0.8784314
     - Name: 
       Entry: 4
-      Data: 0.4627451
+      Data: 0.7607843
     - Name: 
       Entry: 4
-      Data: 0.7529412
+      Data: 0.533333361
     - Name: 
       Entry: 4
       Data: 1
@@ -986,13 +995,13 @@ MonoBehaviour:
       Data: UnityEngine.Color, UnityEngine.CoreModule
     - Name: 
       Entry: 4
+      Data: 0.953553557
+    - Name: 
+      Entry: 4
       Data: 1
     - Name: 
       Entry: 4
-      Data: 0.5823276
-    - Name: 
-      Entry: 4
-      Data: 0.6529655
+      Data: 0.6660714
     - Name: 
       Entry: 4
       Data: 1
@@ -1001,28 +1010,28 @@ MonoBehaviour:
       Data: 
     - Name: FurType
       Entry: 3
-      Data: 18
+      Data: 43
     - Name: IsShiny
       Entry: 5
       Data: false
     - Name: CustomName
       Entry: 1
-      Data: Crusty Gunk
+      Data: Grumpy Smudge
     - Name: Timestamp
       Entry: 3
-      Data: 639262548642795528
+      Data: 639262877624812709
     - Name: BirthDate
       Entry: 7
       Data: System.DateTime, mscorlib
     - Name: 
       Entry: 3
-      Data: 5250948567070183432
+      Data: 5250948896052200613
     - Name: 
       Entry: 8
       Data: 
     - Name: BirthDay
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: MotherID
       Entry: 1
       Data: 
@@ -1034,7 +1043,16 @@ MonoBehaviour:
       Data: 23|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 0
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: BS1-H10-BK2-W0-FC0-C3B898-639262884116125945
+    - Name: 
+      Entry: 1
+      Data: BS3-H4-BK1-W3-FC1-AFC7DA-639262889174178403
+    - Name: 
+      Entry: 1
+      Data: BS1-H10-BK2-W2-FC1-7DAEF0-639262891879052032
     - Name: 
       Entry: 13
       Data: 
@@ -1059,19 +1077,19 @@ MonoBehaviour:
       Data: 1
     - Name: Role
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: Element
       Entry: 3
-      Data: 3
+      Data: 2
     - Name: Sociability
       Entry: 4
-      Data: 0.5692788
+      Data: 0.6415987
     - Name: Boldness
       Entry: 4
-      Data: 0.8391167
+      Data: 0.5250555
     - Name: BreedCount
       Entry: 3
-      Data: 0
+      Data: 3
     - Name: Generation
       Entry: 3
       Data: 1
@@ -1092,7 +1110,7 @@ MonoBehaviour:
       Data: 1
     - Name: BackPotential
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: WingPotential
       Entry: 3
       Data: 3
@@ -1101,10 +1119,10 @@ MonoBehaviour:
       Data: false
     - Name: Form
       Entry: 3
-      Data: 1
+      Data: 0
     - Name: Explorations
       Entry: 3
-      Data: 0
+      Data: 3
     - Name: Battles
       Entry: 3
       Data: 0
@@ -1113,13 +1131,239 @@ MonoBehaviour:
       Data: 25|MoriMonchiSimulator.NeedsState, Assembly-CSharp
     - Name: Health
       Entry: 4
-      Data: 96.52084
+      Data: 58.5589561
     - Name: Energy
       Entry: 4
-      Data: 100
+      Data: 77.2904358
     - Name: Affect
       Entry: 4
-      Data: -78.76736
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BusyState
+      Entry: 3
+      Data: 2
+    - Name: SaleDate
+      Entry: 7
+      Data: System.DateTime, mscorlib
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BreedReadyAt
+      Entry: 3
+      Data: 28481
+    - Name: BreedPartnerID
+      Entry: 1
+      Data: BS1-H10-BK3-W0-FC0-72ADFB-639262877624731681
+    - Name: BreedDecorIDs
+      Entry: 7
+      Data: 26|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: LocationKey
+      Entry: 1
+      Data: 
+    - Name: LocationSlot
+      Entry: 3
+      Data: -1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: BS1-H10-BK2-W0-FC0-C3B898-639262884116125945
+    - Name: $v
+      Entry: 7
+      Data: 27|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
+    - Name: BodyShapeID
+      Entry: 1
+      Data: BS1
+    - Name: HornID
+      Entry: 1
+      Data: H10
+    - Name: BackID
+      Entry: 1
+      Data: BK2
+    - Name: WingID
+      Entry: 1
+      Data: W0
+    - Name: FaceID
+      Entry: 1
+      Data: FC0
+    - Name: BaseColor
+      Entry: 7
+      Data: UnityEngine.Color, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.7647059
+    - Name: 
+      Entry: 4
+      Data: 0.721568644
+    - Name: 
+      Entry: 4
+      Data: 0.596078455
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SecondaryColor
+      Entry: 7
+      Data: UnityEngine.Color, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.87626946
+    - Name: 
+      Entry: 4
+      Data: 0.9147059
+    - Name: 
+      Entry: 4
+      Data: 0.743257165
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: FurType
+      Entry: 3
+      Data: 34
+    - Name: IsShiny
+      Entry: 5
+      Data: false
+    - Name: CustomName
+      Entry: 1
+      Data: Snotty Gloob
+    - Name: Timestamp
+      Entry: 3
+      Data: 639262884116125945
+    - Name: BirthDate
+      Entry: 7
+      Data: System.DateTime, mscorlib
+    - Name: 
+      Entry: 3
+      Data: 5250948902543513849
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BirthDay
+      Entry: 3
+      Data: 15
+    - Name: MotherID
+      Entry: 1
+      Data: BS1-H10-BK3-W0-FC0-72ADFB-639262877624731681
+    - Name: FatherID
+      Entry: 1
+      Data: BS1-H4-BK2-W3-FC1-E0C288-639262877624812709
+    - Name: ChildrenIDs
+      Entry: 7
+      Data: 28|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Origins
+      Entry: 7
+      Data: 29|System.Collections.Generic.List`1[[MoriMonchiSimulator.PartOrigin,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Gender
+      Entry: 3
+      Data: 1
+    - Name: Role
+      Entry: 3
+      Data: 2
+    - Name: Element
+      Entry: 3
+      Data: 2
+    - Name: Sociability
+      Entry: 4
+      Data: 0.8025526
+    - Name: Boldness
+      Entry: 4
+      Data: 0.608186543
+    - Name: BreedCount
+      Entry: 3
+      Data: 0
+    - Name: Generation
+      Entry: 3
+      Data: 2
+    - Name: BodyTier
+      Entry: 3
+      Data: 1
+    - Name: HornTier
+      Entry: 3
+      Data: 1
+    - Name: BackTier
+      Entry: 3
+      Data: 1
+    - Name: WingTier
+      Entry: 3
+      Data: 1
+    - Name: HornPotential
+      Entry: 3
+      Data: 1
+    - Name: BackPotential
+      Entry: 3
+      Data: 1
+    - Name: WingPotential
+      Entry: 3
+      Data: 3
+    - Name: IsDead
+      Entry: 5
+      Data: false
+    - Name: Form
+      Entry: 3
+      Data: 2
+    - Name: Explorations
+      Entry: 3
+      Data: 2
+    - Name: Battles
+      Entry: 3
+      Data: 0
+    - Name: Needs
+      Entry: 7
+      Data: 30|MoriMonchiSimulator.NeedsState, Assembly-CSharp
+    - Name: Health
+      Entry: 4
+      Data: 45.4171028
+    - Name: Energy
+      Entry: 4
+      Data: 75.63712
+    - Name: Affect
+      Entry: 4
+      Data: 4.940902
     - Name: 
       Entry: 8
       Data: 
@@ -1143,7 +1387,459 @@ MonoBehaviour:
       Data: 
     - Name: BreedDecorIDs
       Entry: 7
-      Data: 26|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 31|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: LocationKey
+      Entry: 1
+      Data: 
+    - Name: LocationSlot
+      Entry: 3
+      Data: -1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: BS1-H10-BK2-W2-FC1-7DAEF0-639262891879052032
+    - Name: $v
+      Entry: 7
+      Data: 32|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
+    - Name: BodyShapeID
+      Entry: 1
+      Data: BS1
+    - Name: HornID
+      Entry: 1
+      Data: H10
+    - Name: BackID
+      Entry: 1
+      Data: BK2
+    - Name: WingID
+      Entry: 1
+      Data: W2
+    - Name: FaceID
+      Entry: 1
+      Data: FC1
+    - Name: BaseColor
+      Entry: 7
+      Data: UnityEngine.Color, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.490196079
+    - Name: 
+      Entry: 4
+      Data: 0.68235296
+    - Name: 
+      Entry: 4
+      Data: 0.9411765
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SecondaryColor
+      Entry: 7
+      Data: UnityEngine.Color, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.6146667
+    - Name: 
+      Entry: 4
+      Data: 0.592708349
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: FurType
+      Entry: 3
+      Data: 43
+    - Name: IsShiny
+      Entry: 5
+      Data: false
+    - Name: CustomName
+      Entry: 1
+      Data: Jumpy Plop
+    - Name: Timestamp
+      Entry: 3
+      Data: 639262891879052032
+    - Name: BirthDate
+      Entry: 7
+      Data: System.DateTime, mscorlib
+    - Name: 
+      Entry: 3
+      Data: 5250948910306439936
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BirthDay
+      Entry: 3
+      Data: 19
+    - Name: MotherID
+      Entry: 1
+      Data: BS1-H10-BK3-W0-FC0-72ADFB-639262877624731681
+    - Name: FatherID
+      Entry: 1
+      Data: BS1-H4-BK2-W3-FC1-E0C288-639262877624812709
+    - Name: ChildrenIDs
+      Entry: 7
+      Data: 33|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Origins
+      Entry: 7
+      Data: 34|System.Collections.Generic.List`1[[MoriMonchiSimulator.PartOrigin,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Gender
+      Entry: 3
+      Data: 1
+    - Name: Role
+      Entry: 3
+      Data: 2
+    - Name: Element
+      Entry: 3
+      Data: 0
+    - Name: Sociability
+      Entry: 4
+      Data: 0.7704237
+    - Name: Boldness
+      Entry: 4
+      Data: 0.6802956
+    - Name: BreedCount
+      Entry: 3
+      Data: 0
+    - Name: Generation
+      Entry: 3
+      Data: 2
+    - Name: BodyTier
+      Entry: 3
+      Data: 1
+    - Name: HornTier
+      Entry: 3
+      Data: 1
+    - Name: BackTier
+      Entry: 3
+      Data: 1
+    - Name: WingTier
+      Entry: 3
+      Data: 1
+    - Name: HornPotential
+      Entry: 3
+      Data: 1
+    - Name: BackPotential
+      Entry: 3
+      Data: 1
+    - Name: WingPotential
+      Entry: 3
+      Data: 2
+    - Name: IsDead
+      Entry: 5
+      Data: false
+    - Name: Form
+      Entry: 3
+      Data: 0
+    - Name: Explorations
+      Entry: 3
+      Data: 3
+    - Name: Battles
+      Entry: 3
+      Data: 0
+    - Name: Needs
+      Entry: 7
+      Data: 35|MoriMonchiSimulator.NeedsState, Assembly-CSharp
+    - Name: Health
+      Entry: 4
+      Data: 56.77315
+    - Name: Energy
+      Entry: 4
+      Data: 55.86646
+    - Name: Affect
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BusyState
+      Entry: 3
+      Data: 0
+    - Name: SaleDate
+      Entry: 7
+      Data: System.DateTime, mscorlib
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BreedReadyAt
+      Entry: 3
+      Data: 0
+    - Name: BreedPartnerID
+      Entry: 1
+      Data: 
+    - Name: BreedDecorIDs
+      Entry: 7
+      Data: 36|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: LocationKey
+      Entry: 1
+      Data: 
+    - Name: LocationSlot
+      Entry: 3
+      Data: -1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: BS1-H14-BK2-W0-FC1-8ED858-639271712237742993
+    - Name: $v
+      Entry: 7
+      Data: 37|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
+    - Name: BodyShapeID
+      Entry: 1
+      Data: BS1
+    - Name: HornID
+      Entry: 1
+      Data: H14
+    - Name: BackID
+      Entry: 1
+      Data: BK2
+    - Name: WingID
+      Entry: 1
+      Data: W0
+    - Name: FaceID
+      Entry: 1
+      Data: FC1
+    - Name: BaseColor
+      Entry: 7
+      Data: UnityEngine.Color, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.5568628
+    - Name: 
+      Entry: 4
+      Data: 0.847058833
+    - Name: 
+      Entry: 4
+      Data: 0.345098048
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SecondaryColor
+      Entry: 7
+      Data: UnityEngine.Color, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.4948367
+    - Name: 
+      Entry: 4
+      Data: 0.997058868
+    - Name: 
+      Entry: 4
+      Data: 0.524028361
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: FurType
+      Entry: 3
+      Data: 30
+    - Name: IsShiny
+      Entry: 5
+      Data: false
+    - Name: CustomName
+      Entry: 1
+      Data: Glowy Booger
+    - Name: Timestamp
+      Entry: 3
+      Data: 639271712237742993
+    - Name: BirthDate
+      Entry: 7
+      Data: System.DateTime, mscorlib
+    - Name: 
+      Entry: 3
+      Data: 5250957730665130897
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BirthDay
+      Entry: 3
+      Data: 23
+    - Name: MotherID
+      Entry: 1
+      Data: 
+    - Name: FatherID
+      Entry: 1
+      Data: 
+    - Name: ChildrenIDs
+      Entry: 7
+      Data: 38|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Origins
+      Entry: 7
+      Data: 39|System.Collections.Generic.List`1[[MoriMonchiSimulator.PartOrigin,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Gender
+      Entry: 3
+      Data: 2
+    - Name: Role
+      Entry: 3
+      Data: 1
+    - Name: Element
+      Entry: 3
+      Data: 2
+    - Name: Sociability
+      Entry: 4
+      Data: 0.78170085
+    - Name: Boldness
+      Entry: 4
+      Data: 0.278997958
+    - Name: BreedCount
+      Entry: 3
+      Data: 0
+    - Name: Generation
+      Entry: 3
+      Data: 1
+    - Name: BodyTier
+      Entry: 3
+      Data: 1
+    - Name: HornTier
+      Entry: 3
+      Data: 1
+    - Name: BackTier
+      Entry: 3
+      Data: 1
+    - Name: WingTier
+      Entry: 3
+      Data: 1
+    - Name: HornPotential
+      Entry: 3
+      Data: 2
+    - Name: BackPotential
+      Entry: 3
+      Data: 1
+    - Name: WingPotential
+      Entry: 3
+      Data: 1
+    - Name: IsDead
+      Entry: 5
+      Data: false
+    - Name: Form
+      Entry: 3
+      Data: 0
+    - Name: Explorations
+      Entry: 3
+      Data: 0
+    - Name: Battles
+      Entry: 3
+      Data: 0
+    - Name: Needs
+      Entry: 7
+      Data: 40|MoriMonchiSimulator.NeedsState, Assembly-CSharp
+    - Name: Health
+      Entry: 4
+      Data: 63.2606277
+    - Name: Energy
+      Entry: 4
+      Data: 41.174263
+    - Name: Affect
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BusyState
+      Entry: 3
+      Data: 0
+    - Name: SaleDate
+      Entry: 7
+      Data: System.DateTime, mscorlib
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BreedReadyAt
+      Entry: 3
+      Data: 0
+    - Name: BreedPartnerID
+      Entry: 1
+      Data: 
+    - Name: BreedDecorIDs
+      Entry: 7
+      Data: 41|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -1173,14 +1869,240 @@ MonoBehaviour:
       Data: 
     - Name: departed
       Entry: 7
-      Data: 27|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[MoriMonchiSimulator.CreatureDNA,
+      Data: 42|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[MoriMonchiSimulator.CreatureDNA,
         Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 9
       Data: 1
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: BS3-H4-BK1-W3-FC1-AFC7DA-639262889174178403
+    - Name: $v
+      Entry: 7
+      Data: 43|MoriMonchiSimulator.CreatureDNA, Assembly-CSharp
+    - Name: BodyShapeID
+      Entry: 1
+      Data: BS3
+    - Name: HornID
+      Entry: 1
+      Data: H4
+    - Name: BackID
+      Entry: 1
+      Data: BK1
+    - Name: WingID
+      Entry: 1
+      Data: W3
+    - Name: FaceID
+      Entry: 1
+      Data: FC1
+    - Name: BaseColor
+      Entry: 7
+      Data: UnityEngine.Color, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.6862745
+    - Name: 
+      Entry: 4
+      Data: 0.78039217
+    - Name: 
+      Entry: 4
+      Data: 0.854901969
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SecondaryColor
+      Entry: 7
+      Data: UnityEngine.Color, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.832339466
+    - Name: 
+      Entry: 4
+      Data: 0.8454404
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: FurType
+      Entry: 3
+      Data: 43
+    - Name: IsShiny
+      Entry: 5
+      Data: false
+    - Name: CustomName
+      Entry: 1
+      Data: Munchy Blorp
+    - Name: Timestamp
+      Entry: 3
+      Data: 639262889174178403
+    - Name: BirthDate
+      Entry: 7
+      Data: System.DateTime, mscorlib
+    - Name: 
+      Entry: 3
+      Data: 5250948907601566307
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BirthDay
+      Entry: 3
+      Data: 19
+    - Name: MotherID
+      Entry: 1
+      Data: BS1-H10-BK3-W0-FC0-72ADFB-639262877624731681
+    - Name: FatherID
+      Entry: 1
+      Data: BS1-H4-BK2-W3-FC1-E0C288-639262877624812709
+    - Name: ChildrenIDs
+      Entry: 7
+      Data: 44|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
       Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Origins
+      Entry: 7
+      Data: 45|System.Collections.Generic.List`1[[MoriMonchiSimulator.PartOrigin,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Gender
+      Entry: 3
+      Data: 1
+    - Name: Role
+      Entry: 3
+      Data: 2
+    - Name: Element
+      Entry: 3
+      Data: 2
+    - Name: Sociability
+      Entry: 4
+      Data: 0.7803039
+    - Name: Boldness
+      Entry: 4
+      Data: 0.7543261
+    - Name: BreedCount
+      Entry: 3
+      Data: 0
+    - Name: Generation
+      Entry: 3
+      Data: 2
+    - Name: BodyTier
+      Entry: 3
+      Data: 1
+    - Name: HornTier
+      Entry: 3
+      Data: 1
+    - Name: BackTier
+      Entry: 3
+      Data: 1
+    - Name: WingTier
+      Entry: 3
+      Data: 1
+    - Name: HornPotential
+      Entry: 3
+      Data: 2
+    - Name: BackPotential
+      Entry: 3
+      Data: 3
+    - Name: WingPotential
+      Entry: 3
+      Data: 1
+    - Name: IsDead
+      Entry: 5
+      Data: false
+    - Name: Form
+      Entry: 3
+      Data: 2
+    - Name: Explorations
+      Entry: 3
+      Data: 0
+    - Name: Battles
+      Entry: 3
+      Data: 0
+    - Name: Needs
+      Entry: 7
+      Data: 46|MoriMonchiSimulator.NeedsState, Assembly-CSharp
+    - Name: Health
+      Entry: 4
+      Data: 99.99858
+    - Name: Energy
+      Entry: 4
+      Data: 99.99798
+    - Name: Affect
+      Entry: 4
+      Data: 99.99798
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BusyState
+      Entry: 3
+      Data: 3
+    - Name: SaleDate
+      Entry: 7
+      Data: System.DateTime, mscorlib
+    - Name: 
+      Entry: 3
+      Data: 5250948910493674813
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BreedReadyAt
+      Entry: 3
+      Data: 0
+    - Name: BreedPartnerID
+      Entry: 1
+      Data: 
+    - Name: BreedDecorIDs
+      Entry: 7
+      Data: 47|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: LocationKey
+      Entry: 1
+      Data: 18_12
+    - Name: LocationSlot
+      Entry: 3
+      Data: -1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 

@@ -6,13 +6,13 @@ tags: [script, world, player]
 
 **Ruta:** `Player/PlayerAnimator.cs`
 
-**Responsabilidad:** Capa de animación del jugador. Traduce eventos de `PlayerInputs` y de `PlayerController` a parámetros del Animator y a IK de manos. Anima los brazos en primera persona (FPArms, con `animator`) y el cuerpo visible (PlayerBody, con `bodyAnimator`). No decide estado de juego ni persiste nada.
+**Responsabilidad:** Capa de animación del jugador. Traduce eventos de `PlayerInputs` y de `PlayerController` a parámetros del Animator y a IK de manos. Anima los brazos en primera persona (FPArms, con `animator`) y el cuerpo visible (PlayerBody, con `bodyAnimator`). **S158:** además decide cuándo se ven los brazos en primera persona (solo mientras el jugador actúa) y oculta los brazos del cuerpo visible en esos momentos. No decide estado de juego ni persiste nada.
 
 **Vinculado a:** [[Index/06 - Player & World]]
 
 ## Referencias y tuning
 
-**Referencias:** `animator` (Animator de FPArms; si está vacío, `Awake` toma el del propio GameObject), `bodyAnimator` (Animator de PlayerBody, opcional).
+**Referencias:** `animator` (Animator de FPArms; si está vacío, `Awake` toma el del propio GameObject), `bodyAnimator` (Animator de PlayerBody, opcional; desde S158 usa `PlayerBody.controller`).
 
 **Locomotion:** `speedDampTime` (0.1), `bodyTopSpeed` (3.6: el Speed del cuerpo es `moveInput.magnitude * bodyTopSpeed`).
 
@@ -50,7 +50,9 @@ En `bodyAnimator` solo se escribe `Speed` (escalado por `bodyTopSpeed`).
 
 ## Métodos clave
 
+- **`Awake()`** (S158 detalla): toma `armRenderers` (todos los `Renderer` hijos del Animator de FPArms) y los huesos `LeftUpperArm` / `RightUpperArm` de `bodyAnimator`.
 - **`Update()`**: mueve `petWeight` y `holdWeight` hacia 1 o 0 a `ikBlendSpeed * dt` según haya target. Escribe `Speed` en `bodyAnimator` y en `animator`.
+- **`LateUpdate()`** (S158): `raised = animator.IsInTransition(0)` o el estado actual distinto de `Locomotion`. Si `raised`, los renderers de FPArms quedan encendidos y los brazos del cuerpo (`bodyLeftArm` / `bodyRightArm`) escalan a 0. Si no, al revés. Resultado: caminando o quieto se ve el cuerpo y no los brazos FP; al actuar (Hold, Pet, Throw, Interact) se ven los brazos FP y no los del cuerpo.
 - **`OnAnimatorIK(layer)`**: con petting, la mano derecha va a `petTarget.position + up * petHeight` con un vaivén lateral (`petStrokeAmplitude`). Con hold, la mano izquierda va a `holdTarget - side + under` y la derecha a `holdTarget + side + under`. Si hay petting y hold a la vez, el peso de la derecha es el máximo de ambos. Sin target, los pesos IK van a 0.
 
 ## Invariantes
@@ -58,12 +60,19 @@ En `bodyAnimator` solo se escribe `Speed` (escalado por `bodyTopSpeed`).
 - Solo se suscribe a eventos static; no guarda referencias a `PlayerController` ni a `PlayerInputs`.
 - Todas las escrituras al Animator van null-safe.
 - Los pesos IK se desvanecen con `MoveTowards`, no saltan, al entrar y salir de hold o petting.
+- **S158:** la visibilidad de brazos se resuelve en `LateUpdate` cada frame, sin eventos; los renderers nulos se saltan.
 
 ## Cambios S156
 
 - Se agrega como componente al prefab FPArms (lo hace `HumanBodyAssembler`). `bodyAnimator` apunta al PlayerBody.
 - Maneja los brazos en primera persona (IK de sostener y acariciar) y el cuerpo visible, con parámetros y eventos de `PlayerController`.
 
+## Cambios S158
+
+- Nuevo `LateUpdate`: alterna la visibilidad de los renderers de FPArms y de los brazos del cuerpo según el estado del Animator (`raised`).
+- `Awake` toma `armRenderers` y los brazos del `bodyAnimator`.
+- `bodyAnimator` (PlayerBody) ahora usa `PlayerBody.controller`, generado por [[HumanoidClipBaker]].
+
 ## Conexiones
 
-[[PlayerInputs]], [[PlayerController]] (eventos `HeldChanged`, `PetChanged`, `Threw`, `Interacted`), [[HumanBodyAssembler]] (arma FPArms y PlayerBody), [[HumanoidClipBaker]] (controller `FPArms` con sus clips).
+[[PlayerInputs]], [[PlayerController]] (eventos `HeldChanged`, `PetChanged`, `Threw`, `Interacted`), [[HumanBodyAssembler]] (arma FPArms y PlayerBody), [[HumanoidClipBaker]] (controller `FPArms` con sus clips y controller `PlayerBody`).

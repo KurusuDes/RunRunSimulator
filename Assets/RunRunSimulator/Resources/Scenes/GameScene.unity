@@ -2718,6 +2718,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 110849486}
+  - component: {fileID: 110849487}
   m_Layer: 0
   m_Name: CManchor
   m_TagString: Untagged
@@ -2740,6 +2741,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1458888896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &110849487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110849485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35244c24ab0db1f49b4d0ad6f99182e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.FirstPersonNeck
+  panTilt: {fileID: 907401858}
+  neckPivot: {x: 0, y: 1.45, z: 0.26}
+  eyeOffset: {x: 0, y: 0.16, z: 0.12}
 --- !u!1001 &111230330
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11561,7 +11577,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -44021,7 +44037,7 @@ Transform:
   m_GameObject: {fileID: 895982188}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -59443,7 +59459,7 @@ MonoBehaviour:
   seed: 11
   bladeMaterial: {fileID: 2100000, guid: 052ce51eaba6b8a4dbf74fafb12eeb3f, type: 2}
   chunkSize: 5
-  maxBlades: 260000
+  maxBlades: 520000
   areas:
   - Name: Patio
     Rect:
@@ -59453,20 +59469,20 @@ MonoBehaviour:
       width: 22.4
       height: 12.6
     Height: 0
-    Density: 100
-    HeightRange: {x: 0.14, y: 0.26}
-    WidthRange: {x: 0.06, y: 0.1}
-    Tilt: 0.25
-    Segments: 2
+    Density: 380
+    HeightRange: {x: 0.14, y: 0.34}
+    WidthRange: {x: 0.022, y: 0.04}
+    Tilt: 0.4
+    Segments: 3
     Cover:
-      clumpSpacing: 3
-      clumpRadius: 1.2
-      haloDensity: 0.4
-      patchScale: 6
-      patchThreshold: 0.5
-      patchDensity: 0.8
-      looseDensity: 0.9
-      looseHeight: 0.85
+      clumpSpacing: 0.8
+      clumpRadius: 0.35
+      haloDensity: 0.7
+      patchScale: 3
+      patchThreshold: 0.45
+      patchDensity: 0.85
+      looseDensity: 0.6
+      looseHeight: 0.55
     Material: {fileID: 2100000, guid: 052ce51eaba6b8a4dbf74fafb12eeb3f, type: 2}
     EdgeFade: 1.2
     FlowerDensity: 4
@@ -59478,20 +59494,20 @@ MonoBehaviour:
       width: 7.1000004
       height: 7.5
     Height: 0
-    Density: 100
-    HeightRange: {x: 0.14, y: 0.26}
-    WidthRange: {x: 0.06, y: 0.1}
-    Tilt: 0.25
-    Segments: 2
+    Density: 380
+    HeightRange: {x: 0.14, y: 0.34}
+    WidthRange: {x: 0.022, y: 0.04}
+    Tilt: 0.4
+    Segments: 3
     Cover:
-      clumpSpacing: 3
-      clumpRadius: 1.2
-      haloDensity: 0.4
-      patchScale: 6
-      patchThreshold: 0.5
-      patchDensity: 0.8
-      looseDensity: 0.9
-      looseHeight: 0.85
+      clumpSpacing: 0.8
+      clumpRadius: 0.35
+      haloDensity: 0.7
+      patchScale: 3
+      patchThreshold: 0.45
+      patchDensity: 0.85
+      looseDensity: 0.6
+      looseHeight: 0.55
     Material: {fileID: 2100000, guid: 052ce51eaba6b8a4dbf74fafb12eeb3f, type: 2}
     EdgeFade: 1.2
     FlowerDensity: 4
@@ -59503,10 +59519,10 @@ MonoBehaviour:
       width: 28.400002
       height: 90
     Height: -0.44
-    Density: 24
+    Density: 36
     HeightRange: {x: 0.22, y: 0.5}
-    WidthRange: {x: 0.08, y: 0.13}
-    Tilt: 0.35
+    WidthRange: {x: 0.04, y: 0.07}
+    Tilt: 0.4
     Segments: 2
     Cover:
       clumpSpacing: 4.5
@@ -59528,10 +59544,10 @@ MonoBehaviour:
       width: 30.4
       height: 90
     Height: -0.44
-    Density: 24
+    Density: 36
     HeightRange: {x: 0.22, y: 0.5}
-    WidthRange: {x: 0.08, y: 0.13}
-    Tilt: 0.35
+    WidthRange: {x: 0.04, y: 0.07}
+    Tilt: 0.4
     Segments: 2
     Cover:
       clumpSpacing: 4.5
@@ -59553,10 +59569,10 @@ MonoBehaviour:
       width: 31.199999
       height: 23.900002
     Height: -0.44
-    Density: 24
+    Density: 36
     HeightRange: {x: 0.22, y: 0.5}
-    WidthRange: {x: 0.08, y: 0.13}
-    Tilt: 0.35
+    WidthRange: {x: 0.04, y: 0.07}
+    Tilt: 0.4
     Segments: 2
     Cover:
       clumpSpacing: 4.5
@@ -59578,10 +59594,10 @@ MonoBehaviour:
       width: 31.199999
       height: 15.9
     Height: -0.44
-    Density: 24
+    Density: 36
     HeightRange: {x: 0.22, y: 0.5}
-    WidthRange: {x: 0.08, y: 0.13}
-    Tilt: 0.35
+    WidthRange: {x: 0.04, y: 0.07}
+    Tilt: 0.4
     Segments: 2
     Cover:
       clumpSpacing: 4.5
@@ -59604,7 +59620,7 @@ MonoBehaviour:
   flowerClusterSize: 3.5
   flowerClusterChance: 0.55
   flowerStemHeight: {x: 0.36, y: 0.5}
-  flowerHeadSize: {x: 0.12, y: 0.17}
+  flowerHeadSize: {x: 0.025, y: 0.04}
   exclusionMargin: 0.4
   exclusions:
   - serializedVersion: 2

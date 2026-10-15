@@ -10,6 +10,7 @@ public static class HumanoidClipBaker
 {
     private const string Folder = "Assets/RunRunSimulator/Resources/Animations/Humans";
     private const int Samples = 24;
+    private const float PlayerArmOpen = 0.38f;
 
     private delegate void PoseFn(float t, Pose p);
 
@@ -41,12 +42,15 @@ public static class HumanoidClipBaker
         var fpPet    = Bake("FP_Pet", 1.2f, true, FpPetPose);
         var fpThrow  = Bake("FP_Throw", 0.5f, false, FpThrowPose);
         var fpUse    = Bake("FP_Interact", 0.45f, false, FpInteractPose);
+        var plIdle   = Bake("Player_Idle", 3f, true, PlayerIdlePose);
+        var plWalk   = Bake("Player_Walk", 1.05f, true, PlayerWalkPose);
 
         BuildNpcController(idle, walk, talk);
         BuildFpController(fpIdle, fpWalk, fpHold, fpPet, fpThrow, fpUse);
+        BuildPlayerBodyController(plIdle, plWalk);
 
         AssetDatabase.SaveAssets();
-        Debug.Log("[HumanoidClipBaker] Baked 9 clips + HumanNpc/FPArms controllers in " + Folder);
+        Debug.Log("[HumanoidClipBaker] Baked 11 clips + HumanNpc/FPArms/PlayerBody controllers in " + Folder);
     }
 
     private static void Stand(Pose p)
@@ -119,6 +123,24 @@ public static class HumanoidClipBaker
         p.Bob = -0.022f * Mathf.Abs(s);
     }
 
+    private static void OpenArms(Pose p)
+    {
+        p.Add("Left Arm Down-Up", PlayerArmOpen);
+        p.Add("Right Arm Down-Up", PlayerArmOpen);
+    }
+
+    private static void PlayerIdlePose(float t, Pose p)
+    {
+        IdlePose(t, p);
+        OpenArms(p);
+    }
+
+    private static void PlayerWalkPose(float t, Pose p)
+    {
+        WalkPose(t, p);
+        OpenArms(p);
+    }
+
     private static void TalkPose(float t, Pose p)
     {
         IdlePose(t, p);
@@ -143,7 +165,7 @@ public static class HumanoidClipBaker
         Arm(p, side, Mathf.Lerp(from.x, to.x, k), Mathf.Lerp(from.y, to.y, k), Mathf.Lerp(from.z, to.z, k));
 
     private static readonly Vector3 FpRest    = new(0f, -0.2f, 0.45f);
-    private static readonly Vector3 FpCarry   = new(-0.1f, -0.6f, 0.9f);
+    private static readonly Vector3 FpCarry  = new(-0.1f, -0.6f, 0.9f);
     private static readonly Vector3 FpStroke  = new(-0.2f, -0.5f, 0.75f);
     private static readonly Vector3 FpReach   = new(-0.1f, -0.6f, 0.75f);
     private static readonly Vector3 FpWindUp  = new(0.4f, -0.2f, 0.45f);
@@ -162,9 +184,14 @@ public static class HumanoidClipBaker
         }
     }
 
+    private static void FpLowered(Pose p)
+    {
+        Stand(p);
+    }
+
     private static void FpIdlePose(float t, Pose p)
     {
-        FpBase(p);
+        FpLowered(p);
         p.Add("Left Arm Down-Up", 0.025f * Sin(t));
         p.Add("Right Arm Down-Up", 0.025f * Sin(t, 1f, 0.12f));
         p.Add("Left Forearm Stretch", -0.03f * Sin(t, 1f, 0.05f));
@@ -173,12 +200,10 @@ public static class HumanoidClipBaker
 
     private static void FpWalkPose(float t, Pose p)
     {
-        FpBase(p);
+        FpLowered(p);
         float s = Sin(t);
-        p.Add("Left Arm Front-Back", 0.06f * s);
-        p.Add("Right Arm Front-Back", -0.06f * s);
-        p.Add("Left Arm Down-Up", -0.04f * Mathf.Abs(Cos(t)));
-        p.Add("Right Arm Down-Up", -0.04f * Mathf.Abs(Cos(t)));
+        p.Add("Left Arm Front-Back", 0.15f * s);
+        p.Add("Right Arm Front-Back", -0.15f * s);
         p.Bob = -0.01f * Mathf.Abs(s);
     }
 
@@ -311,15 +336,7 @@ public static class HumanoidClipBaker
         ctrl.AddParameter("Talking", AnimatorControllerParameterType.Bool);
         var sm = ctrl.layers[0].stateMachine;
 
-        var loco = ctrl.CreateBlendTreeInController("Locomotion", out var tree, 0);
-        tree.blendParameter = "Speed";
-        tree.useAutomaticThresholds = false;
-        tree.AddChild(idle, 0f);
-        tree.AddChild(walk, 1.4f);
-        tree.AddChild(walk, 3.6f);
-        var children = tree.children;
-        children[2].timeScale = 1.9f;
-        tree.children = children;
+        var loco = BuildLocomotion(ctrl, idle, walk);
 
         var talkState = sm.AddState("Talk");
         talkState.motion = talk;
@@ -330,6 +347,27 @@ public static class HumanoidClipBaker
         back.hasExitTime = false; back.duration = 0.25f;
         back.AddCondition(AnimatorConditionMode.IfNot, 0f, "Talking");
         sm.defaultState = loco;
+    }
+
+    private static void BuildPlayerBodyController(AnimationClip idle, AnimationClip walk)
+    {
+        var ctrl = FreshController($"{Folder}/PlayerBody.controller");
+        ctrl.AddParameter("Speed", AnimatorControllerParameterType.Float);
+        ctrl.layers[0].stateMachine.defaultState = BuildLocomotion(ctrl, idle, walk);
+    }
+
+    private static AnimatorState BuildLocomotion(AnimatorController ctrl, AnimationClip idle, AnimationClip walk)
+    {
+        var loco = ctrl.CreateBlendTreeInController("Locomotion", out var tree, 0);
+        tree.blendParameter = "Speed";
+        tree.useAutomaticThresholds = false;
+        tree.AddChild(idle, 0f);
+        tree.AddChild(walk, 1.4f);
+        tree.AddChild(walk, 3.6f);
+        var children = tree.children;
+        children[2].timeScale = 1.9f;
+        tree.children = children;
+        return loco;
     }
 
     private static void BuildFpController(AnimationClip idle, AnimationClip walk, AnimationClip hold, AnimationClip pet, AnimationClip thr, AnimationClip use)
@@ -358,22 +396,22 @@ public static class HumanoidClipBaker
         var throwState = sm.AddState("Throw"); throwState.motion = thr;
         var useState = sm.AddState("Interact"); useState.motion = use;
 
-        Link(loco, holdState, AnimatorConditionMode.If, "Holding", 0.18f);
-        Link(holdState, loco, AnimatorConditionMode.IfNot, "Holding", 0.2f);
-        Link(loco, petState, AnimatorConditionMode.If, "Petting", 0.2f);
-        Link(petState, loco, AnimatorConditionMode.IfNot, "Petting", 0.25f);
+        Link(loco, holdState, AnimatorConditionMode.If, "Holding", 0.25f);
+        Link(holdState, loco, AnimatorConditionMode.IfNot, "Holding", 0.4f);
+        Link(loco, petState, AnimatorConditionMode.If, "Petting", 0.25f);
+        Link(petState, loco, AnimatorConditionMode.IfNot, "Petting", 0.4f);
 
         var anyThrow = sm.AddAnyStateTransition(throwState);
-        anyThrow.hasExitTime = false; anyThrow.duration = 0.05f; anyThrow.canTransitionToSelf = false;
+        anyThrow.hasExitTime = false; anyThrow.duration = 0.12f; anyThrow.canTransitionToSelf = false;
         anyThrow.AddCondition(AnimatorConditionMode.If, 0f, "Throw");
         var anyUse = sm.AddAnyStateTransition(useState);
-        anyUse.hasExitTime = false; anyUse.duration = 0.08f; anyUse.canTransitionToSelf = false;
+        anyUse.hasExitTime = false; anyUse.duration = 0.15f; anyUse.canTransitionToSelf = false;
         anyUse.AddCondition(AnimatorConditionMode.If, 0f, "Interact");
 
         foreach (var oneShot in new[] { throwState, useState })
         {
             var back = oneShot.AddTransition(loco);
-            back.hasExitTime = true; back.exitTime = 0.85f; back.duration = 0.15f;
+            back.hasExitTime = true; back.exitTime = 0.85f; back.duration = 0.35f;
         }
         sm.defaultState = loco;
     }

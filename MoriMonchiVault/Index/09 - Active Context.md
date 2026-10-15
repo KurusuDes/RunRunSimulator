@@ -4,6 +4,30 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-15 (Session 158 — **brazos FP en reposo real + cuello + pasto toon fino + contorno fuera de la tienda** — 1 `.cs` creado, 3 modificados, 1 shader; compila 0 errores; verificado en Play con capturas en `Captures/S158/`)
+
+**Focus:** Juan: paso 0 de S157 (brazos FP en reposo), "el cuello se inclina", "usa la forma básica de los NPC", "un poco más abierto", quitar el contorno a través de paredes en la tienda (sí en exploración), y "el pasto se sigue viendo muy feo, busca referencias".
+
+**Hecho:**
+1. **Brazos FP:** en reposo cuelgan fuera de cuadro y sus renderers se apagan; suben solo en Hold/Pet/Throw/Interact (transiciones 0,25 s subir / 0,4 s bajar / one-shots 0,12-0,15). Mientras están arriba, los brazos del cuerpo se escalan a 0 (sin 4 brazos). `PlayerAnimator.LateUpdate` decide todo con "FPArms fuera de Locomotion o en transición".
+2. **Cuerpo visible:** `PlayerBody` lleva un segundo SkinnedMeshRenderer `BodyView` sin cabeza (torso + brazos + piernas, huesos remapeados por nombre) además de la malla completa solo-sombra. `ModelHolder` z 0,26 (cuerpo bajo la cámara).
+3. **Cuello:** `FirstPersonNeck` en `CManchor`: posición = pivote (0, 1,45, 0,26) + rotación del tilt × ojos (0, 0,16, 0,12). Mirando al frente la cámara queda igual (0, 1,61, 0,38); mirando abajo se ven manos, hombros y pies.
+4. **Pose del jugador:** controller propio `PlayerBody` (`Player_Idle`/`Player_Walk` = pose NPC + `PlayerArmOpen` 0,38 de Arm Down-Up). Los NPC siguen con la pose base (`Stand` original; un ajuste "natural" doblaba codos hacia adelante y se revirtió).
+5. **Contorno a través de paredes:** `PC_Renderer_Shop` (copia de `PC_Renderer` con `CreatureBodySilhouette`/`CreatureBodyMask` apagadas) es el renderer 1 del `PC_RPAsset`; la Main Camera de GameScene lo usa. ArenaSandbox sigue con el renderer 0 (contorno intacto).
+6. **Pasto (referencias Ghibli UE4 de Paul Harlan, ArtStation stylised grass, Ghost of Tsushima GDC):** patio con briznas 2,2-4 cm de ancho, 14-34 cm de alto, densidad 380, 3 segmentos, matas (`Cover` spacing 0,8 / radius 0,35 / loose 0,6); pradera 4-7 cm, densidad 36. Shader `ArenaGrass` con `_Lean` (inclinación fija en `_GustDir`, default 0 → la arena no cambia; tienda 0,55). Raíz verde oscura, saturación 1, `_BladeVariation` 0,12, manchas de tono 0,5. `SH_Grass_Env` oscurecido (0,33·0,50·0,22) para que no asome suelo pálido. `maxBlades` 520k; total ~1,26 M vértices de pasto (FPS no medidos).
+
+**Quirks ⚠️:** (1) **Velo blanco en Play sin causa:** la captura de la vista de juego en Play sale lavada (negros levantados, cielo pálido) pero el render directo de la Main Camera y la vista de juego en edición salen nítidos. Descartado: UI (UITK + Canvas apagados), bloom, tonemapping, todo el post, partículas `FX_DustGround`, luz/ambiente (idénticos en edición y Play). Juan vio el velo en S156; falta confirmar si es real en su pantalla o artefacto de `ScreenCapture`. (2) Al recompilar, el puerto del MCP cambió a 6402: fijar por nombre `RunRunSimulator@6fcadfc6`, no por puerto. (3) `manage_camera` no encuentra cámaras con `HideFlags.DontSave`; las capturas posicionadas mueven la Main Camera (y con ella FPArms): usar una cámara temporal propia y borrarla antes de guardar. (4) Muscle `Forearm Stretch` 0,72 ya dobla el codo de forma visible.
+
+**Siguiente paso (S159, pedido de Juan):**
+1. Revisar **clipping de materiales** en ciertos estantes y cerca de marcos de puerta.
+2. **Techos** para las estructuras y **ventanas** para las tiendas.
+3. La **entrada de la tienda** es donde deben poder colocarse las **vitrinas de exposición**.
+4. Pendientes: velo blanco en Play (ver quirk 1), medir FPS del pasto nuevo, lanzar/interactuar con los brazos nuevos no probados en Play, caras vivas Sidekick, mirada de clientes, trample en la tienda, C6 primera build.
+
+**Archivos `.cs` S158 — creados (1):** `Scripts/Player/FirstPersonNeck.cs` (NUEVO) · **modificados (3):** `Scripts/Player/PlayerAnimator.cs`, `Scripts/Editor/HumanoidClipBaker.cs`, `Scripts/Editor/HumanBodyAssembler.cs` · **shaders:** `Shaders/ArenaGrass.shader` (mod, `_Lean`)
+
+---
+
 **Session:** 2026-10-15 (Session 157 — **mini sesión: Sidekick Tool en la PC del trabajo** — 0 `.cs` tocados; compila 0 errores)
 
 **Focus:** Juan: "no está cargando un package modular de Sidekick y está dando muchos errores" tras moverse a esta PC.

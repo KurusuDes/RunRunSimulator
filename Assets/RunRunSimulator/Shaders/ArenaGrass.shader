@@ -25,6 +25,7 @@ Shader "MoriMonchi/ArenaGrass"
         _GustSpeed ("Gust Speed", Float) = 2.2
         _GustStrength ("Gust Strength", Float) = 0.32
         _GustSheen ("Gust Sheen", Range(0,1)) = 0.28
+        _Lean ("Constant Lean (along Gust Dir)", Float) = 0
         _PatchScale ("Patch Scale", Float) = 0.045
         _PatchTint ("Patch Tint", Color) = (1.12,1.06,0.78,1)
         _PatchAmount ("Patch Amount", Range(0,1)) = 0.35
@@ -89,6 +90,7 @@ Shader "MoriMonchi/ArenaGrass"
                 float _GustSpeed;
                 float _GustStrength;
                 half _GustSheen;
+                float _Lean;
                 float _PatchScale;
                 half4 _PatchTint;
                 half _PatchAmount;
@@ -192,7 +194,7 @@ Shader "MoriMonchi/ArenaGrass"
                 float2 gustPerp = float2(-gustDir.y, gustDir.x);
                 float2 gustCoord = float2(dot(positionWS.xz, gustDir) - _Time.y * _GustSpeed, dot(positionWS.xz, gustPerp) * 0.45) * _GustScale;
                 float gust = smoothstep(0.4, 0.8, ValueNoise(gustCoord));
-                positionWS.xz += gustDir * curve * gust * _GustStrength * breeze;
+                positionWS.xz += gustDir * curve * (gust * _GustStrength + _Lean * height) * breeze;
 
                 positionWS.xz += clamp(trample.rg, -1.0, 1.0) * _TrampleBend * curve;
                 positionWS.y -= flatten * _TrampleFlatten * height;

@@ -34,15 +34,26 @@ public class PlayerAnimator : MonoBehaviour
     private static readonly int InteractHash = Animator.StringToHash("Interact");
     private static readonly int JumpHash     = Animator.StringToHash("Jump");
 
+    private static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
+
     private Vector2 moveInput;
     private Transform holdTarget;
     private Transform petTarget;
+    private Transform bodyLeftArm;
+    private Transform bodyRightArm;
+    private Renderer[] armRenderers;
     private float holdWeight;
     private float petWeight;
 
     private void Awake()
     {
         if (animator == null) animator = GetComponent<Animator>();
+        armRenderers = animator != null ? animator.GetComponentsInChildren<Renderer>(true) : GetComponentsInChildren<Renderer>(true);
+        if (bodyAnimator != null && bodyAnimator.isHuman)
+        {
+            bodyLeftArm  = bodyAnimator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
+            bodyRightArm = bodyAnimator.GetBoneTransform(HumanBodyBones.RightUpperArm);
+        }
     }
 
     private void OnEnable()
@@ -88,6 +99,18 @@ public class PlayerAnimator : MonoBehaviour
         if (bodyAnimator != null) bodyAnimator.SetFloat(SpeedHash, moveInput.magnitude * bodyTopSpeed, speedDampTime, Time.deltaTime);
         if (animator == null) return;
         animator.SetFloat(SpeedHash, moveInput.magnitude, speedDampTime, Time.deltaTime);
+    }
+
+    private void LateUpdate()
+    {
+        bool raised = animator != null && (animator.IsInTransition(0) || animator.GetCurrentAnimatorStateInfo(0).shortNameHash != LocomotionHash);
+        Vector3 scale = raised ? Vector3.zero : Vector3.one;
+        if (bodyLeftArm != null) bodyLeftArm.localScale = scale;
+        if (bodyRightArm != null) bodyRightArm.localScale = scale;
+        for (int i = 0; i < armRenderers.Length; i++)
+        {
+            if (armRenderers[i] != null) armRenderers[i].enabled = raised;
+        }
     }
 
     private void OnAnimatorIK(int layerIndex)

@@ -115,10 +115,10 @@ Vive en `WORLD/ShopGrass` de GameScene. Material de fallback `Materials/Shop/Gra
 - **Sin ClearAround:** a diferencia de `ArenaGrassField`, no hay huella de pasos; el pasto de tienda no se pisa.
 - **Destruccion:** chunks con `hideFlags.DontSave`; mallas destruidas al resembrar y en OnDisable.
 
-**Shader asociado:** `Shaders/ArenaGrass.shader`, compartido con la arena. Desde S154 tiene rafagas (`_Gust*`), manchas (`_Patch*`), translucidez de punta (`_TipGlow*`) y trample seguro (si `_ArenaTrampleArea.z <= 0` no hay pisotado). Desde S155 las flores usan el mismo shader: los petalos se distinguen por alpha de vertice < 0.5 y reciben `_FlowerTint` / `_FlowerLift`. Detalle en [[ArenaGrassBlades]].
+**Shader asociado:** `Shaders/ArenaGrass.shader`, compartido con la arena. Desde S154 tiene rafagas (`_Gust*`), manchas (`_Patch*`), translucidez de punta (`_TipGlow*`) y trample seguro (si `_ArenaTrampleArea.z <= 0` no hay pisotado). Desde S155 las flores usan el mismo shader: los petalos se distinguen por alpha de vertice < 0.5 y reciben `_FlowerTint` / `_FlowerLift`. **S158:** el shader suma la propiedad `_Lean`; su efecto vive en el shader y este script no cambia. Detalle en [[ArenaGrassBlades]].
 
 **Estado:** NUEVO en S154; MODIFICADO en S155 (Area con `Material`, `EdgeFade`, `FlowerDensity`; campos de flores; Sow partido en `SowGrassChunk` / `SowFlowerChunk` / `CreateChunk` / `EdgeSmooth` / `CellHash`).
 
 **Conexiones:** [[ArenaGrassBlades]] (briznas), [[MeadowFlowers]] (flores), [[ArenaGrassCover]], [[ArenaGrassField]] (hermano de la arena; misma tecnica de chunks, distinta fuente de area)
 
-**Vinculado a:** [[Index/06 - Player & World]], S154, S155
+**Vinculado a:** [[Index/06 - Player & World]], S154, S155, S158

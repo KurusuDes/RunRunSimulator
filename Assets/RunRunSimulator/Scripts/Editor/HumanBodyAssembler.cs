@@ -249,9 +249,51 @@ public static class HumanBodyAssembler
         ApplyMaterial(go, mat);
         foreach (var smr in go.GetComponentsInChildren<SkinnedMeshRenderer>(true))
             smr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
-        var an = ConfigureAnimator(go, AnimDir + "/HumanNpc.controller");
+
+        var viewNames = new List<string> { HumanPart(1, "10TORS") };
+        foreach (var t in BareArms) viewNames.Add(HumanPart(1, t));
+        foreach (var t in PlayerLegs) viewNames.Add(Civilian + t + "_HU01");
+        var view = Combine(runtime, "PlayerBodyView", viewNames);
+        if (view != null)
+        {
+            ApplyMaterial(view, mat);
+            AttachSkin(go, view.GetComponentInChildren<SkinnedMeshRenderer>(true));
+            Object.DestroyImmediate(view);
+        }
+
+        var an = ConfigureAnimator(go, AnimDir + "/PlayerBody.controller");
         an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         return SavePrefab(go, PrefabDir + "/PlayerBody.prefab");
+    }
+
+    private static void AttachSkin(GameObject owner, SkinnedMeshRenderer skin)
+    {
+        var map = new Dictionary<string, Transform>();
+        foreach (var t in owner.GetComponentsInChildren<Transform>(true))
+            if (!map.ContainsKey(t.name)) map[t.name] = t;
+
+        var bones = skin.bones;
+        for (int i = 0; i < bones.Length; i++)
+        {
+            if (bones[i] == null) continue;
+            if (map.TryGetValue(bones[i].name, out var match)) bones[i] = match;
+            else Debug.LogError("[HumanBodyAssembler] Hueso no encontrado en PlayerBody: " + bones[i].name);
+        }
+
+        var root = skin.rootBone;
+        if (root != null)
+        {
+            if (map.TryGetValue(root.name, out var rootMatch)) root = rootMatch;
+            else Debug.LogError("[HumanBodyAssembler] Root bone no encontrado en PlayerBody: " + root.name);
+        }
+
+        skin.transform.SetParent(owner.transform, false);
+        skin.name = "BodyView";
+        skin.bones = bones;
+        skin.rootBone = root;
+        skin.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        skin.receiveShadows = true;
+        skin.updateWhenOffscreen = true;
     }
 
     private static string HumanPart(int variant, string type) => Human + variant.ToString("00") + "_" + type + "_HU01";

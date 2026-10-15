@@ -56,7 +56,7 @@ tags: [script, world, expedition, graphics, math]
 - **heightScales alineado con roots:** ambos crecen juntos en Build de ArenaGrassField y ShopGrassField
 - **Segments sin tope aqui:** el tope 1-4 vive en el campo serializado de ArenaGrassField; ShopGrassField pasa el valor del area tal cual (solo se clampa a 1)
 
-**Shader asociado:** `Shaders/ArenaGrass.shader`. Desde S154 el shader tiene rafagas (`_Gust*`), manchas (`_Patch*`), translucidez de punta (`_TipGlow*`) y trample seguro si `_ArenaTrampleArea.z <= 0`. Los UV `(0, t)` / `(1, t)` alimentan el gradiente a lo largo de la brizna. **S155:** el shader suma normal blend (`_NormalBlend`), raiz (`_Root*`), saturacion (`_Saturation`), color de punta (`_TipColor*`), variacion de tono (`_Hue*`) y de brizna (`_BladeVariation`). Los petalos de `MeadowFlowers` (flores de `ShopGrassField`) se identifican por alpha de vertice < 0.5 y reciben `_FlowerTint` / `_FlowerLift`.
+**Shader asociado:** `Shaders/ArenaGrass.shader`. Desde S154 el shader tiene rafagas (`_Gust*`), manchas (`_Patch*`), translucidez de punta (`_TipGlow*`) y trample seguro si `_ArenaTrampleArea.z <= 0`. Los UV `(0, t)` / `(1, t)` alimentan el gradiente a lo largo de la brizna. **S155:** el shader suma normal blend (`_NormalBlend`), raiz (`_Root*`), saturacion (`_Saturation`), color de punta (`_TipColor*`), variacion de tono (`_Hue*`) y de brizna (`_BladeVariation`). Los petalos de `MeadowFlowers` (flores de `ShopGrassField`) se identifican por alpha de vertice < 0.5 y reciben `_FlowerTint` / `_FlowerLift`. **S158:** el shader suma la propiedad `_Lean`; su efecto vive en el shader y este script no cambia.
 
 **S117 Cambios:**
 - Parametro `IReadOnlyList<float> heightScales` opcional
@@ -68,4 +68,4 @@ tags: [script, world, expedition, graphics, math]
 
 **Conexiones:** [[ArenaGrassField]] (cliente de arena), [[ShopGrassField]] (cliente de tienda), [[MeadowFlowers]] (hermano de tienda para flores)
 
-**Vinculado a:** [[Index/23 - Arena Sandbox & Expedicion]], [[Index/22 - Bajada Nocturna y Linaje]], S117, S154, S155
+**Vinculado a:** [[Index/23 - Arena Sandbox & Expedicion]], [[Index/22 - Bajada Nocturna y Linaje]], S117, S154, S155, S158
