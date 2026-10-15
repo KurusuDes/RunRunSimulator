@@ -4,6 +4,30 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-14/15 (Session 156 — **Sidekick Synty: clientes caballeros, protagonista con brazos en primera persona, animaciones humanoides generadas, SMAA y recorrido en video** — 4 `.cs` creados, 2 modificados; compila 0 errores; verificado en Play con capturas y videos en `Captures/S156/` (`recorrido_tienda.mp4`, `jitter_compare.mp4`))
+
+**Focus:** Juan: "ya tenemos los assets de Sidekick para el player y los NPC" (pack en `E:\GitHub\AssetVaultFinder`, donde irá todo lo que compre). Primera persona con manos visibles (muchas interacciones), animaciones propias hasta comprar el pack, nuestro toon. Luego: Sidekick Tool instalado por Juan, "solo Fantasy Knight", paleta de Synty, sin contorno, brazos en reposo.
+
+**Hecho:**
+1. **Import:** starter pack + Sidekick Tool 1.2.7 en `Assets/Synty/SidekickCharacters` (gitignored como el resto de Synty; cada PC importa desde AssetVaultFinder y Juan instala el Tool con su botón). El Tool agregó `com.unity.formats.fbx` al manifest y deja `Assets/DownloadCache/` (ahora en `.gitignore`).
+2. **`HumanBodyAssembler` (menú `RunRunSimulator/Humans/Build Bodies`):** arma con la API oficial `SidekickRuntime.CreateCharacter` (malla única, huesos ajustados; el armado casero anterior rompía uniones) 5 caballeros `Human_Knight_01..05` (FANT_KNGT_17 + cabezas/pelo/barba/accesorios variados), `FPArms` (brazos desnudos HUMN_BASE_01) y `PlayerBody` (torso desnudo + pantalón civil, solo sombra). Paleta = presets oficiales "Fantasy Knights 01-06" + 6 tonos de piel de la base de datos (`M_Human_Sk01..06`, Toon/Toon con contorno 0, rim light 0 y `_Set_SystemShadowsToBase` 0). Catálogo `Data/Humans/HumanBodyCatalog.asset`. Mallas en `Models/Humans/` sin blendshapes (89 MB → 20 MB).
+3. **`HumanoidClipBaker` (menú `Bake Clips`):** clips humanoides por curvas de músculos (Human_Idle/Walk/Talk, FP_Idle/Walk/Hold/Pet/Throw/Interact) + controllers `HumanNpc` y `FPArms`. Poses de primera persona calibradas midiendo dónde cae la mano en el viewport. Provisorias hasta el pack de animaciones.
+4. **Clientes:** `NpcAgent.prefab` sin cápsula; `NpcBody` instancia un cuerpo y una piel al azar del catálogo y maneja Speed/Talking.
+5. **Jugador:** `FPArms` hijo de Main Camera (local 0,-1.4,0.07), `PlayerBody` bajo `Player/ModelHolder` (cápsula `Model (1)` desactivada). `PlayerController` emite `HeldChanged/PetChanged/Threw/Interacted`; `PlayerAnimator` maneja brazos (IK de sostener/acariciar) y cuerpo (`bodyAnimator`). Near clip de la CinemachineCamera 0.05.
+6. **Calidad:** SMAA High en Main Camera (no había antialiasing); el jitter de pelo/bordes era autosombra del toon. Bosque de la tienda con `_RampInfluence` 0 (colores Synty originales).
+
+**Quirks ⚠️:** (1) Partes Sidekick sueltas tienen 2 submallas: asignar material a todos los slots o sale gris/magenta. (2) Tras regenerar, Unity cachea prefabs/meshes con referencias nulas: el armador fuerza `ImportAsset` de Models y Prefabs al final. (3) `execute_code` que se corta por timeout puede re-ejecutarse y duplicar objetos de prueba en escena: nombrar con `__` y limpiar antes de guardar. (4) Muestrear clips con `AnimationMode` pisa la rotación de la raíz. (5) En las partes, el eje "Arm Front-Back" positivo va hacia atrás.
+
+**Siguiente paso (S157, propuesta):**
+1. Caras vivas (parpadeo/expresiones de Sidekick al negociar) — requiere volver a conservar blendshapes faciales (`combineFacialBlendShapes`) y medir peso.
+2. Mirada de clientes hacia el jugador/MoriMochi (Animation Rigging), movimiento secundario de plumas/pelo.
+3. Neblina blanquecina global del post-proceso; errores `GotoState` de `MonchiLocomotionAnimator` (preexistentes).
+4. Campesinos: esperar pack Sidekick con ropa de aldeano. Pendientes heredados: trample en tienda, código de etapas (Index/35 1.5), C6 primera build.
+
+**Archivos `.cs` S156 — creados (4):** `Scripts/Editor/HumanBodyAssembler.cs` (NUEVO), `Scripts/Editor/HumanoidClipBaker.cs` (NUEVO), `Scripts/Data/Customers/HumanBodyCatalogSO.cs` (NUEVO), `Scripts/World/Npc/NpcBody.cs` (NUEVO) · **modificados (2):** `Scripts/Player/PlayerAnimator.cs`, `Scripts/Player/PlayerController.cs`
+
+---
+
 **Session:** 2026-10-14 (Session 155 — **pasto toon "que resta" + flores procedurales en la tienda** — 1 `.cs` creado, 1 modificado, 1 shader; compila 0 errores; verificado con capturas antes/después en `Captures/S155/comparacion_antes_despues.png`)
 
 **Focus:** Juan: "empezamos con la mejora del pasto y flora de las áreas verdes"; eligió flores procedurales, mejora global del shader y capturas antes/después.

@@ -88,3 +88,7 @@ Tools/*.key
 # Respaldos de guardado (locales, no versionar)
 _SaveBackups/
 ArtistKit/
+
+# Cache de descarga del Sidekick Tool (S156)
+/Assets/DownloadCache/
+/Assets/DownloadCache.meta

@@ -1,3 +1,4 @@
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 namespace MoriMonchiSimulator
@@ -6,6 +7,11 @@ namespace MoriMonchiSimulator
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
+    public static event Action<Transform> HeldChanged;
+    public static event Action<Transform> PetChanged;
+    public static event Action Threw;
+    public static event Action Interacted;
+
     [Header("References")]
     [Tooltip("The first-person CinemachineCamera. We read its transform (forward = look dir) and its Input Axis Controller (disabled to freeze the camera in menus).")]
     [SerializeField] private CinemachineCamera cinemachineCamera;
@@ -140,6 +146,7 @@ public class PlayerController : MonoBehaviour
         {
             petTarget.EndPetting();
             petTarget = null;
+            PetChanged?.Invoke(null);
         }
     }
 
@@ -191,6 +198,7 @@ public class PlayerController : MonoBehaviour
         if (TryBeginPetting(out var pettable))
         {
             petTarget = pettable;
+            PetChanged?.Invoke(pettable.transform);
             return;
         }
 
@@ -205,6 +213,7 @@ public class PlayerController : MonoBehaviour
         {
             petTarget.EndPetting();
             petTarget = null;
+            PetChanged?.Invoke(null);
             grabbing  = false;
             return;
         }
@@ -215,7 +224,10 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("[PlayerController] E tapped → trying to interact.");
         if (TryFindInView<IInteractable>(out var interactable) && interactable is not MoriMochiAgent)
+        {
             interactable.Interact();
+            Interacted?.Invoke();
+        }
         else
             Debug.Log("[PlayerController] Nothing interactable in front of the camera.");
     }
@@ -236,6 +248,7 @@ public class PlayerController : MonoBehaviour
             agent.OnGrab(holdAnchor);
             held          = agent;
             heldTransform = agent.transform;
+            HeldChanged?.Invoke(heldTransform);
             return;
         }
 
@@ -243,6 +256,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("[PlayerController] Hold complete → throwing active hotbar item.");
             HotbarController.Instance.ThrowActive(ComputeThrowImpulse(null));
+            Threw?.Invoke();
         }
     }
 
@@ -252,6 +266,7 @@ public class PlayerController : MonoBehaviour
         held.OnRelease();
         held          = null;
         heldTransform = null;
+        HeldChanged?.Invoke(null);
     }
 
     private void OnThrow()
@@ -264,6 +279,8 @@ public class PlayerController : MonoBehaviour
             held.OnThrow(ComputeThrowImpulse(heldTransform));
             held          = null;
             heldTransform = null;
+            HeldChanged?.Invoke(null);
+            Threw?.Invoke();
             return;
         }
 

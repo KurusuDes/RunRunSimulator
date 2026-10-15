@@ -6,7 +6,7 @@ tags: [script, world, player]
 
 **Ruta:** `Player/PlayerController.cs`
 
-**Responsabilidad:** Movimiento first-person del jugador con `CharacterController`. Lee input solo a través de los eventos estáticos de `PlayerInputs` y de `UIManager.OnUIFocusChanged`. Maneja el estado `PlayerStateType` (en el código actual solo se usan Exploring y Menu), el grab de MoriMonchis por hold-E, el tap-interact, el lanzamiento de objetos del hotbar y el petting por hold-E. **S149:** el controlador ya no tiene modo construcción; el estado distingue Exploring de Menu. **S151:** aplica los ajustes de control y campo de visión (`SettingsService`) y respeta el tirón de juguete (`PlayerToyTug`) para no pelear con la tecla E.
+**Responsabilidad:** Movimiento first-person del jugador con `CharacterController`. Lee input solo a través de los eventos estáticos de `PlayerInputs` y de `UIManager.OnUIFocusChanged`. Maneja el estado `PlayerStateType` (en el código actual solo se usan Exploring y Menu), el grab de MoriMonchis por hold-E, el tap-interact, el lanzamiento de objetos del hotbar y el petting por hold-E. **S149:** el controlador ya no tiene modo construcción; el estado distingue Exploring de Menu. **S151:** aplica los ajustes de control y campo de visión (`SettingsService`) y respeta el tirón de juguete (`PlayerToyTug`) para no pelear con la tecla E. **S156:** emite eventos estáticos hacia la capa visual (`PlayerAnimator`).
 
 ## Campos Tuning
 
@@ -44,6 +44,17 @@ tags: [script, world, player]
 
 `OnEnable` suscribe y llama `ApplySettings(SettingsService.Current)`. Se desuscribe en `OnDisable`.
 
+## Eventos Emitidos (S156)
+
+| Evento | Cuándo se dispara | Dato |
+|--------|-------------------|------|
+| `HeldChanged` | Al agarrar (`UpdateGrabHold`), al soltar (`Drop`) y al lanzar lo sostenido (`OnThrow`) | `Transform` de lo sostenido o `null` |
+| `PetChanged` | Al empezar a acariciar (`OnInteractPressed`), al terminar (`OnInteractReleased`) y al salir de Exploring (`SetState`) | `Transform` de la criatura o `null` |
+| `Threw` | Al lanzar lo sostenido (`OnThrow`) o un item del hotbar con hold (`UpdateGrabHold`) | sin dato |
+| `Interacted` | Tras un tap de E que ejecutó `IInteractable.Interact()` | sin dato |
+
+Consumidor: [[PlayerAnimator]], que traduce cada evento a parámetros del Animator de FPArms.
+
 ## Métodos clave
 
 - **`Move()`** (Update, solo Exploring): movimiento relativo a la cámara (forward/right sin Y), gravedad propia y `controller.Move`.
@@ -72,8 +83,13 @@ Click de ataque (`ThrowPressed`): lanza lo sostenido, o usa el item activo del h
 - Look/aim lo posee Cinemachine; el controller solo lee el forward de la cámara. Los ajustes de sensibilidad se aplican como ganancia de los controllers del `CinemachineInputAxisController`.
 - Grab y throw pasan por `IThrowable`, así el controller no conoce el tipo concreto sujetado.
 - En Menu el action map Player está deshabilitado (`PlayerInputs` lo gatea por foco de UI): no llega ningún grab ni interact.
-- `TryFindInView` usa `QueryTriggerInteraction.Collide` porque los MoriMonchis llevan collider trigger mientras están NavMesh-driven.
+- `TryFindInView` usa `QueryTriggerInteraction.Collide` porque los MoriMochis llevan collider trigger mientras están NavMesh-driven.
 - El petting termina al salir de Exploring (safety net).
+
+## Cambios S156
+
+- **Eventos estáticos hacia la capa visual:** `HeldChanged`, `PetChanged`, `Threw` e `Interacted` (ver tabla de Eventos Emitidos). Permiten que `PlayerAnimator` reaccione sin que el controller lo conozca.
+- Sin cambios en movimiento, grab ni throw.
 
 ## Cambios S151
 

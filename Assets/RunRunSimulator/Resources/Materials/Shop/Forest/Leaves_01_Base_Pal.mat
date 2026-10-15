@@ -38,7 +38,7 @@ Material:
     - _Cull: 0
     - _Cutoff: 0.5
     - _LitLight: 1
-    - _RampInfluence: 1
+    - _RampInfluence: 0
     - _RimPower: 4
     - _RimStrength: 0.3
     - _ShadeLight: 0.6
