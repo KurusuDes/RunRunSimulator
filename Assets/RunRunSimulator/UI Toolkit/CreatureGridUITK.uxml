@@ -1,14 +1,24 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="CreatureGridUITKStyle.uss" />
-    <!-- Root document assigned to the UIDocument component. The controller
-         (CreatureGridUITK) queries "grid-container" and fills it with cards.
-         The ScrollView's contentContainer is where the cards land. -->
-    <ui:VisualElement name="root" class="mm-theme grid-root">
-        <ui:VisualElement name="header" class="grid-header">
-            <ui:Label text="MoriMonchis" class="grid-title" />
-            <ui:Button name="close-button" text="X" class="grid-close" />
+    <ui:VisualElement name="root" class="mm-theme mm-skin mm-screen grid-root">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
+
+        <ui:VisualElement name="window" class="grid-window">
+            <ui:VisualElement class="grid-panel mm-panel">
+                <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                <ui:Label name="grid-title" text="MoriMonchis" class="grid-title mm-title" />
+                <ui:VisualElement class="mm-bar" />
+                <ui:ScrollView name="grid-container" class="grid-container" mode="Vertical" />
+            </ui:VisualElement>
         </ui:VisualElement>
-        <ui:ScrollView name="grid-container" class="grid-container" mode="Vertical" />
+
+        <ui:VisualElement class="mm-footer" picking-mode="Ignore">
+            <ui:Button name="close-button" text="" class="mm-prompt mm-prompt--button">
+                <ui:Label text="Esc" class="mm-key" picking-mode="Ignore" />
+                <ui:Label text="Cerrar" class="mm-prompt__label" picking-mode="Ignore" />
+            </ui:Button>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

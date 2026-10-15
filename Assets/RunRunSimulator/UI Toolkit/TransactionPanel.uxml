@@ -1,43 +1,52 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
   <Style src="Theme.uss" />
   <Style src="TransactionPanel.uss" />
-  <ui:VisualElement name="backdrop" class="mm-theme tx-backdrop">
-    <ui:VisualElement name="panel-root" class="panel">
-      <ui:VisualElement class="panel__header">
-        <ui:Label text="OFERTA DE COMPRA" class="panel__title" />
-      </ui:VisualElement>
+  <ui:VisualElement name="backdrop" class="mm-theme mm-skin tx-backdrop">
+    <ui:VisualElement name="panel-root" class="mm-panel mm-panel--compact tx-panel">
+      <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+      <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+      <ui:Label text="OFERTA DE COMPRA" class="panel__title mm-title tx-title" />
+      <ui:VisualElement class="mm-bar" />
 
-      <ui:VisualElement class="top-row">
-        <ui:VisualElement class="col col--customer">
-          <ui:Label text="CLIENTE" class="col__label" />
+      <ui:VisualElement class="tx-body">
+        <ui:VisualElement class="tx-col col--customer">
+          <ui:Label text="CLIENTE" class="col__label mm-section" />
+          <ui:VisualElement class="tx-avatar">
+            <ui:VisualElement class="tx-avatar__icon" />
+          </ui:VisualElement>
           <ui:Label name="customer-name" text="Cliente" class="customer-name" />
           <ui:Label name="archetype" text="" class="archetype" />
         </ui:VisualElement>
 
-        <ui:VisualElement class="divider" />
+        <ui:VisualElement class="tx-divider" />
 
-        <ui:VisualElement class="col col--mm">
-          <ui:Label text="MORIMONCHI" class="col__label" />
-          <ui:VisualElement name="mm-swatch" class="mm-swatch" />
+        <ui:VisualElement class="tx-col tx-col--wide col--mm">
+          <ui:Label text="MORIMONCHI" class="col__label mm-section" />
+          <ui:VisualElement class="mm-slot tx-portrait">
+            <ui:VisualElement class="mm-layer mm-slot__vignette" picking-mode="Ignore" />
+            <ui:VisualElement name="mm-swatch" class="mm-swatch" />
+            <ui:VisualElement class="mm-layer mm-slot__frame" picking-mode="Ignore" />
+          </ui:VisualElement>
           <ui:Label name="target-name" text="" class="target-name" />
           <ui:Label name="target-info" text="" class="target-info" />
         </ui:VisualElement>
 
-        <ui:VisualElement class="divider" />
+        <ui:VisualElement class="tx-divider" />
 
-        <ui:VisualElement class="col col--value">
-          <ui:Label text="OFRECE" class="col__label" />
-          <ui:VisualElement class="price-tag">
+        <ui:VisualElement class="tx-col col--value">
+          <ui:Label text="OFRECE" class="col__label mm-section" />
+          <ui:VisualElement class="tx-price">
+            <ui:VisualElement class="tx-gem" />
             <ui:Label name="offer" text="+0" class="offer" />
             <ui:Label text="Dabloons" class="offer-unit" />
           </ui:VisualElement>
         </ui:VisualElement>
       </ui:VisualElement>
 
-      <ui:VisualElement class="actions">
-        <ui:Button name="reject"  text="Cancelar"  class="action action--cancel" />
-        <ui:Button name="accept"  text="Aceptar"   class="action action--accept" />
-        <ui:Button name="counter" text="Pedir más" class="action action--more" />
+      <ui:VisualElement class="tx-actions">
+        <ui:Button name="reject" text="Cancelar" class="mm-button tx-btn tx-btn--reject" />
+        <ui:Button name="counter" text="Pedir más" class="mm-button mm-button--alt tx-btn" />
+        <ui:Button name="accept" text="Aceptar" class="mm-button mm-button--big tx-btn tx-btn--accept" />
       </ui:VisualElement>
     </ui:VisualElement>
   </ui:VisualElement>

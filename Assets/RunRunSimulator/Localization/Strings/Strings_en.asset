@@ -2184,6 +2184,42 @@ MonoBehaviour:
     m_Localized: unlocks
     m_Metadata:
       m_Items: []
+  - m_Id: 29731651169345536
+    m_Localized: Details
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107584
+    m_Localized: Powers & evolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107585
+    m_Localized: Personality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107586
+    m_Localized: State
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107587
+    m_Localized: Born
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107588
+    m_Localized: Offspring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107589
+    m_Localized: Battles
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107590
+    m_Localized: Tab
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107591
+    m_Localized: Close
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

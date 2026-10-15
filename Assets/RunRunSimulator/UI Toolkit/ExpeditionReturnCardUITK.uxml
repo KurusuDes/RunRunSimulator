@@ -1,22 +1,29 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
-    <Style src="TransactionPanel.uss" />
     <Style src="ExpeditionReturnCardUITKStyle.uss" />
-    <ui:VisualElement name="ret-root" class="mm-theme mm-theme--night ret">
-        <ui:VisualElement name="ret-backdrop" class="tx-backdrop">
-            <ui:VisualElement name="ret-panel" class="panel ret-panel">
-                <ui:VisualElement class="panel__header">
-                    <ui:Label name="ret-title" text="" class="panel__title" />
-                </ui:VisualElement>
+    <ui:VisualElement name="ret-root" class="mm-theme mm-skin ret">
+        <ui:VisualElement name="ret-backdrop" class="ret-scrim">
+            <ui:VisualElement name="ret-panel" class="mm-panel mm-panel--compact ret-panel">
+                <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                <ui:Label name="ret-title" text="" class="mm-title ret-title" />
+                <ui:VisualElement class="mm-bar" />
                 <ui:VisualElement class="ret-body">
-                    <ui:Label name="ret-minerita" text="" class="ret-minerita" />
-                    <ui:Label name="ret-rooms" text="" class="ret-rooms" />
+                    <ui:VisualElement class="ret-reward">
+                        <ui:VisualElement class="mm-statbox ret-reward__box">
+                            <ui:VisualElement class="ret-reward__gem" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ret-reward__text">
+                            <ui:Label name="ret-minerita" text="" class="ret-minerita" />
+                            <ui:Label name="ret-rooms" text="" class="ret-rooms" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
                     <ui:Label name="ret-lost" text="" class="ret-lost" />
                     <ui:VisualElement name="ret-team" class="ret-team" />
                     <ui:Label name="ret-noexploration" text="" class="ret-note" />
                 </ui:VisualElement>
-                <ui:VisualElement class="actions ret-actions">
-                    <ui:Button name="ret-continue" text="" class="action action--accept" />
+                <ui:VisualElement class="ret-actions">
+                    <ui:Button name="ret-continue" text="" class="mm-button mm-button--big ret-continue" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

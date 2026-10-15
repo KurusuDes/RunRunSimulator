@@ -1,0 +1,974 @@
+Screen_FantasyScreens_Inventory_01 (0x-140) ANIM AC_FantasyScreens_Screen_Inventory_02
+  Background (0x-140)
+    SPR_Background (0x-140)
+    SPR_Screenshot (5040x-140) IMG SPR_FantasyMenus_Example_Image_MainMenu_01 Simple #6D88A476
+    SPR_Glow (0x-140) IMG SPR_FantasyMenus_FX_Glow_01 Simple #2C567870
+    AssetDemo_FX (0x600)
+      ParticleFX_Glow (0x100)
+        ParticleFX_Glow_Wide (0x300)
+        ParticleFX_GlowDots (0x100)
+        Particle System Force Field (100x100)
+    Vignette (0x-140) CG1
+      SPR_Fill (0x-140)
+      SPR_Vignette (0x-140) IMG SPR_FantasyMenus_Background_Vignette_01 Simple #09161FCC
+      SPR_Gradient (0x380) IMG SPR_FantasyMenus_Gradient_Vertical_01 Simple #256EA84C
+  Content (0x-140)
+    Inventory (-300x-580)
+      Panel_Inventory (1130x-580) CG1
+        Panel_Character_Inventory (1130x-580)
+          Navigation_Tabs (1130x140)
+            H_Group (1130x140)
+              Input_Key_Left (70x60) IMG SPR_FantasyMenus_Box_Small_Parchment_03 Sliced #E3BB71FF
+                ICON [off] (80x80) IMG ICON_Input_PlayStation_Button_L1_Clean Simple #E3BB71FF
+                Press and Hold [off] (80x70) IMG SPR_FantasyMenus_Frame_Box_Small_03 Simple #001735FF
+                  Fill (80x70) IMG SPR_FantasyMenus_Box_Small_Parchment_03 Sliced #FFFFFFFF
+                  Rim (25x25) IMG SPR_FantasyMenus_Arrow_Small_01 Simple #FFFFFFFF
+                Label_Input (0x0) TXT 'Q' AlegreyaSans-Medium SDF 42 #00374FFA Bold, UpperCase m=AlegreyaSans-Medium Atlas Material
+              Button_00 (0x140) ANIM AC_FantasyScreens_Button_Navigation_Tabs_01
+                Content (0x140)
+                  Inactive (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #034060FF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #B0AA99FF
+                  Active [off] (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #0071ADFF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #FFFFFFFF
+                  Selected [off] (0x140)
+                    Active_Glow (0x140) CG1
+                      SPR_Gradient (40x140) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FFFF
+                    Active_PFX (100x100)
+                      ParticleFX_Glow_Dots_Small (100x100)
+                      ParticleFX_Glow_Dots_Large (100x100)
+                  ICON (-40x100) IMG ICON_FantasyWarrior_Inventory_Swords_01_Underlay Simple #FFFFFFFF
+              Button_01 (0x140) ANIM AC_FantasyScreens_Button_Navigation_Tabs_01
+                Content (0x140)
+                  Inactive (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #034060FF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #B0AA99FF
+                  Active [off] (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #0071ADFF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #FFFFFFFF
+                  Selected [off] (0x140)
+                    Active_Glow (0x140) CG1
+                      SPR_Gradient (40x140) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FFFF
+                    Active_PFX (100x100)
+                      ParticleFX_Glow_Dots_Small (100x100)
+                      ParticleFX_Glow_Dots_Large (100x100)
+                  ICON (-40x100) IMG ICON_FantasyWarrior_Inventory_Shields_01_Underlay Simple #FFFFFFFF
+              Button_02 (0x140) ANIM AC_FantasyScreens_Button_Navigation_Tabs_01
+                Content (0x140)
+                  Inactive (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #034060FF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #B0AA99FF
+                  Active [off] (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #0071ADFF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #FFFFFFFF
+                  Selected [off] (0x140)
+                    Active_Glow (0x140) CG1
+                      SPR_Gradient (40x140) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FFFF
+                    Active_PFX (100x100)
+                      ParticleFX_Glow_Dots_Small (100x100)
+                      ParticleFX_Glow_Dots_Large (100x100)
+                  ICON (-40x100) IMG ICON_FantasyWarrior_Inventory_Armor_01_Underlay Simple #FFFFFFFF
+              Button_03 (0x140) ANIM AC_FantasyScreens_Button_Navigation_Tabs_01
+                Content (0x140)
+                  Inactive (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #034060FF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #B0AA99FF
+                  Active [off] (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #0071ADFF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #FFFFFFFF
+                  Selected [off] (0x140)
+                    Active_Glow (0x140) CG1
+                      SPR_Gradient (40x140) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FFFF
+                    Active_PFX (100x100)
+                      ParticleFX_Glow_Dots_Small (100x100)
+                      ParticleFX_Glow_Dots_Large (100x100)
+                  ICON (-40x100) IMG ICON_FantasyWarrior_Inventory_Potions_01_Underlay Simple #FFFFFFFF
+              Button_04 (0x140) ANIM AC_FantasyScreens_Button_Navigation_Tabs_01
+                Content (0x140)
+                  Inactive (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #034060FF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #B0AA99FF
+                  Active [off] (0x140)
+                    SPR_Background (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Background Sliced #0071ADFF
+                    SPR_Frame (0x200) IMG SPR_FantasyScreens_Menu_Tab_01_Frame Sliced #FFFFFFFF
+                  Selected [off] (0x140)
+                    Active_Glow (0x140) CG1
+                      SPR_Gradient (40x140) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FFFF
+                    Active_PFX (100x100)
+                      ParticleFX_Glow_Dots_Small (100x100)
+                      ParticleFX_Glow_Dots_Large (100x100)
+                  ICON (-40x100) IMG ICON_FantasyWarrior_Inventory_Items_01_Clean Simple #FFFFFFFF
+              Input_Key_Right (70x60) IMG SPR_FantasyMenus_Box_Small_Parchment_03 Sliced #E3BB71FF
+                ICON [off] (80x80) IMG ICON_Input_PlayStation_Button_R1_Clean Simple #E3BB71FF
+                Press and Hold [off] (80x70) IMG SPR_FantasyMenus_Frame_Box_Small_03 Simple #001735FF
+                  Fill (80x70) IMG SPR_FantasyMenus_Box_Small_Parchment_03 Sliced #FFFFFFFF
+                  Rim (25x25) IMG SPR_FantasyMenus_Arrow_Small_01 Simple #FFFFFFFF
+                Label_Input (0x0) TXT 'E' AlegreyaSans-Medium SDF 42 #00374FFA Bold, UpperCase m=AlegreyaSans-Medium Atlas Material
+          SPR_Background (1130x-690) IMG SPR_FantasyMenus_Frame_Box_Large_13_Mask Sliced #0B2C48E6
+          Items (1130x-840)
+            Item_Grid_01 (1130x-840)
+              Item_00 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Sword_01 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_01 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Axe_01 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_02 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Sceptre_04 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_03 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Mace_06 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_04 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Axe_07 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_05 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Sword_16 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_06 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Sword_04 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_08 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Sword_15 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_09 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Staff_09 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_10 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Spear_11 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_11 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Sword_02 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_12 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Sceptre_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_13 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Knife_01 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_14 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Dagger_07 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_15 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_06 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_16 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_17 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_18 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_19 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_20 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_21 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_22 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_23 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_24 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_25 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_26 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_27 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_28 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_29 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_30 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_31 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_32 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_33 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_34 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_35 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_36 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_37 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_38 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_39 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_40 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_41 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment_01 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+              Item_42 (0x0) ANIM AC_FantasyScreens_Button_Inventory_Item_01
+                Content (0x0) CG1
+                  Background (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #031522E6
+                  Selected [off] (0x0)
+                    SPR_Background (8x8) IMG SPR_HUD_FantasyWarrior_Box_Medium_Parchment02 Sliced #0A5389E6
+                  Item [off] (0x0)
+                    ICON (0x0) IMG ICON_SM_Wep_Hammer_05 Simple #FFFFFFFF
+                  Highlighted [off] (0x0)
+                    SPR_Frame (0x0) IMG SPR_HUD_FantasyWarrior_Frame_Box_Small_03 Sliced #FFFFFFFF
+          Stats (930x100)
+            Stat_Encumbrance (250x0)
+              SPR_Background (260x10) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #11171DFF
+              Label_Stat_Text (180x0) TXT '<color=#F8401D>925<color' LTMuseum-Bold SDF 38 #FAD088FF Normal m=LTMuseum-Bold Atlas Material
+              ICON (60x60) IMG ICON_FantasyWarrior_Status_Encumbered_01_Underlay Simple #717395FF
+            Stat_Currency_Coins (180x0)
+              SPR_Background (190x10) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #11171DFF
+              Label_Stat_Text (110x0) TXT '1325' LTMuseum-Bold SDF 38 #FAD088FF Normal m=LTMuseum-Bold Atlas Material
+              ICON (60x60) IMG ICON_SM_Item_Coins_01_Dungeon Simple #FFFFFFFF
+            Stat_Currency_Gems (160x0)
+              SPR_Background (170x10) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #11171DFF
+              Label_Stat_Text (90x0) TXT '64' LTMuseum-Bold SDF 38 #FAD088FF Normal m=LTMuseum-Bold Atlas Material
+              ICON (60x60) IMG SPR_FantasyMenus_Crest_Gem_01_Red Simple #FFFFFFFF
+          SPR_Frame (1130x-690) IMG SPR_FantasyMenus_Frame_Box_Large_13 Sliced #FFFFFFFF
+      Hero (-99x-580)
+        Hero (-99x-580) CG1
+          SPR_Hero (-99x-580) IMG SPR_FantasyScreens_Example_Hero_05 Simple #FFFFFFFF
+        Equipment_Left (220x-580) CG1
+          Item_Head (150x150)
+            Background (150x150)
+              SPR_Gradient (150x150) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (150x150)
+              ICON_Empty (140x140) IMG ICON_FantasyScreens_Inventory_Helmets_01_Underlay Simple #405F6F66
+              ICON [off] (150x150) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (150x150) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (150x150)
+              SPR_Frame (170x170) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+          Item_Torso (150x150)
+            Background (150x150)
+              SPR_Gradient (150x150) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (150x150)
+              ICON_Empty (140x140) IMG ICON_FantasyScreens_Inventory_Armor_01_Underlay Simple #405F6F66
+              ICON [off] (150x150) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (150x150) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (150x150)
+              SPR_Frame (170x170) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+          Item_Legs (150x150)
+            Background (150x150)
+              SPR_Gradient (150x150) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (150x150)
+              ICON_Empty (140x140) IMG ICON_FantasyScreens_Inventory_LegArmor_01_Underlay Simple #405F6F66
+              ICON [off] (150x150) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (150x150) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (150x150)
+              SPR_Frame (170x170) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+          Item_Boots (150x150)
+            Background (150x150)
+              SPR_Gradient (150x150) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (150x150)
+              ICON_Empty (140x140) IMG ICON_FantasyScreens_Inventory_Boots_01_Underlay Simple #405F6F66
+              ICON [off] (150x150) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (150x150) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (150x150)
+              SPR_Frame (170x170) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+          Item_Hand_Right (200x200)
+            Background (200x200)
+              SPR_Gradient (200x200) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (200x200)
+              ICON_Empty [off] (190x190) IMG ICON_FantasyScreens_Inventory_Swords_01_Underlay Simple #405F6F66
+              ICON (200x200) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (200x200) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (200x200)
+              SPR_Frame (220x220) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+        Equipment_Right (220x-580) CG1
+          Item_Neck (150x150)
+            Background (150x150)
+              SPR_Gradient (150x150) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (150x150)
+              ICON_Empty (140x140) IMG ICON_FantasyScreens_Inventory_Necklaces_02_Underlay Simple #405F6F66
+              ICON [off] (150x150) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (150x150) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (150x150)
+              SPR_Frame (170x170) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+          Item_Ring_Left (150x150)
+            Background (150x150)
+              SPR_Gradient (150x150) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (150x150)
+              ICON_Empty [off] (140x140) IMG ICON_FantasyScreens_Inventory_Swords_01_Underlay Simple #405F6F66
+              ICON (150x150) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (150x150) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (150x150)
+              SPR_Frame (170x170) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+          Item_Ring_Right (150x150)
+            Background (150x150)
+              SPR_Gradient (150x150) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (150x150)
+              ICON_Empty [off] (140x140) IMG ICON_FantasyScreens_Inventory_Swords_01_Underlay Simple #405F6F66
+              ICON (150x150) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (150x150) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (150x150)
+              SPR_Frame (170x170) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+          Item_Backpack (150x150)
+            Background (150x150)
+              SPR_Gradient (150x150) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (150x150)
+              ICON_Empty [off] (140x140) IMG ICON_FantasyScreens_Inventory_Swords_01_Underlay Simple #405F6F66
+              ICON (150x150) IMG ICON_SM_Wep_Sword_03 Simple #FFFFFFFF
+              Image (150x150) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (150x150)
+              SPR_Frame (170x170) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+          Item_Hand_Left (200x200)
+            Background (200x200)
+              SPR_Gradient (200x200) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_01 Simple #002B37FF
+            Item (200x200)
+              ICON_Empty [off] (190x190) IMG ICON_FantasyScreens_Inventory_Swords_01_Underlay Simple #405F6F66
+              ICON (200x200) IMG ICON_SM_Wep_Shield_04 Simple #FFFFFFFF
+              Image (200x200) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #051013FF
+            Frame (200x200)
+              SPR_Frame (220x220) IMG SPR_FantasyMenus_Frame_Box_Small_01 Sliced #D1CDC2FF
+              SPR_Gem_Left (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+              SPR_Gem_Right (40x40) IMG SPR_FantasyWarrior_Gem_09 Simple #FFFFFFFF
+      Panel_Info (1130x-580) CG1
+        Panel_Character_Info (1130x-580)
+          Background (1130x-580)
+            SPR_Background (1130x-580) IMG SPR_FantasyMenus_Frame_Box_Large_12_Mask Sliced #0B2C48E6
+            SPR_Frame_Lip (1130x-580) IMG SPR_FantasyMenus_Frame_Box_Large_12_Lip Sliced #4884FF4C
+            SPR_Frame (1130x-580) IMG SPR_FantasyMenus_Frame_Box_Large_12 Sliced #FFFFFFFF
+          Info (970x-740)
+            Hero_Name (970x200)
+              Label_Hero_Name (970x80) TXT 'Sir Cliffery Richardus' LTMuseum-Bold SDF 72 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+              Label_Hero_Class (970x80) TXT 'Human Knight' LTMuseum-Bold SDF 46 #E3BB71FF Normal m=LTMuseum-Bold Atlas Material
+              SPR_Bar (970x15) IMG SPR_FantasyWarrior_Bar_Horizontal_04 Sliced #FFFFFFFF
+            Stats (970x300)
+              Label_Header (970x80) TXT 'Core Stats' Grenze-SemiBold SDF 52 #FAD088FF Normal m=Grenze-SemiBold Atlas Material
+              Grid_Stats (970x220)
+                Stat_HP (0x0)
+                  Label_Stat (0x60) TXT '<color=#FFFFFF>160<color' LTMuseum-Bold SDF 38 #7D6822FF Normal m=LTMuseum-Bold Atlas Material
+                  Content (0x0)
+                    SPR_Background (0x0) IMG SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 Sliced #02172EFF
+                    ICON (-40x-40) IMG SPR_FantasyWarrior_Heart_01 Simple #FFFFFFFF
+                Stat_Attack (0x0)
+                  Label_Stat (0x60) TXT '15' LTMuseum-Bold SDF 38 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (0x0)
+                    SPR_Background (0x0) IMG SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 Sliced #02172EFF
+                    ICON (-40x-40) IMG SPR_FantasyMenus_Crest_Greeble_SwordsCrossed_01 Simple #FFFFFFFF
+                Stat_Magic (0x0)
+                  Label_Stat (0x60) TXT '1' LTMuseum-Bold SDF 38 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (0x0)
+                    SPR_Background (0x0) IMG SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 Sliced #02172EFF
+                    ICON (-40x-40) IMG ICON_SM_Item_Book_02 Simple #FFFFFFFF
+                Stat_Initiative (0x0)
+                  Label_Stat (0x60) TXT '6' LTMuseum-Bold SDF 38 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (0x0)
+                    SPR_Background (0x0) IMG SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 Sliced #02172EFF
+                    ICON (-40x-40) IMG ICON_FantasyWarrior_Stat_Speed_02_Underlay Simple #6BC2FFFF
+                Stat_Magic_School (0x0)
+                  Label_Stat (0x60) TXT '12' LTMuseum-Bold SDF 38 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (0x0)
+                    SPR_Background (0x0) IMG SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 Sliced #02172EFF
+                    ICON (-40x-40) IMG SPR_FantasyMenus_Crest_Greeble_Lionhead_01_Gold Simple #FFFFFFFF
+                Stat_Armor (0x0)
+                  Label_Stat (0x60) TXT '32' LTMuseum-Bold SDF 38 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (0x0)
+                    SPR_Background (0x0) IMG SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 Sliced #02172EFF
+                    ICON (-40x-40) IMG SPR_FantasyMenus_Crest_Shield_01_Blue Simple #FFFFFFFF
+              Core_Stats_Classic [off] (970x300)
+                Stat_Strength (160x260)
+                  Label_Stat_Name (160x60) TXT 'STR' LTMuseum-Bold SDF 46 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (160x200)
+                    SPR_Background (150x150) IMG SPR_HUD_FantasyWarrior_Circle_Background_01 Simple #02172EFF
+                    Label_Stat_Value (160x60) TXT '02' LTMuseum-Bold SDF 64 #BE3030FF Normal m=LTMuseum-Bold Atlas Material
+                    SPR_Frame (200x200) IMG SPR_FantasyWarrior_Ring_Small_02_Variant_01 Simple #FFFFFFFF
+                Stat_Intelligence (160x260)
+                  Label_Stat_Name (160x60) TXT 'INT' LTMuseum-Bold SDF 46 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (160x200)
+                    SPR_Background (150x150) IMG SPR_HUD_FantasyWarrior_Circle_Background_01 Simple #02172EFF
+                    Label_Stat_Value (160x60) TXT '03' LTMuseum-Bold SDF 64 #BE3030FF Normal m=LTMuseum-Bold Atlas Material
+                    SPR_Frame (200x200) IMG SPR_FantasyWarrior_Ring_Small_02_Variant_01 Simple #FFFFFFFF
+                Stat_WIsdom (160x260)
+                  Label_Stat_Name (160x60) TXT 'WIS' LTMuseum-Bold SDF 46 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (160x200)
+                    SPR_Background (150x150) IMG SPR_HUD_FantasyWarrior_Circle_Background_01 Simple #02172EFF
+                    Label_Stat_Value (160x60) TXT '06' LTMuseum-Bold SDF 64 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                    SPR_Frame (200x200) IMG SPR_FantasyWarrior_Ring_Small_02_Variant_01 Simple #FFFFFFFF
+                Stat_Dexterity (160x260)
+                  Label_Stat_Name (160x60) TXT 'DEX' LTMuseum-Bold SDF 46 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (160x200)
+                    SPR_Background (150x150) IMG SPR_HUD_FantasyWarrior_Circle_Background_01 Simple #02172EFF
+                    Label_Stat_Value (160x60) TXT '01' LTMuseum-Bold SDF 64 #BE3030FF Normal m=LTMuseum-Bold Atlas Material
+                    SPR_Frame (200x200) IMG SPR_FantasyWarrior_Ring_Small_02_Variant_01 Simple #FFFFFFFF
+                Stat_Charisma (160x260)
+                  Label_Stat_Name (160x60) TXT 'CHA' LTMuseum-Bold SDF 46 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (160x200)
+                    SPR_Background (150x150) IMG SPR_HUD_FantasyWarrior_Circle_Background_01 Simple #02172EFF
+                    Label_Stat_Value (160x60) TXT '20' LTMuseum-Bold SDF 64 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                    SPR_Frame (200x200) IMG SPR_FantasyWarrior_Ring_Small_02_Variant_01 Simple #FFFFFFFF
+                Stat_Constitution (160x260)
+                  Label_Stat_Name (160x60) TXT 'CON' LTMuseum-Bold SDF 46 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Content (160x200)
+                    SPR_Background (150x150) IMG SPR_HUD_FantasyWarrior_Circle_Background_01 Simple #02172EFF
+                    Label_Stat_Value (160x60) TXT '05' LTMuseum-Bold SDF 64 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                    SPR_Frame (200x200) IMG SPR_FantasyWarrior_Ring_Small_02_Variant_01 Simple #FFFFFFFF
+            Skills (970x-459)
+              Label_Header (970x100) TXT 'Mad Skillz' LTMuseum-Bold SDF 56 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+              SPR_Frame_Bar (620x100) IMG SPR_FantasyMenus_Menu_Button_06_Frame Sliced #FFFFFFFF
+              Skills_List (970x-559)
+                Hero_Skill_00 (0x100)
+                  SPR_Background (0x100)
+                  Label_Skill_Name (-240x100) TXT 'Death Gaze' Grenze-SemiBold SDF 48 #39ACB9FF Normal m=Grenze-SemiBold Atlas Material
+                  Stat_Base_02 (180x100)
+                    SPR_Background (180x100) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #02101AFF
+                    ICON (0x0) IMG ICON_FantasyWarrior_Map_Skull_01_Underlay Simple #D42727FF
+                    Label_Stat_Text (0x0) TXT '24' LTMuseum-Bold SDF 32 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Icon (100x100)
+                    SPR_Background (80x80) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #C30024FF
+                    SPR_Frame (100x100) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #B2A69FFF
+                    ICON (80x80) IMG ICON_FantasyWarrior_Map_Skull_01_Underlay Simple #FFFFFFFF
+                Hero_Skill_01 (0x100)
+                  SPR_Background (0x100)
+                  Label_Skill_Name (-240x100) TXT 'Attack Buff' Grenze-SemiBold SDF 48 #39ACB9FF Normal m=Grenze-SemiBold Atlas Material
+                  Stat_Base_02 (180x100)
+                    SPR_Background (180x100) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #02101AFF
+                    ICON (0x0) IMG ICON_FantasyWarrior_Element_Air_01_Underlay Simple #00A1FFFF
+                    Label_Stat_Text (0x0) TXT '12' LTMuseum-Bold SDF 32 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Icon (100x100)
+                    SPR_Background (80x80) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #003F71FF
+                    SPR_Frame (100x100) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #B2A69FFF
+                    ICON (80x80) IMG ICON_FantasyWarrior_Status_AttackUp_01_Underlay Simple #FFFFFFFF
+                Hero_Skill_02 (0x100)
+                  SPR_Background (0x100)
+                  Label_Skill_Name (-240x100) TXT 'Smash Defense' Grenze-SemiBold SDF 48 #39ACB9FF Normal m=Grenze-SemiBold Atlas Material
+                  Stat_Base_02 (180x100)
+                    SPR_Background (180x100) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #02101AFF
+                    ICON (0x0) IMG ICON_FantasyWarrior_Element_Fire_01_Underlay Simple #F87522FF
+                    Label_Stat_Text (0x0) TXT '8' LTMuseum-Bold SDF 32 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Icon (100x100)
+                    SPR_Background (80x80) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #003F71FF
+                    SPR_Frame (100x100) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #B2A69FFF
+                    ICON (80x80) IMG ICON_FantasyWarrior_Status_DefenseBroken_01_Underlay Simple #FFFFFFFF
+                Hero_Skill_03 (0x100)
+                  SPR_Background (0x100)
+                  Label_Skill_Name (-240x100) TXT 'Tangled Up in You' Grenze-SemiBold SDF 48 #39ACB9FF Normal m=Grenze-SemiBold Atlas Material
+                  Stat_Base_02 (180x100)
+                    SPR_Background (180x100) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #02101AFF
+                    ICON (0x0) IMG ICON_FantasyWarrior_Element_Earth_02_Underlay Simple #38D12AFF
+                    Label_Stat_Text (0x0) TXT '32' LTMuseum-Bold SDF 32 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Icon (100x100)
+                    SPR_Background (80x80) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #04B783FF
+                    SPR_Frame (100x100) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #B2A69FFF
+                    ICON (60x60) IMG ICON_FantasyWarrior_Status_Entangled_01_Underlay Simple #FFFFFFFF
+                Hero_Skill_04 (0x100)
+                  SPR_Background (0x100)
+                  Label_Skill_Name (-240x100) TXT 'Fortify Attack' Grenze-SemiBold SDF 48 #39ACB9FF Normal m=Grenze-SemiBold Atlas Material
+                  Stat_Base_02 (180x100)
+                    SPR_Background (180x100) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #02101AFF
+                    ICON (0x0) IMG ICON_FantasyWarrior_Element_Fire_01_Underlay Simple #F87522FF
+                    Label_Stat_Text (0x0) TXT '16' LTMuseum-Bold SDF 32 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Icon (100x100)
+                    SPR_Background (80x80) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #003F71FF
+                    SPR_Frame (100x100) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #B2A69FFF
+                    ICON (80x80) IMG ICON_FantasyWarrior_Status_FortifiedAttack_01_Underlay Simple #FFFFFFFF
+                Hero_Skill_05 (0x100)
+                  SPR_Background (0x100)
+                  Label_Skill_Name (-240x100) TXT 'Raining Blood' Grenze-SemiBold SDF 48 #39ACB9FF Normal m=Grenze-SemiBold Atlas Material
+                  Stat_Base_02 (180x100)
+                    SPR_Background (180x100) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #02101AFF
+                    ICON (0x0) IMG ICON_FantasyWarrior_Map_Skull_01_Underlay Simple #D42727FF
+                    Label_Stat_Text (0x0) TXT '45' LTMuseum-Bold SDF 32 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Icon (100x100)
+                    SPR_Background (80x80) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #CF2301FF
+                    SPR_Frame (100x100) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #B2A69FFF
+                    ICON (80x80) IMG ICON_FantasyWarrior_Status_Wet_01_Underlay Simple #FFFFFFFF
+                Hero_Skill_06 (0x100)
+                  SPR_Background (0x100)
+                  Label_Skill_Name (-240x100) TXT 'Turn Back Time' Grenze-SemiBold SDF 48 #39ACB9FF Normal m=Grenze-SemiBold Atlas Material
+                  Stat_Base_02 (180x100)
+                    SPR_Background (180x100) IMG SPR_FantasyMenus_Box_Small_Parchment_02 Sliced #02101AFF
+                    ICON (0x0) IMG ICON_FantasyWarrior_Element_Air_01_Underlay Simple #00A1FFFF
+                    Label_Stat_Text (0x0) TXT '60' LTMuseum-Bold SDF 32 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+                  Icon (100x100)
+                    SPR_Background (80x80) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #00716CFF
+                    SPR_Frame (100x100) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #B2A69FFF
+                    ICON (80x80) IMG ICON_FantasyWarrior_Status_Time_01_Clean Simple #FFFFFFFF
+    Header (0x180)
+      Navigation_Header_01 (1600x180)
+        H_Group (1600x180)
+          Input_Menu_Left (120x60) IMG SPR_FantasyMenus_Box_Small_Parchment_03 Sliced #E3BB71FF
+            ICON (0x0) IMG ICON_Input_PlayStation_Button_L1_Clean Simple #E3BB71FF
+            Press and Hold [off] (130x70) IMG SPR_FantasyMenus_Frame_Box_Small_03 Simple #001735FF
+              Fill (130x70) IMG SPR_FantasyMenus_Box_Small_Parchment_03 Sliced #FFFFFFFF
+              Rim (25x25) IMG SPR_FantasyMenus_Arrow_Small_01 Simple #FFFFFFFF
+            Label_Input [off] (20x36) TXT 'F' AlegreyaSans-Medium SDF 42 #00374FFA Bold, UpperCase m=AlegreyaSans-Medium Atlas Material
+          Button_Nav_00 (0x80) ANIM AC_FantasyMenus_Button_NavigationHeader_01
+            Selected [off] (0x80)
+              Active_Glow (0x80) CG1
+                SPR_Gradient (50x80) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FF66
+              Active_Middle (200x200) CG1
+                SPR_Ring [off] (140x140) IMG SPR_FantasyMenus_Ring_Medium_01 Simple #2499CC74
+              Active_PFX (100x100)
+                ParticleFX_Glow_Dots_Small (100x100)
+                ParticleFX_Glow_Dots_Large (100x100)
+              Active_Top (-12x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Top Simple #FFFFFFFF
+              Active_Bottom (0x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Bottom Simple #FFFFFFFF
+            Label_Button (0x80) TXT 'Quests' AlegreyaSans-Medium SDF 48 #FFFFFFFF UpperCase m=AlegreyaSans-Medium Atlas Material
+          Button_Nav_01 (0x80) ANIM AC_FantasyMenus_Button_NavigationHeader_01
+            Selected [off] (0x80)
+              Active_Glow (0x80) CG1
+                SPR_Gradient (50x80) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FF66
+              Active_Middle (200x200) CG1
+                SPR_Ring [off] (140x140) IMG SPR_FantasyMenus_Ring_Medium_01 Simple #2499CC74
+              Active_PFX (100x100)
+                ParticleFX_Glow_Dots_Small (100x100)
+                ParticleFX_Glow_Dots_Large (100x100)
+              Active_Top (-12x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Top Simple #FFFFFFFF
+              Active_Bottom (0x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Bottom Simple #FFFFFFFF
+            Label_Button (0x80) TXT 'Map' AlegreyaSans-Medium SDF 48 #FFFFFFFF UpperCase m=AlegreyaSans-Medium Atlas Material
+          Button_Nav_02 (0x80) ANIM AC_FantasyMenus_Button_NavigationHeader_01
+            Selected [off] (0x80)
+              Active_Glow (0x80) CG1
+                SPR_Gradient (50x80) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FF66
+              Active_Middle (200x200) CG1
+                SPR_Ring [off] (140x140) IMG SPR_FantasyMenus_Ring_Medium_01 Simple #2499CC74
+              Active_PFX (100x100)
+                ParticleFX_Glow_Dots_Small (100x100)
+                ParticleFX_Glow_Dots_Large (100x100)
+              Active_Top (-12x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Top Simple #FFFFFFFF
+              Active_Bottom (0x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Bottom Simple #FFFFFFFF
+            Label_Button (0x80) TXT 'Crafting' AlegreyaSans-Medium SDF 48 #FFFFFFFF UpperCase m=AlegreyaSans-Medium Atlas Material
+          Button_Nav_03 (0x80) ANIM AC_FantasyMenus_Button_NavigationHeader_01
+            Selected [off] (0x80)
+              Active_Glow (0x80) CG1
+                SPR_Gradient (50x80) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FF66
+              Active_Middle (200x200) CG1
+                SPR_Ring [off] (140x140) IMG SPR_FantasyMenus_Ring_Medium_01 Simple #2499CC74
+              Active_PFX (100x100)
+                ParticleFX_Glow_Dots_Small (100x100)
+                ParticleFX_Glow_Dots_Large (100x100)
+              Active_Top (-12x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Top Simple #FFFFFFFF
+              Active_Bottom (0x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Bottom Simple #FFFFFFFF
+            Label_Button (0x80) TXT 'Inventory' AlegreyaSans-Medium SDF 48 #FFFFFFFF UpperCase m=AlegreyaSans-Medium Atlas Material
+          Button_Nav_04 (0x80) ANIM AC_FantasyMenus_Button_NavigationHeader_01
+            Selected [off] (0x80)
+              Active_Glow (0x80) CG1
+                SPR_Gradient (50x80) IMG SPR_FantasyMenus_Gradient_Vertical_05 Sliced #0DB3FF66
+              Active_Middle (200x200) CG1
+                SPR_Ring [off] (140x140) IMG SPR_FantasyMenus_Ring_Medium_01 Simple #2499CC74
+              Active_PFX (100x100)
+                ParticleFX_Glow_Dots_Small (100x100)
+                ParticleFX_Glow_Dots_Large (100x100)
+              Active_Top (-12x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Top Simple #FFFFFFFF
+              Active_Bottom (0x100) CG1
+                SPR_Menu_Item (256x128) IMG SPR_FantasyMenus_Menu_Item_01_Bottom Simple #FFFFFFFF
+            Label_Button (0x80) TXT 'Store' AlegreyaSans-Medium SDF 48 #FFFFFFFF UpperCase m=AlegreyaSans-Medium Atlas Material
+          Input_Menu_Right (120x60) IMG SPR_FantasyMenus_Box_Small_Parchment_03 Sliced #E3BB71FF
+            ICON (0x0) IMG ICON_Input_PlayStation_Button_R1_Clean Simple #E3BB71FF
+            Press and Hold [off] (130x70) IMG SPR_FantasyMenus_Frame_Box_Small_03 Simple #001735FF
+              Fill (130x70) IMG SPR_FantasyMenus_Box_Small_Parchment_03 Sliced #FFFFFFFF
+              Rim (25x25) IMG SPR_FantasyMenus_Arrow_Small_01 Simple #FFFFFFFF
+            Label_Input [off] (20x36) TXT 'F' AlegreyaSans-Medium SDF 42 #00374FFA Bold, UpperCase m=AlegreyaSans-Medium Atlas Material
+      HUD_HeartsBar_01 (800x80)
+        Horizontal_Group (800x80)
+          Toggle_Heart_00 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_01 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_02 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_03 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_04 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_05 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_06 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_07 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_08 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+          Toggle_Heart_09 (0x0)
+            Background (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Simple #1F011799
+              SPR_Heart (0x0) IMG ICON_FantasyWarrior_Status_Health_01_Clean Filled #E2402AFF
+      Currency (1200x180)
+        Button_Currency_Coins (300x90) ANIM AC_FantasyScreens_Button_Currency_Item_01
+          Content (300x90) CG1
+            SPR_Background (300x90) IMG SPR_FantasyWarrior_Banner_03 Sliced #E2E1DDFF
+            Label_Currency (140x75) TXT '5,240' LTMuseum-Bold SDF 48 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+            Icon (120x120)
+              SPR_Background (100x100) IMG SPR_HUD_FantasyWarrior_Circle_Background_01 Simple #143F6FFF
+              SPR_Frame (120x120) IMG SPR_FantasyWarrior_Ring_Small_01_Variant_02 Simple #FFFFFFFF
+              ICON (120x115) IMG ICON_SM_Item_Coins_04_Dungeon Simple #FFFFFFFF
+        Button_Currency_Gems (250x90) ANIM AC_FantasyScreens_Button_Currency_Item_01
+          Content (250x90) CG1
+            SPR_Background (250x90) IMG SPR_FantasyWarrior_Banner_03 Sliced #E2E1DDFF
+            Label_Currency (90x75) TXT '326' LTMuseum-Bold SDF 48 #FFFFFFFF Normal m=LTMuseum-Bold Atlas Material
+            Icon (120x120)
+              SPR_Background (100x100) IMG SPR_HUD_FantasyWarrior_Circle_Background_01 Simple #143F6FFF
+              SPR_Frame (120x120) IMG SPR_FantasyWarrior_Ring_Small_01_Variant_02 Simple #FFFFFFFF
+              ICON (120x115) IMG ICON_SM_Item_Crystal_01 Simple #58BEFFFF
+    Footer (0x140)
+      Input_Footer_01 (0x140)
+        SPR_Background (0x140)
+        H_Group (0x140)
+          Hotkey_Prompt_01 (0x80)
+            Hotkey (0x0) IMG SPR_FantasyMenus_Box_Small_Parchment_01 Sliced #197AA4FF CG1
+              Input [off] (0x0) TXT 'F' AlegreyaSans-Medium SDF 52 #E3BB71FF UpperCase m=AlegreyaSans-Medium Atlas Material
+              ICON (0x0) IMG ICON_Input_Stick_Left_02_Underlay Simple #F5F0E6FF
+            Label_Action (0x0) TXT 'Navigate' AlegreyaSans-Medium SDF 48 #FAD088FF Normal m=AlegreyaSans-Medium Atlas Material
+          Hotkey_Prompt_02 (0x80)
+            Hotkey (0x0) IMG SPR_FantasyMenus_Box_Small_Parchment_01 Sliced #197AA4FF CG1
+              Input [off] (0x0) TXT 'F' AlegreyaSans-Medium SDF 52 #E3BB71FF UpperCase m=AlegreyaSans-Medium Atlas Material
+              ICON (0x0) IMG ICON_Input_Xbox_ButtonColor_A_Underlay Simple #F5F0E6FF
+            Label_Action (0x0) TXT 'Select' AlegreyaSans-Medium SDF 48 #FAD088FF Normal m=AlegreyaSans-Medium Atlas Material
+          Hotkey_Prompt_03 (0x80)
+            Hotkey (0x0) IMG SPR_FantasyMenus_Box_Small_Parchment_01 Sliced #197AA4FF CG1
+              Input [off] (0x0) TXT 'F' AlegreyaSans-Medium SDF 52 #E3BB71FF UpperCase m=AlegreyaSans-Medium Atlas Material
+              ICON (0x0) IMG ICON_Input_Xbox_ButtonColor_B_Underlay Simple #F5F0E6FF
+            Label_Action (0x0) TXT 'Back' AlegreyaSans-Medium SDF 48 #FAD088FF Normal m=AlegreyaSans-Medium Atlas Material

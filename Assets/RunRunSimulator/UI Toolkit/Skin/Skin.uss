@@ -1,0 +1,565 @@
+.mm-skin,
+.mm-theme.mm-skin {
+    --mm-bg: rgb(6, 24, 21);
+    --mm-bg-deep: rgb(3, 16, 14);
+    --mm-surface: rgb(11, 44, 40);
+    --mm-surface-2: rgb(18, 62, 55);
+    --mm-frame: rgb(227, 187, 113);
+    --mm-frame-soft: rgb(160, 120, 60);
+    --mm-ink: rgb(245, 240, 230);
+    --mm-ink-soft: rgb(170, 196, 186);
+    --mm-ink-dark: rgb(10, 44, 36);
+    --mm-coral: rgb(232, 112, 80);
+    --mm-coral-dark: rgb(200, 88, 56);
+    --mm-teal: rgb(64, 196, 164);
+    --mm-gold: rgb(227, 187, 113);
+    --mm-plum: rgb(176, 130, 220);
+    --mm-good: rgb(110, 196, 96);
+    --mm-warn: rgb(236, 168, 64);
+    --mm-crit: rgb(226, 72, 52);
+    --mm-scrim: rgb(9, 31, 27);
+    --mm-ally: rgb(150, 200, 255);
+    --mm-foe: rgb(255, 150, 140);
+    --mm-section: rgb(250, 208, 136);
+    --mm-panel-fill: rgba(11, 44, 40, 0.92);
+    --mm-panel-lip: rgba(96, 230, 180, 0.28);
+    --mm-slot-fill: rgb(2, 26, 22);
+    --mm-row-fill: rgba(2, 20, 17, 0.85);
+    --mm-tab-fill: rgb(3, 64, 52);
+    --mm-tab-fill-on: rgb(0, 128, 98);
+    --mm-glow: rgba(60, 200, 150, 0.45);
+    -unity-font-definition: url("Fonts/AlegreyaSans-Medium.ttf");
+    color: var(--mm-ink);
+}
+
+.mm-screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: var(--mm-scrim);
+}
+
+.mm-screen__glow {
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top: 5%;
+    bottom: 5%;
+    background-image: url("Synty/SPR_FantasyMenus_FX_Glow_01.png");
+    -unity-background-image-tint-color: var(--mm-glow);
+}
+
+.mm-screen__vignette {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: url("Synty/SPR_FantasyMenus_Background_Vignette_01.png");
+    -unity-background-image-tint-color: rgba(3, 14, 12, 0.85);
+}
+
+.mm-screen__gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 190px;
+    background-image: url("Synty/SPR_FantasyMenus_Gradient_Vertical_01.png");
+    -unity-background-image-tint-color: rgba(37, 168, 130, 0.3);
+}
+
+.mm-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.mm-panel {
+    background-image: url("Synty/SPR_FantasyMenus_Frame_Box_Large_12_Mask.png");
+    -unity-background-image-tint-color: var(--mm-panel-fill);
+    -unity-slice-scale: 0.25;
+    padding: 58px 54px 54px 54px;
+}
+
+.mm-panel__lip {
+    background-image: url("Synty/SPR_FantasyMenus_Frame_Box_Large_12_Lip.png");
+    -unity-background-image-tint-color: var(--mm-panel-lip);
+    -unity-slice-scale: 0.25;
+}
+
+.mm-panel__frame {
+    background-image: url("Synty/SPR_FantasyMenus_Frame_Box_Large_12.png");
+    -unity-slice-scale: 0.25;
+}
+
+.mm-title {
+    -unity-font-definition: url("Fonts/LTMuseum-Bold.ttf");
+    font-size: 38px;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+}
+
+.mm-subtitle {
+    -unity-font-definition: url("Fonts/LTMuseum-Bold.ttf");
+    font-size: 23px;
+    color: var(--mm-gold);
+    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+}
+
+.mm-bar {
+    background-image: url("Synty/SPR_FantasyWarrior_Bar_Horizontal_04.png");
+    -unity-slice-scale: 0.5;
+    height: 10px;
+    align-self: stretch;
+    margin: 12px 0 14px 0;
+    flex-shrink: 0;
+}
+
+.mm-section {
+    -unity-font-definition: url("Fonts/Grenze-SemiBold.ttf");
+    font-size: 26px;
+    color: var(--mm-section);
+    margin: 14px 0 6px 0;
+    padding: 0;
+}
+
+.mm-section--ornate {
+    background-image: url("Synty/SPR_FantasyMenus_Menu_Button_06_Frame.png");
+    -unity-slice-scale: 0.22;
+    -unity-text-align: middle-center;
+    align-self: center;
+    min-width: 280px;
+    height: 46px;
+    padding: 0 60px;
+    font-size: 28px;
+    color: rgb(255, 255, 255);
+    -unity-font-definition: url("Fonts/LTMuseum-Bold.ttf");
+}
+
+.mm-text {
+    font-size: 21px;
+    color: var(--mm-ink);
+    white-space: normal;
+}
+
+.mm-text--soft {
+    color: var(--mm-ink-soft);
+}
+
+.mm-text--accent {
+    -unity-font-definition: url("Fonts/Grenze-SemiBold.ttf");
+    font-size: 23px;
+    color: var(--mm-teal);
+}
+
+.mm-statbox {
+    background-image: url("Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
+    -unity-background-image-tint-color: var(--mm-slot-fill);
+    -unity-slice-scale: 0.5;
+    width: 58px;
+    height: 58px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.mm-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+}
+
+.mm-icon--health {
+    background-image: url("Synty/ICON_FantasyWarrior_Status_Health_01_Clean.png");
+    -unity-background-image-tint-color: rgb(226, 64, 42);
+}
+
+.mm-icon--energy {
+    background-image: url("Synty/ICON_FantasyWarrior_Status_SpeedUp_01_Clean.png");
+    -unity-background-image-tint-color: rgb(250, 208, 96);
+}
+
+.mm-icon--affect {
+    background-image: url("Synty/ICON_FantasyWarrior_Status_Charmed_01_Clean.png");
+    -unity-background-image-tint-color: rgb(240, 140, 200);
+}
+
+.mm-row {
+    background-image: url("Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.22;
+    flex-direction: row;
+    align-items: center;
+    min-height: 50px;
+    padding: 6px 12px;
+    margin-bottom: 6px;
+}
+
+.mm-valuebox {
+    background-image: url("Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
+    -unity-background-image-tint-color: rgb(1, 14, 12);
+    -unity-slice-scale: 0.45;
+    min-width: 76px;
+    min-height: 38px;
+    padding: 2px 12px;
+    -unity-text-align: middle-center;
+    font-size: 20px;
+    -unity-font-style: bold;
+}
+
+.mm-slot {
+    width: 76px;
+    height: 76px;
+    flex-shrink: 0;
+    background-image: url("Synty/SPR_FantasyMenus_Gradient_Vertical_Solid_01.png");
+    -unity-background-image-tint-color: rgb(0, 43, 36);
+    align-items: center;
+    justify-content: center;
+}
+
+.mm-slot__vignette {
+    background-image: url("Synty/SPR_HUD_FantasyWarrior_Vignette_Box_Small_01.png");
+    -unity-background-image-tint-color: rgb(3, 16, 13);
+    -unity-slice-scale: 0.35;
+}
+
+.mm-slot__frame {
+    left: -5px;
+    right: -5px;
+    top: -5px;
+    bottom: -5px;
+    background-image: url("Synty/SPR_FantasyMenus_Frame_Box_Small_01.png");
+    -unity-background-image-tint-color: rgb(209, 205, 194);
+    -unity-slice-scale: 0.35;
+}
+
+.mm-key {
+    background-image: url("Synty/SPR_FantasyMenus_Box_Small_Parchment_03.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+    -unity-slice-scale: 0.35;
+    min-width: 36px;
+    height: 32px;
+    padding: 0 8px;
+    -unity-text-align: middle-center;
+    font-size: 19px;
+    -unity-font-style: bold;
+    color: var(--mm-ink-dark);
+    margin: 0;
+}
+
+.mm-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 62px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(2, 14, 12, 0.75);
+    border-top-width: 2px;
+    border-top-color: rgba(227, 187, 113, 0.55);
+}
+
+.mm-prompt {
+    flex-direction: row;
+    align-items: center;
+    margin: 0 22px;
+}
+
+.mm-prompt__label {
+    font-size: 22px;
+    color: var(--mm-section);
+    margin-left: 8px;
+}
+
+.mm-prompt--button {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 8px;
+    padding: 4px 10px;
+    transition-property: scale, background-color;
+    transition-duration: 0.12s;
+}
+
+.mm-prompt--button:hover {
+    background-color: rgba(64, 196, 164, 0.18);
+    scale: 1.05 1.05;
+}
+
+.mm-prompt--button:active {
+    scale: 0.96 0.96;
+}
+
+
+.mm-tabs .unity-tab-view__header-container {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 0;
+    height: 76px;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.mm-tabs .unity-scroller--horizontal,
+.mm-tabs .unity-tab-view__header-container .unity-scroller,
+.mm-tabs .unity-tab-view__header-container .unity-repeat-button,
+.mm-tabs .unity-tab-view__header-container .unity-button {
+    display: none;
+}
+
+.mm-tabs > .unity-tab-view__content-viewport {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 76px;
+    flex-shrink: 0;
+}
+
+.mm-tabs .unity-tab-view__next-button,
+.mm-tabs .unity-tab-view__previous-button {
+    display: none;
+}
+
+.mm-tabs .unity-tab__header {
+    padding: 0 26px;
+    height: 56px;
+    margin: 0 4px;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.mm-tabs .unity-tab__header-label {
+    font-size: 24px;
+    color: var(--mm-ink-soft);
+    -unity-font-style: normal;
+    -unity-font-definition: url("Fonts/AlegreyaSans-Medium.ttf");
+    letter-spacing: 2px;
+}
+
+.mm-tabs .unity-tab__header:hover .unity-tab__header-label {
+    color: rgb(255, 255, 255);
+}
+
+.mm-tabs .unity-tab__header:checked {
+    background-image: url("Synty/SPR_FantasyMenus_Gradient_Vertical_05.png");
+    -unity-background-image-tint-color: rgba(40, 220, 160, 0.4);
+    -unity-slice-scale: 0.4;
+}
+
+.mm-tabs .unity-tab__header:checked .unity-tab__header-label {
+    color: rgb(255, 255, 255);
+}
+
+.mm-tabs .unity-tab__header-underline {
+    height: 14px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.mm-tabs .unity-tab__header:checked .unity-tab__header-underline {
+    background-image: url("Synty/SPR_FantasyMenus_Menu_Item_01_Bottom.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.mm-tabs > .unity-tab-view__content-container {
+    flex-grow: 1;
+}
+
+.mm-tabs .unity-tab {
+    flex-grow: 1;
+}
+
+.mm-panel .unity-scroller--vertical {
+    width: 12px;
+    margin-left: 6px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.mm-panel .unity-scroller--vertical .unity-scroller__low-button,
+.mm-panel .unity-scroller--vertical .unity-scroller__high-button {
+    display: none;
+}
+
+.mm-panel .unity-scroller--vertical .unity-base-slider__tracker {
+    background-color: rgba(1, 14, 12, 0.9);
+    border-width: 0;
+    border-radius: 6px;
+}
+
+.mm-panel .unity-scroller--vertical .unity-base-slider__dragger {
+    background-color: var(--mm-gold);
+    border-width: 0;
+    border-radius: 6px;
+    left: 2px;
+    right: 2px;
+}
+
+.mm-panel .unity-scroller--vertical .unity-base-slider__drag-container {
+    top: 0;
+    bottom: 0;
+}
+
+.mm-button {
+    background-image: url("Synty/SPR_FantasyMenus_Box_Small_Parchment_03.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+    -unity-slice-scale: 0.35;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+    min-height: 48px;
+    padding: 0 22px;
+    margin: 4px;
+    font-size: 21px;
+    -unity-font-style: bold;
+    color: var(--mm-ink-dark);
+    -unity-text-align: middle-center;
+    transition-property: scale, -unity-background-image-tint-color;
+    transition-duration: 0.12s;
+}
+
+.mm-button:hover {
+    -unity-background-image-tint-color: rgb(250, 214, 150);
+    background-color: rgba(0, 0, 0, 0);
+    scale: 1.03 1.03;
+}
+
+.mm-button:active {
+    scale: 0.97 0.97;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.mm-button:focus {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.mm-button:disabled {
+    opacity: 0.45;
+}
+
+.mm-button--alt {
+    -unity-background-image-tint-color: var(--mm-tab-fill);
+    color: var(--mm-ink);
+}
+
+.mm-button--alt:hover {
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
+}
+
+.mm-button--big {
+    min-height: 60px;
+    padding: 0 40px;
+    font-size: 25px;
+    -unity-font-definition: url("Fonts/LTMuseum-Bold.ttf");
+    -unity-font-style: normal;
+}
+
+.mm-button--selected {
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
+    color: rgb(255, 255, 255);
+}
+
+.mm-panel--compact,
+.mm-panel--compact > .mm-panel__lip,
+.mm-panel--compact > .mm-panel__frame {
+    -unity-slice-scale: 0.15;
+}
+
+.mm-panel--compact {
+    padding: 36px 34px 32px 34px;
+}
+
+.mm-hud {
+    --hud-pill: rgba(43, 40, 36, 0.62);
+    --hud-slot: rgba(99, 75, 49, 0.92);
+    --hud-slot-active: rgb(168, 124, 66);
+    --hud-key: rgba(17, 17, 17, 0.8);
+    --hud-bubble: rgba(231, 224, 202, 0.95);
+    --hud-bubble-ink: rgb(31, 43, 46);
+    --hud-gold: rgb(253, 230, 124);
+    -unity-font-definition: url("Fonts/AlegreyaSans-Medium.ttf");
+    color: rgb(255, 255, 255);
+}
+
+.mm-hud-pill {
+    background-image: url("Synty/SPR_FantasyScreens_Bar_Rounded_01.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.4;
+    flex-direction: row;
+    align-items: center;
+    min-height: 46px;
+    padding: 4px 20px;
+}
+
+.mm-hud-box {
+    background-image: url("Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.2;
+    padding: 12px 16px;
+}
+
+.mm-hud-slot {
+    background-image: url("Synty/SPR_FantasyScreens_Box_Rounded_Medium_01.png");
+    -unity-background-image-tint-color: var(--hud-slot);
+    -unity-slice-scale: 0.2;
+    align-items: center;
+    justify-content: center;
+    transition-property: scale, -unity-background-image-tint-color;
+    transition-duration: 0.12s;
+}
+
+.mm-hud-slot__runes {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    bottom: 10%;
+    background-image: url("Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(36, 32, 26, 0.6);
+}
+
+.mm-hud-key {
+    background-image: url("Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-key);
+    -unity-slice-scale: 0.12;
+    min-width: 30px;
+    height: 28px;
+    padding: 0 7px;
+    -unity-font-definition: url("Fonts/Grenze-SemiBold.ttf");
+    font-size: 19px;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+}
+
+.mm-hud-value {
+    -unity-font-definition: url("Fonts/LTMuseum-Bold.ttf");
+    font-size: 21px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.mm-bubble {
+    background-image: url("Synty/SPR_FantasyScreens_Box_SpeechBubble_01.png");
+    -unity-background-image-tint-color: var(--hud-bubble);
+    -unity-slice-scale: 0.3;
+    padding: 12px 18px 22px 18px;
+    -unity-font-definition: url("Fonts/LTMuseum-Bold.ttf");
+    color: var(--hud-bubble-ink);
+}

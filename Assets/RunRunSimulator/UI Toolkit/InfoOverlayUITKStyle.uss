@@ -1,106 +1,141 @@
-/* Full-screen, non-interactive layer. Children pin themselves to the corners. */
 .overlay-root {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
-/* Control legend, top-left. */
 .overlay-hints {
     position: absolute;
-    top: 24px;             /* 16 × 1.5 */
-    left: 24px;            /* 16 × 1.5 */
-    background-color: var(--mm-scrim);
-    border-radius: 12px;   /* 8 × 1.5 */
-    padding: 12px 15px;    /* 8×10 × 1.5 */
+    top: 22px;
+    left: 22px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.15;
+    padding: 12px 16px;
 }
 
 .hint-row {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 5px;    /* 3 × 1.5 */
+    margin-bottom: 6px;
 }
 
 .hint-key {
-    min-width: 81px;       /* 54 × 1.5 */
-    font-size: 18px;       /* 12 × 1.5 */
-    color: var(--mm-gold);
-    -unity-font-style: bold;
-    background-color: var(--mm-scrim);
-    border-radius: 6px;    /* 4 × 1.5 */
-    padding: 2px 9px;      /* 1×6 × 1.5 */
-    margin-right: 12px;    /* 8 × 1.5 */
+    min-width: 64px;
+    height: 28px;
+    padding: 0 8px;
+    margin-right: 10px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-key);
+    -unity-slice-scale: 0.12;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 18px;
+    color: var(--hud-gold);
     -unity-text-align: middle-center;
 }
 
 .hint-action {
-    font-size: 18px;       /* 12 × 1.5 */
-    color: var(--mm-ink);
+    font-size: 18px;
+    color: rgb(255, 255, 255);
 }
 
-/* Language switch row, bottom of the legend. */
 .lang-row {
     flex-direction: row;
     justify-content: flex-start;
-    margin-top: 9px;
+    margin-top: 8px;
 }
 
 .lang-btn {
-    min-width: 48px;
-    font-size: 16px;
-    color: var(--mm-ink);
-    -unity-font-style: bold;
-    background-color: var(--mm-scrim);
-    border-radius: 6px;
+    min-width: 46px;
+    height: 30px;
+    padding: 0 8px;
+    margin: 0 8px 0 0;
     border-width: 0;
-    padding: 3px 9px;
-    margin-right: 8px;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-key);
+    -unity-slice-scale: 0.12;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 17px;
+    color: rgb(255, 255, 255);
+}
+
+.lang-btn:hover {
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: var(--hud-slot);
 }
 
 .lang-btn--active {
-    color: var(--mm-gold);
-    border-width: 2px;
-    border-color: var(--mm-gold);
+    -unity-background-image-tint-color: var(--hud-gold);
+    color: var(--hud-bubble-ink);
 }
 
-/* Date + currency column, top-right. */
 .overlay-top-right {
     position: absolute;
-    top: 24px;             /* 16 × 1.5 */
-    right: 24px;           /* 16 × 1.5 */
+    top: 22px;
+    right: 22px;
     align-items: flex-end;
 }
 
 .overlay-date {
-    font-size: 24px;       /* 16 × 1.5 */
-    color: var(--mm-gold);
-    -unity-font-style: bold;
-    background-color: var(--mm-scrim);
-    border-radius: 12px;   /* 8 × 1.5 */
-    padding: 9px 18px;     /* 6×12 × 1.5 */
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Bar_Rounded_01.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.4;
+    padding: 6px 22px;
     margin-bottom: 8px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 26px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.overlay-currency {
+    flex-direction: row;
+    align-items: center;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Bar_Rounded_01.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.4;
+    padding: 2px 18px 2px 6px;
+    margin-bottom: 6px;
+}
+
+.overlay-currency__icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 6px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.overlay-currency__icon--coin {
+    background-image: url("Skin/Synty/ICON_SM_Item_Coins_02_Dungeon.png");
+}
+
+.overlay-currency__icon--gem {
+    background-image: url("Skin/Synty/ICON_SM_Item_Crystal_02.png");
 }
 
 .overlay-dabloons {
-    font-size: 21px;       /* 14 × 1.5 */
-    color: var(--mm-gold);
-    -unity-font-style: bold;
-    background-color: var(--mm-scrim);
-    border-radius: 12px;   /* 8 × 1.5 */
-    padding: 7px 18px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 22px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-/* Expedition return toast, top-center. */
 .expedition-toast {
     position: absolute;
-    top: 24px;
+    top: 22px;
     left: 50%;
     translate: -50% 0;
-    font-size: 21px;
-    color: var(--mm-ink);
-    -unity-font-style: bold;
-    background-color: var(--mm-scrim);
-    border-radius: 12px;
-    padding: 9px 24px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Bar_Rounded_01.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.4;
+    padding: 8px 28px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 22px;
+    color: rgb(255, 255, 255);
     -unity-text-align: middle-center;
     display: none;
 }

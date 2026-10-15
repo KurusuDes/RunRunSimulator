@@ -4,6 +4,30 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-15 (Session 160 — **overhaul de UI con los packs Synty Interface (Fantasy Menus / Screens / Warrior HUD): kit v2 "Linterna de bosque", ficha de MoriMochi modelo, piel aplicada a todos los paneles y HUD cozy; propuesta de overhaul por pantalla** — 2 `.cs` modificados; consola 0 errores; ficha verificada en Play contra Synty)
+
+**Focus:** Juan importó los 3 packs Synty de UI y pidió un overhaul completo con feel cozy/fantasía moderna y una línea gráfica común (cartas y menús). Elegida la dirección **B "Linterna de bosque"** (pino + oro, UITK, no prefabs UGUI). Juan: "el kit parecía slop" frente a Synty → se rehízo con las capas nativas de Synty; luego "examinar juegos similares y copiar su distribución, no reinventar la rueda"; regla nueva: tras cada pantalla apuntar lo aprendido en `Index/05` §Kit v2 y compararse con la referencia (igual o mejor).
+
+**Hecho:**
+1. **Investigación:** capturas de las 3 tiendas, biblioteca visual de los sprites (`Captures/S160/biblioteca/`), 3 tableros de dirección (A madera y miel, B linterna, C caramelo), 18 escenas demo de Synty renderizadas en nuestro editor (`Captures/S160/ref/`), recetas de prefabs volcadas (`Captures/S160/recipe_*.txt`).
+2. **Kit v2** (`UI Toolkit/Skin/`): `Skin.uss` importado por `Theme.uss` (tokens `.mm-skin`, panel por capas mask/lip/frame, títulos LT Museum, secciones Grenze, statbox, row, valuebox, slot, key, footer, tabs, botones, `mm-panel--compact`, registro HUD `mm-hud` con píldoras/ranuras/burbuja); ~50 sprites copiados a `Skin/Synty/` (Assets/Synty está en .gitignore); fuentes LT Museum, Grenze, Alegreya + OFL.
+3. **Ficha de MoriMochi (pantalla modelo):** pantalla completa opaca, pestañas centradas, panel Cuidado (necesidades con %, personalidad, rol), centro vitrina con pedestal y **partes como ranuras** (cuerno/espalda/alas | cara/cuerpo), panel derecho con subtítulo dorado, datos con íconos (estado, nació, crías, combates) y poderes/evolución; pie con teclas (Esc clickeable). 9 claves de Loc nuevas (es/en). Juan rechazó el degradado de fondo → fondo liso.
+4. **Piel aplicada por 5 subagentes** (UXML/USS): grilla + carta, almacén, crianza, tienda, venta, expedición, retorno, pausa, ajustes, título. HUD cozy hecho por mí: hotbar, overlay (fecha y monedas con íconos), burbuja de pensamiento, pista.
+5. **Propuesta de overhaul por pantalla** (artifact `claude.ai/artifact/N3UpoMexRkG49b9T2GmT44`, archivo `Captures/S160/propuesta_ui.html`): Libro de MoriMonchis (Palbox/PC Pokémon), crianza con probabilidades por parte (Palworld/Axie), PC de la tienda con apps (TCG Card Shop/Supermarket Sim), venta con reacción del cliente (Moonlighter), almacén de dos grillas (Stardew), expedición con equipo arriba.
+
+**Quirks ⚠️:** (1) `var()` en `style=""` del UXML rompe `CloneTree`. (2) USS importado antes de existir su sprite muestra un triángulo de advertencia → reimportar el USS. (3) TabView 6.3: header en `.unity-tab-view__content-viewport`. (4) Abrir muchas escenas demo en una llamada tumba el MCP (una por llamada; re-fijar la instancia). Detalle en `Index/05` §Kit v2.
+
+**Siguiente paso (S161, pedido de Juan):**
+1. **Empezar limpio el overhaul con la guía** (`Index/05` §Kit v2 + la propuesta): arrancar por el **Libro de MoriMonchis**, luego Crianza y la PC. Juan aún no respondió las decisiones 2-4 de la propuesta (PC diegética o fantasía, mostrar probabilidades de herencia, quitar la leyenda de teclas del HUD).
+2. Verificar en Play los paneles de los subagentes que no se miraron: pausa, ajustes, título, venta, expedición, retorno, almacén (cada uno contra su referencia).
+3. Pulidos pendientes de la ficha: bloque de evolución, píldora de rol con el estilo viejo, retrato a 512 px; Juan tiene sugerencias de distribución del espacio.
+4. Textos fijos en español en pies de pantalla de los paneles nuevos → pasarlos por `Loc`.
+5. Pendientes previos: recorrer la tienda (techos/vitrinas), presupuesto de tris, velo blanco en Play, FPS del pasto, caras Sidekick, C6 primera build.
+
+**Archivos `.cs` S160 — creados (0) · modificados (2):** `Scripts/UI/DetailInfoTabPresenter.cs` (MODIFICADO: subtítulo, datos con íconos, personalidad, % de necesidades, ranuras de partes `BuildSlots`, sin fila de Cara, `PartText`), `Scripts/UI/MorimonchiDetailInfoUITK.cs` (MODIFICADO: claves de secciones nuevas y labels de datos/pie en `WireStaticLabels`).
+
+---
+
 **Session:** 2026-10-15 (Session 159 — **clipping de la tienda, techos con vigas vistas, ventanas de vidrio con cruz y 4 vitrinas fijas en la entrada** — 0 `.cs` tocados; 4 agentes Blender; consola 0 errores; probado en Play por sondas y capturas en el scratchpad)
 
 **Focus:** pedidos de Juan al cierre de S158: clipping en estantes y marcos de puerta, techos para las estructuras, ventanas para las tiendas, vitrinas de exposición en la entrada. Decisiones de Juan: vitrinas **fijas, 2 a cada lado de la entrada, que van creciendo**; el techo **se ve desde adentro** ("por eso es un techo"); ventanas **de vidrio con marco en cruz**. Al cierre aceptó que el vidrio no sea transparente (es `SH_Glass_Env` opaco celeste).

@@ -1,10 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="HotbarHUDUITKStyle.uss" />
-    <!-- Always-on play-mode HUD. picking-mode Ignore so it never eats gameplay
-         clicks. The controller (HotbarHUDUITK) builds 6 slots into "slots" and
-         refreshes them on HotbarController.OnHotbarChanged. -->
-    <ui:VisualElement name="hotbar-root" class="mm-theme hotbar-root" picking-mode="Ignore">
+    <ui:VisualElement name="hotbar-root" class="mm-theme mm-hud hotbar-root" picking-mode="Ignore">
         <ui:VisualElement name="tug-meter" class="tug-meter" picking-mode="Ignore">
             <ui:Label name="tug-meter-label" class="tug-meter__label" picking-mode="Ignore" />
             <ui:VisualElement name="tug-meter-track" class="tug-meter__track" picking-mode="Ignore">

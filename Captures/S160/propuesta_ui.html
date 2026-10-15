@@ -1,0 +1,251 @@
+<title>Overhaul de UI MoriMonchis</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze:wght@500;600;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: one column of panel dossiers; each dossier = wireframe (16:9 screen) beside its rationale. Single dark world: the game's own pine-and-gold kit. */
+:root {
+  --bg: #0a1d19;
+  --panel: #10302a;
+  --panel-2: #0c2520;
+  --slot: #06171a;
+  --gold: #e3bb71;
+  --gold-soft: rgba(227, 187, 113, .38);
+  --ink: #f5f0e6;
+  --soft: #a9c3b9;
+  --teal: #4cc7a6;
+  --coral: #e8785a;
+  --plum: #b78bdc;
+  --display: "Grenze", "Georgia", serif;
+  --body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 40px; }
+header { display: grid; gap: 14px; }
+.eyebrow { font-family: var(--display); color: var(--gold); letter-spacing: .08em; text-transform: uppercase; font-size: 15px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(34px, 5vw, 52px); line-height: 1.05; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 28px; margin: 0; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 19px; color: var(--gold); margin: 0; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--soft); font-size: 19px; }
+.rule { height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); border: 0; margin: 0; }
+
+.principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.principle { background: var(--panel-2); border: 1px solid var(--gold-soft); border-radius: 10px; padding: 16px 18px; display: grid; gap: 6px; }
+.principle b { font-family: var(--display); font-size: 19px; color: var(--ink); font-weight: 600; }
+.principle span { color: var(--soft); font-size: 16px; }
+
+.dossier { background: var(--panel); border: 1px solid var(--gold-soft); border-radius: 14px; padding: 22px; display: grid; gap: 18px; }
+.dossier-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
+.dossier-head .file { font-size: 14px; color: var(--soft); font-variant-numeric: tabular-nums; }
+.chip { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; border: 1px solid currentColor; }
+.chip--p1 { color: var(--coral); }
+.chip--p2 { color: var(--gold); }
+.chip--p3 { color: var(--teal); }
+.chip--done { color: var(--soft); }
+.dossier-body { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.facts { display: grid; gap: 14px; min-width: 0; }
+.fact { display: grid; gap: 4px; }
+.fact p { color: var(--ink); font-size: 16px; }
+.fact .ref { color: var(--soft); }
+.fact .code { color: var(--plum); }
+
+/* wireframe of a 16:9 screen */
+.wf { aspect-ratio: 16 / 9; max-width: 100%; background: var(--slot); border: 1px solid var(--gold-soft); border-radius: 8px; padding: 2.2%; display: grid; gap: 1.6%; font-size: clamp(9px, 1.15vw, 12.5px); line-height: 1.2; }
+.b { background: rgba(76, 199, 166, .08); border: 1px solid rgba(227, 187, 113, .55); border-radius: 4px; display: grid; place-items: center; text-align: center; color: var(--soft); padding: 4px; min-width: 0; min-height: 0; overflow: hidden; }
+.b--hero { background: rgba(227, 187, 113, .12); color: var(--ink); font-weight: 700; }
+.b--bar { background: rgba(255, 255, 255, .03); border-style: dashed; }
+.b--grid { background-image: linear-gradient(rgba(227,187,113,.35) 1px, transparent 1px), linear-gradient(90deg, rgba(227,187,113,.35) 1px, transparent 1px); background-size: 20% 25%; background-color: rgba(76,199,166,.06); }
+.b--world { background: repeating-linear-gradient(135deg, rgba(76,199,166,.06) 0 8px, transparent 8px 16px); border-style: dotted; }
+
+.decisions { background: var(--panel-2); border: 1px solid var(--gold); border-radius: 14px; padding: 22px; display: grid; gap: 12px; }
+.decisions ol { margin: 0; padding-left: 22px; display: grid; gap: 10px; max-width: 72ch; }
+.decisions li::marker { color: var(--gold); font-family: var(--display); font-weight: 700; }
+.sources { color: var(--soft); font-size: 14px; display: grid; gap: 6px; }
+.sources a { color: var(--teal); }
+a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+@media (max-width: 760px) {
+  .dossier-body { grid-template-columns: minmax(0, 1fr); }
+  .dossier { padding: 16px; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">S160 · Propuesta de overhaul</div>
+    <h1>Cada pantalla, copiada de un juego que ya la resolvió</h1>
+    <p class="lede">La piel de Synty ya está aplicada. Ahora cambia la estructura: varios paneles nacieron como herramientas de prueba y no sirven para el juego final. Para cada uno elegí el juego que mejor resolvió esa misma tarea y propongo copiar su distribución.</p>
+    <hr class="rule">
+  </header>
+
+  <section class="principles" aria-label="Reglas de la propuesta">
+    <div class="principle"><b>Un patrón por tarea</b><span>Si Palworld o Pokémon ya resolvieron "ver mis criaturas", copiamos esa distribución completa en vez de diseñarla de cero.</span></div>
+    <div class="principle"><b>Selección a la izquierda, detalle a la derecha</b><span>Es el patrón común a casi todos los juegos de criaturas: elegís en una grilla y la ficha cambia al lado, sin abrir otra pantalla.</span></div>
+    <div class="principle"><b>La tienda es una tienda</b><span>Los simuladores de tienda (TCG Card Shop, Supermarket Simulator) llevan la gestión a un dispositivo dentro del mundo con apps separadas.</span></div>
+  </section>
+
+  <article class="dossier" id="libro">
+    <div class="dossier-head"><h2>Libro de MoriMonchis</h2><span class="chip chip--p1">Prioridad 1</span><span class="file">reemplaza CreatureGridUITK (grilla de prueba)</span></div>
+    <div class="dossier-body">
+      <div class="wf" style="grid-template-columns: 1.15fr 1fr; grid-template-rows: auto 1fr auto; grid-template-areas: 'tabs tabs' 'grid card' 'foot foot';">
+        <div class="b b--bar" style="grid-area: tabs;">Filtros: Todos · En tienda · Corral · Vendidos · Orden por set / edad</div>
+        <div class="b b--grid" style="grid-area: grid;">Grilla 5×4 de retratos chicos<br>(caja 1 de N)</div>
+        <div class="b b--hero" style="grid-area: card;">Ficha resumida del elegido<br>retrato · partes · necesidades<br>[Ver ficha completa]</div>
+        <div class="b b--bar" style="grid-area: foot;">Teclas: mover · ver ficha · cambiar caja · cerrar</div>
+      </div>
+      <div class="facts">
+        <div class="fact"><h3>Referencia</h3><p class="ref">Palbox de Palworld y la caja del PC de Pokémon: grilla de íconos a la izquierda, ficha del seleccionado a la derecha, cajas paginadas.</p></div>
+        <div class="fact"><h3>Qué copiamos</h3><p>Retratos chicos en grilla (hoy cada carta ocupa un cuarto de pantalla). Elegir actualiza la ficha lateral sin salir. La ficha completa que ya hicimos se abre desde ahí.</p></div>
+        <div class="fact"><h3>Qué cambia</h3><p>Filtros por estado (en tienda, corral, vendido) y orden por set de partes, que es lo que el jugador busca al planear crías.</p></div>
+        <div class="fact"><h3>Código</h3><p class="code">Grilla y ficha lateral nuevas en el controlador; los filtros leen el registro que ya existe.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="dossier" id="crianza">
+    <div class="dossier-head"><h2>Corral de crianza</h2><span class="chip chip--p1">Prioridad 1</span><span class="file">BreedingPanelUITK</span></div>
+    <div class="dossier-body">
+      <div class="wf" style="grid-template-columns: 1fr 1.3fr 1fr; grid-template-rows: 1fr auto; grid-template-areas: 'p hero m' 'p btn m';">
+        <div class="b" style="grid-area: p;">Padre<br>retrato grande<br>sus 4 partes</div>
+        <div class="b b--hero" style="grid-area: hero;">Probabilidades por parte<br>Cuerno: 50% padre · 30% madre · 20% mutación<br>Espalda · Alas · Cara · Color</div>
+        <div class="b" style="grid-area: m;">Madre<br>retrato grande<br>sus 4 partes</div>
+        <div class="b b--bar" style="grid-area: btn;">Huevo · tiempo · [Criar]</div>
+      </div>
+      <div class="facts">
+        <div class="fact"><h3>Referencia</h3><p class="ref">Calculadoras de crianza de Palworld (dos padres, resultado al centro) y simuladores de Axie, que muestran la probabilidad de heredar cada parte.</p></div>
+        <div class="fact"><h3>Qué copiamos</h3><p>Los dos padres enfrentados y, al centro, qué puede salir parte por parte con su porcentaje. Es el "porqué criar" del linaje hecho visible.</p></div>
+        <div class="fact"><h3>Qué cambia</h3><p>Hoy las listas de candidatos ocupan dos columnas enteras. Pasan a elegirse desde el Libro (o una tira compacta) y el centro gana espacio.</p></div>
+        <div class="fact"><h3>Código</h3><p class="code">Exponer las probabilidades que ya usa la regla 50/30/20 para mostrarlas antes de criar.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="dossier" id="pc">
+    <div class="dossier-head"><h2>PC de la tienda</h2><span class="chip chip--p1">Prioridad 1</span><span class="file">StorePanelUITK</span></div>
+    <div class="dossier-body">
+      <div class="wf" style="grid-template-columns: .55fr 1.6fr 1fr; grid-template-rows: auto 1fr; grid-template-areas: 'apps top top' 'apps list item';">
+        <div class="b" style="grid-area: apps;">Apps<br>Mejoras<br>Muebles<br>Juguetes<br>Encargos<br>Metas</div>
+        <div class="b b--bar" style="grid-area: top;">Saldo: dabloons · Minerita</div>
+        <div class="b b--grid" style="grid-area: list;">Tarjetas de producto<br>ícono · nombre · precio</div>
+        <div class="b b--hero" style="grid-area: item;">Ficha del producto<br>qué hace · nivel<br>[Comprar]</div>
+      </div>
+      <div class="facts">
+        <div class="fact"><h3>Referencia</h3><p class="ref">TCG Card Shop Simulator (apps separadas para pedidos, ampliaciones y muebles) y Supermarket Simulator (pedidos desde una computadora del local).</p></div>
+        <div class="fact"><h3>Qué copiamos</h3><p>Una app por tarea en la barra izquierda, tarjetas con ícono y precio en el centro y la ficha de compra a la derecha. Hoy son ocho pestañas de texto con filas.</p></div>
+        <div class="fact"><h3>Qué cambia</h3><p>La PC puede verse como pantalla de computadora de la tienda (diegética) en lugar de un panel de fantasía. Esa es tu decisión 2.</p></div>
+        <div class="fact"><h3>Código</h3><p class="code">Reordenar las categorías como apps; las filas pasan a tarjetas con ícono por producto.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="dossier" id="venta">
+    <div class="dossier-head"><h2>Venta en el mostrador</h2><span class="chip chip--p2">Prioridad 2</span><span class="file">TransactionPanel</span></div>
+    <div class="dossier-body">
+      <div class="wf" style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto auto; grid-template-areas: 'cli mon' 'mood mood' 'act act';">
+        <div class="b" style="grid-area: cli;">Cliente<br>retrato + qué busca</div>
+        <div class="b b--hero" style="grid-area: mon;">MoriMochi en venta<br>partes que le gustan resaltadas</div>
+        <div class="b" style="grid-area: mood;">Oferta y reacción del cliente: contento · justo · caro · se va</div>
+        <div class="b b--bar" style="grid-area: act;">[Aceptar] · [Pedir más] · [No vender]</div>
+      </div>
+      <div class="facts">
+        <div class="fact"><h3>Referencia</h3><p class="ref">Moonlighter: el cliente reacciona con cuatro caras según el precio, y el jugador aprende el precio justo.</p></div>
+        <div class="fact"><h3>Qué copiamos</h3><p>La reacción visible del cliente al "Pedir más" que ya existe, para que regatear se lea sin números.</p></div>
+        <div class="fact"><h3>Qué cambia</h3><p>Resaltar qué partes del MoriMochi le gustan al cliente conecta la venta con el linaje.</p></div>
+        <div class="fact"><h3>Código</h3><p class="code">Solo presentación si la reacción sale del estado actual de la negociación; no agrega mecánicas nuevas.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="dossier" id="almacen">
+    <div class="dossier-head"><h2>Almacén</h2><span class="chip chip--p2">Prioridad 2</span><span class="file">StoragePanelUITK</span></div>
+    <div class="dossier-body">
+      <div class="wf" style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto; grid-template-areas: 'box inv' 'foot foot';">
+        <div class="b b--grid" style="grid-area: box;">Contenido del almacén<br>ranuras con ícono y cantidad</div>
+        <div class="b b--grid" style="grid-area: inv;">Tu inventario / hotbar</div>
+        <div class="b b--bar" style="grid-area: foot;">Clic mueve de un lado al otro · Shift mueve todo</div>
+      </div>
+      <div class="facts">
+        <div class="fact"><h3>Referencia</h3><p class="ref">Cofres de Stardew Valley: dos grillas, una arriba de la otra, y un clic transfiere.</p></div>
+        <div class="fact"><h3>Qué copiamos</h3><p>Ranuras con ícono y número en lugar de filas con botón "Eject".</p></div>
+        <div class="fact"><h3>Código</h3><p class="code">Construir ranuras en vez de filas; la lógica de sacar ítems ya existe.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="dossier" id="expedicion">
+    <div class="dossier-head"><h2>Expedición y regreso</h2><span class="chip chip--p3">Prioridad 3</span><span class="file">ExpeditionPanelUITK · ExpeditionReturnCardUITK</span></div>
+    <div class="dossier-body">
+      <div class="wf" style="grid-template-columns: repeat(3, 1fr) 1.2fr; grid-template-rows: 1fr auto; grid-template-areas: 'a b c info' 'pick pick pick go';">
+        <div class="b b--hero" style="grid-area: a;">Integrante 1</div>
+        <div class="b b--hero" style="grid-area: b;">Integrante 2</div>
+        <div class="b b--hero" style="grid-area: c;">Integrante 3</div>
+        <div class="b" style="grid-area: info;">Riesgo, poderes del equipo, rol sugerido</div>
+        <div class="b b--bar" style="grid-area: pick;">Tira de candidatos aptos</div>
+        <div class="b b--bar" style="grid-area: go;">[Bajar]</div>
+      </div>
+      <div class="facts">
+        <div class="fact"><h3>Referencia</h3><p class="ref">Gestión de grupo de Synty y equipos de Pokémon: cartas altas por integrante. El regreso copia la pantalla de resultados con botín.</p></div>
+        <div class="fact"><h3>Qué copiamos</h3><p>Los tres huecos del equipo fijos arriba y los candidatos en una tira abajo, como al armar un equipo antes de pelear.</p></div>
+        <div class="fact"><h3>Código</h3><p class="code">Mayormente reacomodo de UXML; el regreso ya tiene la estructura de resultados.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="dossier" id="hud">
+    <div class="dossier-head"><h2>HUD de la tienda</h2><span class="chip chip--done">Ya aplicado</span><span class="file">InfoOverlay · Hotbar · pistas · burbujas</span></div>
+    <div class="dossier-body">
+      <div class="wf" style="grid-template-columns: 1fr 2fr 1fr; grid-template-rows: auto 1fr auto; grid-template-areas: 'enc . clock' 'world world world' '. bar .';">
+        <div class="b" style="grid-area: enc;">Encargos del día</div>
+        <div class="b" style="grid-area: clock;">Día · hora · monedas</div>
+        <div class="b b--world" style="grid-area: world;">mundo</div>
+        <div class="b" style="grid-area: bar;">Hotbar</div>
+      </div>
+      <div class="facts">
+        <div class="fact"><h3>Referencia</h3><p class="ref">Stardew Valley, Slime Rancher y el HUD de granja de Synty: reloj y dinero arriba a la derecha, barra abajo, todo translúcido.</p></div>
+        <div class="fact"><h3>Qué cambia</h3><p>La leyenda de teclas de arriba a la izquierda es de desarrollo. En el juego final la reemplazan los encargos del día y las pistas contextuales.</p></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="dossier" id="menus">
+    <div class="dossier-head"><h2>Ficha, pausa, ajustes y título</h2><span class="chip chip--done">Se mantienen</span></div>
+    <div class="facts">
+      <p>La ficha del MoriMochi ya sigue el patrón de resumen de Pokémon y Palworld. Pausa, ajustes y título usan la distribución estándar de Synty, que es la misma de casi cualquier juego. Solo necesitan revisión en Play, no un rediseño.</p>
+    </div>
+  </article>
+
+  <section class="decisions" aria-label="Decisiones">
+    <h2>Lo que decides vos</h2>
+    <ol>
+      <li><b>Orden:</b> arranco por el Libro de MoriMonchis, después Crianza y la PC. ¿Te sirve ese orden?</li>
+      <li><b>PC de la tienda:</b> ¿pantalla de computadora dentro del mundo (diegética, con apps) o panel de fantasía como el resto?</li>
+      <li><b>Crianza:</b> ¿mostramos las probabilidades de herencia por parte antes de criar, o preferís que se descubran?</li>
+      <li><b>HUD:</b> ¿saco la leyenda de teclas y la reemplazo por encargos del día y pistas contextuales?</li>
+    </ol>
+  </section>
+
+  <section class="sources" aria-label="Fuentes">
+    <h3>Fuentes consultadas</h3>
+    <a href="https://palworld.wiki.gg/wiki/Palbox">Palworld Wiki: Palbox</a>
+    <a href="https://wikily.gg/palworld/breeding-calculator/">Wikily: calculadora de crianza de Palworld</a>
+    <a href="https://afkgaming.com/blockchaingames/guide/everything-you-need-to-know-about-axie-infinity-breeding">AFK Gaming: crianza en Axie Infinity</a>
+    <a href="https://tcg-card-shop-sim.upcomer.com/wiki/Phone">TCG Card Shop Simulator Wiki: teléfono y apps</a>
+    <a href="https://store.steampowered.com/app/2670630/Supermarket_Simulator/">Supermarket Simulator en Steam</a>
+    <a href="https://primagames.com/tips/moonlighter-2-shop-guide-pricing-furniture-perks-explained">Prima Games: precios y reacciones en Moonlighter 2</a>
+    <a href="https://mewgenics.wiki.gg/wiki/Breeding">Mewgenics Wiki: crianza</a>
+    <a href="https://bulbapedia.bulbagarden.net/wiki/Battle_Team">Bulbapedia: sistema de cajas de Pokémon</a>
+  </section>
+</div>

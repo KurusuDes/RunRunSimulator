@@ -1,72 +1,104 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="BreedingPanelUITKStyle.uss" />
-    <!-- Full-screen modal backdrop (eats clicks). Window centered inside. -->
-    <ui:VisualElement name="backdrop" class="mm-theme breed-backdrop">
+    <ui:VisualElement name="backdrop" class="mm-theme mm-skin mm-screen breed-backdrop">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
+
         <ui:VisualElement name="window" class="breed-window">
+            <ui:TabView name="tabs" class="breed-tabs mm-tabs">
 
-            <ui:VisualElement name="breed-header" class="breed-header">
-                <ui:Label name="title" text="Breeding" class="breed-title" />
-                <ui:Button name="close-button" text="X" class="breed-close" />
-            </ui:VisualElement>
+                <ui:Tab label="Criar" name="tab-criar">
+                    <ui:VisualElement class="criar-content">
 
-            <!-- 3 columns. Left/right parent lists are ALWAYS present; the tabs sit
-                 in the center column and only swap the center content. -->
-            <ui:VisualElement class="breed-body">
+                        <ui:VisualElement class="breed-side breed-side--father mm-panel">
+                            <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                            <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                            <ui:Label text="Padres" class="breed-col-title mm-section mm-section--ornate" />
+                            <ui:ScrollView name="father-list" class="breed-list" mode="Vertical" />
+                        </ui:VisualElement>
 
-                <!-- LEFT: fathers -->
-                <ui:VisualElement class="breed-col-side">
-                    <ui:Label text="Padres" class="breed-col-title" />
-                    <ui:ScrollView name="father-list" class="breed-list" mode="Vertical" />
-                </ui:VisualElement>
-
-                <!-- CENTER: tabs -->
-                <ui:VisualElement class="breed-col-center">
-                    <ui:TabView name="tabs" class="breed-tabs">
-
-                        <ui:Tab label="Criar" name="tab-criar">
-                            <ui:VisualElement class="criar-content">
-                                <ui:VisualElement class="breed-slots">
-                                    <ui:VisualElement name="father-slot" class="breed-slot">
-                                        <ui:Label text="Padre" class="breed-slot-role" />
-                                        <ui:VisualElement name="father-slot-img" class="breed-slot-img" />
-                                        <ui:Label name="father-slot-name" text="Vacío" class="breed-slot-name" />
+                        <ui:VisualElement class="breed-center">
+                            <ui:VisualElement class="breed-slots">
+                                <ui:VisualElement name="father-slot" class="breed-slot mm-panel mm-panel--compact">
+                                    <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                                    <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                                    <ui:Label text="Padre" class="breed-slot-role mm-section" />
+                                    <ui:VisualElement class="breed-portrait mm-slot">
+                                        <ui:VisualElement class="mm-layer mm-slot__vignette" picking-mode="Ignore" />
+                                        <ui:VisualElement name="father-slot-img" class="breed-slot-img" picking-mode="Ignore" />
+                                        <ui:VisualElement class="mm-layer mm-slot__frame" picking-mode="Ignore" />
                                     </ui:VisualElement>
-                                    <ui:Label text="💗" class="breed-heart" />
-                                    <ui:VisualElement name="mother-slot" class="breed-slot">
-                                        <ui:Label text="Madre" class="breed-slot-role" />
-                                        <ui:VisualElement name="mother-slot-img" class="breed-slot-img" />
-                                        <ui:Label name="mother-slot-name" text="Vacío" class="breed-slot-name" />
-                                    </ui:VisualElement>
+                                    <ui:Label name="father-slot-name" text="Vacío" class="breed-slot-name" />
                                 </ui:VisualElement>
 
+                                <ui:VisualElement class="breed-link" picking-mode="Ignore">
+                                    <ui:VisualElement class="mm-icon mm-icon--affect breed-link__icon" picking-mode="Ignore" />
+                                </ui:VisualElement>
+
+                                <ui:VisualElement name="mother-slot" class="breed-slot mm-panel mm-panel--compact">
+                                    <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                                    <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                                    <ui:Label text="Madre" class="breed-slot-role mm-section" />
+                                    <ui:VisualElement class="breed-portrait mm-slot">
+                                        <ui:VisualElement class="mm-layer mm-slot__vignette" picking-mode="Ignore" />
+                                        <ui:VisualElement name="mother-slot-img" class="breed-slot-img" picking-mode="Ignore" />
+                                        <ui:VisualElement class="mm-layer mm-slot__frame" picking-mode="Ignore" />
+                                    </ui:VisualElement>
+                                    <ui:Label name="mother-slot-name" text="Vacío" class="breed-slot-name" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <ui:VisualElement class="breed-result mm-panel mm-panel--compact">
+                                <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                                <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
                                 <ui:VisualElement class="breed-egg">
-                                    <ui:Label text="❓" class="breed-egg-icon" />
-                                    <ui:Label name="time-label" text="" class="breed-time" />
+                                    <ui:VisualElement class="mm-statbox breed-egg__box">
+                                        <ui:VisualElement class="mm-icon breed-egg__icon" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="mm-row breed-egg__time">
+                                        <ui:VisualElement class="mm-icon breed-time-icon" />
+                                        <ui:Label name="time-label" text="" class="breed-time" />
+                                    </ui:VisualElement>
+                                    <ui:Button name="breed-button" text="Breed" class="breed-action mm-button mm-button--big" />
                                 </ui:VisualElement>
-
-                                <ui:Button name="breed-button" text="Breed" class="breed-action" />
-
-                                <!-- Both-parents preview fills the lower space. -->
                                 <ui:VisualElement name="preview" class="breed-preview" />
                             </ui:VisualElement>
-                        </ui:Tab>
+                        </ui:VisualElement>
 
-                        <ui:Tab label="Incubando" name="tab-incubando">
-                            <ui:ScrollView name="egg-list" class="egg-list" mode="Vertical" />
-                        </ui:Tab>
+                        <ui:VisualElement class="breed-side breed-side--mother mm-panel">
+                            <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                            <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                            <ui:Label text="Madres" class="breed-col-title mm-section mm-section--ornate" />
+                            <ui:ScrollView name="mother-list" class="breed-list" mode="Vertical" />
+                        </ui:VisualElement>
 
-                    </ui:TabView>
-                </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:Tab>
 
-                <!-- RIGHT: mothers -->
-                <ui:VisualElement class="breed-col-side">
-                    <ui:Label text="Madres" class="breed-col-title" />
-                    <ui:ScrollView name="mother-list" class="breed-list" mode="Vertical" />
-                </ui:VisualElement>
+                <ui:Tab label="Incubando" name="tab-incubando">
+                    <ui:VisualElement class="page-panel mm-panel">
+                        <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                        <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                        <ui:VisualElement class="egg-empty" picking-mode="Ignore" />
+                        <ui:ScrollView name="egg-list" class="egg-list" mode="Vertical" />
+                    </ui:VisualElement>
+                </ui:Tab>
 
+            </ui:TabView>
+
+            <ui:Label name="title" text="Crianza" class="breed-title mm-title" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="mm-footer" picking-mode="Ignore">
+            <ui:VisualElement class="mm-prompt">
+                <ui:Label text="A" class="mm-key" />
+                <ui:Label text="D" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label name="prompt-tab" text="Pestaña" class="mm-prompt__label" />
             </ui:VisualElement>
-
+            <ui:Button name="close-button" text="" class="mm-prompt mm-prompt--button">
+                <ui:Label text="Esc" class="mm-key" picking-mode="Ignore" />
+                <ui:Label name="prompt-close" text="Cerrar" class="mm-prompt__label" picking-mode="Ignore" />
+            </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

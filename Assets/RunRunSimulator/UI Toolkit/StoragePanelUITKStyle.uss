@@ -1,45 +1,19 @@
 .storage-root {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
     align-items: center;
     justify-content: center;
-    background-color: var(--mm-scrim);
+    padding-bottom: 62px;
 }
 
 .storage-panel {
-    width: 420px;
-    max-height: 70%;
-    background-color: var(--mm-surface);
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    border-radius: 22px;
-    padding: 12px;
-}
-
-.storage-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    width: 820px;
+    height: 72%;
 }
 
 .storage-title {
-    font-size: 20px;
-    color: var(--mm-gold);
-    -unity-font-style: bold;
+    -unity-text-generator: advanced;
+    -unity-text-auto-size: best-fit 28px 44px;
+    height: 54px;
 }
-
-.storage-close {
-    width: 28px;
-    height: 28px;
-    border-radius: 10px;
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    color: var(--mm-ink);
-    background-color: var(--mm-surface-2);
-}
-
-.storage-close:hover { background-color: var(--mm-coral); color: rgb(255, 255, 255); }
 
 .storage-list {
     flex-grow: 1;
@@ -49,39 +23,87 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 8px;
-    margin-bottom: 4px;
-    background-color: var(--mm-surface-2);
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: rgba(0, 0, 0, 0);
+    min-height: 68px;
+    padding: 8px 18px 8px 16px;
+    margin: 0 4px 8px 0;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.22;
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.12s;
+}
+
+.storage-row:hover {
+    -unity-background-image-tint-color: rgba(0, 58, 48, 0.95);
 }
 
 .storage-row--selected {
-    border-color: var(--mm-gold);
-    background-color: var(--mm-surface);
+    -unity-background-image-tint-color: rgba(0, 96, 76, 0.95);
 }
 
 .storage-row__name {
-    font-size: 14px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding-left: 60px;
+    min-height: 48px;
+    -unity-text-align: middle-left;
+    background-image: url("Skin/Synty/ICON_FantasyScreens_Inventory_Backpack_01_Clean.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 44px 44px;
+    -unity-background-image-tint-color: var(--mm-gold);
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 24px;
     color: var(--mm-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.storage-row--selected .storage-row__name {
+    color: rgb(255, 255, 255);
 }
 
 .storage-row__eject {
-    height: 26px;
-    min-width: 70px;
-    border-radius: 8px;
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    color: rgb(255, 255, 255);
-    background-color: var(--mm-coral);
+    flex-shrink: 0;
+    min-width: 128px;
+    min-height: 46px;
+    margin: 0 0 0 16px;
+    padding: 0 22px;
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Box_Small_Parchment_03.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+    -unity-slice-scale: 0.35;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+    font-size: 21px;
+    -unity-font-style: bold;
+    color: var(--mm-ink-dark);
+    -unity-text-align: middle-center;
 }
 
-.storage-row__eject:hover { background-color: var(--mm-coral-dark); }
+.storage-row__eject:hover {
+    -unity-background-image-tint-color: rgb(250, 214, 150);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.storage-row__eject:active {
+    scale: 0.97 0.97;
+}
 
 .storage-empty {
+    position: absolute;
+    left: 54px;
+    right: 54px;
+    top: 170px;
+    padding: 96px 20px 0 20px;
+    background-image: url("Skin/Synty/ICON_FantasyScreens_Inventory_Backpack_01_Clean.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 84px 84px;
+    -unity-background-image-tint-color: rgba(170, 196, 186, 0.55);
+    font-size: 24px;
     color: var(--mm-ink-soft);
-    font-size: 13px;
-    -unity-text-align: middle-center;
-    padding: 16px;
+    -unity-text-align: upper-center;
+    white-space: normal;
 }

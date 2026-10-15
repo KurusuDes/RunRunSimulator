@@ -1,100 +1,168 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="MorimonchiDetailInfoUITKStyle.uss" />
-    <!-- Full-screen backdrop sits above the grid (higher sortingOrder) and eats
-         clicks, so the panel behind can't be touched until the X closes this.
-         The window is centered inside it. -->
-    <ui:VisualElement name="backdrop" class="mm-theme detail-backdrop">
+    <ui:VisualElement name="backdrop" class="mm-theme mm-skin mm-screen detail-backdrop">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
+
         <ui:VisualElement name="window" class="detail-window">
+            <ui:TabView name="tabs" class="detail-tabs mm-tabs">
 
-            <ui:VisualElement name="detail-header" class="detail-header">
-                <ui:Label name="title" text="MoriMochi" class="detail-title" />
-                <ui:Button name="close-button" text="X" class="detail-close" />
-            </ui:VisualElement>
-
-            <ui:TabView name="tabs" class="detail-tabs">
-
-                <!-- Summary page (FireRed-inspired): portrait + stats on the left,
-                     all the rest on the right. -->
                 <ui:Tab label="Info" name="tab-info">
                     <ui:VisualElement class="info-body">
 
-                        <ui:VisualElement class="info-left">
-                            <ui:VisualElement name="portrait" class="portrait" />
-                            <ui:Label name="care-title" text="Cuidado" class="care-title" />
+                        <ui:VisualElement class="info-left mm-panel">
+                            <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                            <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                            <ui:Label name="care-title" text="Cuidado" class="care-title mm-section mm-section--ornate" />
                             <ui:VisualElement name="needs" class="needs">
                                 <ui:VisualElement name="need-health" class="detail-need">
-                                    <ui:Label name="need-health-label" text="Vida" class="detail-need__label" />
-                                    <ui:VisualElement class="detail-need__bar-track">
-                                        <ui:VisualElement name="need-health-fill" class="detail-need__bar-fill" />
+                                    <ui:VisualElement class="mm-statbox"><ui:VisualElement class="mm-icon mm-icon--health" /></ui:VisualElement>
+                                    <ui:VisualElement class="detail-need__body">
+                                        <ui:VisualElement class="detail-need__head">
+                                            <ui:Label name="need-health-label" text="Vida" class="detail-need__label" />
+                                            <ui:Label name="need-health-value" text="0%" class="detail-need__value" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement class="detail-need__bar-track">
+                                            <ui:VisualElement name="need-health-fill" class="detail-need__bar-fill" />
+                                        </ui:VisualElement>
                                     </ui:VisualElement>
                                 </ui:VisualElement>
                                 <ui:VisualElement name="need-energy" class="detail-need">
-                                    <ui:Label name="need-energy-label" text="Energía" class="detail-need__label" />
-                                    <ui:VisualElement class="detail-need__bar-track">
-                                        <ui:VisualElement name="need-energy-fill" class="detail-need__bar-fill" />
+                                    <ui:VisualElement class="mm-statbox"><ui:VisualElement class="mm-icon mm-icon--energy" /></ui:VisualElement>
+                                    <ui:VisualElement class="detail-need__body">
+                                        <ui:VisualElement class="detail-need__head">
+                                            <ui:Label name="need-energy-label" text="Energía" class="detail-need__label" />
+                                            <ui:Label name="need-energy-value" text="0%" class="detail-need__value" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement class="detail-need__bar-track">
+                                            <ui:VisualElement name="need-energy-fill" class="detail-need__bar-fill" />
+                                        </ui:VisualElement>
                                     </ui:VisualElement>
                                 </ui:VisualElement>
                                 <ui:VisualElement name="need-affect" class="detail-need">
-                                    <ui:Label name="need-affect-label" text="Afecto" class="detail-need__label" />
-                                    <ui:VisualElement class="detail-need__bar-track">
-                                        <ui:VisualElement name="need-affect-fill" class="detail-need__bar-fill" />
+                                    <ui:VisualElement class="mm-statbox"><ui:VisualElement class="mm-icon mm-icon--affect" /></ui:VisualElement>
+                                    <ui:VisualElement class="detail-need__body">
+                                        <ui:VisualElement class="detail-need__head">
+                                            <ui:Label name="need-affect-label" text="Afecto" class="detail-need__label" />
+                                            <ui:Label name="need-affect-value" text="0%" class="detail-need__value" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement class="detail-need__bar-track">
+                                            <ui:VisualElement name="need-affect-fill" class="detail-need__bar-fill" />
+                                        </ui:VisualElement>
                                     </ui:VisualElement>
                                 </ui:VisualElement>
                             </ui:VisualElement>
                             <ui:Label name="explore-status" text="Apta para bajar" class="explore-status" />
+                            <ui:VisualElement class="mm-bar" />
+                            <ui:Label text="Personalidad" class="section-title mm-section" />
+                            <ui:Label name="personality-name" text="—" class="detail-personality__name" />
+                            <ui:Label name="personality-desc" text="" class="detail-personality__desc" />
                             <ui:VisualElement name="combat-role" class="combat-role">
                                 <ui:Label name="combat-role-title" text="Rol sugerido" class="combat-role__title" />
                                 <ui:VisualElement name="combat-role-pill" class="combat-role__pill" />
                             </ui:VisualElement>
                         </ui:VisualElement>
 
-                        <ui:ScrollView name="info-right" class="info-right" mode="Vertical">
-                            <ui:Label text="Identidad" class="section-title" />
-                            <ui:Label name="identity" class="info-block" />
-                            <ui:Label text="Rol y Elemento" class="section-title" />
-                            <ui:Label name="role-element" class="info-block" />
-                            <ui:Label text="Partes" class="section-title" />
-                            <ui:VisualElement name="parts" class="parts" />
-                            <ui:Label text="Progresión" class="section-title" />
-                            <ui:Label name="progression" class="info-block" />
-                        </ui:ScrollView>
+                        <ui:VisualElement class="info-center detail-stage">
+                            <ui:VisualElement name="slots-left" class="detail-slots" />
+                            <ui:VisualElement class="detail-stage__core">
+                                <ui:VisualElement class="detail-stage__floor" picking-mode="Ignore">
+                                    <ui:VisualElement class="detail-stage__floor-ring" picking-mode="Ignore" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="portrait" class="portrait" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="slots-right" class="detail-slots" />
+                        </ui:VisualElement>
+
+                        <ui:VisualElement class="info-right-panel mm-panel">
+                            <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                            <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                            <ui:Label name="title" text="MoriMochi" class="detail-title mm-title" />
+                            <ui:Label name="subtitle" text="" class="mm-subtitle" />
+                            <ui:VisualElement class="mm-bar" />
+                            <ui:Label text="Datos" class="section-title mm-section" />
+                            <ui:VisualElement class="detail-stats">
+                                <ui:VisualElement class="detail-stat">
+                                    <ui:VisualElement class="mm-statbox detail-stat__box"><ui:VisualElement class="mm-icon detail-stat__icon detail-stat__icon--state" /></ui:VisualElement>
+                                    <ui:Label name="stat-state-value" text="—" class="detail-stat__value" />
+                                    <ui:Label name="stat-state-label" text="Estado" class="detail-stat__label" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="detail-stat">
+                                    <ui:VisualElement class="mm-statbox detail-stat__box"><ui:VisualElement class="mm-icon detail-stat__icon detail-stat__icon--born" /></ui:VisualElement>
+                                    <ui:Label name="stat-born-value" text="—" class="detail-stat__value" />
+                                    <ui:Label name="stat-born-label" text="Nació" class="detail-stat__label" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="detail-stat">
+                                    <ui:VisualElement class="mm-statbox detail-stat__box"><ui:VisualElement class="mm-icon detail-stat__icon detail-stat__icon--breeds" /></ui:VisualElement>
+                                    <ui:Label name="stat-breeds-value" text="—" class="detail-stat__value" />
+                                    <ui:Label name="stat-breeds-label" text="Crías" class="detail-stat__label" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="detail-stat">
+                                    <ui:VisualElement class="mm-statbox detail-stat__box"><ui:VisualElement class="mm-icon detail-stat__icon detail-stat__icon--battles" /></ui:VisualElement>
+                                    <ui:Label name="stat-battles-value" text="—" class="detail-stat__value" />
+                                    <ui:Label name="stat-battles-label" text="Combates" class="detail-stat__label" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:Label text="Poderes y evolución" class="section-title mm-section mm-section--ornate detail-powers-title" />
+                            <ui:ScrollView name="info-right" class="info-right" mode="Vertical">
+                                <ui:VisualElement name="parts" class="parts" />
+                            </ui:ScrollView>
+                        </ui:VisualElement>
 
                     </ui:VisualElement>
                 </ui:Tab>
 
-                <!-- Partners this MoriMochi bred with + the children from each. -->
                 <ui:Tab label="Breed" name="tab-breed">
-                    <ui:ScrollView class="lineage-body" mode="VerticalAndHorizontal">
-                        <ui:VisualElement name="breed-tree" class="lineage-tree" />
-                        <ui:Label name="breed-empty" text="Sin descendencia registrada." class="placeholder" />
-                    </ui:ScrollView>
+                    <ui:VisualElement class="page-panel mm-panel">
+                        <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                        <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                        <ui:ScrollView class="lineage-body" mode="VerticalAndHorizontal">
+                            <ui:VisualElement name="breed-tree" class="lineage-tree" />
+                            <ui:Label name="breed-empty" text="Sin descendencia registrada." class="placeholder" />
+                        </ui:ScrollView>
+                    </ui:VisualElement>
                 </ui:Tab>
 
-                <!-- Family tree: ancestors (self + parents + grandparents). -->
                 <ui:Tab label="Linaje" name="tab-lineage">
-                    <ui:ScrollView class="lineage-body" mode="VerticalAndHorizontal">
-                        <ui:VisualElement name="lineage-tree" class="lineage-tree" />
-                        <ui:Label name="inherit-title" text="Herencia" class="section-title" />
-                        <ui:VisualElement name="inherit-list" class="inherit-list" />
-                        <ui:Label name="lineage-empty" text="Sin ascendencia registrada (linaje silvestre)." class="placeholder" />
-                    </ui:ScrollView>
+                    <ui:VisualElement class="page-panel mm-panel">
+                        <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                        <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                        <ui:ScrollView class="lineage-body" mode="VerticalAndHorizontal">
+                            <ui:VisualElement name="lineage-tree" class="lineage-tree" />
+                            <ui:Label name="inherit-title" text="Herencia" class="section-title mm-section" />
+                            <ui:VisualElement name="inherit-list" class="inherit-list" />
+                            <ui:Label name="lineage-empty" text="Sin ascendencia registrada (linaje silvestre)." class="placeholder" />
+                        </ui:ScrollView>
+                    </ui:VisualElement>
                 </ui:Tab>
 
-                <!-- Social relations: who this MoriMochi likes and dislikes, read
-                     straight from SocialGraphService (seed + history). -->
                 <ui:Tab label="Relaciones" name="tab-relations">
-                    <ui:ScrollView class="relations-body" mode="Vertical">
-                        <ui:Label text="Le caen bien" class="section-title" />
-                        <ui:VisualElement name="relations-good" class="relations-list" />
-                        <ui:Label text="Le caen mal" class="section-title" />
-                        <ui:VisualElement name="relations-bad" class="relations-list" />
-                        <ui:Label name="relations-empty" text="Todavía no conoce a nadie." class="placeholder" />
-                    </ui:ScrollView>
+                    <ui:VisualElement class="page-panel mm-panel">
+                        <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                        <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                        <ui:ScrollView class="relations-body" mode="Vertical">
+                            <ui:Label text="Le caen bien" class="section-title mm-section" />
+                            <ui:VisualElement name="relations-good" class="relations-list" />
+                            <ui:Label text="Le caen mal" class="section-title mm-section" />
+                            <ui:VisualElement name="relations-bad" class="relations-list" />
+                            <ui:Label name="relations-empty" text="Todavía no conoce a nadie." class="placeholder" />
+                        </ui:ScrollView>
+                    </ui:VisualElement>
                 </ui:Tab>
 
             </ui:TabView>
+        </ui:VisualElement>
 
+        <ui:VisualElement class="mm-footer" picking-mode="Ignore">
+            <ui:VisualElement class="mm-prompt">
+                <ui:Label text="A" class="mm-key" />
+                <ui:Label text="D" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label name="prompt-tab" text="Pestaña" class="mm-prompt__label" />
+            </ui:VisualElement>
+            <ui:Button name="close-button" text="" class="mm-prompt mm-prompt--button">
+                <ui:Label text="Esc" class="mm-key" picking-mode="Ignore" />
+                <ui:Label name="prompt-close" text="Cerrar" class="mm-prompt__label" picking-mode="Ignore" />
+            </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,0 +1,193 @@
+HUD_FantasyScreens_FarmingLife_01 (0x0)
+  WorldSpace (0x0)
+    HUD_WorldSpace_Objective_01 (50x50)
+      Icon (100x100)
+        ICON (100x100) IMG SPR_FantasyWarrior_Map_Objective_01_Underlay Simple #E5D64BFF
+        MASK (100x100) IMG SPR_FantasyWarrior_Map_Objective_01_Clean Simple #FFFFFFFF
+          Glow (100x100)
+            SPR_Glow (50x50) IMG SPR_FX_FantasyWarrior_Glow_01 Simple #FFFFFF80
+      Distance (180x60)
+        Label_ObjectiveDistance (180x60) TXT '12m' Grenze-SemiBold SDF 46 #E5D64BFF
+  ScreenSpace (-120x-120)
+    Top Left (-60x-60)
+      Component_Objectives (1300x350)
+        SPR_Background (1300x350) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #2B282480
+        Portrait (200x200)
+          Mask (180x180)
+            SPR_Background (200x200) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_02 Simple #523F23FF
+            SPR_Portrait (210x210) IMG SPR_FantasyScreens_Example_Portrait_03 Simple #FFFFFFFF
+          SPR_Frame (200x200) IMG SPR_FantasyWarrior_Frame_Box_Medium_01_Variant_03 Sliced #FFFFFFFF
+        Content (1020x270)
+          Objective_List (0x100)
+            Objective_00 (0x80)
+              Content (0x80)
+                Icon (40x40)
+                  SPR_Item_Inactive (36x36) IMG SPR_FantasyWarrior_Gem_01_Background_01 Simple #675656FF
+                  SPR_Item_Frame (40x40) IMG SPR_FantasyWarrior_Gem_01_Container_01 Simple #FFFFFFFF
+                Text (0x80)
+                  Label_Objective (-110x80) TXT 'Help Farmer Raccoon weed' LTMuseum-Bold SDF 38 #FFFFFFFF
+            Objective_01 (0x80)
+              Content (0x80)
+                Icon (40x40)
+                  SPR_Item_Inactive (36x36) IMG SPR_FantasyWarrior_Gem_01_Background_01 Simple #675656FF
+                  SPR_Item_Frame (40x40) IMG SPR_FantasyWarrior_Gem_01_Container_01 Simple #FFFFFFFF
+                Text (0x80)
+                  Label_Objective (-110x80) TXT 'Find a birthday present ' LTMuseum-Bold SDF 38 #FFFFFFFF
+            Objective_02 (0x80)
+              Content (0x80)
+                Icon (40x40)
+                  SPR_Item_Inactive (36x36) IMG SPR_FantasyWarrior_Gem_01_Background_01 Simple #675656FF
+                  SPR_Item_Frame (40x40) IMG SPR_FantasyWarrior_Gem_01_Container_01 Simple #FFFFFFFF
+                Text (0x80)
+                  Label_Objective (-110x80) TXT 'Help Comrade Goblin seiz' LTMuseum-Bold SDF 38 #FFFFFFFF
+      Prompt_Buttons (500x200)
+        Button_Craft (200x200)
+          Content (200x200)
+            ICON (160x160) IMG ICON_FantasyScreens_Inventory_Crafting_01_Underlay Simple #FFFFFFFF
+            Input_KeyButton (80x80)
+              Input_Key (0x0) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #111111CC
+                Label_Input (0x0) TXT 'C' Grenze-SemiBold SDF 42 #FFFFFFFF
+        Button_Inventory (200x200)
+          Content (200x200)
+            ICON (160x160) IMG ICON_FantasyScreens_Inventory_Items_01_Underlay Simple #FFFFFFFF
+            Input_KeyButton (80x80)
+              Input_Key (60x0) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #111111CC
+                Label_Input (0x0) TXT 'T' Grenze-SemiBold SDF 42 #FFFFFFFF
+    Top (-120x-60)
+    Top Right (-60x-60)
+      Game_Time (560x240)
+        Content (560x240)
+          Background (560x240)
+            SPR_Background (560x240) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #2B282480
+          Info (480x160)
+            Time (0x100)
+              ICON (80x0) IMG ICON_FantasyWarrior_Status_Time_01_Underlay Simple #FFFFFFFF
+              Label_Time (300x0) TXT '9:04am' LTMuseum-Bold SDF 72 #FFFFFFFF
+            Season_Date (0x60)
+              Label_Season (180x0) TXT 'Spring' LTMuseum-Bold SDF 48 #FDFF7CFF
+              Label_Day (260x0) TXT 'Mon 14' LTMuseum-Bold SDF 48 #FFFFFFFF
+      Currency (560x120)
+        Currency_Coins (300x0)
+          Content (300x0)
+            SPR_Background (300x0) IMG SPR_FantasyScreens_Bar_Rounded_01 Sliced #2B282480
+            Label_Currency (160x0) TXT '12,060' LTMuseum-Bold SDF 42 #FFFFFFFF
+            Icon (120x120)
+              ICON (120x120) IMG ICON_SM_Item_Coins_02_Dungeon Simple #FFFFFFFF
+        Currency_Butterflies (240x0)
+          Content (240x0)
+            SPR_Background (240x0) IMG SPR_FantasyScreens_Bar_Rounded_01 Sliced #2B282480
+            Label_Currency (100x0) TXT '478' LTMuseum-Bold SDF 42 #FFFFFFFF
+            Icon (90x90)
+              ICON (90x90) IMG ICON_SM_Item_Butterfly_01 Simple #FFFFFFFF
+    Bottom Left (-60x-60)
+      Player_Stats (640x200)
+        SPR_Background (640x200) IMG SPR_FantasyScreens_Bar_Rounded_01 Sliced #2B282480
+        Stat_HP (0x60)
+          ICON (60x60) IMG ICON_FantasyWarrior_Status_Health_01_Underlay Simple #CA1C0AFF
+          Stat_Bar (-275x60)
+            Slider (-275x60)
+              Mask (-275x60) IMG SPR_FantasyScreens_Bar_Rounded_01 Sliced #FFFFFFFF
+                Background (-275x60) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_02 Simple #30251896
+                Fill Area (-275x60)
+                  Fill (0x0)
+              SPR_Frame (-271x64) IMG SPR_FantasyScreens_Frame_Rounded_02 Sliced #CA1C0AFF
+          Label_Stat_Value (200x60) TXT '120/120' LTMuseum-Bold SDF 42 #FFFFFFFF
+        Stat_Energy (0x60)
+          ICON (60x60) IMG ICON_FantasyScreens_Inventory_Stamina_01_Underlay Simple #FDFF7CFF
+          Stat_Bar (-275x60)
+            Slider (-275x60)
+              Mask (-275x60) IMG SPR_FantasyScreens_Bar_Rounded_01 Sliced #FFFFFFFF
+                Background (-275x60) IMG SPR_FantasyMenus_Gradient_Vertical_Solid_02 Simple #30251896
+                Fill Area (-275x60)
+                  Fill (0x0)
+              SPR_Frame (-271x64) IMG SPR_FantasyScreens_Frame_Rounded_02 Sliced #FDFF7CFF
+          Label_Stat_Value (200x60) TXT '80/80' LTMuseum-Bold SDF 42 #FFFFFFFF
+    Bottom (-120x-60)
+      Component_HotBar (1900x180)
+        SPR_Background (1900x260) IMG SPR_FantasyScreens_Bar_Rounded_01 Sliced #2B282480
+        ActionBar (0x180)
+          Item_00 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Bucket_01 Simple #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '1' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_01 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Hammer_03 Simple #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '2' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_02 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Saw_01 Simple #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '3' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_03 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Pan_01 Simple #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '4' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_04 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_FloatingFlower_01 Simple #FFFFFFFF
+              Label_Item_Amount (50x50) TXT '2' LTMuseum-Bold SDF 36 #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '5' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_05 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Meat_Fish_02 Simple #FFFFFFFF
+              Label_Item_Amount (50x50) TXT '5' LTMuseum-Bold SDF 36 #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '6' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_06 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Pie_03 Simple #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '7' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_07 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Cheese_Wheel_02 Simple #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '8' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_08 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Bread_03 Simple #FFFFFFFF
+              Label_Item_Amount (50x50) TXT '7' LTMuseum-Bold SDF 36 #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '9' Grenze-SemiBold SDF 40 #FFFFFFFF
+          Item_09 (180x180)
+            Item (180x180)
+              SPR_Background (160x160) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+              SPR_Runes (140x140) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #24201A9A
+              ICON (160x163) IMG ICON_SM_Item_Envelope_01 Simple #FFFFFFFF
+            Input_Hotkey (0x50) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #463E34F2
+              Input (0x0) TXT '0' Grenze-SemiBold SDF 40 #FFFFFFFF
+    Bottom Right (-60x-60)
+      Component_Hint (800x800)
+        Content (800x800)
+          Character (800x800)
+            SPR_Character (1024x2048) IMG SPR_FantasyScreens_Example_Hero_08 Simple #FFFFFFFF
+          Speech_Bubble (800x290)
+            Content (800x290)
+              SPR_Background (800x290) IMG SPR_FantasyScreens_Box_SpeechBubble_01 Sliced #E7E0CAE6
+              SPR_Background_Additive (800x290) IMG SPR_FantasyScreens_Box_SpeechBubble_01 Sliced #D6D5CD31
+              Speech (680x175)
+                Label_Body (680x165) TXT 'Best not to go chasing w' LTMuseum-Bold SDF 48 #1F2B2EFF
+    Right (1492x796)

@@ -1,168 +1,231 @@
-/* Detailed MoriMochi summary window (UI Toolkit), FireRed-summary inspired.
-   - Full-screen modal backdrop that blocks the grid behind it.
-   - Left column: portrait + colored stats. Right column: everything else. */
-
-.detail-backdrop {
+.detail-window {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
-    bottom: 0;
-    background-color: var(--mm-scrim);
-    align-items: center;
-    justify-content: center;
-}
-
-.detail-window {
-    width: 72%;
-    height: 72%;
-    padding: 14px;
-    border-radius: 12px;
-    background-color: var(--mm-surface);
-}
-
-/* Header: title + close X. */
-.detail-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-/* The name is the headline — big, fills the header width, and auto-shrinks only
-   for unusually long names (bounded height lets best-fit work). */
-.detail-title {
-    flex-grow: 1;
-    height: 56px;
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 24px 46px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
-}
-
-.detail-close {
-    width: 36px;
-    height: 36px;
-    margin: 0;
-    border-radius: 10px;
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    -unity-font-style: bold;
-    font-size: 18px;
-    color: var(--mm-ink);
-    background-color: var(--mm-surface-2);
-}
-
-.detail-close:hover {
-    background-color: var(--mm-coral);
-    color: rgb(255, 255, 255);
+    bottom: 62px;
+    padding: 0 48px 18px 48px;
 }
 
 .detail-tabs {
     flex-grow: 1;
 }
 
-/* ── TabView chrome ───────────────────────────────────────────────
-   The native TabView ships a tiny, scrollable header (the left/right arrows in
-   the default skin come from its internal ScrollView). We hide those scrollers
-   and restyle the headers into proper pill buttons. */
-
-/* Tab bar: a simple row, no scroll arrows. */
-.detail-tabs > .unity-tab-view__header-container {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    background-color: var(--mm-surface-2);
-    border-radius: 8px;
-    padding: 4px;
-    margin-bottom: 10px;
-}
-
-/* Kill the header's left/right scroll arrows. The TabView makes its header a
-   horizontal ScrollView and shows arrow buttons when it thinks the tabs overflow.
-   Targeting the HORIZONTAL scroller removes them whatever the header class is,
-   while leaving the Info page's VERTICAL scrollbar (a different scroller) intact. */
-.detail-tabs .unity-scroller--horizontal {
-    display: none;
-}
-
-/* Belt-and-suspenders: also hide any scroller/scroll-buttons/arrows inside the
-   header (the ◄ ► appear as repeat-buttons in some Unity versions). The tabs
-   themselves are .unity-tab__header (not buttons), so they stay. */
-.detail-tabs .unity-tab-view__header-container .unity-scroller,
-.detail-tabs .unity-tab-view__header-container .unity-scroller__low-button,
-.detail-tabs .unity-tab-view__header-container .unity-scroller__high-button,
-.detail-tabs .unity-tab-view__header-container .unity-repeat-button,
-.detail-tabs .unity-tab-view__header-container .unity-button {
-    display: none;
-}
-
-/* Each tab header = a pill button. */
-.unity-tab__header {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    margin-right: 6px;
-    border-radius: 8px;
-    background-color: var(--mm-surface);
-}
-
-.unity-tab__header:hover {
-    background-color: var(--mm-surface-2);
-}
-
-/* Selected tab: highlighted pill. */
-.unity-tab__header:checked {
-    background-color: var(--mm-plum);
-}
-
-.unity-tab__header-label {
-    font-size: 18px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
-}
-
-/* We signal selection with the pill color, so drop the default underline. */
-.unity-tab__header-underline {
-    display: none;
-}
-
-/* Make the page content fill the window height (so stats best-fit has room). */
 .detail-tabs .unity-tab-view__content-container,
 .detail-tabs .unity-tab__content-container {
     flex-grow: 1;
 }
 
-/* ── Info page ───────────────────────────────────────────────── */
-
 .info-body {
     flex-direction: row;
     flex-grow: 1;
-    padding-top: 8px;
+    align-items: stretch;
 }
 
 .info-left {
-    width: 34%;
-    margin-right: 12px;
+    width: 440px;
+    flex-shrink: 0;
 }
 
-/* Portrait placeholder — tinted with PrimaryColor until real sprites exist.
-   Tall enough to read as a square slot for the future sprite. */
+.info-center {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.info-right-panel {
+    width: 600px;
+    flex-shrink: 0;
+}
+
 .portrait {
-    width: 100%;
-    height: 300px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    background-color: rgb(120, 120, 120);
+    width: 600px;
+    height: 600px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.detail-stage {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-stage__core {
+    flex-grow: 1;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-stage__beam {
+    position: absolute;
+    width: 520px;
+    height: 760px;
+    background-image: url("Skin/Synty/SPR_FantasyMenus_FX_Glow_01.png");
+    -unity-background-image-tint-color: rgba(110, 230, 185, 0.22);
+}
+
+.detail-stage__floor {
+    position: absolute;
+    bottom: 24%;
+    width: 440px;
+    height: 104px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Circle_Background_01.png");
+    -unity-background-image-tint-color: rgba(0, 10, 8, 0.55);
+}
+
+.detail-stage__floor-ring {
+    position: absolute;
+    left: -10px;
+    right: -10px;
+    top: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border-width: 3px;
+    border-color: rgba(227, 187, 113, 0.65);
+}
+
+.detail-slots {
+    width: 140px;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.detail-slot {
+    align-items: center;
+    margin: 12px 0;
+}
+
+.detail-slot__box {
+    width: 86px;
+    height: 86px;
+}
+
+.detail-slot__icon {
+    width: 58px;
+    height: 58px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.detail-slot__icon--body {
+    background-image: url("Skin/Synty/ICON_FantasyScreens_Character_Body_01_Clean.png");
+}
+
+.detail-slot__icon--face {
+    background-image: url("Skin/Synty/ICON_FantasyScreens_Character_Head_01_Clean.png");
+}
+
+.detail-slot__icon--horn,
+.detail-slot__icon--back,
+.detail-slot__icon--wing {
+    background-image: url("Skin/Synty/ICON_FantasyScreens_Character_Body_01_Clean.png");
+    opacity: 0.6;
+}
+
+.detail-slot__label {
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 19px;
+    color: var(--mm-section);
+    margin-top: 6px;
+    -unity-text-align: middle-center;
+}
+
+.detail-slot__name {
+    font-size: 17px;
+    color: var(--mm-ink);
+    max-width: 136px;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.detail-stats {
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 4px 0 6px 0;
+}
+
+.detail-stat {
+    width: 25%;
+    align-items: center;
+}
+
+.detail-stat__box {
+    width: 64px;
+    height: 64px;
+}
+
+.detail-stat__icon {
+    width: 40px;
+    height: 40px;
+}
+
+.detail-stat__icon--state {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Up_01_Clean.png");
+    -unity-background-image-tint-color: rgb(120, 220, 160);
+}
+
+.detail-stat__icon--born {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Time_01_Clean.png");
+    -unity-background-image-tint-color: rgb(250, 208, 136);
+}
+
+.detail-stat__icon--breeds {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Health_02_Clean.png");
+    -unity-background-image-tint-color: rgb(240, 140, 200);
+}
+
+.detail-stat__icon--battles {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Attack_01_Clean.png");
+    -unity-background-image-tint-color: rgb(232, 112, 80);
+}
+
+.detail-stat__value {
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 21px;
+    color: rgb(255, 255, 255);
+    margin-top: 4px;
+    -unity-text-align: middle-center;
+}
+
+.detail-stat__label {
+    font-size: 16px;
+    color: var(--mm-ink-soft);
+    -unity-text-align: middle-center;
+}
+
+.detail-powers-title {
+    margin-top: 12px;
+    margin-bottom: 10px;
+}
+
+.detail-personality__name {
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 25px;
+    color: rgb(255, 255, 255);
+}
+
+.detail-personality__desc {
+    font-size: 20px;
+    color: var(--mm-ink-soft);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.page-panel {
+    flex-grow: 1;
+    margin: 0 160px;
+}
+
+.detail-title {
+    -unity-text-generator: advanced;
+    -unity-text-auto-size: best-fit 26px 40px;
+    height: 52px;
 }
 
 .care-title {
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 14px 22px;
-    -unity-font-style: bold;
-    color: var(--mm-ink-soft);
-    margin-top: 4px;
-    margin-bottom: 6px;
+    margin-bottom: 18px;
 }
 
 .needs {
@@ -170,100 +233,108 @@
 }
 
 .detail-need {
-    margin-bottom: 8px;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.detail-need__body {
+    flex-grow: 1;
+    margin-left: 12px;
+}
+
+.detail-need__head {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.detail-need__value {
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 20px;
+    color: var(--mm-ink-soft);
+    margin-bottom: 4px;
 }
 
 .detail-need__label {
-    font-size: 13px;
-    color: var(--mm-ink-soft);
-    margin-bottom: 2px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 22px;
+    color: var(--mm-ink);
+    margin-bottom: 4px;
 }
 
 .detail-need__bar-track {
-    width: 100%;
-    height: 8px;
-    border-radius: 4px;
-    background-color: var(--mm-bg-deep);
-    border-width: 1px;
-    border-color: var(--mm-frame-soft);
-    overflow: hidden;
+    height: 22px;
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Box_Small_Parchment_01.png");
+    -unity-background-image-tint-color: rgb(1, 14, 12);
+    -unity-slice-scale: 0.15;
+    padding: 3px;
 }
 
 .detail-need__bar-fill {
     height: 100%;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .exp-bar--good { background-color: var(--mm-good); }
 .exp-bar--warn { background-color: var(--mm-warn); }
 .exp-bar--crit { background-color: var(--mm-crit); }
 
-.detail-need--blocked .detail-need__bar-track {
-    border-width: 2px;
-    border-color: var(--mm-crit);
+.detail-need--blocked .detail-need__label {
+    color: var(--mm-crit);
 }
 
 .explore-status {
-    margin-top: 8px;
-    padding: 6px;
-    border-radius: 8px;
-    -unity-font-style: bold;
-    font-size: 14px;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
+    -unity-slice-scale: 0.45;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 22px;
     -unity-text-align: middle-center;
     color: rgb(255, 255, 255);
 }
 
-.explore-status--ready { background-color: var(--mm-good); }
-.explore-status--blocked { background-color: var(--mm-crit); }
+.explore-status--ready { -unity-background-image-tint-color: rgb(40, 120, 60); }
+.explore-status--blocked { -unity-background-image-tint-color: rgb(150, 40, 30); }
 
 .combat-role {
-    margin-top: 6px;
-    align-items: center;
+    margin-top: 14px;
+    align-items: flex-start;
 }
 
 .combat-role__title {
-    font-size: 13px;
-    color: var(--mm-ink-soft);
-    margin-bottom: 3px;
-    -unity-text-align: middle-center;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 20px;
+    color: var(--mm-section);
+    margin-bottom: 6px;
 }
 
 .combat-role__pill {
-    align-items: center;
+    align-items: flex-start;
 }
 
 .combat-role__pill .mm-rolepill__seg {
-    font-size: 16px;
-    padding: 4px 12px;
+    font-size: 18px;
+    padding: 4px 14px;
 }
 
 .combat-role__pill .mm-rolepill__seg--minor {
-    font-size: 13px;
-    padding: 4px 9px;
+    font-size: 15px;
+    padding: 4px 10px;
 }
 
 .info-right {
     flex-grow: 1;
 }
 
-.section-title {
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 16px 26px;
-    -unity-font-style: bold;
-    color: var(--mm-ink-soft);
-    margin-top: 12px;
+.info-block {
+    font-size: 21px;
+    color: var(--mm-ink);
+    white-space: normal;
     margin-bottom: 4px;
 }
 
-.info-block {
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 16px 30px;
-    color: var(--mm-ink);
-    white-space: normal;
-    margin-bottom: 6px;
-}
-
-/* Parts — one row per slot: a set-colored swatch + its description. */
 .parts {
     flex-direction: column;
 }
@@ -271,20 +342,23 @@
 .part-row {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 3px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.22;
+    padding: 8px 12px;
+    margin-bottom: 6px;
 }
 
 .part-swatch {
-    width: 22px;
-    height: 22px;
-    border-radius: 4px;
-    margin-right: 8px;
+    width: 44px;
+    height: 44px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .part-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 0;
     background-color: rgba(0, 0, 0, 0);
     -unity-background-scale-mode: scale-to-fit;
 }
@@ -293,17 +367,17 @@
 .part-icon--back { -unity-background-image-tint-color: var(--mm-teal); }
 .part-icon--wing { -unity-background-image-tint-color: var(--mm-plum); }
 
-.part-text {
-    flex-grow: 1;
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 14px 26px;
-    color: var(--mm-ink);
-    white-space: normal;
-}
-
 .part-swatch--ring {
     border-width: 2px;
-    border-radius: 6px;
+    border-radius: 8px;
+}
+
+.part-text {
+    flex-grow: 1;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 22px;
+    color: var(--mm-teal);
+    white-space: normal;
 }
 
 .part-body {
@@ -319,14 +393,15 @@
 .part-power {
     flex-direction: row;
     align-items: flex-start;
-    margin-top: 1px;
+    margin-top: 2px;
 }
 
 .part-power__title {
     flex-shrink: 0;
     margin-right: 8px;
-    font-size: 20px;
+    font-size: 19px;
     -unity-font-style: bold;
+    color: var(--mm-ink);
 }
 
 .part-power__desc {
@@ -346,7 +421,6 @@
     -unity-font-style: italic;
 }
 
-/* Evolucion de partes con Minerita (temporal, UI funcional). */
 .part-evo {
     margin-top: 6px;
     align-items: flex-start;
@@ -367,6 +441,7 @@
     width: 14px;
     height: 14px;
     margin-right: 4px;
+    rotate: 45deg;
     border-width: 2px;
     border-color: var(--mm-frame-soft);
     background-color: rgba(0, 0, 0, 0);
@@ -378,25 +453,25 @@
 }
 
 .part-evo__level {
-    font-size: 20px;
+    font-size: 18px;
     -unity-font-style: bold;
     color: var(--mm-ink-soft);
 }
 
 .part-evo__done {
-    font-size: 19px;
+    font-size: 18px;
     color: var(--mm-good);
     white-space: normal;
 }
 
 .part-evo__next {
-    font-size: 19px;
+    font-size: 18px;
     color: var(--mm-ink);
     white-space: normal;
 }
 
 .part-evo__max {
-    font-size: 20px;
+    font-size: 18px;
     -unity-font-style: bold;
     color: var(--mm-gold);
 }
@@ -409,33 +484,36 @@
 .part-evo--fresh {
     padding: 4px;
     border-radius: 6px;
-    background-color: rgba(233, 161, 31, 0.15);
+    background-color: rgba(227, 187, 113, 0.15);
 }
 
 .evo-action {
     flex-direction: column;
-    padding: 10px;
+    padding: 12px 14px;
     margin-bottom: 10px;
-    border-width: 2px;
-    border-radius: 8px;
-    border-color: var(--mm-gold);
-    background-color: rgba(233, 161, 31, 0.1);
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: rgba(70, 52, 12, 0.85);
+    -unity-slice-scale: 0.22;
 }
 
 .evo-action__button {
-    height: 44px;
-    margin: 4px 0 0 0;
-    padding-left: 14px;
-    padding-right: 14px;
-    border-radius: 6px;
+    height: 48px;
+    margin: 6px 0 0 0;
+    padding: 0 18px;
+    border-width: 0;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Box_Small_Parchment_03.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+    -unity-slice-scale: 0.35;
     font-size: 21px;
     -unity-font-style: bold;
-    color: rgb(255, 255, 255);
-    background-color: var(--mm-plum);
+    color: var(--mm-ink-dark);
 }
 
 .evo-action__button:hover {
-    background-color: var(--mm-teal);
+    -unity-background-image-tint-color: rgb(250, 214, 150);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .evo-action__button:disabled {
@@ -443,9 +521,9 @@
 }
 
 .evo-action__xp {
-    font-size: 20px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 21px;
+    color: var(--mm-section);
 }
 
 .evo-action__hint {
@@ -457,226 +535,82 @@
 
 .evo-action__result {
     margin-bottom: 4px;
-    font-size: 22px;
-    -unity-font-style: bold;
-    color: var(--mm-gold);
-    white-space: normal;
-}
-
-.evo-action__max {
     font-size: 21px;
     -unity-font-style: bold;
     color: var(--mm-gold);
     white-space: normal;
 }
 
-/* ── Combat tab: one card per finished fight, newest first ───────
-   Turn-by-turn detail is not shown here — that replay lives in the
-   Combat Visualizer. */
-.combat-body { flex-grow: 1; padding-top: 8px; }
-.combat-history { flex-grow: 1; }
-
-.combat-card {
-    margin-bottom: 8px;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: var(--mm-surface-2);
-    border-left-width: 4px;
-    border-left-color: var(--mm-frame-soft);
-}
-
-.combat-card--win  { border-left-color: var(--mm-good); }
-.combat-card--lose { border-left-color: var(--mm-crit); }
-.combat-card--draw { border-left-color: var(--mm-ink-soft); }
-
-.combat-card__header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.combat-card__badge {
-    font-size: 14px;
+.evo-action__max {
+    font-size: 20px;
     -unity-font-style: bold;
-    color: var(--mm-ink);
-}
-
-.combat-card__badge--win  { color: var(--mm-good); }
-.combat-card__badge--lose { color: var(--mm-crit); }
-.combat-card__badge--draw { color: var(--mm-ink-soft); }
-
-.combat-card__date {
-    font-size: 12px;
-    color: var(--mm-ink-soft);
-}
-
-.combat-card__opponent {
-    font-size: 13px;
-    color: var(--mm-ink);
-    margin-top: 2px;
-    margin-bottom: 6px;
-}
-
-.combat-card__body {
-    flex-direction: row;
-    margin-top: 2px;
-}
-
-.combat-card__colstats {
-    flex-grow: 1;
-    flex-direction: column;
-}
-
-.combat-card__colhead {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 3px;
-}
-
-.combat-card__swatch {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    background-color: rgb(90, 90, 100);
-    margin-right: 6px;
-}
-
-.combat-card__col-title {
-    font-size: 12px;
-    -unity-font-style: bold;
-    color: var(--mm-ink-soft);
-}
-
-.combat-card__stat {
-    font-size: 12px;
-    color: var(--mm-ink);
-}
-
-.combat-card__chips {
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-top: 3px;
-}
-
-.combat-card__tierchip {
-    font-size: 11px;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    border-radius: 8px;
-    background-color: var(--mm-surface);
     color: var(--mm-gold);
-    margin-right: 4px;
-    margin-top: 2px;
+    white-space: normal;
 }
 
-.combat-card__nostats {
-    font-size: 12px;
-    -unity-font-style: italic;
-    color: var(--mm-ink-soft);
-    margin-top: 4px;
-}
-
-.combat-card__comment {
-    font-size: 12px;
-    -unity-font-style: italic;
-    color: var(--mm-ink-soft);
-    margin-top: 6px;
-}
-
-.combat-card__footer {
-    flex-direction: row;
-    justify-content: flex-end;
-    margin-top: 4px;
-}
-
-.combat-card__play {
-    width: 32px;
-    height: 24px;
-    margin: 0;
-    padding: 0;
-    border-radius: 8px;
-    font-size: 12px;
-    color: var(--mm-ink);
-    background-color: var(--mm-surface-2);
-}
-
-.combat-card__play:hover {
-    background-color: var(--mm-coral);
-    color: rgb(255, 255, 255);
-}
-
-.combat-card__play:disabled {
-    opacity: 0.4;
-}
-
-/* ── Lineage tab: ancestor tree (self + parents + grandparents) ─── */
 .lineage-body { flex-grow: 1; }
 .lineage-tree { align-items: center; padding: 12px; }
 
-.inherit-list { padding-left: 12px; padding-right: 12px; margin-bottom: 12px; }
+.inherit-list { padding: 0 12px; margin-bottom: 12px; }
 .inherit-line { flex-direction: row; flex-wrap: wrap; align-items: flex-start; margin-bottom: 6px; }
 .inherit-line__part {
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 16px 30px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
-    margin-right: 0;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 22px;
+    color: var(--mm-teal);
 }
 .inherit-line__text {
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 16px 30px;
+    font-size: 21px;
     color: var(--mm-ink);
     white-space: normal;
     flex-shrink: 1;
 }
 
-/* A generation block stacks: [ancestors row] → [connector] → [this chip]. */
 .tree-block { align-items: center; }
 .tree-parents { flex-direction: row; justify-content: center; align-items: flex-end; }
-/* Downward direction (Breed tab): children hang below their parent. */
 .tree-children { flex-direction: row; justify-content: center; align-items: flex-start; }
-.tree-branch { align-items: center; margin-left: 10px; margin-right: 10px; }
-.tree-partner { align-items: center; margin-left: 14px; margin-right: 14px; }
-.tree-chip--partner { border-color: var(--mm-plum); }
+.tree-branch { align-items: center; margin-left: 12px; margin-right: 12px; }
+.tree-partner { align-items: center; margin-left: 16px; margin-right: 16px; }
 
-/* One creature chip: color swatch header + name. */
 .tree-chip {
-    width: 104px;
+    width: 124px;
     align-items: center;
-    padding: 6px;
-    border-radius: 8px;
-    background-color: var(--mm-surface-2);
-    border-width: 2px; border-color: var(--mm-frame-soft);
+    padding: 10px 6px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.2;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: rgba(227, 187, 113, 0.35);
 }
-.tree-chip--self    { border-color: var(--mm-plum); }
-.tree-chip--unknown { background-color: var(--mm-surface); border-color: var(--mm-frame-soft); }
-.tree-swatch { width: 56px; height: 56px; border-radius: 6px; background-color: rgb(90, 90, 100); margin-bottom: 4px; }
+.tree-chip--self { border-color: var(--mm-gold); }
+.tree-chip--partner { border-color: var(--mm-plum); }
+.tree-chip--unknown { opacity: 0.7; }
+.tree-swatch { width: 72px; height: 72px; margin-bottom: 6px; -unity-background-scale-mode: scale-to-fit; }
 .tree-name {
-    width: 100%; font-size: 12px; -unity-font-style: bold; color: var(--mm-ink);
+    width: 100%;
+    font-size: 17px;
+    -unity-font-style: bold;
+    color: var(--mm-ink);
     -unity-text-align: middle-center;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.tree-role { font-size: 10px; color: var(--mm-ink-soft); -unity-text-align: middle-center; }
+.tree-role { font-size: 15px; color: var(--mm-section); -unity-text-align: middle-center; }
 .tree-dead .tree-name { color: var(--mm-crit); }
 
-/* Simple connectors between generations. */
-.tree-connector-v { width: 2px; height: 14px; background-color: var(--mm-frame-soft); }
-.tree-connector-h { height: 2px; background-color: var(--mm-frame-soft); }
+.tree-connector-v { width: 2px; height: 18px; background-color: rgba(227, 187, 113, 0.6); }
+.tree-connector-h { height: 2px; background-color: rgba(227, 187, 113, 0.6); }
 
-/* Placeholder for the not-yet-built tabs. */
 .placeholder {
     flex-grow: 1;
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 14px 28px;
+    font-size: 24px;
     color: var(--mm-ink-soft);
     -unity-text-align: middle-center;
+    white-space: normal;
 }
 
-/* ── Relaciones tab: who this MoriMochi likes / dislikes ─────────
-   Same chip language as the lineage trees, bordered by feeling. */
-.relations-body { flex-grow: 1; padding-top: 8px; }
+.relations-body { flex-grow: 1; }
 
 .relations-list {
     flex-direction: row;
@@ -684,30 +618,31 @@
 }
 
 .relation-chip {
-    width: 104px;
+    width: 124px;
     align-items: center;
-    padding: 6px;
-    margin: 4px;
-    border-radius: 8px;
-    background-color: var(--mm-surface-2);
+    padding: 10px 6px;
+    margin: 5px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.2;
     border-width: 2px;
-    border-color: var(--mm-frame-soft);
+    border-radius: 10px;
+    border-color: rgba(227, 187, 113, 0.35);
 }
 
 .relation-chip--good { border-color: var(--mm-good); }
 .relation-chip--bad  { border-color: var(--mm-crit); }
 
 .relation-swatch {
-    width: 56px;
-    height: 56px;
-    border-radius: 6px;
-    background-color: rgb(90, 90, 100);
-    margin-bottom: 4px;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 6px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .relation-name {
     width: 100%;
-    font-size: 12px;
+    font-size: 17px;
     -unity-font-style: bold;
     color: var(--mm-ink);
     -unity-text-align: middle-center;
@@ -717,7 +652,7 @@
 }
 
 .relation-glyph {
-    font-size: 14px;
+    font-size: 18px;
     -unity-text-align: middle-center;
 }
 

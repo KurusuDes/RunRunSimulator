@@ -1,17 +1,23 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="StoragePanelUITKStyle.uss" />
-    <!-- Storage box panel. The controller (StoragePanelUITK) fills "list" with one
-         row per distinct stored prop (id + count + Eject). Opened by StorageContainer
-         via UIManager (UIPanelType.Storage). -->
-    <ui:VisualElement name="root" class="mm-theme storage-root">
-        <ui:VisualElement name="panel" class="storage-panel">
-            <ui:VisualElement name="header" class="storage-header">
-                <ui:Label text="Almacén" class="storage-title" />
-                <ui:Button name="close-button" text="X" class="storage-close" />
-            </ui:VisualElement>
+    <ui:VisualElement name="root" class="mm-theme mm-skin mm-screen storage-root">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
+
+        <ui:VisualElement name="panel" class="storage-panel mm-panel">
+            <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+            <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+            <ui:Label text="Almacén" class="storage-title mm-title" />
+            <ui:VisualElement class="mm-bar" />
             <ui:ScrollView name="list" class="storage-list" mode="Vertical" />
-            <ui:Label name="empty" text="Vacío — tira objetos aquí para guardarlos." class="storage-empty" />
+            <ui:Label name="empty" text="Vacío — tira objetos aquí para guardarlos." class="storage-empty" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="mm-footer" picking-mode="Ignore">
+            <ui:Button name="close-button" text="" class="mm-prompt mm-prompt--button">
+                <ui:Label text="Esc" class="mm-key" picking-mode="Ignore" />
+                <ui:Label text="Cerrar" class="mm-prompt__label" picking-mode="Ignore" />
+            </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,288 +1,434 @@
-/* Breeding panel (UI Toolkit) — modal, big, 3 columns.
-   Left/right parent lists are ALWAYS present; the TabView sits centered in the
-   middle column and only swaps the center content (Criar / Incubando). */
-
-.breed-backdrop {
-    position: absolute;
-    left: 0; right: 0; top: 0; bottom: 0;
-    background-color: var(--mm-scrim);
-    align-items: center;
-    justify-content: center;
-}
-
 .breed-window {
-    width: 90%;
-    height: 88%;
-    padding: 14px;
-    border-radius: 22px;
-    background-color: var(--mm-surface);
-    border-width: 3px;
-    border-color: var(--mm-frame);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 62px;
+    padding: 0 48px 18px 48px;
 }
 
-/* Header */
-.breed-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+.breed-tabs {
+    flex-grow: 1;
+}
+
+.breed-tabs .unity-tab-view__content-container,
+.breed-tabs .unity-tab__content-container {
+    flex-grow: 1;
+}
+
+.breed-tabs.tabbar-focused .unity-tab__header:checked {
+    -unity-background-image-tint-color: rgba(70, 255, 190, 0.8);
 }
 
 .breed-title {
-    flex-grow: 1;
-    height: 52px;
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 24px 42px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
+    position: absolute;
+    left: 48px;
+    top: 0;
+    height: 76px;
+    -unity-text-align: middle-left;
 }
 
-.breed-close {
-    width: 36px; height: 36px;
-    margin: 0;
-    border-radius: 10px;
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    -unity-font-style: bold;
-    font-size: 18px;
-    color: var(--mm-ink);
-    background-color: var(--mm-surface-2);
-}
-
-.breed-close:hover { background-color: var(--mm-coral); color: rgb(255, 255, 255); }
-
-/* ── 3-column body ── */
-.breed-body {
+.criar-content {
     flex-direction: row;
     flex-grow: 1;
+    align-items: stretch;
 }
 
-.breed-col-side {
-    width: 27%;
-    background-color: var(--mm-surface-2);
-    border-radius: 14px;
-    padding: 8px;
-    border-width: 2px;
-    border-color: var(--mm-frame-soft);
+.breed-side {
+    width: 480px;
+    flex-shrink: 0;
 }
 
 .breed-col-title {
-    font-size: 16px;
-    -unity-font-style: bold;
-    color: var(--mm-ink-soft);
-    margin-bottom: 6px;
-    -unity-text-align: middle-center;
+    margin-top: 0;
+    margin-bottom: 14px;
 }
 
-.breed-col-center {
+.breed-list {
     flex-grow: 1;
-    padding-left: 12px;
-    padding-right: 12px;
 }
 
-/* ── TabView (centered headers, pills, no scroll arrows) ── */
-.breed-tabs { flex-grow: 1; }
-
-.breed-tabs > .unity-tab-view__header-container {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;   /* tabs centered over the middle column */
-    background-color: var(--mm-surface-2);
-    border-radius: 10px;
-    padding: 4px;
-    margin-bottom: 10px;
-}
-
-.breed-tabs .unity-scroller--horizontal,
-.breed-tabs .unity-tab-view__header-container .unity-scroller {
-    display: none;
-}
-
-.unity-tab__header {
-    padding-left: 22px; padding-right: 22px;
-    padding-top: 8px; padding-bottom: 8px;
-    margin-right: 6px;
-    border-radius: 8px;
-    background-color: var(--mm-surface);
-}
-
-.unity-tab__header:hover { background-color: var(--mm-frame-soft); }
-.unity-tab__header:checked { background-color: var(--mm-coral); }
-.unity-tab__header-label { font-size: 18px; -unity-font-style: bold; color: var(--mm-ink); }
-.unity-tab__header-underline { display: none; }
-
-.breed-tabs .unity-tab-view__content-container,
-.breed-tabs .unity-tab__content-container { flex-grow: 1; }
-
-/* ── Criar center content ── */
-.criar-content {
+.breed-center {
     flex-grow: 1;
-    align-items: center;
+    flex-shrink: 1;
+    margin: 0 24px;
 }
 
 .breed-slots {
     flex-direction: row;
-    align-items: center;
     justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .breed-slot {
-    width: 42%;
-    height: 210px;
-    flex-shrink: 0;          /* keep a stable size regardless of the name length */
-    overflow: hidden;        /* clip a long name instead of growing the box */
+    width: 340px;
+    flex-shrink: 0;
     align-items: center;
-    justify-content: flex-start;
-    padding: 10px;
-    border-radius: 14px;
-    background-color: var(--mm-surface-2);
-    /* transparent 3px border reserved for the focus ring (no reflow) */
-    border-width: 3px;
-    border-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: var(--mm-panel-fill);
 }
 
-.breed-slot:hover { background-color: var(--mm-surface); }
-.breed-slot-role { font-size: 14px; color: var(--mm-ink-soft); margin-bottom: 6px; }
+.breed-slot:hover {
+    -unity-background-image-tint-color: rgba(18, 62, 55, 0.96);
+}
 
-/* Square portrait placeholder (tinted with the parent's PrimaryColor in code). */
+.breed-slot.breed-focus {
+    -unity-background-image-tint-color: rgba(3, 64, 52, 0.98);
+}
+
+.breed-slot.breed-focus > .mm-panel__frame {
+    -unity-background-image-tint-color: rgb(255, 236, 170);
+}
+
+.breed-slot.breed-focus > .mm-panel__lip {
+    -unity-background-image-tint-color: rgba(96, 255, 200, 0.75);
+}
+
+.breed-slot-role {
+    margin: 0 0 12px 0;
+    font-size: 27px;
+    -unity-text-align: middle-center;
+}
+
+.breed-portrait {
+    width: 240px;
+    height: 240px;
+    margin-bottom: 12px;
+}
+
 .breed-slot-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 12px;
-    background-color: var(--mm-surface);
-    margin-bottom: 8px;
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 6px;
+    bottom: 6px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-/* Name stays on ONE line; overflow is ellipsized so it never resizes the slot. */
 .breed-slot-name {
     width: 100%;
-    font-size: 20px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 26px;
+    color: rgb(255, 255, 255);
     -unity-text-align: middle-center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.breed-heart { font-size: 36px; margin-left: 16px; margin-right: 16px; }
+.breed-link {
+    width: 72px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
 
-.breed-egg { align-items: center; margin-top: 14px; }
-.breed-egg-icon { font-size: 48px; color: var(--mm-ink-soft); }
-.breed-time { font-size: 16px; color: var(--mm-ink-soft); margin-top: 4px; }
+.breed-link__icon {
+    width: 56px;
+    height: 56px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.breed-result {
+    flex-grow: 1;
+    margin-top: 18px;
+}
+
+.breed-egg {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.breed-egg__box {
+    width: 74px;
+    height: 74px;
+}
+
+.breed-egg__icon {
+    width: 50px;
+    height: 50px;
+    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.breed-egg__time {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 74px;
+    margin: 0 18px;
+    padding: 6px 18px;
+}
+
+.breed-time-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 14px;
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Time_01_Clean.png");
+    -unity-background-image-tint-color: rgb(250, 208, 136);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.breed-time {
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 24px;
+    color: var(--mm-ink);
+    white-space: normal;
+    flex-shrink: 1;
+}
 
 .breed-action {
-    min-width: 220px;
-    margin-top: 14px;
-    padding-top: 10px; padding-bottom: 10px;
-    border-radius: 10px;
-    font-size: 18px;
-    -unity-font-style: bold;
-    color: rgb(255, 255, 255);
-    background-color: var(--mm-coral);
-    border-width: 3px;
-    border-color: var(--mm-frame);
+    min-width: 230px;
+    margin: 0;
 }
 
-.breed-action:hover { background-color: var(--mm-coral-dark); }
+.breed-action.breed-focus {
+    -unity-background-image-tint-color: rgb(255, 236, 170);
+    scale: 1.05 1.05;
+}
 
-/* Breed in flight — grayed + non-interactive until the async update lands. */
 .breed-action--busy,
 .breed-action--busy:hover {
-    background-color: var(--mm-surface-2);
-    color: var(--mm-ink-soft);
+    opacity: 0.45;
 }
 
-/* Both-parents preview fills the remaining lower space. */
 .breed-preview {
     flex-direction: row;
-    width: 100%;
     flex-grow: 1;
     margin-top: 16px;
+    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 120px 120px;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.1);
 }
 
 .preview-parent {
     flex-grow: 1;
-    width: 50%;
-    padding: 10px;
-    margin: 4px;
-    border-radius: 12px;
-    background-color: var(--mm-surface-2);
+    flex-shrink: 1;
+    flex-basis: 0;
+    margin: 0 6px;
+    padding: 12px 16px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.22;
 }
 
-.preview-name { font-size: 18px; -unity-font-style: bold; color: var(--mm-ink); margin-bottom: 4px; white-space: normal; }
-.preview-part-row { flex-direction: row; align-items: center; margin-bottom: 3px; }
-.preview-swatch { width: 16px; height: 16px; border-radius: 4px; margin-right: 6px; }
-.preview-icon { width: 32px; height: 32px; border-radius: 0; background-color: rgba(0, 0, 0, 0); -unity-background-scale-mode: scale-to-fit; }
+.preview-name {
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 25px;
+    color: var(--mm-section);
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preview-part-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.preview-swatch {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    border-radius: 6px;
+}
+
+.preview-icon {
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
 .preview-icon--horn { -unity-background-image-tint-color: var(--mm-gold); }
 .preview-icon--back { -unity-background-image-tint-color: var(--mm-teal); }
 .preview-icon--wing { -unity-background-image-tint-color: var(--mm-plum); }
-.preview-part-text { flex-grow: 1; font-size: 13px; color: var(--mm-ink); white-space: normal; }
 
-/* ── Side lists (always visible) ── */
-.breed-list { flex-grow: 1; }
+.preview-part-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 19px;
+    color: var(--mm-ink);
+    white-space: normal;
+}
 
 .breed-candidate {
-    padding: 8px;
-    margin-bottom: 6px;
-    border-radius: 10px;
-    background-color: var(--mm-surface);
-    border-width: 3px;
+    flex-direction: row;
+    align-items: center;
+    min-height: 64px;
+    margin-bottom: 8px;
+    padding: 8px 14px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.22;
+    border-width: 2px;
     border-color: rgba(0, 0, 0, 0);
 }
 
-.breed-candidate:hover { background-color: var(--mm-surface-2); }
-.breed-candidate-text { font-size: 14px; color: var(--mm-ink); white-space: normal; }
+.breed-candidate:hover {
+    -unity-background-image-tint-color: rgba(18, 62, 55, 0.95);
+}
 
-/* ── Incubando tab: egg list ── */
-.egg-list { flex-grow: 1; }
+.breed-candidate.breed-focus {
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
+    border-color: var(--mm-gold);
+}
+
+.breed-candidate-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding-left: 54px;
+    min-height: 44px;
+    -unity-text-align: middle-left;
+    font-size: 23px;
+    color: var(--mm-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
+
+.breed-side--father .breed-candidate-text {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Attack_01_Clean.png");
+    -unity-background-image-tint-color: rgb(232, 112, 80);
+}
+
+.breed-side--mother .breed-candidate-text {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Health_02_Clean.png");
+    -unity-background-image-tint-color: rgb(240, 140, 200);
+}
+
+.page-panel {
+    flex-grow: 1;
+    margin: 0 220px;
+}
+
+.egg-empty {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 200px 200px;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.1);
+}
+
+.egg-list {
+    flex-grow: 1;
+}
 
 .egg-row {
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 10px;
-    background-color: var(--mm-surface);
-    border-width: 3px;
+    min-height: 96px;
+    margin-bottom: 10px;
+    padding: 12px 18px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.22;
+    border-width: 2px;
     border-color: rgba(0, 0, 0, 0);
 }
 
-.egg-pair { flex-grow: 1; font-size: 17px; -unity-font-style: bold; color: var(--mm-ink); white-space: normal; }
-.egg-time { font-size: 16px; color: var(--mm-ink-soft); margin-left: 10px; margin-right: 10px; }
-
-.egg-hatch {
-    min-width: 110px;
-    padding-top: 8px; padding-bottom: 8px;
-    border-radius: 8px;
-    font-size: 16px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
-    background-color: var(--mm-gold);
+.egg-row.breed-focus {
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
+    border-color: var(--mm-gold);
 }
 
-.egg-hatch:hover { background-color: var(--mm-warn); }
-.egg-hatch--minerita { background-color: var(--mm-teal); color: var(--mm-surface); }
-.egg-hatch--minerita:hover { background-color: var(--mm-good); }
+.egg-pair {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 52px;
+    padding-left: 62px;
+    -unity-text-align: middle-left;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 27px;
+    color: rgb(255, 255, 255);
+    white-space: normal;
+    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 48px 48px;
+}
 
-/* Hatch in flight — grayed out + non-interactive until the server answers.
-   The :hover variant keeps it gray (otherwise the base :hover repaints it yellow). */
+.egg-time {
+    min-width: 170px;
+    min-height: 46px;
+    margin: 0 18px;
+    padding: 2px 16px;
+    flex-shrink: 0;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
+    -unity-background-image-tint-color: rgb(1, 14, 12);
+    -unity-slice-scale: 0.45;
+    -unity-text-align: middle-center;
+    font-size: 24px;
+    -unity-font-style: bold;
+    color: var(--mm-section);
+}
+
+.egg-hatch {
+    min-width: 200px;
+    min-height: 54px;
+    margin: 0;
+    padding: 0 22px;
+    flex-shrink: 0;
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Box_Small_Parchment_03.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+    -unity-slice-scale: 0.35;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: var(--mm-ink-dark);
+    -unity-text-align: middle-center;
+    transition-property: scale, -unity-background-image-tint-color;
+    transition-duration: 0.12s;
+}
+
+.egg-hatch:hover {
+    -unity-background-image-tint-color: rgb(250, 214, 150);
+    background-color: rgba(0, 0, 0, 0);
+    scale: 1.03 1.03;
+}
+
+.egg-hatch:active {
+    scale: 0.97 0.97;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.egg-hatch:focus {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.egg-hatch--minerita {
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
+    color: var(--mm-ink);
+}
+
+.egg-hatch--minerita:hover {
+    -unity-background-image-tint-color: rgb(20, 168, 128);
+}
+
+.egg-hatch:disabled,
 .egg-hatch--busy,
 .egg-hatch--busy:hover,
 .egg-hatch--minerita.egg-hatch--busy,
 .egg-hatch--minerita.egg-hatch--busy:hover {
-    background-color: var(--mm-surface-2);
-    color: var(--mm-ink-soft);
+    opacity: 0.45;
+    scale: 1 1;
 }
 
-/* Focus ring (keyboard/gamepad) — toggled by the controller on the focused element. */
-.breed-focus { border-color: var(--mm-plum); }
-
-/* Tab bar focused (region == TabBar) — outline the header so A/D feels intentional. */
-.breed-tabs.tabbar-focused > .unity-tab-view__header-container {
-    border-width: 2px;
-    border-color: var(--mm-plum);
+.egg-hatch--minerita.egg-hatch--busy,
+.egg-hatch--minerita.egg-hatch--busy:hover {
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
 }

@@ -1,6 +1,9 @@
 .hint-root {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     align-items: center;
     justify-content: flex-start;
 }
@@ -9,11 +12,10 @@
     flex-direction: row;
     align-items: center;
     margin-top: 28px;
-    padding: 10px 28px 10px 12px;
-    background-color: var(--mm-surface);
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    border-radius: 44px;
+    padding: 8px 30px 8px 10px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Bar_Rounded_01.png");
+    -unity-background-image-tint-color: rgba(43, 40, 36, 0.82);
+    -unity-slice-scale: 0.6;
     opacity: 0;
     translate: 0 -30px;
     transition-property: opacity, translate;
@@ -27,25 +29,26 @@
 }
 
 .hint-badge {
-    min-width: 64px;
-    height: 64px;
-    margin-right: 18px;
+    min-width: 58px;
+    height: 58px;
+    margin-right: 16px;
     padding: 0 10px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-gold);
+    -unity-slice-scale: 0.2;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
     font-size: 28px;
-    -unity-font-style: bold;
     -unity-text-align: middle-center;
-    color: var(--mm-ink);
-    background-color: var(--mm-gold);
-    border-radius: 32px;
+    color: var(--hud-bubble-ink);
     scale: 1 1;
-    transition-property: scale, background-color;
+    transition-property: scale, -unity-background-image-tint-color;
     transition-duration: 0.12s, 0.2s;
     transition-timing-function: ease-out;
 }
 
 .hint-badge.hint--done {
+    -unity-background-image-tint-color: var(--mm-good);
     color: rgb(255, 255, 255);
-    background-color: var(--mm-good);
 }
 
 .hint-badge.hint--pop {
@@ -53,9 +56,10 @@
 }
 
 .hint-text {
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
     font-size: 26px;
-    -unity-font-style: bold;
     -unity-text-align: middle-left;
     white-space: nowrap;
-    color: var(--mm-ink);
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }

@@ -1,0 +1,176 @@
+Screen_FantasyScreens_MainMenu_05 (0x0)
+  Background (0x0)
+    SPR_Background (0x0)
+    SPR_Screenshot (5000x0) IMG SPR_FantasyScreens_ExampleScreenshot_Village_02 Simple #C3DCE2FF
+    AssetDemo_FX (0x600)
+      ParticleFX_Glow (0x100)
+        ParticleFX_Glow_Wide (0x300)
+        ParticleFX_GlowDots (0x100)
+        Particle System Force Field (100x100)
+    Vignette (0x0)
+      SPR_Vignette (0x0) IMG SPR_FantasyMenus_Background_Vignette_01 Simple #09161FCC
+      SPR_Gradient (0x380) IMG SPR_FantasyMenus_Gradient_Vertical_01 Simple #256EA84C
+  Background_Split_Left (650x0)
+    Content (650x0)
+      SPR_Cloud (1024x2048) IMG SPR_FantasyScreens_FX_Cloud Simple #18160FFF
+  Background_Split_Right (400x0)
+    Content (400x0)
+      SPR_Cloud_01 (1024x2048) IMG SPR_FantasyScreens_FX_Cloud Simple #18160FCC
+      SPR_Cloud_02 (1024x2349) IMG SPR_FantasyScreens_FX_Cloud Simple #18160FFF
+  Main_Menu (-300x-330)
+    Button_Group (670x1000)
+      Button_Menu_01 (0x120)
+        Button_Menu_01_Transform (0x120)
+          Button_Continue (0x120)
+            Content (0x120)
+              Inactive (0x120)
+                SPR_Background (0x125) IMG SPR_FantasyMenus_Frame_Box_Large_01_Background Sliced #483A2AFF
+                SPR_Frame (20x140) IMG SPR_FantasyWarrior_Banner_12 Sliced #714735FF
+              Label_Button_Name (-240x80) TXT 'Continue' Grenze-SemiBold SDF 72 #FFFFFFFF
+      Button_Menu_02 (0x120)
+        Button_Menu_02_Transform (0x120)
+          Button_LoadGame (0x120)
+            Content (0x120)
+              Inactive (0x120)
+                SPR_Background (0x125) IMG SPR_FantasyMenus_Frame_Box_Large_01_Background Sliced #483A2AFF
+                SPR_Frame (20x140) IMG SPR_FantasyWarrior_Banner_12 Sliced #714735FF
+              Label_Button_Name (-240x80) TXT 'Load Game' Grenze-SemiBold SDF 72 #FFFFFFFF
+      Button_Menu_03 (0x120)
+        Button_Menu_03_Transform (0x120)
+          Button_Options (0x120)
+            Content (0x120)
+              Inactive (0x120)
+                SPR_Background (0x125) IMG SPR_FantasyMenus_Frame_Box_Large_01_Background Sliced #483A2AFF
+                SPR_Frame (20x140) IMG SPR_FantasyWarrior_Banner_12 Sliced #714735FF
+              Label_Button_Name (-240x80) TXT 'Options' Grenze-SemiBold SDF 72 #FFFFFFFF
+      Button_Menu_04 (0x120)
+        Button_Menu_04_Transform (0x120)
+          Button_Quit (0x120)
+            Content (0x120)
+              Inactive (0x120)
+                SPR_Background (0x125) IMG SPR_FantasyMenus_Frame_Box_Large_01_Background Sliced #483A2AFF
+                SPR_Frame (20x140) IMG SPR_FantasyWarrior_Banner_12 Sliced #714735FF
+              Label_Button_Name (-240x80) TXT 'Quit' Grenze-SemiBold SDF 72 #FFFFFFFF
+    Panels (1000x-330)
+      Panel_01 (1000x600)
+        Panel_01_Transform (1000x600)
+          Panel_Coop (1000x600)
+            Content (1000x600)
+              Mask (940x540)
+                Inactive (940x540)
+                  SPR_Image_Inactive (1400x540) IMG SPR_FantasyScreens_Example_Panel_Image_Journey_01 Simple #989898FF
+                  SPR_Gradient (940x340) IMG SPR_FantasyMenus_Gradient_Vertical_02 Sliced #302126C2
+                  SPR_Vignette (940x540) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #1E0824D7
+                  SPR_Background_Cloud (500x1000) IMG SPR_FantasyScreens_FX_Cloud Simple #300416C2
+                Active (940x540)
+                  SPR_Image_Active (1400x540) IMG SPR_FantasyScreens_Example_Panel_Image_Journey_01 Simple #FFFFFFFF
+                  SPR_Gradient_Additive (940x340) IMG SPR_FantasyMenus_Gradient_Vertical_01 Simple #42756EFF
+                  SPR_Background_Cloud (500x1000) IMG SPR_FantasyScreens_FX_Cloud Simple #38827AFF
+                  SPR_Vignette (940x540) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #241B0894
+                  SPR_Gradient (940x280) IMG SPR_FantasyMenus_Gradient_Vertical_01 Simple #1C170D6E
+              SPR_Frame (1045x620) IMG SPR_FantasyWarrior_Frame_Box_18_Variant_02 Sliced #FFFFFFFF
+              Curlicues (1000x600)
+                SPR_Curlicue_Top_Left (480x240) IMG SPR_FantasyWarrior_Greeble_Curlicue_41 Simple #FFFFFFFF
+                SPR_Curlicue_Bottom_Right (256x128) IMG SPR_FantasyWarrior_Greeble_Curlicue_40 Simple #FFFFFFFF
+              Info (840x560)
+                Label_Description (840x80) TXT 'Co-op Adventure' Grenze-SemiBold SDF 48 #FAD088FF
+                Label_Header (840x120) TXT 'Into Whimsy Woods' Grenze-SemiBold SDF 84 #FFFFFFFF
+      Panel_02 (1000x600)
+        Panel_02_Transform (1000x600)
+          Panel_NewFurries (1000x600)
+            Content (1000x600)
+              Mask (940x540)
+                Inactive (940x540)
+                  SPR_Image_Inactive (1400x540) IMG SPR_FantasyScreens_Example_Panel_Image_CuteAnimals_01 Simple #989898FF
+                  SPR_Gradient (940x340) IMG SPR_FantasyMenus_Gradient_Vertical_02 Sliced #302126C2
+                  SPR_Vignette (940x540) IMG SPR_HUD_FantasyWarrior_Vignette_Box_Small_01 Sliced #1E0824D7
+                  SPR_Background_Cloud (500x1000) IMG SPR_FantasyScreens_FX_Cloud Simple #300416C2
+              SPR_Frame (1045x620) IMG SPR_FantasyWarrior_Frame_Box_18_Variant_04 Sliced #FFFFFFFF
+              Curlicues (1000x600)
+                SPR_Curlicue_Top_Right (480x240) IMG SPR_FantasyWarrior_Greeble_Curlicue_41 Simple #FFFFFFFF
+                SPR_Curlicue_Bottom_Left (256x128) IMG SPR_FantasyWarrior_Greeble_Curlicue_40 Simple #FFFFFFFF
+              Info (840x560)
+                Label_Description (840x80) TXT 'We have yifft-off!' Grenze-SemiBold SDF 48 #FAD088FF
+                Label_Header (840x120) TXT 'New Furry Friends' Grenze-SemiBold SDF 84 #FFFFFFFF
+              Notification (100x100)
+                Contents (100x100)
+                  SPR_Notification (100x100) IMG SPR_FantasyMenus_PushNotification_02 Simple #FFFFFFFF
+    Lower_Buttons (2000x300)
+      Button_Icon_01 (400x400)
+        Button_Icon_01_Transform (400x400)
+          Button_Awards (400x400)
+            Content (400x400)
+              Inactive (400x400)
+                SPR_Background (340x340) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #634B31FF
+              SPR_Frame (400x400) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #FFFFFFFF
+              Curlicue_Bottom_Left (100x100)
+                SPR_Curlicue (240x120) IMG SPR_FantasyWarrior_Greeble_Curlicue_25 Simple #FFFFFFFF
+              Curlicue_Top_Right (100x100)
+                SPR_Curlicue (80x80) IMG SPR_FantasyWarrior_Greeble_Curlicue_27_Right Simple #FFFFFFFF
+              Icon (291x410)
+                ICON (291x410) IMG ICON_FantasyScreens_Menu_Awards_01_Stroke Simple #FEEB9EFF
+              Label (400x100)
+                Label_Button_Shadow (400x100) TXT 'My Awards' Grenze-SemiBold SDF 60 #292929FF
+                Label_Button (400x100) TXT 'My Awards' Grenze-SemiBold SDF 60 #FFFFFFFF
+      Button_Icon_02 (400x400)
+        Button_Icon_02_Transform (400x400)
+          Button_Photos (400x400)
+            Content (400x400)
+              Inactive (400x400)
+                SPR_Background (340x340) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #634B31FF
+              SPR_Frame (400x400) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #FFFFFFFF
+              Curlicue_Bottom_Left (100x100)
+                SPR_Curlicue (240x120) IMG SPR_FantasyWarrior_Greeble_Curlicue_25 Simple #FFFFFFFF
+              Curlicue_Top_Right (100x100)
+                SPR_Curlicue (80x80) IMG SPR_FantasyWarrior_Greeble_Curlicue_27_Right Simple #FFFFFFFF
+              Icon (291x410)
+                ICON (291x410) IMG ICON_FantasyMenus_Settings_Camera_01_Stroke Simple #FEEB9EFF
+              Label (400x100)
+                Label_Button_Shadow (400x100) TXT 'My Photos' Grenze-SemiBold SDF 60 #292929FF
+                Label_Button (400x100) TXT 'My Photos' Grenze-SemiBold SDF 60 #FFFFFFFF
+      Button_Icon_03 (400x400)
+        Button_Icon_03_Transform (400x400)
+          Button_Shop (400x400)
+            Content (400x400)
+              Inactive (400x400)
+                SPR_Background (340x340) IMG SPR_FantasyMenus_Mask_Diamond_01 Simple #634B31FF
+              SPR_Frame (400x400) IMG SPR_FantasyWarrior_Frame_Diamond_01 Simple #FFFFFFFF
+              Curlicue_Bottom_Left (100x100)
+                SPR_Curlicue (240x120) IMG SPR_FantasyWarrior_Greeble_Curlicue_25 Simple #FFFFFFFF
+              Curlicue_Top_Right (100x100)
+                SPR_Curlicue (80x80) IMG SPR_FantasyWarrior_Greeble_Curlicue_27_Right Simple #FFFFFFFF
+              Icon (291x410)
+                ICON (261x380) IMG ICON_FantasyScreens_Menu_Shop_01_Stroke Simple #FEEB9EFF
+              Label (400x100)
+                Label_Button_Shadow (400x100) TXT 'Shop' Grenze-SemiBold SDF 60 #292929FF
+                Label_Button (400x100) TXT 'Shop' Grenze-SemiBold SDF 60 #FFFFFFFF
+    Potions (600x350)
+      Content (600x350)
+        Health_Potions (240x240)
+          Content (240x240)
+            SPR_Background (240x240) IMG SPR_FantasyScreens_Box_Rounded_Medium_01 Sliced #634B31FF
+            SPR_Tracery (220x220) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #43301FE6
+            Amount (190x15)
+              Label_Amount (190x70) TXT '5 / 5' Grenze-SemiBold SDF 72 #FAD088FF
+            Icon (260x260)
+              ICON (260x260) IMG ICON_SM_Item_Bottle_03_Bonus Simple #FFFFFFFF
+        Mana_Potions (240x240)
+          Content (240x240)
+            SPR_Background (240x240) IMG SPR_FantasyScreens_Box_Rounded_Medium_02 Sliced #634B31FF
+            SPR_Tracery (220x220) IMG SPR_HUD_FantasyWarrior_Tracery_Diamond_01 Simple #43301FE6
+            Amount (190x15)
+              Label_Amount (190x70) TXT '3 / 3' Grenze-SemiBold SDF 72 #FAD088FF
+            Icon (260x260)
+              ICON (260x260) IMG ICON_SM_Item_Bottle_10 Simple #C9E4FFFF
+  Input_Menu (0x140)
+    H_Group (0x140)
+      SPR_Background (0x140)
+      Input_Select (0x80)
+        Hotkey (0x0) IMG SPR_FantasyMenus_Box_Small_Parchment_01 Sliced #197AA4FF
+          ICON (0x0) IMG ICON_Input_Xbox_ButtonColor_A_Clean Simple #F5F0E6FF
+        Label_Action (0x0) TXT 'Select' AlegreyaSans-Medium SDF 48 #FAD088FF
+      Input_Back (0x80)
+        Hotkey (0x0) IMG SPR_FantasyMenus_Box_Small_Parchment_01 Sliced #197AA4FF
+          ICON (0x0) IMG ICON_Input_Xbox_ButtonColor_B_Underlay Simple #F5F0E6FF
+        Label_Action (0x0) TXT 'Back to Title Screen' AlegreyaSans-Medium SDF 48 #FAD088FF
+  Darkenator (0x0)

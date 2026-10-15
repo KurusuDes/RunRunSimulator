@@ -13,8 +13,11 @@ public class DetailInfoTabPresenter
 
     private readonly VisualElement needHealthFill, needEnergyFill, needAffectFill;
     private readonly VisualElement needHealthRow, needEnergyRow, needAffectRow;
-    private readonly Label exploreStatus, combatRoleTitle, identityLabel, roleElementLabel, progressionLabel;
-    private readonly VisualElement partsContainer, combatRole, combatRolePill;
+    private readonly Label needHealthValue, needEnergyValue, needAffectValue;
+    private readonly Label exploreStatus, combatRoleTitle, subtitle;
+    private readonly Label statState, statBorn, statBreeds, statBattles;
+    private readonly Label personalityName, personalityDesc;
+    private readonly VisualElement partsContainer, combatRole, combatRolePill, slotsLeft, slotsRight;
     private CreatureDNA lastDna;
 
     public DetailInfoTabPresenter(VisualElement root, CreatureDatabaseSO database, CareGateSO careGate, BrawlKitDatabaseSO kits,
@@ -35,10 +38,19 @@ public class DetailInfoTabPresenter
         combatRole       = root.Q<VisualElement>("combat-role");
         combatRoleTitle  = root.Q<Label>("combat-role-title");
         combatRolePill   = root.Q<VisualElement>("combat-role-pill");
-        identityLabel   = root.Q<Label>("identity");
-        roleElementLabel = root.Q<Label>("role-element");
+        needHealthValue  = root.Q<Label>("need-health-value");
+        needEnergyValue  = root.Q<Label>("need-energy-value");
+        needAffectValue  = root.Q<Label>("need-affect-value");
+        subtitle         = root.Q<Label>("subtitle");
+        statState        = root.Q<Label>("stat-state-value");
+        statBorn         = root.Q<Label>("stat-born-value");
+        statBreeds       = root.Q<Label>("stat-breeds-value");
+        statBattles      = root.Q<Label>("stat-battles-value");
+        personalityName  = root.Q<Label>("personality-name");
+        personalityDesc  = root.Q<Label>("personality-desc");
+        slotsLeft        = root.Q<VisualElement>("slots-left");
+        slotsRight       = root.Q<VisualElement>("slots-right");
         partsContainer   = root.Q<VisualElement>("parts");
-        progressionLabel = root.Q<Label>("progression");
     }
 
     public void Rebuild(CreatureDNA dna)
@@ -46,9 +58,9 @@ public class DetailInfoTabPresenter
         if (dna == null) return;
         lastDna = dna;
 
-        SetNeedBar(needHealthFill, NeedType.Health, dna.Needs.Health);
-        SetNeedBar(needEnergyFill, NeedType.Energy, dna.Needs.Energy);
-        SetNeedBar(needAffectFill, NeedType.Affect, dna.Needs.Affect);
+        SetNeedBar(needHealthFill, needHealthValue, NeedType.Health, dna.Needs.Health);
+        SetNeedBar(needEnergyFill, needEnergyValue, NeedType.Energy, dna.Needs.Energy);
+        SetNeedBar(needAffectFill, needAffectValue, NeedType.Affect, dna.Needs.Affect);
 
         bool canExplore = careGate != null && CreatureAvailability.CanExplore(dna, careGate);
         NeedType? weakest = careGate != null ? CreatureAvailability.WeakestNeed(dna, careGate) : null;
@@ -64,23 +76,27 @@ public class DetailInfoTabPresenter
             exploreStatus.EnableInClassList("explore-status--blocked", !canExplore);
         }
 
-        if (identityLabel != null)
-            identityLabel.text = Loc.Tr("ui.detail.identity", LocEnumMaps.GenderName(dna.Gender), CreatureDisplay.StateOf(dna), Born(dna));
+        if (subtitle != null)
+            subtitle.text = $"{LocEnumMaps.GenderName(dna.Gender)} · {LocEnumMaps.RoleName(dna.Role)} · {LocEnumMaps.ElementName(dna.Element)}";
 
-        if (roleElementLabel != null)
-            roleElementLabel.text = Loc.Tr("ui.detail.roleline", LocEnumMaps.RoleName(dna.Role), LocEnumMaps.ElementName(dna.Element), RoleDesc(dna.Role));
+        if (statState != null) statState.text = CreatureDisplay.StateOf(dna);
+        if (statBorn != null) statBorn.text = Born(dna);
+        if (statBreeds != null) statBreeds.text = dna.BreedCount.ToString();
+        if (statBattles != null) statBattles.text = dna.Battles.ToString();
+
+        if (personalityName != null) personalityName.text = LocEnumMaps.RoleName(dna.Role);
+        if (personalityDesc != null) personalityDesc.text = RoleDesc(dna.Role);
 
         var profile = BrawlKitProfile.Of(dna, kits, database);
 
         SetCombatRole(profile);
+        BuildSlots(dna);
         BuildParts(dna, profile);
-
-        if (progressionLabel != null)
-            progressionLabel.text = Loc.Tr("ui.detail.progression", dna.BreedCount);
     }
 
-    private static void SetNeedBar(VisualElement fill, NeedType need, float value)
+    private static void SetNeedBar(VisualElement fill, Label valueLabel, NeedType need, float value)
     {
+        if (valueLabel != null) valueLabel.text = Mathf.RoundToInt(NeedsDisplay.Fill01(need, value) * 100f) + "%";
         if (fill == null) return;
         fill.style.width = Length.Percent(NeedsDisplay.Fill01(need, value) * 100f);
         fill.RemoveFromClassList("exp-bar--good");
@@ -120,7 +136,70 @@ public class DetailInfoTabPresenter
         AddSkillRow(PartRole.Back, database.GetBack(dna.BackID), profile.Back, profile.BackLocked,
             profile.BackLocked ? null : evolutionBlock.Build(dna, PartRole.Back, profile.Back?.Family));
         AddWingRow(PartRole.Wing, database.GetWing(dna.WingID), profile.Wing, evolutionBlock.Build(dna, PartRole.Wing, null));
-        AddPartRow(PartRole.Face, database.GetFace(dna.FaceID));
+    }
+
+    private void BuildSlots(CreatureDNA dna)
+    {
+        slotsLeft?.Clear();
+        slotsRight?.Clear();
+        if (database == null) return;
+
+        slotsLeft?.Add(BuildSlot(PartRole.Horn, database.GetHorn(dna.HornID)));
+        slotsLeft?.Add(BuildSlot(PartRole.Back, database.GetBack(dna.BackID)));
+        slotsLeft?.Add(BuildSlot(PartRole.Wing, database.GetWing(dna.WingID)));
+        slotsRight?.Add(BuildSlot(PartRole.Face, database.GetFace(dna.FaceID)));
+        slotsRight?.Add(BuildSlot(PartRole.Body, database.GetBodyShape(dna.BodyShapeID)));
+    }
+
+    private static VisualElement BuildSlot(PartRole slot, BodyPart part)
+    {
+        var root = new VisualElement();
+        root.AddToClassList("detail-slot");
+
+        var box = new VisualElement();
+        box.AddToClassList("mm-slot");
+        box.AddToClassList("detail-slot__box");
+
+        var vignette = new VisualElement { pickingMode = PickingMode.Ignore };
+        vignette.AddToClassList("mm-layer");
+        vignette.AddToClassList("mm-slot__vignette");
+        box.Add(vignette);
+
+        var icon = new VisualElement();
+        icon.AddToClassList("detail-slot__icon");
+        if (part != null && part.Icon != null)
+        {
+            icon.style.backgroundImage = new StyleBackground(part.Icon);
+            switch (slot)
+            {
+                case PartRole.Horn: icon.AddToClassList("part-icon--horn"); break;
+                case PartRole.Back: icon.AddToClassList("part-icon--back"); break;
+                case PartRole.Wing: icon.AddToClassList("part-icon--wing"); break;
+            }
+        }
+        else
+        {
+            icon.AddToClassList("detail-slot__icon--" + slot.ToString().ToLowerInvariant());
+            if (part?.Set != null) icon.style.unityBackgroundImageTintColor = part.Set.Color;
+        }
+        box.Add(icon);
+
+        var frame = new VisualElement { pickingMode = PickingMode.Ignore };
+        frame.AddToClassList("mm-layer");
+        frame.AddToClassList("mm-slot__frame");
+        box.Add(frame);
+
+        root.Add(box);
+
+        var label = new Label(SlotName(slot));
+        label.AddToClassList("detail-slot__label");
+        root.Add(label);
+
+        var name = new Label(part?.Name ?? "—");
+        name.AddToClassList("detail-slot__name");
+        root.Add(name);
+
+        return root;
     }
 
     private void AddSkillRow(PartRole slot, BodyPart part, BrawlSkillSO skill, bool locked = false, VisualElement evolution = null)
@@ -144,7 +223,7 @@ public class DetailInfoTabPresenter
 
         var text = new Label();
         text.AddToClassList("part-text");
-        text.text = PartLine(slot, part);
+        text.text = PartText(slot, part);
 
         if (evolution != null)
         {
@@ -173,7 +252,7 @@ public class DetailInfoTabPresenter
 
         var text = new Label();
         text.AddToClassList("part-text");
-        text.text = PartLine(slot, part);
+        text.text = PartText(slot, part);
         body.Add(text);
 
         if (powerRole.HasValue || locked)
@@ -200,10 +279,8 @@ public class DetailInfoTabPresenter
         partsContainer.Add(row);
     }
 
-    private static string PartLine(PartRole slot, BodyPart part) =>
-        part != null
-            ? Loc.Tr("ui.detail.partrow", SlotName(slot), part.Name, SetName(part), LocEnumMaps.RarityName(part.Rarity))
-            : Loc.Tr("ui.detail.partrow.empty", SlotName(slot));
+    private static string PartText(PartRole slot, BodyPart part) =>
+        part != null ? $"{SlotName(slot)} · {part.Name}" : SlotName(slot);
 
     private static VisualElement BuildPartSwatch(BodyPart part, BrawlSkillRole? ringRole)
     {
@@ -232,13 +309,12 @@ public class DetailInfoTabPresenter
         }
         else
         {
-            swatch.style.backgroundColor = setColor;
+            if (part != null) swatch.AddToClassList("detail-slot__icon--" + part.GetPartRole().ToString().ToLowerInvariant());
+            swatch.style.unityBackgroundImageTintColor = setColor;
         }
 
         return swatch;
     }
-
-    private static string SetName(BodyPart part) => part?.Set != null ? part.Set.Name : "—";
 
     private static string SlotName(PartRole r) => r switch
     {
@@ -259,6 +335,6 @@ public class DetailInfoTabPresenter
     };
 
     private static string Born(CreatureDNA d) =>
-        d.BirthDate == default ? "—" : d.BirthDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
+        d.BirthDate == default ? "—" : d.BirthDate.ToLocalTime().ToString("dd/MM/yy");
 }
 }

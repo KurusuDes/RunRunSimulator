@@ -75,3 +75,27 @@ Patron completo en [[CombatLineupUITK]]: `PointerDownEvent` (guardar candidato +
 - **Helpers** (S93): `UI/UiPanels` (`RootOf(document)`, `SetActiveIndex(items, index, clase)`, `ClampSelection(count, index)` — usarlos en vez de repetir el idioma) · `UI/CreatureDisplay` (`StateOf(dna)` localizada UNICA, `RarityColor(r, palette)`, `ApplyIconVisual`, `ApplyRarityBorder`) · `UI/MonchiPortraitUI.Apply(elemento, dna)` para retratos (sin spawnear; `ApplyLive` solo con la criatura en el mundo).
 - Show/hide de paneles: `UIManager.SetPanelShown` es el dueno; los paneles solo togglean sub-vistas propias (etiquetas de vacio, toasts). `BuildBrowserUITK` y `HotbarHUDUITK` no son paneles de `UIManager` a proposito.
 - `PanelSettings`: `StandartPanelSettings.asset` (Scale With Screen Size, 1920x1080, match alto) para los 10 documentos de pantalla; `WorldUIPanelSettings.asset` solo para world-space (nametag, globo NPC).
+
+## Kit v2 "Linterna de bosque" (S160) — cómo usarlo y lo aprendido
+
+> Regla de trabajo (Juan S160): al terminar cada pantalla, sumar acá lo aprendido y compararse lado a lado con la referencia original; la vara es **igual o mejor** que Synty. Antes de diseñar una pantalla nueva, buscar qué juego ya resolvió esa tarea y copiar su distribución.
+
+**Dónde vive:** `UI Toolkit/Skin/Skin.uss` (tokens + componentes, importado por `Theme.uss`), `Skin/Synty/` (sprites copiados de los packs, con su 9-slice), `Skin/Fonts/` (LT Museum = títulos, Grenze = secciones/números, Alegreya Sans = cuerpo; licencias OFL al lado). Pantalla modelo aprobada: `MorimonchiDetailInfoUITK`. Referencias renderizadas: `Captures/S160/ref/`. Propuesta de overhaul por pantalla (juego de referencia + esquema): artifact `claude.ai/artifact/N3UpoMexRkG49b9T2GmT44`.
+
+**Dos registros:** menú de pantalla completa = raíz `mm-theme mm-skin mm-screen` (fondo pino **opaco**, sin degradados ni brillos: Juan los rechazó) + capa `mm-screen__vignette` + `mm-footer` con `mm-prompt`/`mm-key`; HUD sobre el mundo = clase `mm-hud` (píldoras cálidas translúcidas `Bar_Rounded`/`Box_Rounded`, ranuras marrones, burbuja crema `mm-bubble`), receta del HUD FarmingLife de Synty.
+
+**Copiar una receta de Synty (lo que más rindió):** volcar la jerarquía del prefab con `execute_code` (sprite, tipo, color, tamaño y fuente por nodo) a un .txt y replicarla. Los prefabs están a 4K: dividir tamaños y fuentes por 2 para la referencia 1920×1080. Las escenas demo se renderizan en editor con su cámara a un RT; si el canvas es Overlay, pasarlo a ScreenSpaceCamera en memoria (sin guardar). Abrir **una escena por llamada**: los lotes grandes tumban el MCP.
+
+**Capas en UITK (un solo fondo por elemento):** un marco de Synty = relleno (`*_Mask`, blanco → `-unity-background-image-tint-color`) en el propio elemento + hijos absolutos `mm-layer mm-panel__lip` y `mm-layer mm-panel__frame` como **primeros hijos** con `picking-mode="Ignore"`. Los marcos dorados se usan **nativos** (no recolorear: el gradient map los aplanaba). Bordes de 4K → `-unity-slice-scale` (0.25 marcos grandes, 0.35 chicos, 0.15 `mm-panel--compact`).
+
+**Sprites:** `Assets/Synty/` está en .gitignore → nunca referenciarlo; copiar con `AssetDatabase.CopyAsset` a `Skin/Synty/` (conserva bordes 9-slice, GUID nuevo). Un USS importado **antes** de que exista el sprite muestra un triángulo de advertencia: reimportar el USS (`ImportAsset(..., ForceUpdate)`) y reiniciar Play. Mirar la forma del sprite antes de culpar al render (Ring_Large_01 es un arco parcial, no un círculo).
+
+**Quirks de UITK:** `var()` en `style=""` del UXML rompe el `CloneTree` (NullReference en `StyleVariableResolver`) → colores por variable solo en clases (`mm-skin-chip--coral`). Tokens del skin: selector `.mm-skin, .mm-theme.mm-skin` (el @import queda antes y perdía contra `.mm-theme`). TabView 6.3: el header vive en `.unity-tab-view__content-viewport` (nombre engañoso) con `.unity-tab-view__next-button/__previous-button`; centrar con `justify-content` en ese viewport, `.unity-tab { flex-grow:1 }` para que la página ocupe el alto, seleccionado = `:checked`, subrayado = `.unity-tab__header-underline`. Fuentes: `-unity-font-definition: url("x.ttf")` funciona directo; Ortica no tiene "¿".
+
+**Retrato en vivo:** el RT de `MonchiLivePortrait` es transparente; pedestal = elipse CSS (`border-radius:50%` + borde dorado) + disco oscuro aplastado detrás, subido hasta los pies.
+
+**Verificación:** abrir paneles en Play con `UIManager.SelectCreature(dna, registry)` o `UIManager.RequestPanelSet(UIPanelType.X, true)` y capturar con `manage_camera screenshot`. Editar USS con Play corriendo huerfana el árbol: stop → refresh → play. Las capturas a veces salen "lavadas" (quirk S158): ante dudas, probar con un fondo opaco de prueba.
+
+**Anti-slop (checklist de comparación):** cada dato = ícono + nombre + valor en cajitas (`mm-statbox`, `mm-row`, `mm-valuebox`), nunca párrafos tipo volcado; nada de placeholders visibles (cuadrados grises, botones lavados); sin espacio muerto; nada de rectángulos planos sin marco; jerarquía título blanco 38 / subtítulo dorado 23 / sección Grenze dorada 26 / cuerpo 20-22; comparar **recortes a la misma escala** contra la referencia y dar un veredicto honesto.
+
+**Subagentes:** el trabajo UXML/USS se paraleliza bien con una guía escrita (archivos disjuntos, prohibido tocar `.cs`/`Skin.uss`, reportar sprites y cambios de código); no pueden verificar a ojo → la verificación en Play la hago yo.

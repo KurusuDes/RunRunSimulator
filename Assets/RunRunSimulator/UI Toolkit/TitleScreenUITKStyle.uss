@@ -1,77 +1,63 @@
 .title-root {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    flex-direction: row;
-    align-items: stretch;
-}
-
-.title-scrim {
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    flex-direction: row;
-}
-
-.title-scrim-main {
-    width: 680px;
-    background-color: rgba(30, 20, 14, 0.78);
-}
-
-.title-scrim-edge {
-    width: 24px;
-}
-
-.title-scrim-edge--1 {
-    background-color: rgba(30, 20, 14, 0.55);
-}
-
-.title-scrim-edge--2 {
-    background-color: rgba(30, 20, 14, 0.32);
-}
-
-.title-scrim-edge--3 {
-    background-color: rgba(30, 20, 14, 0.15);
+    align-items: center;
+    justify-content: center;
 }
 
 .title-menu {
-    width: 680px;
-    max-width: 60%;
-    padding: 0 56px 130px 56px;
+    width: 760px;
+    align-items: center;
     justify-content: center;
-    align-items: stretch;
+    padding: 0 0 30px 0;
+}
+
+.title-logo-wrap {
+    width: 760px;
+    height: 290px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-emblem {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 470px;
+    height: 470px;
+    margin-left: -235px;
+    margin-top: -235px;
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Ring_Medium_01.png");
+    -unity-background-image-tint-color: rgba(227, 187, 113, 0.42);
 }
 
 .title-logo {
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    margin-bottom: 36px;
 }
 
 .title-logo-row {
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     flex-shrink: 0;
-    height: 120px;
-}
-
-.title-logo-row--2 {
-    margin-left: 40px;
+    height: 124px;
 }
 
 .title-letter {
     margin: 0;
     padding: 0;
     flex-shrink: 0;
-    height: 120px;
-    font-size: 128px;
-    -unity-font-style: bold;
+    height: 124px;
+    font-size: 124px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    -unity-font-style: normal;
     -unity-text-align: middle-center;
-    -unity-text-outline-width: 6px;
-    -unity-text-outline-color: rgb(40, 26, 18);
+    -unity-text-outline-width: 5px;
+    -unity-text-outline-color: rgb(3, 20, 17);
     white-space: nowrap;
-    text-shadow: 0 6px 0 rgba(62, 42, 29, 0.75);
+    text-shadow: 0 6px 0 rgba(0, 0, 0, 0.55);
     opacity: 0;
     translate: 0 -60px;
     scale: 0.4 0.4;
@@ -81,11 +67,11 @@
 }
 
 .title-letter--a {
-    color: var(--mm-gold);
+    color: var(--mm-section);
 }
 
 .title-letter--b {
-    color: var(--mm-coral);
+    color: rgb(255, 246, 228);
 }
 
 .title-letter--in {
@@ -99,77 +85,62 @@
     transition-duration: 0s;
 }
 
+.title-tagline-wrap {
+    width: 640px;
+    flex-shrink: 0;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.title-ornament {
+    width: 420px;
+    height: 105px;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.title-ornament--top {
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Menu_Item_01_Top.png");
+    margin-bottom: -22px;
+}
+
+.title-ornament--bottom {
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Menu_Item_01_Bottom.png");
+    margin-top: -12px;
+}
+
 .title-tagline {
-    font-size: 28px;
-    -unity-text-align: middle-left;
+    margin: 0;
+    padding: 0 12px;
+    font-size: 30px;
+    -unity-text-align: middle-center;
     white-space: normal;
-    color: var(--mm-surface);
-    text-shadow: 0 2px 6px rgba(62, 42, 29, 0.85);
-    margin-bottom: 40px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .title-button {
-    height: 72px;
-    min-width: 0;
+    width: 460px;
+    min-height: 66px;
     margin: 7px 0;
-    font-size: 30px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
-    background-color: var(--mm-surface-2);
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    border-radius: 14px;
-    transition-property: scale, translate, border-color, background-color;
-    transition-duration: 0.15s;
-    transition-timing-function: ease-out;
-}
-
-.title-button--primary {
-    border-color: var(--mm-gold);
+    flex-shrink: 0;
+    padding: 0 30px;
 }
 
 .title-button--primary.title-button--breathe {
-    scale: 1.03 1.03;
-    translate: 0 0;
+    scale: 1.035 1.035;
     transition-property: scale;
     transition-duration: 1.3s;
     transition-timing-function: ease-in-out;
 }
 
-.title-button:hover,
-.title-button:focus {
-    background-color: var(--mm-surface);
-    border-color: var(--mm-gold);
-    scale: 1.06 1.06;
-    translate: 6px 0;
-    transition-property: scale, translate, border-color, background-color;
-    transition-duration: 0.15s;
-    transition-timing-function: ease-out;
-}
-
-.title-button:active {
-    scale: 0.96 0.96;
-    transition-property: scale, translate, border-color, background-color;
-    transition-duration: 0.15s;
-}
-
-.title-button:disabled {
-    opacity: 0.5;
-}
-
-.title-button--primary {
-    background-color: var(--mm-teal);
+.title-button--danger {
+    -unity-background-image-tint-color: var(--mm-coral-dark);
     color: rgb(255, 255, 255);
 }
 
-.title-button--primary:hover,
-.title-button--primary:focus {
-    background-color: var(--mm-good);
-}
-
-.title-button--danger:hover,
-.title-button--danger:focus {
-    background-color: var(--mm-coral);
+.title-button--danger:hover {
+    -unity-background-image-tint-color: var(--mm-coral);
     color: rgb(255, 255, 255);
 }
 
@@ -194,30 +165,32 @@
 
 .title-confirm {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     align-items: center;
     justify-content: center;
-    background-color: var(--mm-scrim);
+    background-color: rgba(2, 12, 10, 0.78);
     display: none;
 }
 
 .title-confirm-panel {
-    width: 640px;
-    max-width: 90%;
-    padding: 28px;
+    width: 700px;
+    max-width: 92%;
     align-items: stretch;
-    background-color: var(--mm-surface);
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    border-radius: 18px;
 }
 
 .title-confirm-text {
     font-size: 26px;
     -unity-text-align: middle-center;
     white-space: normal;
-    color: var(--mm-ink);
-    margin-bottom: 24px;
+    color: rgb(255, 255, 255);
+    margin: 0 0 4px 0;
+}
+
+.title-confirm-panel > .mm-bar {
+    margin: 14px 0 18px 0;
 }
 
 .title-confirm-row {
@@ -226,26 +199,32 @@
 }
 
 .title-confirm-button {
+    width: auto;
     flex-grow: 1;
     flex-basis: 0;
     margin: 0 8px;
+    padding: 0 16px;
+    font-size: 23px;
+    white-space: normal;
 }
 
 .title-version {
     position: absolute;
-    right: 16px;
-    bottom: 10px;
+    right: 20px;
+    bottom: 12px;
     margin: 0;
     padding: 0;
-    font-size: 14px;
-    color: var(--mm-ink);
-    opacity: 0.5;
+    font-size: 17px;
+    color: var(--mm-ink-soft);
     -unity-text-align: lower-right;
 }
 
 .title-fade {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgb(0, 0, 0);
     opacity: 0;
     transition-property: opacity;

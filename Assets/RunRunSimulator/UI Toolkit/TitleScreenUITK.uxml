@@ -1,27 +1,32 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="TitleScreenUITKStyle.uss" />
-    <ui:VisualElement name="title-root" class="mm-theme title-root">
-        <ui:VisualElement name="title-scrim" class="title-scrim" picking-mode="Ignore">
-            <ui:VisualElement class="title-scrim-main" picking-mode="Ignore" />
-            <ui:VisualElement class="title-scrim-edge title-scrim-edge--1" picking-mode="Ignore" />
-            <ui:VisualElement class="title-scrim-edge title-scrim-edge--2" picking-mode="Ignore" />
-            <ui:VisualElement class="title-scrim-edge title-scrim-edge--3" picking-mode="Ignore" />
-        </ui:VisualElement>
+    <ui:VisualElement name="title-root" class="mm-theme mm-skin mm-screen title-root">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
         <ui:VisualElement name="title-menu" class="title-menu">
-            <ui:VisualElement name="title-logo" class="title-logo" picking-mode="Ignore" />
-            <ui:Label name="title-tagline" class="title-tagline title-slide title-slide--hidden" />
-            <ui:Button name="title-continue" class="title-button title-button--primary title-slide title-slide--hidden" />
-            <ui:Button name="title-new" class="title-button title-slide title-slide--hidden" />
-            <ui:Button name="title-settings" class="title-button title-slide title-slide--hidden" />
-            <ui:Button name="title-quit" class="title-button title-button--danger title-slide title-slide--hidden" />
+            <ui:VisualElement class="title-logo-wrap" picking-mode="Ignore">
+                <ui:VisualElement class="title-emblem" picking-mode="Ignore" />
+                <ui:VisualElement name="title-logo" class="title-logo" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="title-tagline-wrap" picking-mode="Ignore">
+                <ui:VisualElement class="title-ornament title-ornament--top" picking-mode="Ignore" />
+                <ui:Label name="title-tagline" class="title-tagline title-slide title-slide--hidden" />
+                <ui:VisualElement class="title-ornament title-ornament--bottom" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Button name="title-continue" class="title-button title-button--primary mm-button mm-button--big title-slide title-slide--hidden" />
+            <ui:Button name="title-new" class="title-button mm-button mm-button--big mm-button--alt title-slide title-slide--hidden" />
+            <ui:Button name="title-settings" class="title-button mm-button mm-button--big mm-button--alt title-slide title-slide--hidden" />
+            <ui:Button name="title-quit" class="title-button mm-button mm-button--big mm-button--alt title-slide title-slide--hidden" />
         </ui:VisualElement>
         <ui:VisualElement name="title-confirm" class="title-confirm">
-            <ui:VisualElement name="title-confirm-panel" class="title-confirm-panel">
-                <ui:Label name="title-confirm-text" class="title-confirm-text" />
+            <ui:VisualElement name="title-confirm-panel" class="title-confirm-panel mm-panel mm-panel--compact">
+                <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                <ui:Label name="title-confirm-text" class="title-confirm-text mm-text" />
+                <ui:VisualElement class="mm-bar" picking-mode="Ignore" />
                 <ui:VisualElement class="title-confirm-row">
-                    <ui:Button name="title-confirm-yes" class="title-button title-button--danger title-confirm-button" />
-                    <ui:Button name="title-confirm-no" class="title-button title-confirm-button" />
+                    <ui:Button name="title-confirm-yes" class="title-button title-button--danger title-confirm-button mm-button mm-button--big" />
+                    <ui:Button name="title-confirm-no" class="title-button title-confirm-button mm-button mm-button--big mm-button--alt" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

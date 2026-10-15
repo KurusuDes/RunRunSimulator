@@ -1,14 +1,16 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="PauseMenuUITKStyle.uss" />
-    <ui:VisualElement name="pause-root" class="mm-theme pause-root">
+    <ui:VisualElement name="pause-root" class="mm-theme mm-skin pause-root">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
         <ui:VisualElement name="pause-panel" class="pause-panel">
-            <ui:Label name="pause-title" class="pause-title" />
-            <ui:Button name="pause-resume" class="pause-button pause-button--primary" />
-            <ui:Button name="pause-settings" class="pause-button" />
-            <ui:Button name="pause-skiptutorial" class="pause-button" />
-            <ui:Button name="pause-totitle" class="pause-button" />
-            <ui:Button name="pause-quit" class="pause-button pause-button--danger" />
+            <ui:Label name="pause-title" class="pause-title mm-title" />
+            <ui:VisualElement class="mm-bar" picking-mode="Ignore" />
+            <ui:Button name="pause-resume" class="pause-button mm-button mm-button--big" />
+            <ui:Button name="pause-settings" class="pause-button mm-button mm-button--big mm-button--alt" />
+            <ui:Button name="pause-skiptutorial" class="pause-button mm-button mm-button--big mm-button--alt" />
+            <ui:Button name="pause-totitle" class="pause-button mm-button mm-button--big mm-button--alt" />
+            <ui:Button name="pause-quit" class="pause-button pause-button--danger mm-button mm-button--big mm-button--alt" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

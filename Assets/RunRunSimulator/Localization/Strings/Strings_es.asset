@@ -2181,6 +2181,42 @@ MonoBehaviour:
     m_Localized: abre
     m_Metadata:
       m_Items: []
+  - m_Id: 29731651169345536
+    m_Localized: Datos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107584
+    m_Localized: "Poderes y evoluci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107585
+    m_Localized: Personalidad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107586
+    m_Localized: Estado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107587
+    m_Localized: "Naci\xF3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107588
+    m_Localized: "Cr\xEDas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107589
+    m_Localized: Combates
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107590
+    m_Localized: "Pesta\xF1a"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29731651639107591
+    m_Localized: Cerrar
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

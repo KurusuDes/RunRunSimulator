@@ -117,15 +117,20 @@ public class MorimonchiDetailInfoUITK : MonoBehaviour, IUINavigable
         SetTabLabel(root, "tab-lineage", "ui.detail.tab.lineage");
         SetTabLabel(root, "tab-relations", "ui.detail.tab.relations");
 
-        SetSectionTitles(root, "tab-info", "ui.detail.section.identity", "ui.detail.section.role_element",
-            "ui.detail.section.parts", "ui.detail.section.progression");
+        SetSectionTitles(root, "tab-info", "ui.detail.section.personality", "ui.detail.section.data", "ui.detail.section.powers");
         SetSectionTitles(root, "tab-relations", "ui.detail.section.friends", "ui.detail.section.foes");
 
         SetLabelText(root, "care-title", "ui.detail.section.care");
         SetLabelText(root, "need-health-label", "ui.detail.need.health");
         SetLabelText(root, "need-energy-label", "ui.detail.need.energy");
         SetLabelText(root, "need-affect-label", "ui.detail.need.affect");
-        SetLabelText(root, "breed-empty", "ui.detail.placeholder.breed_empty");
+        SetLabelText(root, "stat-state-label", "ui.detail.stat.state");
+        SetLabelText(root, "stat-born-label", "ui.detail.stat.born");
+        SetLabelText(root, "stat-breeds-label", "ui.detail.stat.breeds");
+        SetLabelText(root, "stat-battles-label", "ui.detail.stat.battles");
+        SetLabelText(root, "prompt-tab", "ui.prompt.tab");
+        SetLabelText(root, "prompt-close", "ui.prompt.close");
+        SetLabelText(root, "breed-empty","ui.detail.placeholder.breed_empty");
         SetLabelText(root, "lineage-empty", "ui.detail.placeholder.lineage_empty");
         SetLabelText(root, "relations-empty", "ui.detail.placeholder.relations_empty");
     }

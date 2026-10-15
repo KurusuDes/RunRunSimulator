@@ -6,22 +6,26 @@
     bottom: 0;
 }
 
+.ret-scrim {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(3, 14, 12, 0.72);
+}
+
 .ret-panel {
-    width: 620px;
-    max-width: 94%;
-    max-height: 92%;
-    border-width: 3px;
-    border-color: var(--mm-frame);
-    border-radius: 22px;
+    width: 1040px;
+    max-width: 96%;
+    max-height: 94%;
 }
 
-.ret-panel .panel__header {
-    border-top-left-radius: 19px;
-    border-top-right-radius: 19px;
-}
-
-.ret-panel .panel__title {
-    font-size: 20px;
+.ret-title {
+    font-size: 56px;
+    letter-spacing: 3px;
 }
 
 .ret-title--lost {
@@ -30,27 +34,58 @@
 
 .ret-body {
     align-items: center;
-    padding: 22px 16px 8px 16px;
+    padding: 4px 0 6px 0;
+}
+
+.ret-reward {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-width: 460px;
+    padding: 12px 30px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
+    -unity-background-image-tint-color: var(--mm-row-fill);
+    -unity-slice-scale: 0.22;
+}
+
+.ret-reward__box {
+    width: 84px;
+    height: 84px;
+    margin-right: 22px;
+}
+
+.ret-reward__gem {
+    width: 54px;
+    height: 54px;
+    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ret-reward__text {
+    align-items: flex-start;
 }
 
 .ret-minerita {
-    font-size: 52px;
-    -unity-font-style: bold;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 48px;
     color: var(--mm-teal);
 }
 
 .ret-rooms {
-    font-size: 15px;
-    color: var(--mm-ink-soft);
-    letter-spacing: 1px;
-    margin-top: 2px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 24px;
+    color: var(--mm-section);
 }
 
 .ret-lost {
-    font-size: 15px;
-    -unity-font-style: bold;
-    color: var(--mm-crit);
-    margin-top: 10px;
+    margin-top: 14px;
+    padding: 8px 26px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
+    -unity-background-image-tint-color: rgb(150, 40, 30);
+    -unity-slice-scale: 0.45;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 24px;
+    color: rgb(255, 255, 255);
     white-space: normal;
     -unity-text-align: middle-center;
 }
@@ -60,32 +95,32 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 18px;
 }
 
 .ret-card {
-    width: 176px;
-    margin: 6px;
-    padding: 8px;
+    width: 210px;
+    margin: 8px 10px;
+    padding: 20px 18px 16px 18px;
     align-items: center;
-    border-radius: 14px;
-    border-width: 3px;
-    border-color: var(--mm-frame-soft);
-    background-color: var(--mm-surface-2);
+    background-color: var(--mm-slot-fill);
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Frame_Box_Small_01.png");
+    -unity-background-image-tint-color: rgb(209, 205, 194);
+    -unity-slice-scale: 0.22;
 }
 
 .ret-card--grew {
-    border-color: var(--mm-gold);
-    background-color: var(--mm-bg-deep);
+    background-color: rgb(8, 52, 44);
+    -unity-background-image-tint-color: rgb(255, 232, 178);
 }
 
 .ret-card__icon {
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 150px;
     border-radius: 8px;
     border-width: 2px;
-    border-color: var(--mm-frame-soft);
-    background-color: rgb(120, 120, 120);
+    border-color: rgba(227, 187, 113, 0.4);
+    background-color: rgb(40, 60, 56);
 }
 
 .ret-card--grew .ret-card__icon {
@@ -94,28 +129,30 @@
 
 .ret-card__name {
     width: 100%;
-    margin-top: 6px;
-    font-size: 15px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
+    margin-top: 8px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 26px;
+    color: rgb(255, 255, 255);
     -unity-text-align: middle-center;
     white-space: normal;
 }
 
 .ret-card__growth {
     width: 100%;
-    min-height: 22px;
-    margin-top: 6px;
+    min-height: 34px;
+    margin-top: 8px;
     align-items: center;
     justify-content: center;
 }
 
 .ret-badge {
-    padding: 4px 8px;
-    border-radius: 10px;
-    background-color: var(--mm-gold);
-    color: var(--mm-bg-deep);
-    font-size: 13px;
+    padding: 2px 18px;
+    min-height: 34px;
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Box_Small_Parchment_03.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+    -unity-slice-scale: 0.35;
+    color: var(--mm-ink-dark);
+    font-size: 20px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     white-space: normal;
@@ -125,20 +162,22 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-top: 6px;
+    margin-top: 10px;
 }
 
 .ret-newpower__icon {
-    width: 22px;
-    height: 22px;
+    width: 34px;
+    height: 34px;
     flex-shrink: 0;
-    margin-right: 6px;
-    border-radius: 6px;
+    margin-right: 8px;
+    border-radius: 8px;
+    background-color: var(--mm-bg-deep);
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .ret-newpower__text {
     flex-shrink: 1;
-    font-size: 13px;
+    font-size: 18px;
     color: var(--mm-teal);
     white-space: normal;
 }
@@ -150,28 +189,33 @@
 }
 
 .ret-pip {
-    width: 14px;
-    height: 14px;
-    margin: 3px;
-    border-radius: 7px;
+    width: 20px;
+    height: 20px;
+    margin: 4px;
+    border-radius: 10px;
     border-width: 2px;
     border-color: var(--mm-frame-soft);
     background-color: var(--mm-bg-deep);
 }
 
 .ret-pip--on {
-    border-color: var(--mm-teal);
-    background-color: var(--mm-teal);
+    border-color: var(--mm-gold);
+    background-color: var(--mm-gold);
 }
 
 .ret-note {
-    margin-top: 8px;
-    font-size: 13px;
+    margin-top: 12px;
+    font-size: 20px;
     color: var(--mm-ink-soft);
     white-space: normal;
     -unity-text-align: middle-center;
 }
 
 .ret-actions {
-    padding-top: 14px;
+    align-items: center;
+    padding-top: 12px;
+}
+
+.ret-continue {
+    min-width: 300px;
 }

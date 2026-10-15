@@ -1,18 +1,22 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="SettingsPanelUITKStyle.uss" />
-    <ui:VisualElement name="root" class="mm-theme set-root">
-        <ui:VisualElement name="panel" class="set-panel">
-            <ui:Label name="title" text="Ajustes" class="set-title" />
+    <ui:VisualElement name="root" class="mm-theme mm-skin mm-screen set-root">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
+        <ui:VisualElement name="panel" class="set-panel mm-panel">
+            <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+            <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+            <ui:Label name="title" text="Ajustes" class="set-title mm-title" />
+            <ui:VisualElement class="mm-bar" picking-mode="Ignore" />
+            <ui:VisualElement name="nav" class="set-nav" />
             <ui:VisualElement name="body" class="set-body">
-                <ui:VisualElement name="nav" class="set-nav" />
                 <ui:ScrollView name="content" class="set-content" mode="Vertical" />
             </ui:VisualElement>
             <ui:VisualElement name="footer" class="set-footer">
-                <ui:Label name="status" text="" class="set-status" picking-mode="Ignore" />
-                <ui:Button name="apply-button" text="Aplicar" class="set-button set-button--primary" />
-                <ui:Button name="reset-button" text="Restablecer sección" class="set-button" />
-                <ui:Button name="back-button" text="Volver" class="set-button" />
+                <ui:Label name="status" text="" class="set-status mm-text mm-text--accent" picking-mode="Ignore" />
+                <ui:Button name="apply-button" text="Aplicar" class="set-button mm-button" />
+                <ui:Button name="reset-button" text="Restablecer sección" class="set-button mm-button mm-button--alt" />
+                <ui:Button name="back-button" text="Volver" class="set-button mm-button mm-button--alt" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

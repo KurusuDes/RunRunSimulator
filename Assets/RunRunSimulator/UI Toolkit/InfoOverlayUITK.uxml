@@ -1,15 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="InfoOverlayUITKStyle.uss" />
-    <!-- Always-on overlay. picking-mode Ignore so it never eats gameplay clicks. The
-         controller (InfoOverlayUITK) fills "date" and "dabloons" (top-right column)
-         and builds the control legend rows into "hints" (top-left). -->
-    <ui:VisualElement name="overlay-root" class="mm-theme overlay-root" picking-mode="Ignore">
+    <ui:VisualElement name="overlay-root" class="mm-theme mm-hud overlay-root" picking-mode="Ignore">
         <ui:VisualElement name="hints" class="overlay-hints" picking-mode="Ignore" />
         <ui:VisualElement name="top-right" class="overlay-top-right" picking-mode="Ignore">
             <ui:Label name="date" text="" class="overlay-date" picking-mode="Ignore" />
-            <ui:Label name="dabloons" text="" class="overlay-dabloons" picking-mode="Ignore" />
-            <ui:Label name="material" text="" class="overlay-dabloons" picking-mode="Ignore" />
+            <ui:VisualElement class="overlay-currency" picking-mode="Ignore">
+                <ui:VisualElement class="overlay-currency__icon overlay-currency__icon--coin" picking-mode="Ignore" />
+                <ui:Label name="dabloons" text="" class="overlay-dabloons" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="overlay-currency" picking-mode="Ignore">
+                <ui:VisualElement class="overlay-currency__icon overlay-currency__icon--gem" picking-mode="Ignore" />
+                <ui:Label name="material" text="" class="overlay-dabloons" picking-mode="Ignore" />
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:Label name="expedition-toast" text="" class="expedition-toast" picking-mode="Ignore" />
     </ui:VisualElement>

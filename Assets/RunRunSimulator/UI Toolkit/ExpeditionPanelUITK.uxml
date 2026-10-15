@@ -1,23 +1,39 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
-    <Style src="TransactionPanel.uss" />
     <Style src="ExpeditionPanelUITKStyle.uss" />
-    <ui:VisualElement name="exp-root" class="mm-theme mm-theme--night exp">
-        <ui:VisualElement name="exp-backdrop" class="tx-backdrop">
-            <ui:VisualElement name="exp-panel" class="panel exp-panel">
-                <ui:VisualElement class="panel__header">
-                    <ui:Label name="exp-title" text="" class="panel__title" />
-                </ui:VisualElement>
-                <ui:Label name="exp-subtitle" text="" class="exp-subtitle" />
-                <ui:Label name="exp-empty" text="" class="exp-empty" />
+    <ui:VisualElement name="exp-root" class="mm-theme mm-skin mm-screen exp">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
+
+        <ui:VisualElement name="exp-backdrop" class="exp-window">
+            <ui:VisualElement class="exp-head">
+                <ui:Label name="exp-title" text="" class="mm-title exp-title" />
+                <ui:Label name="exp-subtitle" text="" class="mm-subtitle exp-subtitle" />
+                <ui:VisualElement class="mm-bar exp-rule" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="exp-body">
                 <ui:ScrollView name="exp-list" class="exp-list" mode="Vertical" />
-                <ui:VisualElement name="exp-detail" class="exp-detail" />
-                <ui:VisualElement name="exp-team" class="exp-team" />
-                <ui:VisualElement class="actions exp-actions">
-                    <ui:Button name="exp-close" text="" class="action action--cancel" />
-                    <ui:Button name="exp-go" text="" class="action action--accept" />
+
+                <ui:VisualElement name="exp-panel" class="mm-panel exp-side">
+                    <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                    <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                    <ui:Label name="exp-empty" text="" class="mm-text mm-text--soft exp-empty" />
+                    <ui:VisualElement name="exp-detail" class="exp-detail" />
+                    <ui:VisualElement name="exp-team" class="exp-team" />
+                    <ui:Button name="exp-go" text="" class="mm-button mm-button--big exp-go" />
                 </ui:VisualElement>
             </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="mm-footer" picking-mode="Ignore">
+            <ui:VisualElement class="mm-prompt">
+                <ui:Label text="A" class="mm-key" />
+                <ui:Label text="D" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label name="exp-prompt-move" text="Mover" class="mm-prompt__label" />
+            </ui:VisualElement>
+            <ui:Button name="exp-close" text="" class="mm-prompt mm-prompt--button exp-close">
+                <ui:Label text="Esc" class="mm-key exp-close__key" picking-mode="Ignore" />
+            </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
