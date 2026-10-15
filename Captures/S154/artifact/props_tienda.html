@@ -1,0 +1,286 @@
+<title>Props de la tienda MoriMonchis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: catalogo de juguetes por estantes; arriba la tienda en el juego, abajo cada pieza con su veredicto */
+:root{
+  --bg:#eef5f1; --surface:#ffffff; --ink:#26302c; --muted:#5d6b65; --line:#d3e2db;
+  --mint:#2f9c78; --mint-soft:#d6efe5; --coral:#e2604f; --coral-soft:#fbe1dc; --straw:#f3c24f;
+  --plum:#7d5a80; --ok:#2f9c78; --warn:#d1782c; --warn-soft:#fbe8d6;
+  --display:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#18201d; --surface:#212b27; --ink:#e7efeb; --muted:#9fb0a8; --line:#33423c;
+  --mint:#5fd0a8; --mint-soft:#1f3a30; --coral:#f08a7a; --coral-soft:#3d2622; --straw:#f3c24f;
+  --plum:#c9a3cc; --ok:#5fd0a8; --warn:#f0a35e; --warn-soft:#3b2a1b; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#18201d; --surface:#212b27; --ink:#e7efeb; --muted:#9fb0a8; --line:#33423c;
+  --mint:#5fd0a8; --mint-soft:#1f3a30; --coral:#f08a7a; --coral-soft:#3d2622; --straw:#f3c24f;
+  --plum:#c9a3cc; --ok:#5fd0a8; --warn:#f0a35e; --warn-soft:#3b2a1b; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 120px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,4.4vw,44px);font-weight:700;letter-spacing:-.01em}
+h1 .dot{color:var(--coral)}
+.lede{color:var(--muted);max-width:66ch;margin:10px 0 0}
+.how{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;color:var(--muted);font-size:14px}
+.how b{color:var(--ink)}
+section{margin-top:44px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px dashed var(--line);padding-bottom:8px;margin-bottom:16px}
+h2{font-size:24px;font-weight:600}
+.era{display:inline-block;font:600 13px var(--display);letter-spacing:.04em;color:var(--plum);margin-right:8px;vertical-align:middle}
+.sec-head .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.shot{margin:0;background:var(--surface);border-radius:14px;overflow:hidden;border:1px solid var(--line);cursor:zoom-in}
+.shot img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
+.shot figcaption{padding:8px 12px;font-size:14px;font-weight:700}
+.shot figcaption span{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;min-width:0;transition:border-color .15s}
+.card[data-state="ok"]{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.card[data-state="sug"]{border-color:var(--warn);box-shadow:inset 0 0 0 1px var(--warn)}
+.thumb{position:relative;display:block;width:100%;padding:0;border:0;background:#5c6865;cursor:zoom-in}
+.thumb img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
+.thumb .zoom{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 8px;border-radius:999px}
+.badge{position:absolute;left:8px;top:8px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--surface);color:var(--muted)}
+.badge.prev{background:var(--straw);color:#3a2c08}
+.badge.v2{background:var(--mint);color:var(--surface)}
+.badge.new{background:var(--plum);color:var(--surface)}
+.badge-inline{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--mint);color:var(--surface)}
+.badge-inline.new{background:var(--plum)}
+.body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+h3{font-size:18px;font-weight:600}
+.what{color:var(--muted);font-size:14px;margin:0}
+.spec{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;font-variant-numeric:tabular-nums}
+.spec span{background:var(--mint-soft);color:var(--ink);padding:2px 8px;border-radius:999px}
+.actions{display:flex;gap:8px;margin-top:auto;padding-top:4px}
+.btn{flex:1;font:700 14px var(--body);padding:8px 10px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--muted)}
+.btn:focus-visible,.shot:focus-visible,.thumb:focus-visible,textarea:focus-visible{outline:3px solid var(--mint);outline-offset:2px}
+.btn.ok[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.btn.sug[aria-pressed="true"]{background:var(--warn);border-color:var(--warn);color:var(--surface)}
+textarea{width:100%;min-height:72px;resize:vertical;font:14px/1.4 var(--body);color:var(--ink);background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;padding:8px 10px}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;z-index:5}
+.tally{display:flex;gap:14px;font-size:14px;font-variant-numeric:tabular-nums}
+.tally b{font-family:var(--display);font-size:18px}
+.t-ok b{color:var(--ok)} .t-sug b{color:var(--warn)} .t-pend b{color:var(--muted)}
+.copy{font:700 15px var(--body);padding:10px 18px;border-radius:12px;border:0;background:var(--coral);color:#fff;cursor:pointer}
+.copy:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.status{font-size:13px;color:var(--muted);min-width:12ch}
+.fallback{width:100%;max-width:1100px;min-height:120px;display:none;font:13px/1.4 ui-monospace,Consolas,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+dialog{border:0;padding:0;background:transparent;max-width:min(96vw,1400px)}
+dialog::backdrop{background:rgba(10,14,12,.82)}
+dialog img{display:block;max-width:100%;max-height:86vh;border-radius:10px}
+dialog p{color:#fff;font:600 15px var(--body);margin:8px 2px 0}
+@media (max-width:520px){.wrap{padding-inline:16px}.bar{justify-content:space-between}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Props de la tienda<span class="dot">.</span></h1>
+    <p class="lede">Todo lo que reemplazó a los cubos de ProBuilder en la sesión 153 y el arte de las etapas que llegó en la 154. Cada pieza tiene su hoja de render al lado de un MoriMochi de 0,99 m.</p>
+    <p class="lede"><b>Sesión 154</b> <span class="badge-inline new">nuevo</span>: kit modular de sala, piezas para los niveles 2 y 3 de las zonas que ya existen y el equipamiento de las 8 salas de las etapas 3 y 4, armadas en GameScene como lotes de vista previa. La caja registradora, el letrero y el cartel de zona bloqueada perdieron el coral y vuelven a estar pendientes.</p>
+    <div class="how"><span>Toca una imagen para verla grande.</span><span><b>Aprobar</b> o <b>Sugerir</b> en cada pieza.</span><span>Al final, <b>Copiar resumen</b> y pégalo en el chat.</span></div>
+  </header>
+
+  <section aria-labelledby="h-recorrido">
+    <div class="sec-head"><h2 id="h-recorrido"><span class="era">S154</span>Recorrido de las etapas</h2><span class="count">vista previa en GameScene · niveles 2 y 3 encendidos solo para la foto</span></div>
+    <div class="shots" id="shots2"></div>
+  </section>
+
+  <section aria-labelledby="h-juego">
+    <div class="sec-head"><h2 id="h-juego"><span class="era">S153</span>En el juego</h2><span class="count">capturas en Play · las zonas se abrieron solo para la foto</span></div>
+    <div class="shots" id="shots"></div>
+  </section>
+
+  <div id="groups"></div>
+</div>
+
+<div class="bar" role="region" aria-label="Resumen de aprobación">
+  <div class="tally"><span class="t-ok"><b id="n-ok">0</b> aprobados</span><span class="t-sug"><b id="n-sug">0</b> con sugerencia</span><span class="t-pend"><b id="n-pend">0</b> pendientes</span></div>
+  <button class="copy" id="copy" type="button">Copiar resumen</button>
+  <span class="status" id="status" aria-live="polite"></span>
+  <textarea class="fallback" id="fallback" readonly aria-label="Resumen para copiar"></textarea>
+</div>
+
+<dialog id="lb"><img id="lb-img" alt=""><p id="lb-cap"></p></dialog>
+
+<script>
+const SHOTS2=[
+ ["s154_01_aerea.jpg","Vista aérea","La tienda al centro, etapa 3 a los costados y etapa 4 al fondo"],
+ ["s154_00_planta_tienda.jpg","Planta de la tienda","Mostrador con sus dos tramos extra y vitrina N3 en la trastienda"],
+ ["s154_02_vitrina_N3.jpg","Vitrina nivel 3","8 lugares, escalón y cartel doble"],
+ ["s154_03_mostrador_N3.jpg","Mostrador nivel 3","Caja + dos tramos extra (3 clientes)"],
+ ["s154_04_cuidado_N3.jpg","Rincón de cuidado N2-N3","Comedero y bebedero dobles, cama con dosel"],
+ ["s154_05_patio_N3.jpg","Patio N2-N3","Arenero, manguera fija y charcos"],
+ ["s154_06_oficina_N2.jpg","Oficina N2","Pizarra de pedidos sobre la cerca"],
+ ["s154_07_sala_juegos_N3.jpg","Sala de juegos N2-N3","Alfombra grande y 2.ª estación"],
+ ["s154_08_etapa3_oeste.jpg","Etapa 3 · lado oeste","Guardería y Almacén junto al Criadero"],
+ ["s154_09_guarderia.jpg","Guardería","Cunas, mecedora, baúl, camitas y alfombra"],
+ ["s154_10_almacen.jpg","Almacén","Estanterías, sacos, barriles y carretilla"],
+ ["s154_11_bano.jpg","Baño y peluquería","Bañeras, secadores, mesas de peluquería"],
+ ["s154_12_cocina.jpg","Cocina de snacks","Horno de leña, mesadas y estante de recetas"],
+ ["s154_13_etapa4.jpg","Etapa 4 · al fondo","Escenario, Gimnasio, Clínica y Sala del linaje"],
+ ["s154_14_escenario.jpg","Escenario","Tarima con telón, focos, podio y público"],
+ ["s154_15_gimnasio.jpg","Gimnasio","Ruedas, pesas, colchonetas y sacos"],
+ ["s154_16_clinica.jpg","Clínica","Camillas, botiquín, biombo y báscula"],
+ ["s154_17_linaje.jpg","Sala del linaje","Árbol genealógico, retratos y trofeos"]];
+const SHOTS=[["game_01_fachada.jpg","Fachada"],["game_02_tienda.jpg","Tienda"],["game_08_vitrina.jpg","Vitrina"],["game_03_trastienda_pc.jpg","Trastienda y PC"],["game_04_cuidado.jpg","Zona de cuidado"],["game_05_criadero.jpg","Criadero"],["game_06_sala_juegos.jpg","Sala de juegos"],["game_07_aerea.jpg","Vista aérea"]];
+const GROUPS=[
+ ["S154","Kit modular de sala",[
+  ["ZoneKitAsm","Tramo armado","Prueba del kit: dos baldosas, pared lisa, ventana, esquina y puerta con remate.","módulo de 3 m","prueba"],
+  ["ZoneKitFloor","Piso de tablones","Baldosa de 3 × 3 m; empalma sin costura.","3,0 × 3,0 m","1.062 tris"],
+  ["ZoneKitWall","Pared lisa","Entramado, friso de tablas y franja de acento que cambia de color por sala.","3,0 × 0,3 × 2,7 m","1.586 tris"],
+  ["ZoneKitWallWindow","Pared con ventana","Arco tallado, vidrio y maceterito.","3,0 × 0,3 × 2,7 m","3.524 tris"],
+  ["ZoneKitWallDoor","Pared con puerta","Hueco libre de 1,6 × 2,2 m con marco tallado y farol.","3,0 × 0,3 × 2,7 m","2.944 tris"],
+  ["ZoneKitCorner","Pilar de esquina","Poste con capitel y base de piedra.","0,4 × 0,4 × 2,85 m","1.716 tris"],
+  ["ZoneKitTrimIvy","Remate con hiedra","Viga redondeada con guirnalda colgante.","3,0 m","2.302 tris"]]],
+ ["S154","Niveles de las zonas actuales",[
+  ["ShopShowcaseL2","Vitrina nivel 2","5 lugares; misma familia que la vitrina, sin coral.","4,0 × 3,0 m","4.682 tris"],
+  ["ShopShowcaseL3","Vitrina nivel 3","8 lugares, escalón perimetral, remates dorados y cartel doble.","5,0 × 3,6 × 2,29 m","5.918 tris"],
+  ["ShopCounterExt","Tramo de mostrador","2.º y 3.er cliente; mismo alto y fondo que la caja.","1,0 × 0,8 × 1,13 m","3.562 tris"],
+  ["ShopFeederDouble","Comedero doble","Dos tolvas salvia en una base con corazón.","1,38 × 0,76 × 0,70 m","5.384 tris"],
+  ["ShopWaterDouble","Bebedero doble","Abrevadero largo con dos garrafones.","1,38 × 0,76 × 0,72 m","5.366 tris"],
+  ["ShopBedCanopy","Cama con dosel","2.ª cama de lujo con dosel crema y estrellas.","0,98 × 1,0 × 1,43 m","5.792 tris"],
+  ["ShopOrderBoard","Pizarra de pedidos","5 ganchos con fichas y campanita de pedido especial.","1,0 × 0,15 × 0,7 m","2.488 tris"],
+  ["ShopSandbox","Arenero","Marco de troncos, castillo, palita y balde (trabajo Escarbar).","2,0 × 2,0 × 0,70 m","5.314 tris"],
+  ["ShopHoseReel","Manguera fija","Poste con grifo y carrete con tornillos.","0,6 × 0,4 × 0,8 m","4.472 tris"],
+  ["ShopPuddle","Charco","Se pisa: 2 cm con borde en rampa.","1,2 × 0,8 m","1.658 tris"],
+  ["ShopPlayMat","Área de juego grande","Alfombra trenzada acolchada con dos cojines.","3,0 × 3,0 × 0,08 m","5.520 tris"]]],
+ ["Etapa 3","Guardería",[
+  ["ShopCrib","Cuna","Barrotes gordos, colchita y móvil de estrellas.","1,0 × 0,7 × 0,90 m","5.636 tris"],
+  ["ShopRockingChair","Mecedora","Para el cuidador; nube celeste con estrella.","0,7 × 0,9 × 1,0 m","4.022 tris"],
+  ["ShopToyChest","Baúl de juguetes","Tapa entreabierta con juguetes asomando.","0,7 × 0,45 × 0,70 m","2.492 tris"],
+  ["ShopNightLamp","Lámpara-hongo","Luz de noche para las crías.","Ø 0,3 × 0,6 m","1.736 tris"]]],
+ ["Etapa 3","Baño y peluquería",[
+  ["ShopBathtub","Bañera","Con patas, burbujas y canilla dorada.","1,4 × 0,8 × 0,83 m","5.040 tris"],
+  ["ShopDryer","Secador de casco","De pie, verde azulado y latón.","0,6 × 0,6 × 1,43 m","4.328 tris"],
+  ["ShopGroomTable","Mesa de peluquería","Con espejo y huellita.","1,0 × 0,6 × 1,5 m","5.512 tris"],
+  ["ShopTowelRack","Toallero","Toallas blancas con gotita.","0,8 × 0,3 × 1,0 m","4.108 tris"]]],
+ ["Etapa 3","Cocina de snacks",[
+  ["ShopStove","Horno de leña","Piedra, nogal y huesos dorados.","1,0 × 0,73 × 1,1 m","4.734 tris"],
+  ["ShopKitchenCounter","Mesada","Tabla, bowls y frascos encima.","1,6 × 0,7 × 1,24 m","5.790 tris"],
+  ["ShopRecipeShelf","Estante de recetas","Frascos de recetas de afecto y energía.","1,2 × 0,40 × 1,6 m","5.968 tris"]]],
+ ["Etapa 3","Almacén",[
+  ["ShopStorageShelf","Estantería","Cajas y sacos con huellita.","2,0 × 0,63 × 2,0 m","5.920 tris"],
+  ["ShopSackPile","Pila de sacos","Sacos de alimento con atadura dorada.","1,0 × 0,82 × 0,58 m","2.996 tris"],
+  ["ShopBarrel","Barril","Duelas de madera y aros dorados.","0,57 × 0,59 × 0,87 m","2.340 tris"],
+  ["ShopHandTruck","Carretilla","Para las entregas al instante.","0,59 × 0,59 × 1,21 m","3.320 tris"]]],
+ ["Etapa 4","Escenario",[
+  ["ShopStage","Tarima con telón","Arco ciruela con remates dorados.","3,0 × 2,0 × 3,2 m","5.902 tris"],
+  ["ShopSpotlight","Foco de pie","Poste y cabezal gordos.","alto 1,6 m","2.468 tris"],
+  ["ShopJudgeTable","Mesa del jurado","Campanita y cartelitos.","1,6 × 0,6 × 0,8 m","2.740 tris"],
+  ["ShopPrizePodium","Podio 1-2-3","Entra un MoriMochi por escalón.","2,55 × 0,91 × 0,45 m","3.548 tris"]]],
+ ["Etapa 4","Gimnasio",[
+  ["ShopDumbbellRack","Rack de pesas","Pesas gordas de madera.","1,2 × 0,57 × 0,8 m","5.440 tris"],
+  ["ShopRunWheel","Rueda para correr","Rueda grande con estrella dorada.","Ø 1,53 × 0,94 m","4.424 tris"],
+  ["ShopGymMat","Colchoneta","Lona verde azulada con asas.","2,08 × 1,2 × 0,12 m","2.256 tris"],
+  ["ShopPunchBag","Saco","Colgado de un poste.","0,8 × 0,8 × 1,8 m","2.152 tris"]]],
+ ["Etapa 4","Clínica",[
+  ["ShopExamTable","Camilla","Para reposo y tratamiento.","1,4 × 0,7 × 0,84 m","4.212 tris"],
+  ["ShopMedCabinet","Botiquín","Cruz verde azulada sobre disco blanco.","0,9 × 0,4 × 1,6 m","5.240 tris"],
+  ["ShopFolderScreen","Biombo","Paneles de tela con marco de madera.","1,23 × 0,3 × 1,5 m","5.316 tris"],
+  ["ShopScale","Báscula","Plato justo para un MoriMochi.","0,6 × 0,6 × 1,2 m","3.796 tris"]]],
+ ["Etapa 4","Sala del linaje",[
+  ["ShopFamilyTree","Árbol genealógico","Tronco trenzado con 7 medallones: cría, padres y abuelos.","2,43 × 0,51 × 2,60 m","5.908 tris"],
+  ["ShopPortraitPedestal","Pedestal con retrato","Marco ovalado sobre columna.","0,5 × 0,5 × 1,3 m","2.376 tris"],
+  ["ShopTrophyCase","Vitrina de trofeos","Frente abierto, vidrio a los costados.","1,4 × 0,5 × 1,8 m","5.480 tris"],
+  ["ShopLineageBook","Libro del linaje","Atril con libro abierto.","0,6 × 0,5 × 1,1 m","2.474 tris"]]],
+ ["S153","Estaciones de cuidado",[
+  ["ShopFeeder","Comedero","Tolva con ventanita de nivel y corazón.","0,74 × 0,74 × 0,70 m","2.652 tris"],
+  ["ShopWater","Bebedero","Garrafón invertido con plato y gota.","0,74 × 0,74 × 0,80 m","2.732 tris"],
+  ["ShopBed","Cama","Cama redonda acolchada con mantita y luna.","0,95 × 0,93 × 0,38 m","2.208 tris"],
+  ["ShopPlayStation","Estación de juego","Torrecita con escalera, tobogán y pelota.","0,78 × 0,78 × 1,10 m","2.424 tris"]]],
+ ["S153","Mostrador y vitrina",[
+  ["ShopRegister","Caja registradora","Mostrador con caja retro; ahora con latón dorado en vez de coral.","1,00 × 0,80 × 1,38 m","5.470 tris"],
+  ["ShopShowcase","Vitrina","Tarima de 3 × 3 m donde esperan comprador; entrada al frente.","3,00 × 3,00 × 1,60 m","5.430 tris"],
+  ["ShopLockedSign","Cartel de zona bloqueada","Tablero con candado (ahora verde azulado) y cinta; centro libre para el precio.","2,56 × 0,40 × 2,35 m","5.158 tris"]]],
+ ["S153","Cría",[
+  ["ShopCorral","Corral","Corral con paja y portón (S152), en los 4 corrales.","2,8 × 2,8 m","S152",true],
+  ["ShopIncubator","Incubadora","Incubadora con cúpula (S152), contra la pared.","0,94 × 0,98 × 1,26 m","S152",true],
+  ["ShopEggShelf","Repisa de huevos","Estante de 2 niveles con 6 nidos, al lado de la incubadora.","1,65 × 0,51 × 1,53 m","5.242 tris"],
+  ["ShopDecorPedestal","Pedestal de decoración","Plinto con estrella, 3 por corral.","Ø 0,60 × 0,30 m","1.648 tris"],
+  ["ShopCorkBoard","Tablero de crianza","Pizarra de corcho de pie con fichas e hilo.","1,00 × 0,58 × 1,91 m","3.530 tris"]]],
+ ["S153","Trastienda",[
+  ["ShopPC","PC con escritorio","PC retro sobre escritorio (S152); ya no se levanta.","0,92 × 0,70 × 1,39 m","S152",true],
+  ["ShopLedger","Fichero de criaturas","Rolodex con fichas y separadores.","0,48 × 0,32 × 0,40 m","1.750 tris"],
+  ["ShopRadio","Radio de la bajada","Walkie de expedición con antena y foco.","0,42 × 0,27 × 0,49 m","2.010 tris"],
+  ["ShopCrate","Baúl del almacén","Caja de madera con herrajes y tapa entreabierta.","0,44 × 0,41 × 0,42 m","2.224 tris"],
+  ["ShopSideTable","Mesita","Mesa baja para fichero, radio y baúl.","0,60 × 0,50 × 0,52 m","1.238 tris"],
+  ["ShopMop","Trapeador","Palo y mechas gruesas; en el juego mide 2 m como su colisionador.","1,20 m (2 m en juego)","2.752 tris"],
+  ["ShopSnack","Snack Monchi","Bolsa de papas inflada con huellita.","0,27 × 0,18 × 0,30 m","1.104 tris"]]],
+ ["S153","Edificio y zonas",[
+  ["ShopBuilding","Edificio de la tienda","Entramado de madera, base de piedra, piso de tablones; repisas con comida, frascos, correas, pecera y faroles.","15 × 21 m","49.546 tris"],
+  ["ShopYard","Patio","Cerca rústica con seto, faroles en los postes, losas de piedra y tarima.","30 × 21 m","15.400 tris"],
+  ["ShopStreet","Calle y vereda","Vereda de piedra cálida, cruce peatonal y líneas doradas.","31 × 50 m","5.100 tris"],
+  ["ShopZoneCriadero","Zona Criadero","Granero de madera natural con entramado, hiedra y cartel del huevo.","9 × 15 m","14.200 tris"],
+  ["ShopZoneSalaJuegos","Zona Sala de juegos","Roble claro, alfombra trenzada redonda y estrellas talladas.","7 × 10 m","10.000 tris"]]],
+ ["S153","Fachada y calle",[
+  ["ShopSignMain","Letrero MoriMonchis","Letras 3D con focos y cabecita de MoriMochi; letras y corazón ahora en ciruela.","4,04 × 0,91 × 1,90 m","5.804 tris"],
+  ["ShopAwning","Toldo","Lona a rayas salvia y crema con varillas de nogal (2 en la fachada).","3,69 × 1,04 × 0,74 m","2.952 tris"],
+  ["ShopStreetLamp","Farol","Poste de madera oscura con dorado y banderín verde azulado (2).","alto 3,04 m","2.600 tris"],
+  ["ShopBench","Banca","Tablas de roble y corazón ciruela (2).","1,60 × 0,71 × 1,02 m","2.684 tris"],
+  ["ShopPlanter","Macetero","Maceta color miel con flores ciruela (3).","0,66 × 0,66 × 0,82 m","3.024 tris"],
+  ["ShopMailbox","Buzón","Verde azulado con franjas crema y banderita dorada.","0,61 × 0,52 × 1,12 m","1.950 tris"]]]
+];
+const V2=new Set(["ShopBuilding","ShopYard","ShopStreet","ShopZoneCriadero","ShopZoneSalaJuegos","ShopAwning","ShopStreetLamp","ShopBench","ShopPlanter","ShopMailbox"]);
+const V3=new Set(["ShopRegister","ShopSignMain","ShopLockedSign"]);
+const sid=id=>V3.has(id)?id+"@v3":V2.has(id)?id+"@v2":id;
+const KEY="mm-props-s153";
+let state={};
+try{state=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){state={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+const lb=document.getElementById("lb"),lbImg=document.getElementById("lb-img"),lbCap=document.getElementById("lb-cap");
+function openLb(src,cap){lbImg.src=src;lbImg.alt=cap;lbCap.textContent=cap;lb.showModal()}
+lb.addEventListener("click",()=>lb.close());
+
+function shotGrid(el,list){list.forEach(([f,cap,sub])=>{const fig=document.createElement("figure");fig.className="shot";fig.tabIndex=0;
+ fig.innerHTML=`<img src="img/${f}" alt="${cap}" loading="lazy"><figcaption>${cap}${sub?`<span>${sub}</span>`:""}</figcaption>`;
+ const go=()=>openLb("img/"+f,cap+(sub?" · "+sub:""));fig.addEventListener("click",go);fig.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});el.appendChild(fig)})}
+shotGrid(document.getElementById("shots2"),SHOTS2);
+shotGrid(document.getElementById("shots"),SHOTS);
+
+const groups=document.getElementById("groups");
+const ALL=[];
+const ENV=id=>id.startsWith("ShopBuilding")||id.startsWith("ShopYard")||id.startsWith("ShopStreet")||id.startsWith("ShopZone");
+GROUPS.forEach(([era,title,items],gi)=>{
+ const sec=document.createElement("section");const hid="g"+gi;const fresh=era!=="S153";
+ sec.setAttribute("aria-labelledby",hid);
+ sec.innerHTML=`<div class="sec-head"><h2 id="${hid}"><span class="era">${era}</span>${title}</h2><span class="count">${items.length} piezas</span></div><div class="grid"></div>`;
+ const grid=sec.querySelector(".grid");
+ items.forEach(([id,name,what,size,tris,prev])=>{
+  ALL.push([id,name]);
+  const key=sid(id);
+  const st=state[key]||{};
+  const thumb=prev||ENV(id)?`img/${id}_sheet.jpg`:`img/${id}.jpg`;
+  const tag=prev?'<span class="badge prev">sesión 152</span>':V3.has(id)?'<span class="badge new">sin coral</span>':V2.has(id)?'<span class="badge v2">v2</span>':fresh?'<span class="badge new">S154</span>':'';
+  const card=document.createElement("article");card.className="card";card.dataset.state=st.s||"";
+  card.innerHTML=`<button class="thumb" type="button" aria-label="Ver hoja de render de ${name}"><img src="${thumb}" alt="${name}" loading="lazy"><span class="zoom">hoja completa</span>${tag}</button>
+  <div class="body"><h3>${name}</h3><p class="what">${what}</p><div class="spec"><span>${size}</span><span>${tris}</span></div>
+  <div class="actions"><button class="btn ok" type="button" aria-pressed="${st.s==="ok"}">Aprobar</button><button class="btn sug" type="button" aria-pressed="${st.s==="sug"}">Sugerir</button></div>
+  <textarea id="note-${id}" placeholder="¿Qué cambiarías? Ej.: más grande, otro color, menos detalle…" aria-label="Sugerencia para ${name}" ${st.s==="sug"?"":"hidden"}></textarea></div>`;
+  card.querySelector(".thumb").addEventListener("click",()=>openLb(`img/${id}_sheet.jpg`,name+" · hoja de render"));
+  const ta=card.querySelector("textarea");ta.value=st.n||"";
+  const bOk=card.querySelector(".ok"),bSug=card.querySelector(".sug");
+  function set(s){const cur=state[key]||{};cur.s=(cur.s===s)?"":s;state[key]=cur;card.dataset.state=cur.s;
+   bOk.setAttribute("aria-pressed",cur.s==="ok");bSug.setAttribute("aria-pressed",cur.s==="sug");ta.hidden=cur.s!=="sug";if(cur.s==="sug")ta.focus();save();tally()}
+  bOk.addEventListener("click",()=>set("ok"));bSug.addEventListener("click",()=>set("sug"));
+  ta.addEventListener("input",()=>{(state[key]=state[key]||{}).n=ta.value;save()});
+  grid.appendChild(card)});
+ groups.appendChild(sec)});
+
+function tally(){let ok=0,sug=0;ALL.forEach(([id])=>{const s=(state[sid(id)]||{}).s;if(s==="ok")ok++;else if(s==="sug")sug++});
+ document.getElementById("n-ok").textContent=ok;document.getElementById("n-sug").textContent=sug;document.getElementById("n-pend").textContent=ALL.length-ok-sug}
+tally();
+
+function summary(){const ok=[],sug=[],pend=[];
+ ALL.forEach(([id,name])=>{const st=state[sid(id)]||{};if(st.s==="ok")ok.push(name);else if(st.s==="sug")sug.push(`- ${name} (${id}): ${(st.n||"sin detalle").trim()}`);else pend.push(name)});
+ return ["Revisión de props S154",`Aprobados (${ok.length}): ${ok.join(", ")||"ninguno"}`,`Con sugerencia (${sug.length}):`,...(sug.length?sug:["- ninguno"]),`Pendientes (${pend.length}): ${pend.join(", ")||"ninguno"}`].join("\n")}
+const status=document.getElementById("status"),fb=document.getElementById("fallback");
+document.getElementById("copy").addEventListener("click",()=>{const t=summary();
+ navigator.clipboard.writeText(t).then(()=>{status.textContent="Copiado. Pégalo en el chat.";fb.style.display="none"})
+ .catch(()=>{fb.value=t;fb.style.display="block";fb.focus();fb.select();status.textContent="Selecciona y copia el texto."})});
+</script>
