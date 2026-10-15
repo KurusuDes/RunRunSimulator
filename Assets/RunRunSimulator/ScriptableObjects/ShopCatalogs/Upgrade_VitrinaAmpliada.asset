@@ -22,6 +22,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Id: vitrina_ampliada
-  DisplayName: Vitrina ampliada
-  LevelPrices: 140000003200000064000000
+  DisplayName: "M\xE1s vitrinas"
+  LevelPrices: 280000005a000000
   BonusPerLevel: 1

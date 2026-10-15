@@ -1,6 +1,6 @@
 import sys
 sys.path.insert(0, r"C:\Users\Docente\Desktop\UnityProyects\RunRunSimulator\Tools\Blender\props")
-from env_kit_e2 import *
+from zone_annex import *
 
 T = 0.3
 ZT = 2.7
@@ -20,9 +20,13 @@ WALLS = {
 }
 DOOR_E = -11.5
 PILASTERS = {"E": [], "N": [19.4], "S": []}
-INNER = {"E": ("E", YN_IN, YS_IN), "N": ("N", XE_IN, FX1), "S2": ("S", XE_IN, DOOR[0]), "S1": ("S", DOOR[1], FX1)}
+INNER = {"E": ("E", YN_IN + 0.047, YS_IN - 0.047), "N": ("N", XE_IN, FX1), "S2": ("S", XE_IN, DOOR[0]), "S1": ("S", DOOR[1], FX1)}
 POSTS = {"E": [YN_IN, YS_IN], "N": [XE_IN, 19.4, FX1 - 0.15], "S2": [XE_IN, DOOR[0] - 0.16], "S1": [DOOR[1] + 0.16, FX1 - 0.15]}
 RUG_C = (19.3, -12.0)
+PO = 0.06
+WINDOWS_N = [17.78, 20.92]
+Z_SILL = FT + 1.2
+GLASS = []
 
 
 DHW, DH, DFW, DRISE, ND = 0.8, 2.2, 0.14, 0.2, 10
@@ -125,41 +129,78 @@ def door_frame(B, w, uc, v_sill=0.15):
     lantern(B, w.P(uc - 1.22, w.T + 0.02, z0 + DH), -w.n)
 
 
+def wpost(B, w, uc=0.0, width=0.3, u0=None, u1=None):
+    if u0 is None:
+        u0, u1 = uc - width / 2, uc + width / 2
+    a = w.P(u0, -PO, min(w.fin, w.gout) - 0.01)
+    b = w.P(u1, w.T + PO, w.zt + 0.15)
+    post3(B, [min(a[i], b[i]) for i in range(3)], [max(a[i], b[i]) for i in range(3)])
+
+
+def cpost(B, x0, x1, y0, y1, z0, z1):
+    post3(B, (x0 - PO, y0 - PO, z0), (x1 + PO, y1 + PO, z1))
+
+
+def ivy2(B, w, u0, u1, rng, step=0.46):
+    u = u0
+    k = 0
+    while u < u1:
+        big = 0.12 if k % 2 == 0 else 0.085
+        vv = (0.3 if k % 2 == 0 else 0.72) * w.T
+        c = w.P(u, vv, w.zt + 0.075 + big * 0.35)
+        ellipsoid_bm(c, (big, big * 0.9, big * 0.66), 6, 3, bm=B["SH_Leaf" if k % 3 else "SH_Moss"])
+        if k % 2 == 0:
+            r = 0.07
+            ellipsoid_bm(w.P(u + 0.06, w.T + 0.07, w.zt - 0.08), (r, r * 0.8, r * 0.95), 6, 4, bm=B["SH_Moss"])
+            ellipsoid_bm(w.P(u + 0.02, w.T + 0.055, w.zt - 0.22), (0.05, 0.04, 0.055), 6, 3, bm=B["SH_Leaf"])
+        u += step * rng.uniform(0.85, 1.15)
+        k += 1
+
+
 def build_walls(rng):
     B = Bins()
     W = WALLS
     S = W["S"]
     for u0, u1 in ((FX0, DOOR[0]), (DOOR[1], FX1)):
         wall_body(B, S, inner="SH_Parchment", outer="SH_Honey", u0=u0, u1=u1)
-        cap3(B, S, u0, u1)
+        cap3(B, S, XE_IN + 0.05 if u0 < DOOR[0] else u0 + 0.012, u1 - 0.012 if u1 < DOOR[1] + 0.1 else u1)
     for k in ("E", "N"):
         wall_body(B, W[k], inner="SH_Parchment", outer="SH_Honey")
-        cap3(B, W[k], W[k].a0, W[k].a1)
-    S.box(B["SH_Timber"], DOOR[0] - 0.05, DOOR[1] + 0.05, -0.05, T + 0.05, ZT - 0.24, ZT + 0.09, r=0.04, segs=2)
+    cap3(B, W["E"], W["E"].a0, W["E"].a1)
+    cap3(B, W["N"], XE_IN + 0.05, W["N"].a1)
+    S.box(B["SH_Timber"], DOOR[0], DOOR[1], -0.05, T + 0.05, ZT - 0.24, ZT + 0.09, r=0.04, segs=2)
     for key, (k, u0, u1) in INNER.items():
         inner3(B, W[k], u0, u1, "SH_Plum", board="SH_Oak", groove="SH_Honey")
         girt3(B, W[k], u0, u1, FT + 2.0)
         knee_braces(B, W[k], POSTS[key], FT + 1.5, FT + 2.0)
-    for k, u0, u1 in (("E", FY0, YS_OUT), ("N", XE_OUT, FX1), ("S", XE_OUT, DOOR[0]), ("S", DOOR[1], FX1)):
-        outer3(B, W[k], u0, u1, rng)
+    cor = (XE_OUT - PO, XE_IN + PO)
+    endp = (FX1 - 0.3, FX1 + 0.03)
+    posts = {"E": [(YN_OUT - PO, YN_IN + PO), (YS_IN - PO, YS_OUT + PO)],
+             "N": [cor, (19.4 - 0.15, 19.4 + 0.15), endp],
+             "S": [cor, (DOOR[0] - 0.32, DOOR[0] + 0.025), (DOOR[1] - 0.025, DOOR[1] + 0.32), endp]}
+    for k, u0, u1 in (("E", FY0 + 0.02, YS_OUT), ("N", XE_OUT, FX1), ("S", XE_OUT, DOOR[0]), ("S", DOOR[1], FX1)):
+        outer3s(B, W[k], u0, u1, rng, posts[k])
     for k, us in PILASTERS.items():
         for u in us:
-            wall_post3(B, W[k], u)
-    wall_post3(B, W["N"], u0=FX1 - 0.3, u1=FX1 + 0.02)
-    wall_post3(B, S, u0=FX1 - 0.3, u1=FX1 + 0.02)
-    wall_post3(B, S, u0=DOOR[0] - 0.32, u1=DOOR[0])
-    wall_post3(B, S, u0=DOOR[1], u1=DOOR[1] + 0.32)
+            wpost(B, W[k], u)
+    wpost(B, W["N"], u0=endp[0], u1=endp[1])
+    wpost(B, S, u0=endp[0], u1=endp[1])
+    wpost(B, S, u0=DOOR[0] - 0.32, u1=DOOR[0] + 0.025)
+    wpost(B, S, u0=DOOR[1] - 0.025, u1=DOOR[1] + 0.32)
     z0, z1 = G - 0.01, ZT + 0.15
-    corner_post3(B, XE_OUT, XE_IN, YN_OUT, YN_IN, z0, z1)
-    corner_post3(B, XE_OUT, XE_IN, YS_IN, YS_OUT, z0, z1)
+    cpost(B, XE_OUT, XE_IN, YN_OUT, YN_IN, z0, z1)
+    cpost(B, XE_OUT, XE_IN, YS_IN, YS_OUT, z0, z1)
     for u in (DOOR[0] - 0.16, DOOR[1] + 0.16):
         lantern(B, S.P(u, T + PIL_OUT, ZT - 0.55), (0, 1, 0))
-    ivy(B, W["E"], -16.6, -13.0, rng)
-    ivy(B, S, XE_OUT + 0.3, DOOR[0] - 0.5, rng)
+    ivy2(B, S, XE_OUT + 0.4, DOOR[0] - 0.55, rng)
     mushroom(B, XE_OUT - 0.2, YN_OUT - 0.15, G, 1.1, "SH_Gold")
     mushroom(B, XE_OUT - 0.12, YN_OUT + 0.22, G, 0.75, "SH_Plum")
     cut_hole(B, W["E"], DOOR_E - DRO, DOOR_E + DRO, FT + DH)
     door_frame(B, W["E"], DOOR_E)
+    for uc in WINDOWS_N:
+        zb = Z_SILL + WIN_FW - 0.02
+        cut_window(B, W["N"], uc - WIN_HW, uc + WIN_HW, zb, zb + 2 * WIN_HH)
+        cross_window(B, W["N"], uc, Z_SILL, GLASS)
     return B.done("Walls")
 
 
@@ -178,8 +219,6 @@ def build_deco_walls():
     stars_on(B, W["E"], YN_IN + 0.8, -11.9 - 0.8, zs, 0)
     for i, uc in enumerate((-9.75, -8.45)):
         star_local(W["E"], B["SH_Plum" if (1 + i) % 2 == 0 else "SH_Gold"], uc, zs, 0.3, 0.3 * 0.47, 0.045)
-    stars_on(B, W["N"], XE_IN + 0.8, 19.4 - 0.8, zs, 1)
-    stars_on(B, W["N"], 19.4 + 0.8, FX1 - 0.9, zs, 0)
     stars_on(B, W["S"], XE_IN + 0.75, DOOR[0] - 0.85, zs, 0)
     stars_on(B, W["S"], DOOR[1] + 0.85, FX1 - 0.9, zs, 1)
     S = W["S"]
@@ -210,19 +249,22 @@ def annulus(bm, cx, cy, r0, r1, z, n=40, zo=None):
 def build_rug():
     B = Bins()
     cx, cy = RUG_C
-    top = FT + 0.009
     R = 2.0
-    annulus(B["SH_Walnut"], cx, cy, 0.0, R - 0.05, FT + 0.004, n=36)
-    annulus(B["SH_Walnut"], cx, cy, R - 0.05, R, FT + 0.004, n=36, zo=FT + 0.001)
-    cyc = ["SH_Gold", "SH_Parchment", "SH_Sage", "SH_Plum", "SH_Parchment", "SH_Sage", "SH_Gold", "SH_Plum", "SH_Parchment",
-           "SH_Sage", "SH_Plum", "SH_Gold", "SH_Plum"]
-    r = 0.0
-    w = (R - 0.06) / len(cyc)
+    zt, zg = FT + 0.009, FT + 0.0055
+    cyc = ["SH_Gold", "SH_Parchment", "SH_Sage", "SH_Plum", "SH_Parchment", "SH_Gold", "SH_Sage", "SH_Plum", "SH_Parchment",
+           "SH_Plum"]
+    g = 0.009
+    w = (R - 0.05) / len(cyc)
     for i, m in enumerate(cyc):
-        r0 = r + (0.0 if i == 0 else 0.008)
-        r1 = r + w - 0.008
-        annulus(B[m], cx, cy, r0, r1, top, n=36)
-        r += w
+        r0, r1 = i * w, (i + 1) * w
+        a0 = r0 + (g if i > 0 else 0.0)
+        a1 = r1 - g if i < len(cyc) - 1 else r1
+        if i > 0:
+            annulus(B["SH_Walnut"], cx, cy, r0, a0, zg, n=32, zo=zt)
+        annulus(B[m], cx, cy, a0, a1, zt, n=32)
+        if i < len(cyc) - 1:
+            annulus(B["SH_Walnut"], cx, cy, a1, r1, zt, n=32, zo=zg)
+    annulus(B["SH_Walnut"], cx, cy, R - 0.05, R, zt, n=32, zo=FT - 0.004)
     return B.done("Rug", angle=60)
 
 
@@ -256,11 +298,14 @@ floors = build_floor()
 rug = build_rug()
 check_floor(floors + rug, [(XE_IN + 0.05, EDGE_X - 0.05, YN_IN + 0.05, YS_IN - 0.05)], FT, step=0.3, label="planks+rug")
 for key, (k, u0, u1) in INNER.items():
-    skip = PILASTERS[k] + ([DOOR_E + d for d in (-1.1, -0.55, 0.0, 0.55, 1.1)] if k == "E" else [])
+    skip = PILASTERS[k] + ([DOOR_E + d for d in (-1.1, -0.55, 0.0, 0.55, 1.1)] if k == "E" else []) + ([u + d for u in WINDOWS_N for d in (-0.8, -0.4, 0.0, 0.4, 0.8)] if k == "N" else [])
     check_wall(walls, WALLS[k], u0 + 0.35, u1 - 0.35, skip=skip, label="inner_" + key)
 parts_report()
 ob = join_all("ShopZoneSalaJuegos")
 report(ob)
+coplanar_report([ob], "ShopZoneSalaJuegos", show=30, floor_z=FT)
+for c, sz in GLASS:
+    print("GLASS center=%s size=%s unity_center=(%.3f, %.3f, %.3f)" % (c, sz, -c[0], c[2], -c[1]))
 export(ob, flags)
 C = (19.3, -12.0, 0.5)
 views = [

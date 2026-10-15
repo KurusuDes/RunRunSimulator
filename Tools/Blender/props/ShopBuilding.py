@@ -3,6 +3,7 @@ sys.path.insert(0, r"C:\Users\Docente\Desktop\UnityProyects\RunRunSimulator\Tool
 from props_common import *
 import random
 from mathutils.bvhtree import BVHTree
+import coplanar_check
 
 SCRATCH = r"C:\Users\Docente\AppData\Local\Temp\claude\C--Users-Docente-Desktop-UnityProyects-RunRunSimulator\4d55ec4f-97d7-4ab7-b7aa-aab8024c682a\scratchpad"
 OBJ_PATH = os.path.join(SCRATCH, "shop_env", "shop_env.obj")
@@ -20,7 +21,7 @@ WALLS = [
          sides=[dict(plane=-7.5, s=-1, kind="in", rooms=[(24.0, 36.0, "shop")]),
                 dict(plane=-7.0, s=1, kind="out", ext=(23.5, 36.5), extend=True,
                      pilasters=[(23.5, "c0"), (36.5, "c1")])]),
-    dict(name="back", axis="x", a=(23.5, 36.5), t=(-25.0, -24.5), holes=[],
+    dict(name="back", axis="x", a=(23.5, 36.5), t=(-25.0, -24.5), holes=[(25.14, 26.34, 1.8, 3.2), (33.66, 34.86, 1.8, 3.2)],
          sides=[dict(plane=-24.5, s=1, kind="in", rooms=[(24.0, 36.0, "back")]),
                 dict(plane=-25.0, s=-1, kind="out", ext=(23.5, 36.5), extend=True,
                      pilasters=[(23.5, "c0"), (36.5, "c1"), (27.83, "m"), (32.17, "m")])]),
@@ -28,7 +29,7 @@ WALLS = [
          sides=[dict(plane=24.0, s=1, kind="in", rooms=[(-24.5, -18.5, "back"), (-18.0, -7.5, "shop")]),
                 dict(plane=23.5, s=-1, kind="out", ext=(-25.0, -7.0), extend=False,
                      pilasters=[(-25.0, "c0"), (-7.0, "c1"), (-18.25, "m"), (-12.6, "m")])]),
-    dict(name="east", axis="y", a=(-25.0, -7.0), t=(36.0, 36.5), holes=[],
+    dict(name="east", axis="y", a=(-25.0, -7.0), t=(36.0, 36.5), holes=[(-23.95, -22.85, 1.8, 3.2)],
          sides=[dict(plane=36.0, s=-1, kind="in", rooms=[(-24.5, -18.5, "back"), (-18.0, -7.5, "shop")]),
                 dict(plane=36.5, s=1, kind="out", ext=(-25.0, -7.0), extend=False,
                      pilasters=[(-25.0, "c0"), (-7.0, "c1"), (-21.4, "m"), (-18.25, "m"), (-12.6, "m")])]),
@@ -184,6 +185,16 @@ def rect_minus(u0, u1, z0, z1, holes):
     return [(a, b, p, q) for a, b, zs in cols for p, q in zs]
 
 
+def grow(holes, e=0.02):
+    return [(h[0] - e, h[1] + e, h[2] if h[2] <= FLOOR + 1e-4 else h[2] - e, h[3] + e) for h in holes]
+
+
+def neighbors(holes, h):
+    left = [g[1] for g in holes if g is not h and g[1] <= h[0] and h[0] - g[1] < 0.6]
+    right = [g[0] for g in holes if g is not h and g[0] >= h[1] and g[0] - h[1] < 0.6]
+    return (max(left) if left else None), (min(right) if right else None)
+
+
 def u_segments(u0, u1, z0, z1, holes):
     return [(a, b) for a, b, p, q in rect_minus(u0, u1, z0, z1, holes) if abs(p - z0) < 1e-5 and abs(q - z1) < 1e-5]
 
@@ -245,13 +256,13 @@ def arch(mat, wall, side, u0, u1, zb, rise, w, off):
     for k in range(n):
         face_prism(mat, wall, side, [pts_i[k], pts_i[k + 1], pts_o[k + 1], pts_o[k]], -0.02, off)
     for u in (u0, u1):
-        wrbox("SH_Timber", wall, side, u - 0.07, u + 0.07, -0.02, off + 0.012, zb - 0.02, zb + w + 0.06, 0.02)
+        wrbox("SH_Timber", wall, side, u - 0.07, u + 0.07, -0.02, off + 0.045, zb - 0.02, zb + w + 0.06, 0.02)
 
 
 def boards(mats, wall, side, a, b, p, q, w=0.2, gap=0.014, off=0.02, base="SH_Walnut"):
     n = max(1, int(round((b - a) / w)))
     step = (b - a) / n
-    wbox(base, wall, side, a, b, -0.02, 0.004, p, q)
+    wbox(base, wall, side, a + 0.01, b - 0.01, -0.02, 0.009, p + 0.01, q - 0.01)
     for i in range(n):
         u0 = a + i * step + (gap / 2 if i > 0 else 0)
         u1 = a + (i + 1) * step - (gap / 2 if i < n - 1 else 0)
@@ -276,13 +287,52 @@ def build_core(wall):
         mats["-" + ua] = "SH_Oak" if edge_u(a) else None
         mats["+" + ua] = "SH_Oak" if edge_u(b) else None
         below = any(h[0] <= a + 1e-5 and h[1] >= b - 1e-5 and abs(h[3] - p) < 1e-5 for h in holes)
-        above = any(h[0] <= a + 1e-5 and h[1] >= b - 1e-5 and abs(h[2] - q) < 1e-5 for h in holes)
+        above = any(h[0] <= a + 1e-5 and h[1] >= b - 1e-5 and abs(h[2] - q) < 1e-5 and h[2] > FLOOR + 1e-4
+                    for h in holes)
         mats["-z"] = "SH_Oak" if below else None
         mats["+z"] = "SH_Oak" if above else None
         if wall["axis"] == "x":
             abox(mats, (a, t0, p), (b, t1, q))
         else:
             abox(mats, (t0, a, p), (t1, b, q))
+    for h in holes:
+        if h[2] > FLOOR + 1e-4:
+            glazing(wall, h)
+
+
+GLASS = []
+
+
+def glazing(wall, h):
+    group(wall["name"] + "_win")
+    u0, u1, z0, z1 = h
+    t0, t1 = wall["t"]
+    side = dict(plane=t0, s=1)
+    m = (t1 - t0) / 2
+    big = z1 - z0 > 2.5
+    fw = 0.12 if big else 0.09
+    mw = 0.2 if big else 0.14
+    lo, hi = waabb(wall, side, u0 - 0.03, u1 + 0.03, m - 0.012, m + 0.012, z0 - 0.03, z1 + 0.03)
+    abox("SH_Glass", lo, hi)
+    GLASS.append((wall["name"], tuple(lo), tuple(hi)))
+    for a, b in ((u0 - 0.03, u0 + fw), (u1 - fw, u1 + 0.03)):
+        wrbox("SH_Timber", wall, side, a, b, m - 0.085, m + 0.085, z0 - 0.03, z1 + 0.03, 0.025)
+    for p, q in ((z0 - 0.03, z0 + fw), (z1 - fw, z1 + 0.03)):
+        wrbox("SH_Timber", wall, side, u0 - 0.03, u1 + 0.03, m - 0.07, m + 0.07, p, q, 0.025)
+    uc = (u0 + u1) / 2
+    zm = z0 + (z1 - z0) * (0.6 if big else 0.5)
+    wrbox("SH_Timber", wall, side, uc - mw / 2, uc + mw / 2, m - 0.1, m + 0.1, z0 + fw - 0.02, z1 - fw + 0.02, 0.035)
+    wrbox("SH_Timber", wall, side, u0 + fw - 0.02, u1 - fw + 0.02, m - 0.115, m + 0.115, zm - mw / 2, zm + mw / 2,
+          0.035)
+    for sg in (-1, 1):
+        ellipsoid_bm(wp(wall, side, uc, m + sg * 0.115, zm), R3(wall, mw * 0.55, 0.04, mw * 0.55), 10, 5,
+                     bm=B("SH_Walnut"))
+
+
+def alfeizar(wall, side, h, front):
+    u0, u1, z0, z1 = h
+    m = (wall["t"][1] - wall["t"][0]) / 2
+    wrbox("SH_Oak", wall, side, u0 - 0.1, u1 + 0.1, -m + 0.06, front, z0 - 0.045, z0 + 0.035, 0.022)
 
 
 def zoc_prof():
@@ -290,7 +340,7 @@ def zoc_prof():
 
 
 def chair_prof():
-    return [(-0.02, RAIL0), (0.03, RAIL0), (0.042, RAIL0 + 0.025), (0.042, RAIL1 - 0.03), (0.028, RAIL1),
+    return [(-0.02, RAIL0), (0.024, RAIL0), (0.032, RAIL0 + 0.025), (0.032, RAIL1 - 0.03), (0.024, RAIL1),
             (-0.02, RAIL1)]
 
 
@@ -314,7 +364,7 @@ def post_positions(spans, ends_fixed, zlist, spacing=2.3):
 
 
 def build_interior_side(wall, side):
-    holes = wall["holes"]
+    holes = grow(wall["holes"])
     for ru0, ru1, room in side["rooms"]:
         group(wall["name"] + "_in")
         acc = ACCENT[room]
@@ -329,8 +379,8 @@ def build_interior_side(wall, side):
             extrude("SH_Timber", wall, side, a, b, beam_prof(PLATE0, PLATE1, 0.045))
         spans = u_segments(ru0, ru1, RAIL1, MIDRAIL + 0.1, holes)
         for a, b in spans:
-            extrude("SH_Timber", wall, side, a, b, beam_prof(MIDRAIL - 0.07, MIDRAIL + 0.07, 0.04))
-        zl = zones(wall, side)
+            extrude("SH_Timber", wall, side, a, b, beam_prof(MIDRAIL - 0.07, MIDRAIL + 0.07, 0.03))
+        zl = zones(wall, side) + [(h[0] - 0.4, h[1] + 0.4, True) for h in wall["holes"] if h[2] > FLOOR + 1e-4]
         posts = post_positions(spans, True, zl)
         for u in posts:
             timber_post(wall, side, u, 0.18, 0.045, ZOC, PLATE0)
@@ -343,12 +393,14 @@ def build_interior_side(wall, side):
                     continue
                 i0, i1 = p0 + 0.09, p1 - 0.09
                 if k % 2 == 0:
-                    brace("SH_Timber", wall, side, i0, RAIL1 + 0.02, i0 + min(1.2, i1 - i0), MIDRAIL - 0.06, 0.13, 0.035)
+                    brace("SH_Timber", wall, side, i0, RAIL1 + 0.02, i0 + min(1.2, i1 - i0), MIDRAIL - 0.06, 0.13, 0.018)
                 else:
-                    brace("SH_Timber", wall, side, i1, RAIL1 + 0.02, i1 - min(1.2, i1 - i0), MIDRAIL - 0.06, 0.13, 0.035)
-        for h in holes:
+                    brace("SH_Timber", wall, side, i1, RAIL1 + 0.02, i1 - min(1.2, i1 - i0), MIDRAIL - 0.06, 0.13, 0.018)
+        for h in wall["holes"]:
             if h[0] >= ru0 - 1e-5 and h[1] <= ru1 + 1e-5:
-                casing_in(wall, side, h)
+                casing_in(wall, side, h, *neighbors(wall["holes"], h))
+                if h[2] > FLOOR + 1e-4:
+                    alfeizar(wall, side, h, 0.09)
 
 
 def timber_post(wall, side, u, w, off, z0, z1):
@@ -356,21 +408,29 @@ def timber_post(wall, side, u, w, off, z0, z1):
     wbox("SH_Walnut", wall, side, u - w / 2 - 0.025, u + w / 2 + 0.025, -0.02, off + 0.008, z1 - 0.12, z1)
 
 
-def casing_in(wall, side, h):
+def casing_in(wall, side, h, left=None, right=None):
     u0, u1, z0, z1 = h
     W, O = 0.18, 0.045
+    P = 0.008
     door = z0 <= FLOOR + 1e-4
-    zb = FLOOR if door else z0 - 0.07
-    wrbox("SH_Timber", wall, side, u0 - W, u0, -0.02, O, zb, z1 + 0.2, 0.022)
-    wrbox("SH_Timber", wall, side, u1, u1 + W, -0.02, O, zb, z1 + 0.2, 0.022)
-    wrbox("SH_Timber", wall, side, u0 - W - 0.12, u1 + W + 0.12, -0.02, O + 0.005, z1, z1 + 0.22, 0.03)
-    for u in (u0 - W - 0.12, u1 + W + 0.12):
-        wrbox("SH_Walnut", wall, side, u - 0.05, u + 0.05, -0.02, O + 0.005, z1 + 0.02, z1 + 0.2, 0.035)
-    if door:
-        for u in (u0 - W - 0.02, u1):
-            wrbox("SH_Walnut", wall, side, u, u + W + 0.02, -0.02, O + 0.005, FLOOR, FLOOR + 0.22, 0.02)
+    zb = FLOOR + 0.17 if door else z0 - 0.07
+    if left is None:
+        wrbox("SH_Timber", wall, side, u0 - W - P, u0 - P, -0.02, O, zb, z1 + 0.2, 0.022)
+    if right is None:
+        wrbox("SH_Timber", wall, side, u1 + P, u1 + W + P, -0.02, O, zb, z1 + 0.2, 0.022)
     else:
-        wrbox("SH_Timber", wall, side, u0 - W - 0.06, u1 + W + 0.06, -0.02, O + 0.005, z0 - 0.09, z0, 0.02)
+        wrbox("SH_Timber", wall, side, u1 + P, right - P, -0.02, O, min(zb, FLOOR + 0.2), z1 + 0.2, 0.022)
+    la = u0 - W - 0.12 if left is None else left + P + 0.03
+    lb = u1 + W + 0.12 if right is None else right - P - 0.03
+    wrbox("SH_Timber", wall, side, la, lb, -0.02, O + 0.015, z1 + P, z1 + 0.22, 0.03)
+    for u in ((u0 - W - 0.12,) if left is None else ()) + ((u1 + W + 0.12,) if right is None else ()):
+        wrbox("SH_Walnut", wall, side, u - 0.05, u + 0.05, -0.02, O + 0.035, z1 + 0.02, z1 + 0.2, 0.035)
+    if door:
+        for a, b in ((u0 - W - 0.03, u0 + P), (u1 - P, u1 + W + 0.03)):
+            wrbox("SH_Walnut", wall, side, a, b, -0.02, O + 0.015, FLOOR, FLOOR + 0.22, 0.02)
+    else:
+        wrbox("SH_Timber", wall, side, max(la, u0 - W - 0.06), min(lb, u1 + W + 0.06), -0.02, O + 0.005, z0 - 0.09,
+              z0 - 0.012, 0.02)
     rise = min(0.3, PLATE0 - (z1 + 0.22) - 0.1)
     if rise > 0.12:
         arch("SH_Walnut", wall, side, u0 - 0.05, u1 + 0.05, z1 + 0.22, rise, 0.1, 0.035)
@@ -379,9 +439,13 @@ def casing_in(wall, side, h):
 STONE_RNG = random.Random(11)
 
 
+def ext_ends(segs, E0, E1, d=0.012):
+    return [(a - d if abs(a - E0) < 1e-5 else a, b + d if abs(b - E1) < 1e-5 else b) for a, b in segs]
+
+
 def build_exterior_side(wall, side):
     group(wall["name"] + "_out")
-    holes = wall["holes"]
+    holes = grow(wall["holes"])
     e0, e1 = side["ext"]
     ext = 0.12 if side["extend"] else 0.0
     E0, E1 = e0 - ext, e1 + ext
@@ -397,18 +461,18 @@ def build_exterior_side(wall, side):
                 if u1 - u0 > 0.18:
                     zb = GROUND + STONE_RNG.uniform(0.05, 0.12)
                     zt = 0.5 - STONE_RNG.uniform(0.0, 0.08)
-                    wrbox("SH_Stone", wall, side, u0, u1, -0.02, 0.085, zb, zt, 0.07)
+                    wrbox("SH_Stone", wall, side, u0, u1, -0.01, 0.085, zb, zt, 0.07)
                 u += L
     for a, b, p, q in rect_minus(E0 + 0.0, E1 - 0.0, 0.7, 4.9, holes):
         boards(["SH_Honey", "SH_Honey", "SH_Oak", "SH_Honey", "SH_Oak"], wall, side, a, b, p, q, w=0.3, gap=0.012,
                off=0.018, base="SH_Walnut")
-    for a, b in u_segments(E0, E1, 0.6, 0.76, holes_low):
-        extrude("SH_Timber", wall, side, a, b, beam_prof(0.6, 0.76, 0.06))
-    for a, b in u_segments(E0, E1, 4.86, 5.1, holes):
-        extrude("SH_Timber", wall, side, a, b, beam_prof(4.86, 5.1, 0.06))
+    for a, b in ext_ends(u_segments(E0, E1, 0.6, 0.76, holes_low), E0, E1):
+        extrude("SH_Timber", wall, side, a, b, beam_prof(0.6, 0.76, 0.048))
+    for a, b in ext_ends(u_segments(E0, E1, 4.86, 5.1, holes), E0, E1):
+        extrude("SH_Timber", wall, side, a, b, beam_prof(4.86, 5.1, 0.048))
     spans = u_segments(E0, E1, 0.76, 4.86, holes)
     if wall["name"] != "front":
-        for a, b in spans:
+        for a, b in ext_ends(spans, E0, E1):
             extrude("SH_Timber", wall, side, a, b, beam_prof(2.8, 2.98, 0.055))
     PW = 0.3
     posts = []
@@ -431,23 +495,33 @@ def build_exterior_side(wall, side):
             brace("SH_Timber", wall, side, i1, 0.8, (i0 + i1) / 2 + 0.08, 2.76, 0.15, 0.05)
             brace("SH_Timber", wall, side, i0, 4.82, (i0 + i1) / 2 - 0.08, 3.02, 0.15, 0.05)
             brace("SH_Timber", wall, side, i1, 4.82, (i0 + i1) / 2 + 0.08, 3.02, 0.15, 0.05)
-    for h in holes:
-        casing_out(wall, side, h)
+    for h in wall["holes"]:
+        casing_out(wall, side, h, *neighbors(wall["holes"], h))
+        if h[2] > FLOOR + 1e-4:
+            alfeizar(wall, side, h, 0.16)
     eave(wall, side, E0 - (0.38 if side["extend"] else 0.0), E1 + (0.38 if side["extend"] else 0.0))
 
 
-def casing_out(wall, side, h):
+def casing_out(wall, side, h, left=None, right=None):
     u0, u1, z0, z1 = h
     W, O = 0.2, 0.07
+    P = 0.008
     door = z0 <= FLOOR + 1e-4
-    zb = FLOOR if door else z0 - 0.1
-    wrbox("SH_Timber", wall, side, u0 - W, u0, -0.02, O, zb, z1 + 0.2, 0.025)
-    wrbox("SH_Timber", wall, side, u1, u1 + W, -0.02, O, zb, z1 + 0.2, 0.025)
-    wrbox("SH_Timber", wall, side, u0 - W - 0.1, u1 + W + 0.1, -0.02, O + 0.02, z1, z1 + 0.22, 0.035)
-    for u in (u0 - W - 0.1, u1 + W + 0.1):
-        wrbox("SH_Walnut", wall, side, u - 0.055, u + 0.055, -0.02, O + 0.025, z1 + 0.02, z1 + 0.2, 0.04)
+    zb = FLOOR if door else z0 - 0.08
+    if left is None:
+        wrbox("SH_Timber", wall, side, u0 - W - P, u0 - P, -0.02, O, zb, z1 + 0.2, 0.025)
+    if right is None:
+        wrbox("SH_Timber", wall, side, u1 + P, u1 + W + P, -0.02, O, zb, z1 + 0.2, 0.025)
+    else:
+        wrbox("SH_Timber", wall, side, u1 + P, right - P, -0.02, O, min(zb, FLOOR), z1 + 0.2, 0.025)
+    la = u0 - W - 0.1 if left is None else left + P + 0.03
+    lb = u1 + W + 0.1 if right is None else right - P - 0.03
+    wrbox("SH_Timber", wall, side, la, lb, -0.02, O + 0.02, z1 + P, z1 + 0.22, 0.035)
+    for u in ((u0 - W - 0.1,) if left is None else ()) + ((u1 + W + 0.1,) if right is None else ()):
+        wrbox("SH_Walnut", wall, side, u - 0.055, u + 0.055, -0.02, O + 0.045, z1 + 0.02, z1 + 0.2, 0.04)
     if not door:
-        wrbox("SH_Timber", wall, side, u0 - W - 0.06, u1 + W + 0.06, -0.02, 0.13, z0 - 0.1, z0, 0.03)
+        wrbox("SH_Timber", wall, side, max(la, u0 - W - 0.06), min(lb, u1 + W + 0.06), -0.02, 0.13, z0 - 0.1,
+              z0 - 0.012, 0.03)
         rise = min(0.22, 4.86 - (z1 + 0.22) - 0.04)
         if rise > 0.1:
             arch("SH_Walnut", wall, side, u0 + 0.1, u1 - 0.1, z1 + 0.22, rise, 0.09, 0.06)
@@ -504,7 +578,7 @@ def corner_posts():
     group("pilasters")
     corners = [(24.0, -7.5, 1, -1), (36.0, -7.5, -1, -1), (24.0, -18.0, 1, 1), (36.0, -18.0, -1, 1),
                (24.0, -18.5, 1, -1), (36.0, -18.5, -1, -1), (24.0, -24.5, 1, 1), (36.0, -24.5, -1, 1)]
-    W, O = 0.2, 0.05
+    W, O = 0.2, 0.065
     for cx, cy, dx, dy in corners:
         for lo, hi in (((cx, cy), (cx + dx * W, cy + dy * O)), ((cx, cy), (cx + dx * O, cy + dy * W))):
             x0, x1 = sorted((lo[0] - dx * 0.02, hi[0]))
@@ -623,12 +697,14 @@ def ramp(name, axis, lo, hi, W0, W1):
         top = lambda s: f(s) + 0.04
         pts = [(smin, GROUND), (smax, GROUND), (smax, top(smax)), (smin, top(smin))]
         prism("SH_StoneDark", [P(s, a, z) for s, z in pts], [P(s, b, z) for s, z in pts])
-        prism("SH_Timber", [P(s, a - 0.01, z) for s, z in ((smin, top(smin) - 0.02), (smax, top(smax) - 0.02),
-                                                             (smax, top(smax) + 0.03), (smin, top(smin) + 0.03))],
-              [P(s, b + 0.01, z) for s, z in ((smin, top(smin) - 0.02), (smax, top(smax) - 0.02),
-                                              (smax, top(smax) + 0.03), (smin, top(smin) + 0.03))])
-    quad("SH_StoneDark", [P(L0, W0 - 0.1, GROUND), P(L0, W1 + 0.1, GROUND), P(L0, W1 + 0.1, f(L0) - 0.012),
-                          P(L0, W0 - 0.1, f(L0) - 0.012)], P(1 if L0 > L1 else -1, 0, 0))
+        t0 = smin - (0.012 if L0 < L1 else 0.0)
+        t1 = smax + (0.012 if L0 > L1 else 0.0)
+        prism("SH_Timber", [P(s, a - 0.01, z) for s, z in ((t0, top(smin) - 0.02), (t1, top(smax) - 0.02),
+                                                             (t1, top(smax) + 0.03), (t0, top(smin) + 0.03))],
+              [P(s, b + 0.01, z) for s, z in ((t0, top(smin) - 0.02), (t1, top(smax) - 0.02),
+                                              (t1, top(smax) + 0.03), (t0, top(smin) + 0.03))])
+    quad("SH_StoneDark", [P(L0, W0, GROUND), P(L0, W1, GROUND), P(L0, W1, f(L0) - 0.012),
+                          P(L0, W0, f(L0) - 0.012)], P(1 if L0 > L1 else -1, 0, 0))
 
 
 def shelf(wall, side, u0, u1, z, depth=0.26):
@@ -645,7 +721,7 @@ def food_bag(wall, side, u, z, mat, h=0.3):
     sz = R3(wall, 0.2, 0.15, h)
     rbox_bm((c.x, c.y, c.z), sz, 0.045, segs=1, bm=B(mat))
     cc = wp(wall, side, u, 0.13, z + h - 0.01)
-    rbox_bm((cc.x, cc.y, cc.z), R3(wall, 0.21, 0.07, 0.035), 0.012, segs=1, bm=B("SH_Parchment"))
+    rbox_bm((cc.x, cc.y, cc.z), R3(wall, 0.21, 0.12, 0.035), 0.012, segs=1, bm=B("SH_Parchment"))
     lc = wp(wall, side, u, 0.205, z + h * 0.48)
     ellipsoid_bm(lc, R3(wall, 0.06, 0.012, 0.06), 8, 4, bm=B("SH_Parchment"))
     for du, dz in ((-0.03, 0.035), (0.0, 0.05), (0.03, 0.035)):
@@ -682,7 +758,7 @@ def jar(wall, side, u, z, lid):
     if lid:
         lathe_bm([(0.0, 0.195), (0.068, 0.195), (0.07, 0.23), (0.03, 0.245), (0.0, 0.25)], 8, bm=B(lid), matrix=m)
         ellipsoid_bm((c.x, c.y, z + 0.27), (0.025, 0.025, 0.025), 6, 4, bm=B(lid))
-        lathe_bm([(0.0, 0.07), (0.087, 0.07), (0.087, 0.13), (0.0, 0.13)], 8, bm=B(lid), matrix=m)
+        lathe_bm([(0.0, 0.07), (0.098, 0.07), (0.098, 0.13), (0.0, 0.13)], 8, bm=B(lid), matrix=m)
     else:
         lathe_bm([(0.058, 0.2), (0.07, 0.215), (0.064, 0.225), (0.0, 0.18)], 8, bm=B("SH_Glass"), matrix=m)
         bone(wp(wall, side, u - 0.03, 0.12, z + 0.17), wp(wall, side, u - 0.07, 0.15, z + 0.31), 0.013,
@@ -717,10 +793,13 @@ def collar_rail(wall, side, u0, u1, z, mats):
 
 def sign(wall, side, u, z, w, h, motif, low=False):
     decor_zone(wall, side, u - w / 2 - 0.1, u + w / 2 + 0.1, low)
-    wrbox("SH_Oak", wall, side, u - w / 2, u + w / 2, -0.02, 0.05, z - h / 2, z + h / 2, 0.03)
-    for a, b, p, q in ((u - w / 2, u + w / 2, z + h / 2 - 0.07, z + h / 2), (u - w / 2, u + w / 2, z - h / 2, z - h / 2 + 0.07),
-                       (u - w / 2, u - w / 2 + 0.07, z - h / 2, z + h / 2), (u + w / 2 - 0.07, u + w / 2, z - h / 2, z + h / 2)):
-        wrbox("SH_Walnut", wall, side, a, b, -0.02, 0.07, p, q, 0.025)
+    wrbox("SH_Oak", wall, side, u - w / 2 + 0.03, u + w / 2 - 0.03, -0.02, 0.05, z - h / 2 + 0.03, z + h / 2 - 0.03,
+          0.03)
+    for a, b, p, q, f in ((u - w / 2, u + w / 2, z + h / 2 - 0.07, z + h / 2, 0.07),
+                          (u - w / 2, u + w / 2, z - h / 2, z - h / 2 + 0.07, 0.07),
+                          (u - w / 2 + 0.012, u - w / 2 + 0.07, z - h / 2 + 0.05, z + h / 2 - 0.05, 0.061),
+                          (u + w / 2 - 0.07, u + w / 2 - 0.012, z - h / 2 + 0.05, z + h / 2 - 0.05, 0.061)):
+        wrbox("SH_Walnut", wall, side, a, b, -0.02, f, p, q, 0.025)
     s = min(w, h) * 0.5
     bm = B("SH_Walnut")
     if motif == "paw":
@@ -759,7 +838,7 @@ def pecera(wall, side, u, z):
                      bm=B("SH_Leaf"))
     for du, dz in ((0.05, 0.3), (0.08, 0.42), (0.03, 0.5)):
         ellipsoid_bm(wp(wall, side, u + du, D - 0.04, z + dz), (0.018, 0.018, 0.018), 5, 3, bm=B("SH_Glass"))
-    wrbox("SH_Stone", wall, side, u - W / 2 + 0.07, u + W / 2 - 0.07, -0.02, D - 0.035, z, z + 0.05, 0.015)
+    wrbox("SH_Stone", wall, side, u - W / 2 + 0.085, u + W / 2 - 0.085, -0.02, D - 0.025, z, z + 0.05, 0.015)
 
 
 def mushrooms(x, y, dx, dy, s=1.0):
@@ -821,19 +900,19 @@ def dress():
         else:
             jar(W["mid"], mid_shop, u, 2.1, ["SH_Gold", "SH_Plum"][k // 2])
     group("east_in")
-    shelf(W["east"], east_in, -23.6, -21.0, 1.7, depth=0.28)
-    shelf(W["east"], east_in, -23.6, -21.0, 2.5, depth=0.28)
-    for k, u in enumerate((-23.3, -22.95, -22.6, -22.25, -21.9, -21.55, -21.25)):
+    shelf(W["east"], east_in, -22.4, -19.8, 1.7, depth=0.28)
+    shelf(W["east"], east_in, -22.4, -19.8, 2.5, depth=0.28)
+    for k, u in enumerate((-22.1, -21.75, -21.4, -21.05, -20.7, -20.35, -20.05)):
         food_bag(W["east"], east_in, u, 1.7 if k < 4 else 1.7, ["SH_Gold", "SH_Sage", "SH_Teal", "SH_Plum"][k % 4],
                  h=0.32)
-    for k, u in enumerate((-23.3, -22.95, -22.6, -22.25, -21.9)):
+    for k, u in enumerate((-22.1, -21.75, -21.4, -21.05, -20.7)):
         jar(W["east"], east_in, u, 2.5, ["SH_Sage", "SH_Plum", "SH_Gold", "SH_Teal", "SH_Sage"][k])
     group("back_in")
     collar_rail(W["back"], back_in, 30.0, 32.4, 2.35, ["SH_Gold", "SH_Teal", "SH_Plum", "SH_Sage", "SH_Gold"])
     group("mid_in")
     sign(W["mid"], mid_back, 29.2, 4.2, 1.1, 0.8, "bone")
     group("back_in")
-    sign(W["back"], back_in, 27.0, 3.9, 0.9, 0.6, "paw")
+    sign(W["back"], back_in, 27.3, 3.9, 0.9, 0.6, "paw")
     for x, y, dx, dy in ((23.5, -7.0, -1, 1), (36.5, -7.0, 1, 1), (23.5, -25.0, -1, -1), (36.5, -25.0, 1, -1)):
         mushrooms(x, y, dx, dy, 1.0 if y < -20 else 0.8)
     group("west_out")
@@ -854,8 +933,8 @@ def build():
                 build_interior_side(w, side)
             else:
                 build_exterior_side(w, side)
-    build_cap(WALLS[0], 23.45, 36.55)
-    build_cap(WALLS[1], 23.45, 36.55)
+    build_cap(WALLS[0], 23.45, 36.55, garland=False)
+    build_cap(WALLS[1], 23.45, 36.55, garland=False)
     build_cap(WALLS[2], -24.45, -7.55)
     build_cap(WALLS[3], -24.45, -7.55)
     build_cap(WALLS[4], 24.05, 35.95, garland=False)
@@ -928,6 +1007,18 @@ def solid_at(p):
                 return True
     if 23.5 < p.x < 36.5 and -25 < p.y < -7 and 0 < p.z < FLOOR:
         return True
+    return False
+
+
+def solid_check(p):
+    if solid_at(p):
+        return True
+    for w in WALLS:
+        t0, t1 = w["t"]
+        a0, a1 = w["a"]
+        x0, x1, y0, y1 = (a0, a1, t0, t1) if w["axis"] == "x" else (t0, t1, a0, a1)
+        if x0 < p.x < x1 and y0 < p.y < y1 and GROUND < p.z <= 0.0:
+            return True
     return False
 
 
@@ -1157,6 +1248,7 @@ if out and "nopreview" not in flags:
 measure(objs)
 ob = join_all("ShopBuilding", [o for lst in objs.values() for o in lst])
 report(ob)
+coplanar_check.check(ob, "ShopBuilding", os.path.join(out, "ShopBuilding_coplanar.txt") if out else None, solid=solid_check)
 export(ob, flags)
 if out and "nopreview" not in flags:
     overlay(ob, out)

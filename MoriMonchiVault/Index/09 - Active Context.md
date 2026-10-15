@@ -4,6 +4,26 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-15 (Session 159 — **clipping de la tienda, techos con vigas vistas, ventanas de vidrio con cruz y 4 vitrinas fijas en la entrada** — 0 `.cs` tocados; 4 agentes Blender; consola 0 errores; probado en Play por sondas y capturas en el scratchpad)
+
+**Focus:** pedidos de Juan al cierre de S158: clipping en estantes y marcos de puerta, techos para las estructuras, ventanas para las tiendas, vitrinas de exposición en la entrada. Decisiones de Juan: vitrinas **fijas, 2 a cada lado de la entrada, que van creciendo**; el techo **se ve desde adentro** ("por eso es un techo"); ventanas **de vidrio con marco en cruz**. Al cierre aceptó que el vidrio no sea transparente (es `SH_Glass_Env` opaco celeste).
+
+**Hecho:**
+1. **Sonda de clipping (Unity, `execute_code`):** caras coplanares superpuestas (misma orientación, < 6 mm, centroide dentro del otro triángulo) por renderer + penetración de props contra arquitectura con `Physics.ComputePenetration` (colliders temporales `HideAndDontSave`). Hallazgos: frascos vs tapas en los estantes del local, marcos de puerta, alfombra de la Sala y paja del Criadero coplanares con el piso, juntas del kit.
+2. **Blender (agentes en paralelo, cada uno con su chequeo coplanar):** `ShopBuilding.py` (0 visibles según su chequeo `coplanar_check.py`; vidrio + cruz en los 2 escaparates del frente, 2 ventanas nuevas atrás y 1 al este; 51k tris), `ShopRoof.py` NUEVO (dos aguas, hastial con ojo de buey, cielo raso, cerchas, 3 faroles; 18,5k), `ShopZoneCriadero/SalaJuegos.py` (0 visibles; 2 ventanas por zona en el muro norte) + `ShopRoofCriadero.py`/`ShopRoofSala.py` NUEVOS (una agua bajo el alero del edificio; helper `zone_annex.py`), `ZoneKit.py` (juntas sin solapes, ventana con cruz, `ZoneKitRoof` NUEVO 9,67 m a 38°), `ShopShowcaseWindow.py` NUEVO (tarima 1,8 × 1,3 para 2 MoriMonchis).
+3. **Escena:** `ShopRoof` en `ENVIROMENT` (origen igual a `ShopBuilding`), techos de zona en `ZONE_*/Open`, `ZoneKitRoof` en cada `Lote_*/Arquitectura` (girado 90° si el lado abierto es ±X, así el hastial queda sobre la puerta). `ENVIROMENT/GlassColliders` (5 BoxCollider): **los escaparates del frente no tenían colisión** y se podían atravesar. Materiales nuevos remapeados a `Materials/Shop/Env/*_Env` (props a `Materials/Shop/SH_*`). Prefab `BreedingFurnitureNew`: `ShopModel` x +0,35 (el corral entraba 25 cm en la pared oeste del Criadero). Estantería del Almacén z 9,70 → 9,88.
+4. **Vitrinas:** `WORLD/Furniture/EntranceShowcases` con `Vitrina_A_Puerta` y `Vitrina_B_Puerta` (siempre abiertas) + `Slot_A_Fuera` / `Slot_B_Fuera` con `ShopZone` (nivel 1 / 2 de `Upgrade_VitrinaAmpliada`, `Locked` = `ShopLockedSign` a escala 0,6). Cada una: `StoreContainer` capacidad 2 sin `capacityUpgrade`, área 1,7 × 1,0 × 1,2, puntos de uso `Front_L/R` hacia adentro, etiqueta TMP apagada. La mejora se llama "Más vitrinas", precios 40/90 (4 → 6 → 8 lugares). `Base_Vitrina` del fondo borrada (sin referencias). Verificado en Play: el save de Juan (nivel 1) abre 3, registro = 3, rutas `PathComplete` desde la calle a los 6 puntos de uso.
+
+**Quirks ⚠️:** (1) `ShopBuilding` tiene el hijo con offset local (31,03; 0,48; −3,09): los techos nuevos se instancian con la misma transformación de la raíz y caen bien. (2) Al reimportar el kit, los overrides de acento por sala siguen en el slot 3 (`SH_Sage`); verificar si cambia el orden de submallas. (3) La sonda de Unity cuenta también caras ocultas (fondos, dentro de postes): en las esquinas de los lotes quedan miles que parecen ocultas, sin verificar a la vista. (4) El letrero "Cash Register" (TMP de depuración de la caja) se ve espejado en primera persona; preexistente.
+
+**Siguiente paso (S160, pedido de Juan):**
+1. Juan incorpora los **packages necesarios para la UI**; arrancar por ahí.
+2. Pendientes: recorrer la tienda en Play para confirmar techos, ventanas y vitrinas; esquinas de lotes de la sonda; presupuesto de tris (edificio 51k, Criadero 16k); velo blanco en Play; FPS del pasto; brazos nuevos en Play; caras vivas Sidekick; mirada de clientes; trample en la tienda; C6 primera build.
+
+**Archivos `.cs` S159 — creados (0) · modificados (0).** Scripts Blender: `ShopRoof.py`, `ShopRoofCriadero.py`, `ShopRoofSala.py`, `ShopShowcaseWindow.py`, `coplanar_check.py`, `zone_annex.py` (nuevos) · `ShopBuilding.py`, `ShopZoneCriadero.py`, `ShopZoneSalaJuegos.py`, `ZoneKit.py` (mod).
+
+---
+
 **Session:** 2026-10-15 (Session 158 — **brazos FP en reposo real + cuello + pasto toon fino + contorno fuera de la tienda** — 1 `.cs` creado, 3 modificados, 1 shader; compila 0 errores; verificado en Play con capturas en `Captures/S158/`)
 
 **Focus:** Juan: paso 0 de S157 (brazos FP en reposo), "el cuello se inclina", "usa la forma básica de los NPC", "un poco más abierto", quitar el contorno a través de paredes en la tienda (sí en exploración), y "el pasto se sigue viendo muy feo, busca referencias".

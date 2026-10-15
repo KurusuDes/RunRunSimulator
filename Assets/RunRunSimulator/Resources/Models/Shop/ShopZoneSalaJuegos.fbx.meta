@@ -17,6 +17,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: SH_Glass
+    second: {fileID: 2100000, guid: 6e081144131fb1d47a1718f186b74969, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: SH_Gold
     second: {fileID: 2100000, guid: 1e7941b6b00bdad44b3ab62a07db605e, type: 2}
   - first:
