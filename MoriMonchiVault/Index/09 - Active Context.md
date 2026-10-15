@@ -4,6 +4,23 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-15 (Session 157 — **mini sesión: Sidekick Tool en la PC del trabajo** — 0 `.cs` tocados; compila 0 errores)
+
+**Focus:** Juan: "no está cargando un package modular de Sidekick y está dando muchos errores" tras moverse a esta PC.
+
+**Hecho:**
+1. **Causa:** `Assets/Synty/` es gitignored; acá solo estaba el starter pack (trae únicamente `ToolDownloader.cs`). Sin la API del Tool, `HumanBodyAssembler.cs` rompía Assembly-CSharp-Editor y con eso desaparecía el propio menú `Synty > Sidekick Tool Downloader` (huevo y gallina). Además la descarga desde el botón falla en esta PC.
+2. **Arreglo:** saqué temporalmente `HumanBodyAssembler.cs` + `.meta`, compiló; bajé `Sidekicks.unitypackage` 1.2.7 (misma versión que S156) del GitHub de Synty y lo importé por MCP; la base de datos ya la había importado el clic de Juan. Restauré el armador con su `.meta` original (sin diff). `version.txt` = 1.2.7 para que el downloader no se abra solo. Verificado: 0 errores, menú *Build Bodies* presente (no se corrió).
+3. **Error mío corregido:** con AxieDarknessArise abierto (puerto 6402) el MCP saltó de instancia tras un reload y le importé el Tool a ese proyecto; borré su `Assets/Synty` + `.meta` (creados por mí a las 08:43). Regla nueva en memoria: fijar `set_active_instance 6400` al abrir y tras cada reconexión.
+
+**Quirks ⚠️:** (1) PC nueva: sacar el armador antes de instalar el Tool. (2) `EditorApplication.delayCall` no corre con el editor en segundo plano; `ImportPackage` directo funciona aunque reinicie el socket. (3) Diff de `GameScene.unity` = solo `m_VersionIndex` de splines (ruido al guardar).
+
+**Siguiente paso (S158):** el de S157 de abajo sigue vigente (brazos FP en reposo real primero).
+
+**Archivos `.cs` S157 — creados (0) · modificados (0).**
+
+---
+
 **Session:** 2026-10-14/15 (Session 156 — **Sidekick Synty: clientes caballeros, protagonista con brazos en primera persona, animaciones humanoides generadas, SMAA y recorrido en video** — 4 `.cs` creados, 2 modificados; compila 0 errores; verificado en Play con capturas y videos en `Captures/S156/` (`recorrido_tienda.mp4`, `jitter_compare.mp4`))
 
 **Focus:** Juan: "ya tenemos los assets de Sidekick para el player y los NPC" (pack en `E:\GitHub\AssetVaultFinder`, donde irá todo lo que compre). Primera persona con manos visibles (muchas interacciones), animaciones propias hasta comprar el pack, nuestro toon. Luego: Sidekick Tool instalado por Juan, "solo Fantasy Knight", paleta de Synty, sin contorno, brazos en reposo.
@@ -18,7 +35,7 @@ tags: [index, core]
 
 **Quirks ⚠️:** (1) Partes Sidekick sueltas tienen 2 submallas: asignar material a todos los slots o sale gris/magenta. (2) Tras regenerar, Unity cachea prefabs/meshes con referencias nulas: el armador fuerza `ImportAsset` de Models y Prefabs al final. (3) `execute_code` que se corta por timeout puede re-ejecutarse y duplicar objetos de prueba en escena: nombrar con `__` y limpiar antes de guardar. (4) Muestrear clips con `AnimationMode` pisa la rotación de la raíz. (5) En las partes, el eje "Arm Front-Back" positivo va hacia atrás.
 
-**Siguiente paso (S157, propuesta):**
+**Siguiente paso (S157→S158, propuesta):**
 0. **Brazos FP en reposo real (pedido de Juan al cierre):** hoy las manos quedan abajo en los costados pero el brazo sigue adelantado. Investigar cómo lo resuelven otros juegos con brazos visibles en primera persona (Firewatch, Mirror's Edge, Minecraft, cuerpo completo tipo Dying Light): brazos colgando a los lados, visibles solo al mirar abajo, y que se levanten solo cuando hace falta (agarrar, acariciar, lanzar, interactuar) con transición. Proponer y probar en Play con capturas.
 1. Caras vivas (parpadeo/expresiones de Sidekick al negociar) — requiere volver a conservar blendshapes faciales (`combineFacialBlendShapes`) y medir peso.
 2. Mirada de clientes hacia el jugador/MoriMochi (Animation Rigging), movimiento secundario de plumas/pelo.
