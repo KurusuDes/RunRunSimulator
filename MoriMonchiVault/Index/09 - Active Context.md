@@ -19,6 +19,7 @@ tags: [index, core]
 **Quirks ⚠️:** (1) Partes Sidekick sueltas tienen 2 submallas: asignar material a todos los slots o sale gris/magenta. (2) Tras regenerar, Unity cachea prefabs/meshes con referencias nulas: el armador fuerza `ImportAsset` de Models y Prefabs al final. (3) `execute_code` que se corta por timeout puede re-ejecutarse y duplicar objetos de prueba en escena: nombrar con `__` y limpiar antes de guardar. (4) Muestrear clips con `AnimationMode` pisa la rotación de la raíz. (5) En las partes, el eje "Arm Front-Back" positivo va hacia atrás.
 
 **Siguiente paso (S157, propuesta):**
+0. **Brazos FP en reposo real (pedido de Juan al cierre):** hoy las manos quedan abajo en los costados pero el brazo sigue adelantado. Investigar cómo lo resuelven otros juegos con brazos visibles en primera persona (Firewatch, Mirror's Edge, Minecraft, cuerpo completo tipo Dying Light): brazos colgando a los lados, visibles solo al mirar abajo, y que se levanten solo cuando hace falta (agarrar, acariciar, lanzar, interactuar) con transición. Proponer y probar en Play con capturas.
 1. Caras vivas (parpadeo/expresiones de Sidekick al negociar) — requiere volver a conservar blendshapes faciales (`combineFacialBlendShapes`) y medir peso.
 2. Mirada de clientes hacia el jugador/MoriMochi (Animation Rigging), movimiento secundario de plumas/pelo.
 3. Neblina blanquecina global del post-proceso; errores `GotoState` de `MonchiLocomotionAnimator` (preexistentes).
