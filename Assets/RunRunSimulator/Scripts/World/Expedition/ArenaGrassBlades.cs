@@ -18,6 +18,7 @@ public static class ArenaGrassBlades
         var normals = new List<Vector3>(roots.Count * vertsPerBlade);
         var uvs = new List<Vector2>(roots.Count * vertsPerBlade);
         var colors = new List<Color>(roots.Count * vertsPerBlade);
+        var uvs1 = new List<Vector2>(roots.Count * vertsPerBlade);
         var triangles = new List<int>(roots.Count * trisPerBlade);
 
         for (int i = 0; i < roots.Count; i++)
@@ -53,6 +54,8 @@ public static class ArenaGrassBlades
                 vertices.Add(center - sideAxis * halfWidth);
                 uvs.Add(new Vector2(0f, t));
                 uvs.Add(new Vector2(1f, t));
+                uvs1.Add(new Vector2(height * t, height));
+                uvs1.Add(new Vector2(height * t, height));
                 normals.Add(normal);
                 normals.Add(normal);
                 colors.Add(bladeColor);
@@ -61,6 +64,7 @@ public static class ArenaGrassBlades
 
             vertices.Add(root + Vector3.up * height + tipOffset);
             uvs.Add(new Vector2(0.5f, 1f));
+            uvs1.Add(new Vector2(height, height));
             normals.Add(normal);
             colors.Add(bladeColor);
 
@@ -94,6 +98,7 @@ public static class ArenaGrassBlades
         mesh.SetVertices(vertices);
         mesh.SetNormals(normals);
         mesh.SetUVs(0, uvs);
+        mesh.SetUVs(1, uvs1);
         mesh.SetColors(colors);
         mesh.SetTriangles(triangles, 0);
         mesh.RecalculateBounds();

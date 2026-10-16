@@ -28,6 +28,7 @@ public class CreatureGridUITK : MonoBehaviour, IUINavigable
 
     private const string SelectedClass = "tile--selected";
     private const int Columns = 5;
+    private const int MinRows = 5;
 
     private ScrollView scroll;
     private Button closeButton;
@@ -194,10 +195,38 @@ public class CreatureGridUITK : MonoBehaviour, IUINavigable
             scroll.Add(tile);
         }
 
+        int rows = Mathf.Max(MinRows, Mathf.CeilToInt(tiles.Count / (float)Columns));
+        for (int i = tiles.Count; i < rows * Columns; i++)
+            scroll.Add(BuildEmptyTile());
+
         if (countLabel != null) countLabel.text = Loc.Tr("ui.grid.count", tiles.Count);
         if (emptyLabel != null) emptyLabel.style.display = tiles.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
 
         Select(selectedIndex < 0 ? 0 : selectedIndex, scrollIntoView: false);
+    }
+
+    private static VisualElement BuildEmptyTile()
+    {
+        var tile = new VisualElement { pickingMode = PickingMode.Ignore };
+        tile.AddToClassList("mm-slot");
+        tile.AddToClassList("tile");
+
+        var vignette = new VisualElement { pickingMode = PickingMode.Ignore };
+        vignette.AddToClassList("mm-layer");
+        vignette.AddToClassList("mm-slot__vignette");
+        tile.Add(vignette);
+
+        var runes = new VisualElement { pickingMode = PickingMode.Ignore };
+        runes.AddToClassList("tile__runes");
+        tile.Add(runes);
+
+        var frame = new VisualElement { pickingMode = PickingMode.Ignore };
+        frame.AddToClassList("mm-layer");
+        frame.AddToClassList("mm-slot__frame");
+        frame.AddToClassList("tile__frame");
+        tile.Add(frame);
+
+        return tile;
     }
 
     private VisualElement BuildTile(CreatureDNA dna)

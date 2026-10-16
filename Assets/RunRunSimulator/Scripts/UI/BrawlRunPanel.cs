@@ -14,6 +14,7 @@ public class BrawlRunPanel : MonoBehaviour
     private VisualElement root;
     private VisualElement cardWrap;
     private VisualElement cardRooms;
+    private VisualElement teamRow;
     private Label title;
     private Label info;
     private Label minerita;
@@ -47,6 +48,7 @@ public class BrawlRunPanel : MonoBehaviour
         cardWrap = root.Q("run-card-wrap");
         cardRooms = root.Q("run-rooms");
         title = root.Q<Label>("run-title");
+        teamRow = root.Q("run-team");
         info = root.Q<Label>("run-info");
         minerita = MakeLabel("", "run-minerita");
         info.parent.Insert(info.parent.IndexOf(info), minerita);
@@ -67,6 +69,7 @@ public class BrawlRunPanel : MonoBehaviour
             goButton.clicked -= OnGoClicked;
             leaveButton.clicked -= OnLeaveClicked;
             cardRooms.Clear();
+            teamRow.Clear();
         }
 
         boundRoot = null;
@@ -105,10 +108,11 @@ public class BrawlRunPanel : MonoBehaviour
             case BrawlRunState.Planning:
                 title.text = Loc.Tr("ui.brawl.run.plan.title", run.Depth, run.Rooms.Count);
                 minerita.text = Loc.Tr("ui.brawl.run.minerita", Minerita(run.Material));
-                info.text = HealthLine(run);
+                BuildTeam(run);
                 goButton.text = Loc.Tr("ui.brawl.run.go");
                 leaveButton.text = run.Depth == 1 && run.Material == 0 ? Loc.Tr("ui.brawl.run.leave.shop") : Loc.Tr("ui.brawl.run.leave.cash", Minerita(run.Material));
-                SetVisible(info, true);
+                SetVisible(teamRow, true);
+                SetVisible(info, false);
                 SetVisible(goButton, true);
                 SetVisible(leaveButton, true);
                 break;
@@ -118,6 +122,7 @@ public class BrawlRunPanel : MonoBehaviour
                     ? Loc.Tr("ui.brawl.run.lost.loot", Minerita(run.MaterialLost), Minerita(run.Material))
                     : Loc.Tr("ui.brawl.run.lost.none");
                 leaveButton.text = Loc.Tr("ui.brawl.run.leave.shop");
+                SetVisible(teamRow, false);
                 SetVisible(info, false);
                 SetVisible(goButton, false);
                 SetVisible(leaveButton, true);
@@ -131,21 +136,40 @@ public class BrawlRunPanel : MonoBehaviour
         return loot * (rules != null ? rules.MineritaPerLoot : 1);
     }
 
-    private string HealthLine(BrawlRun run)
+    private void BuildTeam(BrawlRun run)
     {
+        teamRow.Clear();
         var team = director.Team;
-        if (team == null) return "";
+        if (team == null) return;
 
-        string line = "";
         for (int i = 0; i < team.Count; i++)
         {
             var dna = team[i];
             if (dna == null) continue;
+            float health = run.Health01(dna.UniqueID);
+
+            var member = Element("run-member");
+            if (health < 0.999f) member.AddToClassList("run-member--hurt");
+
+            var portrait = Element("run-member__portrait");
+            var photo = Element("run-member__photo");
+            MonchiPortraitUI.Apply(photo, dna);
+            portrait.Add(photo);
+            portrait.Add(Element("run-member__frame"));
+            member.Add(portrait);
+
             string name = string.IsNullOrEmpty(dna.CustomName) ? "MoriMochi" : dna.CustomName;
-            if (line.Length > 0) line += " · ";
-            line += name + " " + Mathf.RoundToInt(run.Health01(dna.UniqueID) * 100f) + " %";
+            member.Add(MakeLabel(name, "run-member__name"));
+
+            var bar = Element("run-member__bar");
+            var fill = Element("run-member__fill");
+            fill.style.width = Length.Percent(health * 100f);
+            bar.Add(fill);
+            member.Add(bar);
+
+            member.Add(MakeLabel(Mathf.RoundToInt(health * 100f) + " %", "run-member__pct"));
+            teamRow.Add(member);
         }
-        return line;
     }
 
     private void BuildChips(VisualElement container, BrawlRun run)

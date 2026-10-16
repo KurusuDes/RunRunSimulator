@@ -1,0 +1,63 @@
+# Portraits/HUD_FantasyWarrior_Companions_02
+HUD_FantasyWarrior_Companions_02 size=220x925 pos=340,0 anch=0,0,5-0,0,5
+  SPR_Shadow size=300x1125 pos=0,0 anch=0,0-1,1 IMG=SPR_FX_FantasyWarrior_Glow_Box_01_Stepped col=#16161688 type=Sliced border=(440.00, 220.00, 440.00, 240.00)
+  SPR_FrameDetail size=180x1205 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Tracery_Vertical_08 col=#FFFFFFFF type=Sliced border=(0.00, 300.00, 0.00, 300.00) ppu=1,5
+  Vertical_Group size=220x925 pos=0,0 anch=0,0-1,1
+    HUD_Portrait_00 size=0x0 pos=0,0 anch=0,0-0,0
+      HUD_PortraitContents size=0x0 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_01 col=#001335FF type=Simple
+        SPR_Gradient size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Smooth_01 col=#3163DBE6 type=Simple
+        SPR_Tracery size=20x90 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#4D77E066 type=Simple
+        SPR_Portrait size=140x90 pos=4,-9 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Example_HeroPortrait_02 col=#FFFFFFFF type=Simple
+        SPR_Damage_Multiply size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#905856FF type=Filled fill=Vertical:0,3
+          SPR_Damage size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FF060066 type=Filled fill=Vertical:0,3
+      SPR_Vignette size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Vignette_Box_Large_01 col=#010E25B2 type=Sliced border=(400.00, 400.00, 400.00, 400.00) ppu=3
+      Frame size=0x0 pos=0,0 anch=0,0-1,1
+        SPR_Frame size=20x20 pos=0,10 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Box_Medium_01_Variant_01 col=#FFFFFFFF type=Sliced border=(150.00, 262.00, 278.00, 237.00) ppu=3
+        SPR_FrameDetail size=90x60 pos=0,0 anch=0,0,5-1,0,5 IMG=SPR_FantasyWarrior_Frame_Box_Medium_01_Detail_01 col=#FFFFFFFF type=Sliced border=(120.00, 0.00, 120.00, 0.00) ppu=2
+      HitPoints size=0x50 pos=0,5 anch=0,0-1,0
+        Label_HitPoints size=0x40 pos=0,0 anch=0,0-0,0 TXT='999/999' font=Grenze-SemiBold SDF size=42 col=#FFFFFFFF style=Normal align=Capline outline=0 cs=0
+    HUD_Portrait_01 size=0x0 pos=0,0 anch=0,0-0,0
+      HUD_PortraitContents size=0x0 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_01 col=#001335FF type=Simple
+        SPR_Gradient size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Smooth_01 col=#3163DBE6 type=Simple
+        SPR_Tracery size=20x90 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#4D77E066 type=Simple
+        SPR_Portrait size=140x90 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Example_HeroPortrait_10 col=#FFFFFFFF type=Simple
+        SPR_Damage_Multiply [inactive]
+        SPR_Damage_Multiply size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#905856FF type=Filled fill=Vertical:0,3
+          SPR_Damage size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FF060066 type=Filled fill=Vertical:0,3
+      SPR_Vignette size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Vignette_Box_Large_01 col=#010E25B2 type=Sliced border=(400.00, 400.00, 400.00, 400.00) ppu=3
+      Frame size=0x0 pos=0,0 anch=0,0-1,1
+        SPR_Frame size=20x20 pos=0,10 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Box_Medium_01_Variant_01 col=#FFFFFFFF type=Sliced border=(150.00, 262.00, 278.00, 237.00) ppu=3
+        SPR_FrameDetail size=90x60 pos=0,0 anch=0,0,5-1,0,5 IMG=SPR_FantasyWarrior_Frame_Box_Medium_01_Detail_01 col=#FFFFFFFF type=Sliced border=(120.00, 0.00, 120.00, 0.00) ppu=2
+      HitPoints size=0x50 pos=0,5 anch=0,0-1,0
+        Label_HitPoints size=0x40 pos=0,0 anch=0,0-0,0 TXT='999/999' font=Grenze-SemiBold SDF size=42 col=#FFFFFFFF style=Normal align=Capline outline=0 cs=0
+    HUD_Portrait_02 size=0x0 pos=0,0 anch=0,0-0,0
+      HUD_PortraitContents size=0x0 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_01 col=#001335FF type=Simple
+        SPR_Gradient size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Smooth_01 col=#3163DBE6 type=Simple
+        SPR_Tracery size=20x90 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#4D77E066 type=Simple
+        SPR_Portrait size=140x90 pos=19,-13 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Example_HeroPortrait_03 col=#FFFFFFFF type=Simple
+        SPR_Damage_Multiply size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#905856FF type=Filled fill=Vertical:0,56
+          SPR_Damage size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FF060066 type=Filled fill=Vertical:0,56
+      SPR_Vignette size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Vignette_Box_Large_01 col=#010E25B2 type=Sliced border=(400.00, 400.00, 400.00, 400.00) ppu=3
+      Frame size=0x0 pos=0,0 anch=0,0-1,1
+        SPR_Frame size=20x20 pos=0,10 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Box_Medium_01_Variant_03 col=#FFFFFFFF type=Sliced border=(186.00, 207.00, 186.00, 207.00) ppu=3
+        SPR_FrameDetail size=90x60 pos=0,0 anch=0,0,5-1,0,5 IMG=SPR_FantasyWarrior_Frame_Box_Medium_01_Detail_01 col=#FFFFFFFF type=Sliced border=(120.00, 0.00, 120.00, 0.00) ppu=2
+      HitPoints size=0x50 pos=0,5 anch=0,0-1,0
+        Label_HitPoints size=0x40 pos=0,0 anch=0,0-0,0 TXT='999/999' font=Grenze-SemiBold SDF size=42 col=#FFFFFFFF style=Normal align=Capline outline=0 cs=0
+    HUD_Portrait_03 size=0x0 pos=0,0 anch=0,0-0,0
+      HUD_PortraitContents size=0x0 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_01 col=#001335FF type=Simple
+        SPR_Gradient size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Smooth_01 col=#3163DBE6 type=Simple
+        SPR_Tracery size=20x90 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#4D77E066 type=Simple
+        SPR_Portrait size=140x90 pos=0,-13 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Example_HeroPortrait_07 col=#FFFFFFFF type=Simple
+        SPR_Damage_Multiply [inactive]
+        SPR_Damage_Multiply size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#905856FF type=Filled fill=Vertical:0,3
+          SPR_Damage size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FF060066 type=Filled fill=Vertical:0,3
+      SPR_Vignette size=0x0 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Vignette_Box_Large_01 col=#010E25B2 type=Sliced border=(400.00, 400.00, 400.00, 400.00) ppu=3
+      Frame size=0x0 pos=0,0 anch=0,0-1,1
+        SPR_Frame size=20x20 pos=0,10 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Box_Medium_01_Variant_02 col=#FFFFFFFF type=Sliced border=(222.00, 241.00, 219.00, 250.00) ppu=3
+        SPR_FrameDetail size=90x60 pos=0,0 anch=0,0,5-1,0,5 IMG=SPR_FantasyWarrior_Frame_Box_Medium_01_Detail_01 col=#FFFFFFFF type=Sliced border=(120.00, 0.00, 120.00, 0.00) ppu=2
+      HitPoints size=0x50 pos=0,5 anch=0,0-1,0
+        Label_HitPoints size=0x40 pos=0,0 anch=0,0-0,0 TXT='999/999' font=Grenze-SemiBold SDF size=42 col=#FFFFFFFF style=Normal align=Capline outline=0 cs=0

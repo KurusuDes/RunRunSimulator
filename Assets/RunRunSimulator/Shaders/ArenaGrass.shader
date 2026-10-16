@@ -45,6 +45,7 @@ Shader "MoriMonchi/ArenaGrass"
         _BladeVariation ("Blade Variation", Range(0,0.3)) = 0.05
         _FlowerTint ("Flower Tint", Color) = (1,1,1,1)
         _FlowerLift ("Flower Lift", Range(0,1)) = 0.15
+        _ShadowAtRoot ("Shadow At Root", Range(0,1)) = 0
     }
 
     SubShader
@@ -110,6 +111,7 @@ Shader "MoriMonchi/ArenaGrass"
                 half _BladeVariation;
                 half4 _FlowerTint;
                 half _FlowerLift;
+                half _ShadowAtRoot;
             CBUFFER_END
 
             float4 _ArenaFogCenter;
@@ -120,7 +122,10 @@ Shader "MoriMonchi/ArenaGrass"
             float _ArenaFogDim;
 
             float4 _ArenaTrampleArea;
+            float4 _ShopGrassMaskArea;
 
+            TEXTURE2D(_ShopGrassMaskTex);
+            SAMPLER(sampler_ShopGrassMaskTex);
             TEXTURE2D(_Ramp);
             SAMPLER(sampler_Ramp);
             TEXTURE2D(_ArenaTrampleTex);
@@ -132,6 +137,7 @@ Shader "MoriMonchi/ArenaGrass"
                 float3 normalOS : NORMAL;
                 float2 uv : TEXCOORD0;
                 half4 color : COLOR;
+                float2 uv1 : TEXCOORD1;
             };
 
             struct Varyings
@@ -144,6 +150,7 @@ Shader "MoriMonchi/ArenaGrass"
                 half2 blade : TEXCOORD4;
                 half gust : TEXCOORD5;
                 half4 vcolor : TEXCOORD6;
+                float3 rootWS : TEXCOORD7;
             };
 
             float Hash21(float2 p)
@@ -171,12 +178,22 @@ Shader "MoriMonchi/ArenaGrass"
                 return SAMPLE_TEXTURE2D_LOD(_ArenaTrampleTex, sampler_ArenaTrampleTex, uv, 0);
             }
 
+            float SampleShopKeep(float3 rootWS)
+            {
+                if (_ShopGrassMaskArea.z <= 0.0) return 1.0;
+                float2 uv = (rootWS.xz - _ShopGrassMaskArea.xy) * _ShopGrassMaskArea.zw;
+                if (any(uv < 0.0) || any(uv > 1.0)) return 1.0;
+                float mask = SAMPLE_TEXTURE2D_LOD(_ShopGrassMaskTex, sampler_ShopGrassMaskTex, uv, 0).r;
+                return 1.0 - smoothstep(0.15, 0.85, mask);
+            }
+
             Varyings Vert(Attributes input)
             {
                 Varyings output;
 
+                float height = (input.uv1.y > 0.0) ? input.uv1.x : max(input.positionOS.y, 0.0);
+                float3 rootWS = TransformObjectToWorld(input.positionOS.xyz - float3(0.0, height, 0.0));
                 float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
-                float height = max(input.positionOS.y, 0.0);
                 float along = saturate(input.uv.y);
                 float curve = along * along;
 
@@ -194,10 +211,16 @@ Shader "MoriMonchi/ArenaGrass"
                 float2 gustPerp = float2(-gustDir.y, gustDir.x);
                 float2 gustCoord = float2(dot(positionWS.xz, gustDir) - _Time.y * _GustSpeed, dot(positionWS.xz, gustPerp) * 0.45) * _GustScale;
                 float gust = smoothstep(0.4, 0.8, ValueNoise(gustCoord));
-                positionWS.xz += gustDir * curve * (gust * _GustStrength + _Lean * height) * breeze;
+                float2 leanDir = normalize(gustDir + gustPerp * (input.color.r * 2.0 - 1.0) * 0.9);
+                float2 bendOffset = (gustDir * gust * _GustStrength + leanDir * _Lean * height) * curve * breeze;
+                positionWS.xz += bendOffset;
+                float bendLen = length(bendOffset);
+                positionWS.y -= height - sqrt(max(height * height - bendLen * bendLen, height * height * 0.3));
 
                 positionWS.xz += clamp(trample.rg, -1.0, 1.0) * _TrampleBend * curve;
                 positionWS.y -= flatten * _TrampleFlatten * height;
+
+                positionWS = lerp(rootWS, positionWS, SampleShopKeep(rootWS));
 
                 output.positionWS = positionWS;
                 output.positionCS = TransformWorldToHClip(positionWS);
@@ -207,6 +230,7 @@ Shader "MoriMonchi/ArenaGrass"
                 output.blade = half2(input.color.r, flatten);
                 output.gust = gust;
                 output.vcolor = input.color;
+                output.rootWS = rootWS;
                 return output;
             }
 
@@ -236,7 +260,7 @@ Shader "MoriMonchi/ArenaGrass"
                 }
                 albedo *= lerp(1.0, 1.0 - _TrampleShade, input.blade.y);
 
-                float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
+                float4 shadowCoord = TransformWorldToShadowCoord(lerp(input.positionWS, input.rootWS + float3(0.0, 0.05, 0.0), _ShadowAtRoot));
                 Light mainLight = GetMainLight(shadowCoord);
                 half3 normalWS = normalize(input.normalWS);
                 half attenuation = lerp(1.0, mainLight.shadowAttenuation * mainLight.distanceAttenuation, _ShadowStrength);

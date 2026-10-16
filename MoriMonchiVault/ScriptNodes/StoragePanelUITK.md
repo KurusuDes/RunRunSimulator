@@ -24,7 +24,7 @@ tags: [script, ui]
 
 ## Elementos UXML
 
-`grid` (ScrollView de inventario), `hotbarHost` (contenedor de la copia del hotbar), `subtitle`, `close`.
+`grid` (ScrollView de inventario), `hotbar` (contenedor de la copia del hotbar), `subtitle`, `close-button`. Títulos y leyendas se localizan por nombre: `title`, `section-box`, `section-hotbar`, `prompt-move`, `prompt-take`, `prompt-close`.
 
 ## Estado Privado
 
@@ -39,7 +39,7 @@ tags: [script, ui]
 
 | Método | Descripción |
 |--------|-------------|
-| `OnEnable` / `OnDisable` | Suscribe y desuscribe `OnInventoryReloaded` y el toggle de panel |
+| `OnEnable` / `OnDisable` | Suscribe y desuscribe `GameEvents.OnInventoryChanged`, `GameEvents.OnInventoryReloaded` (→ `Rebuild`) y `HotbarController.OnHotbarChanged` (→ `RebuildHotbar`) |
 | `Start` / `OnDestroy` | Resuelve elementos, cablea el cierre y registra o desregistra la navegación |
 | `OnUINavigate(dir)` | Mueve la selección entre celdas |
 | `OnUISubmit()` | Saca el ítem seleccionado (`EjectSelected`) |
@@ -64,4 +64,5 @@ tags: [script, ui]
 ## Notas
 
 - S161: el almacén es un cofre de dos grillas (inventario y hotbar), con el kit de Synty.
+- S162: el cierre se resuelve por `close-button` y la copia del hotbar por `hotbar`; el hotbar del almacén se refresca también por `HotbarController.OnHotbarChanged`.
 - Probar el inventario en Play escribe el save real: usar un save de prueba.

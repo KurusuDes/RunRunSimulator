@@ -12,7 +12,7 @@ tags: [script, ui, uitk, detail, breeding, presenter]
 
 - Oculta título y lista si `Origins` está vacío.
 - Texto del ancestro: resuelve `AncestorID` en el `CreatureRegistrySO` (vía `getRegistry`) para tomar el `CustomName`; la clave de localización depende de slot, lado y género del ancestro.
-- Decoración: resuelve `DecorID` en `BreedingController.DecorDatabase` y añade "por <DisplayName>".
+- Decoración: resuelve `DecorID` en `BreedingController.DecorDatabase` y añade "por <nombre>", con el nombre salido de `DataLoc.DecorName` (S162).
 - Mutación y Base usan textos fijos.
 
 ## Claves de localización (prefijo `ui.detail.`)
@@ -25,5 +25,10 @@ tags: [script, ui, uitk, detail, breeding, presenter]
 - [[CreatureDNA]] — `Origins`, `Gender`, `CustomName`
 - [[CreatureRegistrySO]] — resuelve ancestros
 - [[BreedingController]] — `DecorDatabase`
-- [[BreedingDecorSO]] — `DisplayName`
+- [[BreedingDecorSO]] — nombre de la decoración (vía `DataLoc.DecorName`)
+- [[DataLoc]] — nombre localizado de decoraciones (S162)
 - [[MorimonchiDetailInfoUITK]] — es quien la construye y le pasa el `root`
+
+## Estado
+
+- MODIFICADO en S162: el nombre de la decoración pasa por `DataLoc.DecorName` (loc de datos). Sin cambio de contrato.

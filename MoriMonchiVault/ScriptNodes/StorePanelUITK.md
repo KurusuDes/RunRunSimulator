@@ -14,6 +14,7 @@ tags: [script, ui, store, panel]
 **S151:** entra la pestaña Orders.
 **S152:** entra la pestaña Goals; la compra rechazada por bloqueo (`BuyResult.Locked`) muestra aviso.
 **S161:** overhaul visual: tiles con ícono y píldora de precio (`StoreTileView`), ficha de detalle con botón de compra (`StoreDetailCard`) y precio con descuento (`StorePrice`). La fila seleccionada usa la clase `store-tile--selected`.
+**S162:** la ficha recibe `affordable` (`CanAfford`: saldo ≥ precio final, o fila sin compra ni tope) y el grid rellena con tiles vacías hasta completar las filas visibles (`StoreTileView.BuildEmpty`), con columnas calculadas por ancho.
 
 ## Pestañas
 
@@ -40,8 +41,8 @@ tags: [script, ui, store, panel]
 
 - **Apertura:** `ResetAndRebuild()` pide `store.RestockIfNeeded()`, vuelve a la primera pestaña y reconstruye.
 - **Navegación:** eje x cambia de pestaña; eje y mueve la selección entre tiles; Submit compra la fila seleccionada.
-- **Tiles:** clic simple selecciona; doble clic compra (`StoreTileView.Build`).
-- **Ficha:** `StoreDetailCard.Show` con la fila seleccionada; `SetEmpty` si no hay selección. El botón de compra de la ficha se suscribe a `BuySelected`.
+- **Tiles:** clic simple selecciona; doble clic compra (`StoreTileView.Build`). Las tiles vacías de relleno no reciben clic.
+- **Ficha:** `StoreDetailCard.Show` con la fila seleccionada, el descuento activo y `CanAfford(row)`; `SetEmpty` si no hay selección. El botón de compra de la ficha se suscribe a `BuySelected`.
 - **Filas de solo lectura:** si `row.Buy == null` la tile muestra la recompensa (`Reward`). Lo usan Orders, Goals y las filas bloqueadas (S151/S152).
 - **Estado vacío:** el texto `ui.store.empty.orders` aparece en Orders y `ui.store.empty` en el resto.
 - **Resultado de compra:** `Success` reconstruye la lista; `OutOfStock`, `InsufficientFunds` y `AlreadyOwned` muestran un aviso 2.5 s. **(S152)** `Locked` muestra `ui.store.result.locked`.
@@ -57,7 +58,7 @@ tags: [script, ui, store, panel]
 - [[ShopCatalogSO]] — listings de cada pestaña e `IsDiscountActive`
 - [[StoreManager]] — `BuyUpgrade`, `BuyDecor`, `BuyCreatureBox`, `BuyWorldProp`, `CreatureBoxPrice`, `RestockIfNeeded`
 - [[StoreRows]] — `Collect()` por pestaña (genera `Row`)
-- [[StoreTileView]] (S161) — tiles y clase de selección
+- [[StoreTileView]] (S161) — tiles, relleno vacío y clase de selección
 - [[StoreDetailCard]] (S161) — ficha y botón de compra
 - [[StorePrice]] (S161) — precio y descuento
 - [[OrderBoardService]] — fuente de la pestaña Orders (S151)

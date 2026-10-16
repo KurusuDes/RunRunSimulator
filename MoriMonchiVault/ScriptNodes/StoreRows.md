@@ -95,3 +95,7 @@ public struct Row
 - [[Index/04 - Store & Transactions]]
 
 **Conexiones:** [[StorePanelUITK]], [[StoreManager]], [[ShopCatalogSO]], [[ShopUpgradeSO]], [[CreatureBoxSO]], [[BreedingDecorSO]], [[WorldPropCategory]], [[WorldStateSO]], [[PlayerInventorySO]], [[OrderBoardService]] (S151), [[ShopOrder]] (S151), [[GoalService]] (S152), [[GoalSO]] (S152), [[StoreTileView]] (S161), [[StorePrice]] (S161), [[StoreDetailCard]] (S161), [[Loc]]
+
+## Notas
+
+- S162: sin cambios de contrato en `Row`, `Tab` ni `Collect`; nota revisada contra el código.

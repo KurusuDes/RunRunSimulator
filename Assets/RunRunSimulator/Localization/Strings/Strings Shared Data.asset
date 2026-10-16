@@ -2507,6 +2507,654 @@ MonoBehaviour:
     m_Key: ui.brawl.run.veil.many
     m_Metadata:
       m_Items: []
+  - m_Id: 29958641049436160
+    m_Key: ui.brawl.banner.result.win
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739328
+    m_Key: ui.brawl.banner.result.lose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739329
+    m_Key: ui.brawl.banner.result.draw
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739330
+    m_Key: ui.brawl.float.shield
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910698147840
+    m_Key: brawl.skill.Skill_Abanico.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536448
+    m_Key: brawl.skill.Skill_Abanico.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536449
+    m_Key: brawl.skill.Skill_AletasCara.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536450
+    m_Key: brawl.skill.Skill_AletasCara.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536451
+    m_Key: brawl.skill.Skill_Alforja.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536452
+    m_Key: brawl.skill.Skill_Alforja.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536453
+    m_Key: brawl.skill.Skill_Antenas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536454
+    m_Key: brawl.skill.Skill_Antenas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536455
+    m_Key: brawl.skill.Skill_Ariete.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536456
+    m_Key: brawl.skill.Skill_Ariete.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536457
+    m_Key: brawl.skill.Skill_Astas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536458
+    m_Key: brawl.skill.Skill_Astas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536459
+    m_Key: brawl.skill.Skill_Borla.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536460
+    m_Key: brawl.skill.Skill_Borla.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536461
+    m_Key: brawl.skill.Skill_Carnero.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536462
+    m_Key: brawl.skill.Skill_Carnero.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536463
+    m_Key: brawl.skill.Skill_Cola.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536464
+    m_Key: brawl.skill.Skill_Cola.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536465
+    m_Key: brawl.skill.Skill_Cometa.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536466
+    m_Key: brawl.skill.Skill_Cometa.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536467
+    m_Key: brawl.skill.Skill_Cometitas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536468
+    m_Key: brawl.skill.Skill_Cometitas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536469
+    m_Key: brawl.skill.Skill_Coraza.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536470
+    m_Key: brawl.skill.Skill_Coraza.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536471
+    m_Key: brawl.skill.Skill_Cresta.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536472
+    m_Key: brawl.skill.Skill_Cresta.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536473
+    m_Key: brawl.skill.Skill_Cristal.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536474
+    m_Key: brawl.skill.Skill_Cristal.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536475
+    m_Key: brawl.skill.Skill_Cristales.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536476
+    m_Key: brawl.skill.Skill_Cristales.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536477
+    m_Key: brawl.skill.Skill_Cuernitos.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536478
+    m_Key: brawl.skill.Skill_Cuernitos.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536479
+    m_Key: brawl.skill.Skill_Espinas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536480
+    m_Key: brawl.skill.Skill_Espinas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536481
+    m_Key: brawl.skill.Skill_Espuelas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536482
+    m_Key: brawl.skill.Skill_Espuelas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536483
+    m_Key: brawl.skill.Skill_Hoz.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536484
+    m_Key: brawl.skill.Skill_Hoz.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536485
+    m_Key: brawl.skill.Skill_Lana.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536486
+    m_Key: brawl.skill.Skill_Lana.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536487
+    m_Key: brawl.skill.Skill_LomoLana.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536488
+    m_Key: brawl.skill.Skill_LomoLana.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536489
+    m_Key: brawl.skill.Skill_Malvaviscos.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536490
+    m_Key: brawl.skill.Skill_Malvaviscos.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536491
+    m_Key: brawl.skill.Skill_Mechon.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536492
+    m_Key: brawl.skill.Skill_Mechon.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536493
+    m_Key: brawl.skill.Skill_Placas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536494
+    m_Key: brawl.skill.Skill_Placas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536495
+    m_Key: brawl.skill.Skill_PuasDobles.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536496
+    m_Key: brawl.skill.Skill_PuasDobles.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536497
+    m_Key: brawl.skill.Skill_PuasFinas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536498
+    m_Key: brawl.skill.Skill_PuasFinas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536499
+    m_Key: brawl.skill.Skill_PuasGruesas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536500
+    m_Key: brawl.skill.Skill_PuasGruesas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536501
+    m_Key: brawl.skill.Skill_Rayo.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536502
+    m_Key: brawl.skill.Skill_Rayo.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536503
+    m_Key: brawl.skill.Skill_Rinoceronte.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536504
+    m_Key: brawl.skill.Skill_Rinoceronte.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536505
+    m_Key: brawl.skill.Skill_Senuelo.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536506
+    m_Key: brawl.skill.Skill_Senuelo.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536507
+    m_Key: brawl.skill.Skill_Tapones.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536508
+    m_Key: brawl.skill.Skill_Tapones.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536509
+    m_Key: brawl.skill.Skill_Triceratops.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536510
+    m_Key: brawl.skill.Skill_Triceratops.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536511
+    m_Key: brawl.skill.Skill_Unicornio.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536512
+    m_Key: brawl.skill.Skill_Unicornio.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910828171264
+    m_Key: brawl.wing.Wing_Aletas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365568
+    m_Key: brawl.wing.Wing_Aletas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365569
+    m_Key: brawl.wing.Wing_Cintas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365570
+    m_Key: brawl.wing.Wing_Cintas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365571
+    m_Key: brawl.wing.Wing_Colibri.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365572
+    m_Key: brawl.wing.Wing_Colibri.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365573
+    m_Key: brawl.wing.Wing_Murcielago.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365574
+    m_Key: brawl.wing.Wing_Murcielago.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365575
+    m_Key: brawl.wing.Wing_Plumitas.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365576
+    m_Key: brawl.wing.Wing_Plumitas.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365577
+    m_Key: brawl.wing.Wing_Vela.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365578
+    m_Key: brawl.wing.Wing_Vela.desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365579
+    m_Key: brawl.body.BS0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365580
+    m_Key: brawl.body.BS1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365581
+    m_Key: brawl.body.BS2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365582
+    m_Key: brawl.body.BS3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365583
+    m_Key: brawl.stance.bold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365584
+    m_Key: brawl.stance.wary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365585
+    m_Key: brawl.stance.even
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365586
+    m_Key: brawl.bond.guardian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365587
+    m_Key: brawl.bond.loner
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365588
+    m_Key: brawl.bond.team
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29966699897061376
+    m_Key: ui.storage.count.one
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29966699959975936
+    m_Key: ui.storage.count.many
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771072
+    m_Key: part.BK4.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771073
+    m_Key: part.BK0.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771074
+    m_Key: part.BK12.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771075
+    m_Key: part.BK3.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771076
+    m_Key: part.BK13.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771077
+    m_Key: part.BK1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771078
+    m_Key: part.BK2.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771079
+    m_Key: part.BK5.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771080
+    m_Key: part.BK14.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771081
+    m_Key: part.BK15.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771082
+    m_Key: part.BK6.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771083
+    m_Key: part.BK7.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771084
+    m_Key: part.BK8.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771085
+    m_Key: part.BK9.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771086
+    m_Key: part.BK10.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771087
+    m_Key: part.BK11.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771088
+    m_Key: part.BS1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771089
+    m_Key: part.BS2.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771090
+    m_Key: part.BS3.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771091
+    m_Key: part.BS4.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771092
+    m_Key: part.BS0.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771093
+    m_Key: part.FC1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771094
+    m_Key: part.FC0.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771095
+    m_Key: part.H1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771096
+    m_Key: part.H2.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771097
+    m_Key: part.H0.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771098
+    m_Key: part.H3.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771099
+    m_Key: part.H4.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771100
+    m_Key: part.H5.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771101
+    m_Key: part.H6.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771102
+    m_Key: part.H7.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771103
+    m_Key: part.H8.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771104
+    m_Key: part.H9.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771105
+    m_Key: part.H10.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771106
+    m_Key: part.H11.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771107
+    m_Key: part.H12.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771108
+    m_Key: part.H13.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771109
+    m_Key: part.H14.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771110
+    m_Key: part.H15.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771111
+    m_Key: part.H16.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771112
+    m_Key: part.W2.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771113
+    m_Key: part.W3.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771114
+    m_Key: part.W1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771115
+    m_Key: part.W4.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771116
+    m_Key: part.W5.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771117
+    m_Key: part.W0.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771118
+    m_Key: upgrade.EXP_CRIADERO.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771119
+    m_Key: upgrade.EXP_JUEGOS.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771120
+    m_Key: upgrade.vitrina_ampliada.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771121
+    m_Key: item.I0.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771122
+    m_Key: item.I1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771123
+    m_Key: item.I2.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771124
+    m_Key: item.I7.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771125
+    m_Key: item.I3.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771126
+    m_Key: item.I4.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771127
+    m_Key: item.I6.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771128
+    m_Key: item.I5.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771129
+    m_Key: decor.DEC_ALBUM.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771130
+    m_Key: decor.DEC_ARBOL.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771131
+    m_Key: decor.DEC_COJINMAMA.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771132
+    m_Key: decor.DEC_COJINPAPA.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771133
+    m_Key: decor.DEC_LAVA.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771134
+    m_Key: decor.DEC_MANTA.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771135
+    m_Key: decor.DEC_MOVIL.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771136
+    m_Key: decor.DEC_RETRATO.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771137
+    m_Key: box.CB5.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771138
+    m_Key: box.CBE.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29968074785718272
+    m_Key: ui.store.locked.short
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

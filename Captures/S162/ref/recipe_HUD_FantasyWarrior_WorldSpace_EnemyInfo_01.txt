@@ -1,0 +1,16 @@
+# NPC_HealthBars_EnemyData/HUD_FantasyWarrior_WorldSpace_EnemyInfo_01
+HUD_FantasyWarrior_WorldSpace_EnemyInfo_01 size=200x120 pos=0,0 anch=0,5,0,5-0,5,0,5
+  Health_Bar size=200x30 pos=0,0 anch=0,0-1,0
+    HUD_HealthBar_Enemy size=200x30 pos=0,0 anch=0,0-1,1
+      Slider size=192x22 pos=0,4 anch=0,0-1,1
+        Background size=192x22 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Bar_Horizontal_03_Mask col=#191A1DCC type=Sliced border=(50.00, 0.00, 50.00, 0.00) ppu=2
+        Fill Area size=192x22 pos=0,0 anch=0,0-1,1
+          Fill size=0x0 pos=0,0 anch=0,0-0,0 IMG=SPR_FantasyWarrior_Bar_Horizontal_05 col=#BE3030FF type=Sliced border=(50.00, 0.00, 50.00, 0.00) ppu=2
+        Handle Slide Area size=192x22 pos=0,0 anch=0,0-1,1
+          Handle [inactive]
+          Handle size=40x40 pos=0,0 anch=0,0-0,0 IMG=SPR_HUD_FantasyWarrior_Circle_Small_02_Underlay col=#FFFFFFFF type=Simple
+    HUD_EnemyInfo_Level size=60x60 pos=0,0 anch=0,0,5-0,0,5
+      SPR_Background size=60x60 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Medium_ParchmentGradient_05 col=#1F2B2EFF type=Sliced border=(120.00, 120.00, 120.00, 120.00) ppu=5
+      Label_EnemyLevel size=60x60 pos=0,0 anch=0,0-1,1 TXT='99' font=Grenze-SemiBold SDF size=40,5 col=#E3BB71FF style=Normal align=Midline outline=0 cs=0
+  HUD_WorldSpace_NameEnemy size=230x60 pos=-15,-60 anch=0,1-1,1
+    Label_Name size=230x70 pos=0,-5 anch=0,0-1,1 TXT='Goblin' font=Grenze-SemiBold SDF size=40,5 col=#FFFFFFFF style=Normal align=Midline outline=0 cs=2

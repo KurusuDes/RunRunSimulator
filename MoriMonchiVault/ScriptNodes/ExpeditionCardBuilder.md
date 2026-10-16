@@ -6,7 +6,7 @@ tags: [script, ui, expedition, builder, uitk]
 
 **Ruta:** `UI/ExpeditionCardBuilder.cs`
 
-**Responsabilidad:** Builder estático de la presentación del panel de bajada: tile de cada candidato, carta de cada integrante del equipo y slot vacío. Solo construye `VisualElement`; no guarda estado, no suscribe eventos y no escribe en `GameManager`. Lo llama `ExpeditionPanelUITK` en cada `Rebuild` y cada cambio de selección.
+**Responsabilidad:** Builder estático de la presentación del panel de bajada: tile de cada candidato, carta de cada integrante del equipo, fila de equipo con sus slots vacíos aviso de falta de apoyo. Solo construye `VisualElement`; no guarda estado, no suscribe eventos y no escribe en `GameManager`. Lo llama `ExpeditionPanelUITK` en cada `Rebuild` y cada cambio de selección.
 
 ## Tipos Públicos
 
@@ -16,12 +16,19 @@ tags: [script, ui, expedition, builder, uitk]
 
 | Método | Descripción |
 |--------|-------------|
-| `BuildTile(dna, ok, careGate)` | Tile de candidato. Si es apta (`ok`), muestra estado listo; si no, estado ocupado o no listo y la barra de la necesidad más débil (`CreatureAvailability.WeakestNeed`). No apta: clase `exp-card--off` |
-| `BuildTeamCard(dna, profile)` | Carta de un integrante elegido con sus poderes (ala, cuerno, espalda) |
-| `BuildEmptySlot()` | Slot vacío de la fila de equipo |
-| `FillTeam(team, profiles, order, maxPick)` | Llena la fila de equipo con una carta por elegido y slots vacíos hasta `maxPick` |
+| `BuildTile(dna, ok, careGate)` | Tile de candidato con retrato, check y nombre. Si es apta (`ok`), estado listo; si no, estado ocupado o no listo y la barra de la necesidad más débil (`CreatureAvailability.WeakestNeed`). No apta: clase `exp-tile--off` |
+| `BuildTeamCard(dna, profile)` | Carta de un integrante elegido: retrato, nombre, píldora de rol y sus tres poderes (ala, cuerno, espalda) |
+| `BuildEmptySlot()` | Slot vacío de la carta de equipo (hint `ui.expedition.slot.empty`) |
+| `FillTeam(team, dnas, profiles, order, maxPick)` | Limpia `team` y lo llena: título, contador `order.Count / maxPick`, una fila por elegido (`BuildTeamRow`) y filas vacías hasta `maxPick`. Si hay elegidos y ninguno tiene rol de apoyo, agrega aviso `ui.expedition.nosupport` |
 
 Cambio S161: `BuildCard` pasó a `BuildTile`, y `FillTeam` recibe `order` y `maxPick` en lugar de la lista de elegidos.
+Cambio S162: `FillTeam` recibe `dnas` (la lista completa de candidatos, indexada por `order`) y arma filas de equipo con retrato, nombre y píldora, más el aviso de apoyo.
+
+## Métodos Privados Relevantes
+
+- `BuildTeamRow(dna, profile)` / `BuildTeamEmptyRow()` (S162): fila de equipo (retrato, nombre, píldora) y fila vacía con runas.
+- `PowerAt(profile, slot)` / `SkillPower(theme, skill)`: arma el `Power` de cada columna.
+- `BuildBar(need, value)`: barra de la necesidad más débil con tooltip de `ui.expedition.needs.*`.
 
 ## Poderes
 
@@ -36,6 +43,7 @@ Cambio S161: `BuildCard` pasó a `BuildTile`, y `FillTeam` recibe `order` y `max
 - [[ExpeditionPanelUITK]] — único consumidor
 - [[BrawlKitProfile]] — rol, temas, kits y `BackLocked` de cada poder
 - [[BrawlTheme]], [[BrawlSkillSO]], [[BrawlWingKitSO]] — iconos, colores, títulos
+- [[BrawlRolePill]] — píldora de rol de cada integrante
 - [[CreatureAvailability]], [[CareGateSO]] — aptitud y necesidad más débil
 - [[NeedsDisplay]] — color y relleno de la barra
 - [[MonchiPortraitUI]] — retrato de la tarjeta
@@ -45,5 +53,6 @@ Cambio S161: `BuildCard` pasó a `BuildTile`, y `FillTeam` recibe `order` y `max
 ## Notas
 
 - Estático y sin estado: cada llamada reemplaza el contenido del contenedor que recibe.
-- Los nombres de los poderes salen de los SO de kit (`Title`, `Description`), no de `Loc`. La excepción es el poder bloqueado.
+- Los nombres de los poderes salen de los SO de kit (`Title`, `Description`) pasando por `BrawlLoc.Title` (S162), no de `Loc` directo. La excepción es el poder bloqueado.
 - S146: espalda bloqueada para formas no adultas, con el mismo criterio que la ficha y el HUD.
+- S162: la bajada muestra el equipo como filas (no como cartas grandes) y avisa si el equipo no tiene apoyo.

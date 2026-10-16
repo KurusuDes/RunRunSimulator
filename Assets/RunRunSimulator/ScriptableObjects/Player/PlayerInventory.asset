@@ -26,7 +26,7 @@ MonoBehaviour:
       Data: 0|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 41
+      Data: 9
     - Name: 
       Entry: 1
       Data: I1
@@ -36,102 +36,6 @@ MonoBehaviour:
     - Name: 
       Entry: 1
       Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I0
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I4
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I2
-    - Name: 
-      Entry: 1
-      Data: I1
-    - Name: 
-      Entry: 1
-      Data: I3
-    - Name: 
-      Entry: 1
-      Data: I4
     - Name: 
       Entry: 1
       Data: I1
@@ -188,10 +92,10 @@ MonoBehaviour:
       Data: 
     - Name: dabloons
       Entry: 3
-      Data: 4
+      Data: 0
     - Name: minerita
       Entry: 3
-      Data: 295
+      Data: 43
     - Name: decorOwned
       Entry: 7
       Data: 2|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32,

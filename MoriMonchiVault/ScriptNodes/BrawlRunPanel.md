@@ -26,7 +26,7 @@ La tarjeta solo se muestra si hay bajada activa, `Depth > 0` y el estado es `Pla
 
 | Estado | Título | Línea Minerita | Línea de salud | Botón principal | Botón salir |
 |--------|--------|----------------|----------------|-----------------|-------------|
-| `Planning` | "Tramo N · K salas" | "Minerita: X" | Nombre y % de vida por MoriMochi | "Enfrentar tramo" | "Volver a la tienda" si es tramo 1 y Minerita 0; si no, "Salir con X Minerita" |
+| `Planning` | "Tramo N · K salas" | "Minerita: X" | Retrato, nombre y % de vida por MoriMochi | "Enfrentar tramo" | "Volver a la tienda" si es tramo 1 y Minerita 0; si no, "Salir con X Minerita" |
 | `Over` | "Perdiste el combate" | "Se pierden X Minerita · te llevas Y" o "Sin botín que perder" | oculta | oculto | "Volver a la tienda" |
 
 - **Chips:** uno por sala. Clase `run-room--done` (antes del índice), `--current` o `--upcoming`. El glifo (`run-room__glyph`) usa `glyphs.For(room)` y la clase `run-glyph--foe` (combate), `run-glyph--heal` (muñecos) o `run-glyph--mineral` (minerales).
@@ -51,9 +51,12 @@ La tarjeta solo se muestra si hay bajada activa, `Depth > 0` y el estado es `Pla
 - [[BrawlRoom]], [[BrawlEnums.cs]] — `BrawlRoomKind`
 - [[BrawlRunHud]] y [[BrawlRunVeil]] — vistas de pelea y velo sobre el mismo `run-root`
 - [[CreatureDNA]] — `CustomName`, `UniqueID`
+- [[MonchiPortraitUI]] — retrato de cada MoriMochi del equipo
+- [[Loc]] — textos `ui.brawl.run.*`
 
 ## Notas
 
-- Textos en español hardcodeados (no pasan por `Loc`), igual que `BrawlHud` y `BrawlRunHud`.
+- Textos por `Loc` (`ui.brawl.run.*`) desde S162.
 - S146: ya no tiene `trial`, ni iconos por tipo (`combatIcon`, `dummiesIcon`, `mineralsIcon`), ni muestra el estado `RoomResult`. El avance a la siguiente sala es automático.
 - S161: restyle con el kit de Synty (tarjeta de planificación y derrota). Sin cambios de reglas.
+- S162: cada MoriMochi del equipo se dibuja con retrato (`MonchiPortraitUI`), barra de vida y porcentaje; las filas dañadas llevan `run-member--hurt`. La línea de Minerita y el título usan `Loc`.

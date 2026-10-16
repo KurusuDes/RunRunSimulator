@@ -13,6 +13,7 @@ public class BrawlHudCard
     private readonly Label intentLabel;
     private readonly VisualElement hpFill;
     private readonly VisualElement hpShield;
+    private readonly VisualElement damage;
     private readonly Label hpLabel;
     private readonly RadialSlot[] radials = new RadialSlot[SlotCount];
     private readonly VisualElement[] slots = new VisualElement[SlotCount];
@@ -33,36 +34,54 @@ public class BrawlHudCard
 
         Root = Element("brawl-card");
         Root.AddToClassList(fighter.Team == ExpeditionTeam.Player ? "brawl-card--blue" : "brawl-card--red");
-        Root.Add(Element("brawl-bg"));
-        Root.Add(Element("brawl-frame"));
+
+        var portrait = Element("brawl-portrait");
+        portrait.Add(Element("brawl-portrait__bg"));
+        portrait.Add(Element("brawl-portrait__grad"));
+        portrait.Add(Element("brawl-portrait__tracery"));
+        var portraitImage = Element("brawl-portrait__img");
+        MonchiPortraitUI.Apply(portraitImage, fighter.DNA);
+        portrait.Add(portraitImage);
+        damage = Element("brawl-portrait__damage");
+        portrait.Add(damage);
+        portrait.Add(Element("brawl-portrait__vignette"));
+        portrait.Add(Element("brawl-portrait__frame"));
+        portrait.Add(Element("brawl-portrait__detail"));
+        hpLabel = MakeLabel("", "brawl-portrait__hp");
+        portrait.Add(hpLabel);
+        portrait.Add(MakeLabel(Loc.Tr("ui.brawl.card.ko"), "brawl-portrait__ko"));
+        Root.Add(portrait);
+
+        var info = Element("brawl-card__info");
 
         var head = Element("brawl-card__head");
         head.Add(MakeLabel(fighter.DisplayName, "brawl-card__name"));
         head.Add(MakeLabel(fighter.BodyLabel, "brawl-card__body"));
-        Root.Add(head);
+        info.Add(head);
+
+        var hp = Element("brawl-hpbar");
+        var track = Element("brawl-hpbar__track");
+        hpFill = Element("brawl-hpbar__fill");
+        hpShield = Element("brawl-hpbar__shield");
+        track.Add(hpFill);
+        track.Add(hpShield);
+        hp.Add(track);
+        hp.Add(Element("brawl-hpbar__heart"));
+        info.Add(hp);
 
         var line = Element("brawl-card__line");
         line.Add(MakeLabel(fighter.Brain.PostureLabel, "brawl-card__posture"));
         intentLabel = MakeLabel("", "brawl-card__intent");
         line.Add(intentLabel);
-        Root.Add(line);
-
-        var hp = Element("brawl-hp");
-        hpFill = Element("brawl-hp__fill");
-        hpFill.style.backgroundColor = tuning.TeamColor(fighter.Team);
-        hpShield = Element("brawl-hp__shield");
-        hpLabel = MakeLabel("", "brawl-hp__label");
-        hp.Add(hpFill);
-        hp.Add(hpShield);
-        hp.Add(hpLabel);
-        hp.Add(MakeLabel(Loc.Tr("ui.brawl.card.ko"), "brawl-hp__ko"));
-        Root.Add(hp);
+        info.Add(line);
 
         var row = Element("brawl-card__slots");
-        AddSlot(row, 0, fighter.WingTheme, fighter.WingKit != null ? fighter.WingKit.Title : null, fighter.WingKit != null, false);
-        AddSlot(row, 1, fighter.HornTheme, fighter.HornSkill != null ? fighter.HornSkill.Title : null, fighter.HornSkill != null, false);
-        AddSlot(row, 2, fighter.BackTheme, fighter.BackSkill != null ? fighter.BackSkill.Title : null, fighter.BackSkill != null, fighter.BackLocked);
-        Root.Add(row);
+        AddSlot(row, 0, fighter.WingTheme, fighter.WingKit != null, false);
+        AddSlot(row, 1, fighter.HornTheme, fighter.HornSkill != null, false);
+        AddSlot(row, 2, fighter.BackTheme, fighter.BackSkill != null, fighter.BackLocked);
+        info.Add(row);
+
+        Root.Add(info);
 
         Refresh();
     }
@@ -90,6 +109,7 @@ public class BrawlHudCard
         {
             lastHp = hp01;
             hpFill.style.width = Length.Percent(hp01 * 100f);
+            damage.style.height = Length.Percent((1f - hp01) * 100f);
         }
 
         float shield01 = fighter.MaxHp > 0f ? Mathf.Clamp01(fighter.Shield / fighter.MaxHp) : 0f;
@@ -129,7 +149,7 @@ public class BrawlHudCard
         slots[index].EnableInClassList("brawl-slot--charging", isCharging);
     }
 
-    private void AddSlot(VisualElement row, int index, BrawlTheme theme, string title, bool active, bool locked)
+    private void AddSlot(VisualElement row, int index, BrawlTheme theme, bool active, bool locked)
     {
         var slot = Element("brawl-slot");
         if (locked) slot.AddToClassList("brawl-slot--locked");
@@ -142,7 +162,6 @@ public class BrawlHudCard
             box.Add(MakeLabel("?", "brawl-slot__lock"));
             box.Add(Element("brawl-slot__ring"));
             slot.Add(box);
-            slot.Add(MakeLabel("—", "brawl-slot__label"));
             row.Add(slot);
 
             slots[index] = slot;
@@ -164,7 +183,6 @@ public class BrawlHudCard
         box.Add(Element("brawl-slot__ring"));
 
         slot.Add(box);
-        slot.Add(MakeLabel(string.IsNullOrEmpty(title) ? "—" : title, "brawl-slot__label"));
         row.Add(slot);
 
         slots[index] = slot;

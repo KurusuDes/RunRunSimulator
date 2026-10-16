@@ -113,6 +113,17 @@
     -unity-background-scale-mode: scale-to-fit;
 }
 
+.breed-tile__runes {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    top: 14px;
+    bottom: 14px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(36, 32, 26, 0.6);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
 .breed-tile__name {
     width: 100%;
     -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");

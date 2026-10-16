@@ -20,10 +20,11 @@
     right: 32px;
     flex-direction: row;
     align-items: center;
-    padding: 6px 24px 6px 18px;
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Bar_Rounded_01.png");
-    -unity-background-image-tint-color: var(--hud-pill);
-    -unity-slice-scale: 0.4;
+    height: 60px;
+    padding: 0 26px 0 16px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Box_Small_Parchment_01.png");
+    -unity-background-image-tint-color: rgba(31, 43, 46, 0.9);
+    -unity-slice-scale: 0.33;
 }
 
 .run-bag__icon {
@@ -35,33 +36,38 @@
 
 .run-bag__count {
     margin-left: 10px;
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 34px;
-    color: rgb(255, 255, 255);
-    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 36px;
+    color: rgb(228, 189, 63);
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .run-left {
     position: absolute;
     left: 0;
     right: 0;
-    top: 118px;
+    top: 132px;
     align-items: center;
 }
 
 .run-left__pill {
+    flex-direction: row;
     align-items: center;
-    padding: 8px 22px 8px 22px;
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
-    -unity-background-image-tint-color: var(--hud-pill);
-    -unity-slice-scale: 0.2;
+    height: 40px;
+    padding: 0 18px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Box_Small_Parchment_01.png");
+    -unity-background-image-tint-color: rgba(31, 27, 22, 0.82);
+    -unity-slice-scale: 0.33;
 }
 
 .run-left__text {
-    margin-top: 4px;
-    font-size: 18px;
+    margin: 0 0 0 10px;
+    padding: 0;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 19px;
     color: rgb(255, 255, 255);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .run-pips {
@@ -113,17 +119,16 @@
 .run-trial {
     position: absolute;
     left: 50%;
-    top: 174px;
+    top: 182px;
     translate: -50% 0;
-    padding: 8px 22px;
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
-    -unity-background-image-tint-color: var(--hud-pill);
-    -unity-slice-scale: 0.2;
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 19px;
+    padding: 6px 20px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Box_Small_Parchment_01.png");
+    -unity-background-image-tint-color: rgba(31, 43, 46, 0.88);
+    -unity-slice-scale: 0.33;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 20px;
     -unity-text-align: middle-center;
-    color: rgb(255, 255, 255);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    color: rgb(250, 208, 136);
 }
 
 .run-loot {
@@ -167,9 +172,11 @@
 }
 
 .run-veil__title {
-    margin-bottom: 18px;
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 64px;
+    margin: 4px 0;
+    padding: 0;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 78px;
+    letter-spacing: 3px;
     color: rgb(255, 255, 255);
     text-shadow: 0 4px 6px rgba(0, 0, 0, 0.75);
 }
@@ -301,4 +308,123 @@
 
 .run-btn {
     min-width: 200px;
+}
+
+.run-veil__vignette {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Background_Vignette_01.png");
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0.85);
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.run-veil__line {
+    width: 760px;
+    height: 24px;
+    flex-direction: row;
+}
+
+.run-veil__half {
+    flex-grow: 1;
+    -unity-background-image-tint-color: rgb(255, 204, 95);
+    -unity-slice-scale: 0.3;
+}
+
+.run-veil__half--l {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Line_03_Right.png");
+}
+
+.run-veil__half--r {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Line_03_Left.png");
+}
+
+.run-veil__line--bottom {
+    scale: 1 -1;
+    margin-bottom: 18px;
+}
+
+.run-team {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 14px;
+}
+
+.run-member {
+    width: 150px;
+    margin: 0 8px;
+    align-items: center;
+}
+
+.run-member__portrait {
+    width: 96px;
+    height: 96px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Gradient_Vertical_Smooth_01.png");
+    -unity-background-image-tint-color: rgba(49, 99, 219, 0.9);
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgb(0, 19, 53);
+}
+
+.run-member__photo {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    right: 4px;
+    bottom: 4px;
+}
+
+.run-member__frame {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Frame_Box_Medium_01_Variant_01.png");
+    -unity-slice-scale: 0.28;
+}
+
+.run-member__name {
+    max-width: 150px;
+    margin: 6px 0 2px 0;
+    padding: 0;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 19px;
+    color: rgb(255, 255, 255);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.run-member__bar {
+    width: 120px;
+    height: 12px;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Bar_Horizontal_03_Mask.png");
+    -unity-background-image-tint-color: rgba(25, 26, 29, 0.9);
+    -unity-slice-scale: 0.12;
+    overflow: hidden;
+}
+
+.run-member__fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Bar_Horizontal_05.png");
+    -unity-background-image-tint-color: rgb(110, 196, 96);
+    -unity-slice-scale: 0.12;
+}
+
+.run-member--hurt .run-member__fill {
+    -unity-background-image-tint-color: rgb(236, 168, 64);
+}
+
+.run-member__pct {
+    margin: 2px 0 0 0;
+    padding: 0;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 16px;
+    color: var(--mm-ink-soft);
 }

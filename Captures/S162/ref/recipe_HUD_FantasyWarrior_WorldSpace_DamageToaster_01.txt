@@ -1,0 +1,4 @@
+# NPC_HealthBars_EnemyData/HUD_FantasyWarrior_WorldSpace_DamageToaster_01
+HUD_FantasyWarrior_WorldSpace_DamageToaster_01 size=100x100 pos=0,0 anch=0,5,0,5-0,5,0,5
+  Damage size=300x200 pos=0,0 anch=0,5,0,5-0,5,0,5
+    Label_Damage size=300x200 pos=0,0 anch=0,0-1,1 TXT='9999' font=Grenze-SemiBold SDF size=52 col=#FFFFFFFF style=Normal align=Center outline=0 cs=3

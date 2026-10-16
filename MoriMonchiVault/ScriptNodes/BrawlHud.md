@@ -141,7 +141,7 @@ brawl-root
 - MVP calcula daño, curación, KOs (mostrado en ganador al fin, solo en partidas no `Driven`)
 - Banner tiene pop animation (pequeño → normal en 60ms)
 - Colores de equipo vienen de tuning (editables sin modificar código)
-- Textos de banner y feed hardcodeados en español (no pasan por `Loc`)
+- Textos de banner y feed pasan por `Loc` (`ui.brawl.*`) desde S162
 
 ## Notas S144
 
@@ -166,3 +166,8 @@ brawl-root
 - Restyle del HUD de combate con el kit de Synty: cartas, cronómetro (`BrawlHudClock`), banner con clases de color (`brawl-banner--ink/blue/red/coral`) y run.
 - `showDebugInfo` (serializado) controla la información de depuración: con `false` queda oculta.
 - Sin cambios en eventos ni en el flujo de partida.
+
+## Notas S162
+
+- Los textos del HUD (fases, banners, feed, MVP, título de equipos, botones de depuración) salen de `Loc` (`ui.brawl.*`). Antes estaban en español fijo.
+- La partida y la semilla (`matchLabel`) solo se muestran con `showDebugInfo`.

@@ -40,13 +40,13 @@ Ya no existen `identityLabel`, `roleElementLabel` ni `progressionLabel` (S160).
 | `SetNeedHighlight(row, highlight)` | Clase `detail-need--blocked` en la fila de la necesidad más débil |
 | `SetCombatRole(profile)` | Título `ui.detail.combatrole.suggested` y píldora con `BrawlRolePill.Build`. Visible solo si hay `kits` |
 | `BuildSlots(dna)` | Limpia `slotsLeft` y `slotsRight`. Izquierda: Horn, Back, Wing. Derecha: Face, Body |
-| `BuildSlot(slot, part)` | Ranura: caja `mm-slot detail-slot__box` con viñeta y marco (`mm-layer`), icono (`part.Icon` con clase `part-icon--horn/back/wing`, o color del set si no hay icono), etiqueta con el nombre del slot y nombre de la parte (o "—") |
+| `BuildSlot(slot, part)` | Ranura: caja `mm-slot detail-slot__box` con viñeta y marco (`mm-layer`), icono (`part.Icon` con clase `part-icon--horn/back/wing`, o color del set si no hay icono), etiqueta con el nombre del slot y nombre de la parte (`DataLoc.PartName`, o "—") |
 | `BuildParts(dna, profile)` | Limpia el contenedor. Agrega primero la acción de evolución (si existe) y luego las filas: Body, Horn, Back (bloqueada si `BackLocked`, sin evolución) y Wing. La cara ya no tiene fila: vive en `BuildSlots` |
 | `AddPartRow(slot, part, evolution)` | Fila con swatch y texto de la parte, sin bloque de poder. Si hay `evolution`, lo agrega junto al texto |
 | `AddSkillRow(slot, part, skill, locked, evolution)` | Fila con el poder del `BrawlSkillSO`. Si `locked`, muestra el bloque bloqueado (`ui.power.locked.title` / `.desc`) sin anillo de rol |
 | `AddWingRow(slot, part, wing, evolution)` | Fila con poder del ala; rol por `BrawlKitProfile.WingRole` |
 | `AddPowerPartRow(..., evolution)` | Fila base: swatch, texto y, si hay rol o está bloqueada, bloque de poder (`part-power`; `part-power--locked` si aplica). Al final agrega el bloque de evolución si existe |
-| `PartText(slot, part)` | Texto de fila: `Slot · Nombre`, o solo el slot si no hay parte (reemplaza al antiguo `PartLine`, S160) |
+| `PartText(slot, part)` | Texto de fila: `Slot · Nombre` (nombre por `DataLoc.PartName`), o solo el slot si no hay parte |
 | `BuildPartSwatch(part, ringRole)` | Swatch con anillo de rol (`mm-role-ring--…`), icono de parte o color del set |
 | `SlotName(PartRole)` | Nombre localizado del slot (`ui.detail.slot.body/horn/back/wing/face`) |
 | `RoleDesc(Role)` | Descripción localizada del rol (`ui.detail.roledesc.*`) |
@@ -73,6 +73,7 @@ Ya no existen `identityLabel`, `roleElementLabel` ni `progressionLabel` (S160).
 - [[BrawlRolePill]] — píldora del rol sugerido
 - [[BrawlKitDatabaseSO]] — kits por ID (para el perfil)
 - [[CreatureDatabaseSO]], [[BodyPart]] — partes, sets, iconos
+- [[DataLoc]] — nombres localizados de partes (S162)
 - [[CreatureDNA]] — necesidades, género, rol, elemento, `BirthDate`, `BreedCount`, `Battles`, `Form`
 - [[NeedsDisplay]] — color y relleno de barras
 - [[CreatureAvailability]], [[CareGateSO]] — apta y necesidad más débil
@@ -86,3 +87,4 @@ Ya no existen `identityLabel`, `roleElementLabel` ni `progressionLabel` (S160).
 - S146: espalda bloqueada para formas no adultas. La fila muestra el bloque bloqueado en lugar del poder de la espalda.
 - S148: cada parte adulta puede mostrar su bloque de evolución y la acción de evolución va arriba de las partes. Sin `evolution` asignado en `MorimonchiDetailInfoUITK`, ambos quedan ocultos.
 - S160: rediseño de la ficha con el kit v2 de UI. Se eliminaron los labels `identity`, `role-element` y `progression`; se agregaron subtítulo, bloque de datos, bloque de personalidad y ranuras de partes. La cara sale de la lista de filas y pasa a `slots-right`. `PartLine` fue reemplazado por `PartText`. Las barras muestran porcentaje.
+- S162: nombres de partes en ranuras y filas por `DataLoc.PartName` (loc de datos). Sin cambios en la estructura de la ficha.

@@ -146,7 +146,7 @@ public class BrawlFighter : MonoBehaviour
         var body = tuning.BodyFor(dna.BodyShapeID);
         MaxHp = tuning.BaseHp * body.HpMul * hpUp;
         BaseSpeed = WingKit.MoveSpeed * body.SpeedMul * speedUp * frailFactor;
-        BodyLabel = body.Label;
+        BodyLabel = BrawlLoc.Body(body.BodyId, body.Label);
         Hp = MaxHp;
 
         ResetState();

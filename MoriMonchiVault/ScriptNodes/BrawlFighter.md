@@ -30,7 +30,7 @@ tags: [script, world, brawl, core, fighter, state]
 | `DNA` | `CreatureDNA` | Datos vivos (leer después de Bind) |
 | `Team` | `ExpeditionTeam` | Player o Rival |
 | `DisplayName` | string | `CustomName` del DNA o nombre del GameObject |
-| `BodyLabel` | string | Etiqueta de cuerpo desde `BrawlTuningSO.BodyFor` |
+| `BodyLabel` | string | Etiqueta de cuerpo: `BrawlLoc.Body(body.BodyId, body.Label)` desde `BrawlTuningSO.BodyFor` (S162 pasa por loc de datos) |
 | `MaxHp`, `Hp`, `Hp01` | float | Vida máxima (cuerpo y mejora de cuerpo), vida actual y ratio |
 | `Shield` | float | Escudo activo (decrece por tiempo) |
 | `IsAlive` | bool | `Hp > 0` |
@@ -118,12 +118,13 @@ tags: [script, world, brawl, core, fighter, state]
 - [[BrawlKitDatabaseSO]] — `BodyUpgrades`
 - [[BrawlTheme]] — tema VFX
 - [[BrawlTuningSO]] — parámetros globales
+- [[BrawlLoc]] — `Body` para `BodyLabel` (S162)
 
 **Presentación:**
 - [[BrawlAnimator]] — anima estado
 - [[BrawlBody]] — pulso y flash
 - [[BrawlCamera]] — sigue e impulsiona
-- [[BrawlHud]], [[BrawlHudCard]], [[BrawlOverheads]] — leen eventos y propiedades para cards y plates
+- [[BrawlHud]], [[BrawlHudCard]], [[BrawlOverheads]] — leen eventos y propiedades para cards, plates y HUD
 - [[BrawlTrialRoom]] — escucha `OnDamaged` para medir daño en salas de prueba
 - [[BrawlPropHit]] — escucha `OnDamaged` para el feedback del prop del muñeco
 
@@ -141,3 +142,4 @@ tags: [script, world, brawl, core, fighter, state]
 - S146: `BackLocked` nuevo. Con espalda bloqueada no hay `BackSkill` ni tema de espalda, y el HUD muestra el slot con "?".
 - S148: las copias mejoradas (`upgraded`) se destruyen en cada `ReleaseUpgrades`: al re-`Bind` y en `OnDestroy`. Los SO del kit nunca se modifican. Una parte sin escalones sigue usando el mismo asset.
 - S151: la fragilidad solo afecta al equipo del jugador (`Team == Player`). Los rivales no pierden poder aunque sean frágiles.
+- S162: `BodyLabel` pasa por `BrawlLoc.Body` (loc de datos del HUD Brawl). Sin cambios en la API de combate.

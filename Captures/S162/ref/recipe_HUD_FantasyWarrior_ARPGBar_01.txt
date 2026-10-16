@@ -1,0 +1,144 @@
+# ActionBar/HUD_FantasyWarrior_ARPGBar_01
+HUD_FantasyWarrior_ARPGBar_01 size=980x150 pos=0,0 anch=0,5,0,5-0,5,0,5
+  SPR_Shadow size=1500x320 pos=0,0 anch=0,0-1,1 IMG=SPR_FX_FantasyWarrior_Glow_Box_01_Stepped col=#16161688 type=Sliced border=(440.00, 220.00, 440.00, 240.00) ppu=2
+  SPR_Background size=1060x145 pos=0,-3 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Banner_03 col=#D1C8C8FF type=Sliced border=(470.00, 0.00, 470.00, 0.00) ppu=4
+  ActionBar size=0x150 pos=0,0 anch=0,0-0,1
+    Item_00 size=180x180 pos=0,0 anch=0,0-0,0 IMG=null col=#00FF2500 type=Simple
+      Item size=180x180 pos=0,0 anch=0,0-1,1 IMG=null col=#10FF00FF type=Simple
+        Normal size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#1E3360FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Highlighted [inactive]
+        Highlighted size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#2E4B89FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Selected [inactive]
+        Selected size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#4C85FFFF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#5187FF80 type=Simple ppu=2
+        SPR_Frame size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Variant_01 col=#FFFFFFFF type=Sliced border=(0.00, 220.00, 0.00, 220.00) ppu=3
+        Icon size=180x179 pos=0,21 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FFFFFFFF type=Simple
+          ICON size=176x153 pos=-2,-17 anch=0,0-1,1 IMG=ICON_SM_Wep_Spear_10 col=#FFFFFFFF type=Simple
+      Input_Hotkey size=0x50 pos=0,-30 anch=0,5,0-0,5,0 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 col=#1F2B2EE6 type=Sliced border=(56.00, 56.00, 56.00, 56.00) ppu=1,5
+        Input size=0x0 pos=0,0 anch=0,0-0,0 TXT='1' font=Grenze-SemiBold SDF size=40 col=#E3BB71FF style=UpperCase align=Midline outline=0 cs=0
+        Icon [inactive]
+        Icon size=24x36 pos=48,-30 anch=0,1-0,1 IMG=SPR_HUD_FantasyWarrior_Arrow_02 col=#FAD088FF type=Simple
+    Item_01 size=180x180 pos=0,0 anch=0,0-0,0 IMG=null col=#00FF2500 type=Simple
+      Item size=180x180 pos=0,0 anch=0,0-1,1 IMG=null col=#10FF00FF type=Simple
+        Normal size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#1E3360FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Highlighted [inactive]
+        Highlighted size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#2E4B89FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Selected [inactive]
+        Selected size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#4C85FFFF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#5187FF80 type=Simple ppu=2
+        SPR_Frame size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Variant_01 col=#FFFFFFFF type=Sliced border=(0.00, 220.00, 0.00, 220.00) ppu=3
+        Icon size=180x179 pos=0,21 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FFFFFFFF type=Simple
+          ICON size=176x153 pos=-2,-17 anch=0,0-1,1 IMG=ICON_SM_Wep_Axe_07 col=#FFFFFFFF type=Simple
+      Input_Hotkey size=0x50 pos=0,-30 anch=0,5,0-0,5,0 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 col=#1F2B2EE6 type=Sliced border=(56.00, 56.00, 56.00, 56.00) ppu=1,5
+        Input size=0x0 pos=0,0 anch=0,0-0,0 TXT='2' font=Grenze-SemiBold SDF size=40 col=#E3BB71FF style=UpperCase align=Midline outline=0 cs=0
+        Icon [inactive]
+        Icon size=24x36 pos=48,-30 anch=0,1-0,1 IMG=SPR_HUD_FantasyWarrior_Arrow_02 col=#FAD088FF type=Simple
+    Item_02 size=180x180 pos=0,0 anch=0,0-0,0 IMG=null col=#00FF2500 type=Simple
+      Item size=180x180 pos=0,0 anch=0,0-1,1 IMG=null col=#10FF00FF type=Simple
+        Normal size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#1E3360FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Highlighted [inactive]
+        Highlighted size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#2E4B89FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Selected [inactive]
+        Selected size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#4C85FFFF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#5187FF80 type=Simple ppu=2
+        SPR_Frame size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Variant_01 col=#FFFFFFFF type=Sliced border=(0.00, 220.00, 0.00, 220.00) ppu=3
+        Icon size=180x179 pos=0,21 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FFFFFFFF type=Simple
+          ICON size=176x153 pos=-2,-17 anch=0,0-1,1 IMG=ICON_SM_Wep_KnuckleDagger_01 col=#FFFFFFFF type=Simple
+      Input_Hotkey size=0x50 pos=0,-30 anch=0,5,0-0,5,0 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 col=#1F2B2EE6 type=Sliced border=(56.00, 56.00, 56.00, 56.00) ppu=1,5
+        Input size=0x0 pos=0,0 anch=0,0-0,0 TXT='3' font=Grenze-SemiBold SDF size=40 col=#E3BB71FF style=UpperCase align=Midline outline=0 cs=0
+        Icon [inactive]
+        Icon size=24x36 pos=48,-30 anch=0,1-0,1 IMG=SPR_HUD_FantasyWarrior_Arrow_02 col=#FAD088FF type=Simple
+    Item_03 size=180x180 pos=0,0 anch=0,0-0,0 IMG=null col=#00FF2500 type=Simple
+      Item size=180x180 pos=0,0 anch=0,0-1,1 IMG=null col=#10FF00FF type=Simple
+        Normal size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#1E3360FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Highlighted [inactive]
+        Highlighted size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#2E4B89FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Selected [inactive]
+        Selected size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#4C85FFFF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#5187FF80 type=Simple ppu=2
+        SPR_Frame size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Variant_01 col=#FFFFFFFF type=Sliced border=(0.00, 220.00, 0.00, 220.00) ppu=3
+        Icon size=180x179 pos=0,21 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FFFFFFFF type=Simple
+          ICON size=172x149 pos=-4,-15 anch=0,0-1,1 IMG=ICON_SM_Item_Book_03 col=#FFFFFFFF type=Simple
+      Input_Hotkey size=0x50 pos=0,-30 anch=0,5,0-0,5,0 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 col=#1F2B2EE6 type=Sliced border=(56.00, 56.00, 56.00, 56.00) ppu=1,5
+        Input size=0x0 pos=0,0 anch=0,0-0,0 TXT='4' font=Grenze-SemiBold SDF size=40 col=#E3BB71FF style=UpperCase align=Midline outline=0 cs=0
+        Icon [inactive]
+        Icon size=24x36 pos=48,-30 anch=0,1-0,1 IMG=SPR_HUD_FantasyWarrior_Arrow_02 col=#FAD088FF type=Simple
+    Item_04 size=180x180 pos=0,0 anch=0,0-0,0 IMG=null col=#00FF2500 type=Simple
+      Item size=180x180 pos=0,0 anch=0,0-1,1 IMG=null col=#10FF00FF type=Simple
+        Normal size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#1E3360FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Highlighted [inactive]
+        Highlighted size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#2E4B89FF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#3F6CCC80 type=Simple ppu=2
+        Selected [inactive]
+        Selected size=180x180 pos=0,0 anch=0,0-1,1
+          SPR_Background size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Background_01 col=#4C85FFFF type=Simple ppu=3
+          SPR_Tracery size=130x120 pos=0,-10 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Diamond_01 col=#5187FF80 type=Simple ppu=2
+        SPR_Frame size=180x180 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Frame_Arch_01_Variant_01 col=#FFFFFFFF type=Sliced border=(0.00, 220.00, 0.00, 220.00) ppu=3
+        Icon size=180x179 pos=0,21 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_White_01 col=#FFFFFFFF type=Simple
+          ICON size=176x149 pos=-2,-15 anch=0,0-1,1 IMG=ICON_SM_Item_Bottle_08 col=#FFFFFFFF type=Simple
+      Input_Hotkey size=0x50 pos=0,-30 anch=0,5,0-0,5,0 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_02 col=#1F2B2EE6 type=Sliced border=(56.00, 56.00, 56.00, 56.00) ppu=1,5
+        Input size=0x0 pos=0,0 anch=0,0-0,0 TXT='5' font=Grenze-SemiBold SDF size=40 col=#E3BB71FF style=UpperCase align=Midline outline=0 cs=0
+        Icon [inactive]
+        Icon size=24x36 pos=48,-30 anch=0,1-0,1 IMG=SPR_HUD_FantasyWarrior_Arrow_02 col=#FAD088FF type=Simple
+  Container_Left size=200x200 pos=20,-10 anch=0,0,5-0,0,5
+    HUD_Container size=200x200 pos=0,0 anch=0,0-1,1
+      SPR_Background size=200x200 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Circle_Medium_01_Clean col=#01152599 type=Simple ppu=1,5
+      Slider_Vertical size=200x200 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Container_02_Mask_01 col=#FFFFFFFF type=Simple
+        Background [inactive]
+        Background size=200x200 pos=0,0 anch=0,0-1,1 IMG=null col=#001643E6 type=Sliced
+        Fill Area size=200x200 pos=0,0 anch=0,0-1,1
+          Fill size=0x0 pos=0,0 anch=0,0-0,0 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_02 col=#E20000FF type=Simple ppu=1,55
+        Handle Slide Area size=200x200 pos=0,0 anch=0,0-1,1
+          Handle [inactive]
+          Handle size=40x40 pos=0,0 anch=0,0-0,0 IMG=SPR_HUD_FantasyWarrior_Circle_Small_02_Underlay col=#FFFFFFFF type=Simple
+      SPR_Container_Glass size=200x200 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Container_02_Glass_01 col=#E0D2D281 type=Simple ppu=1,5
+      SPR_Frame size=355x360 pos=-28,40 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Greeble_Eagle_01_Variant_01 col=#E0E0E0FF type=Simple
+  Container_Right size=200x200 pos=-20,-10 anch=1,0,5-1,0,5
+    HUD_Container size=200x200 pos=0,0 anch=0,0-1,1
+      SPR_Background size=200x200 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Circle_Medium_01_Clean col=#01152599 type=Simple ppu=1,5
+      Slider_Vertical size=200x200 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Container_02_Mask_01 col=#FFFFFFFF type=Simple
+        Background [inactive]
+        Background size=200x200 pos=0,0 anch=0,0-1,1 IMG=null col=#001643E6 type=Sliced
+        Fill Area size=200x200 pos=0,0 anch=0,0-1,1
+          Fill size=0x0 pos=0,0 anch=0,0-0,0 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_02 col=#0093D6FF type=Simple ppu=1,55
+        Handle Slide Area size=200x200 pos=0,0 anch=0,0-1,1
+          Handle [inactive]
+          Handle size=40x40 pos=0,0 anch=0,0-0,0 IMG=SPR_HUD_FantasyWarrior_Circle_Small_02_Underlay col=#FFFFFFFF type=Simple
+      SPR_Container_Glass size=200x200 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Container_02_Glass_01 col=#A9BDD481 type=Simple ppu=1,5
+      SPR_Frame size=360x360 pos=30,40 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Greeble_Eagle_01_Variant_02 col=#E0E0E0FF type=Simple
+  XPBar size=860x50 pos=0,58 anch=0,1-1,1
+    HUD_XPBar size=860x50 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Mask_Trapezoid_01 col=#FFFFFFFF type=Sliced border=(65.00, 0.00, 65.00, 0.00) ppu=2
+      Slider size=860x50 pos=0,0 anch=0,0-1,1
+        Background size=836x46 pos=0,1 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Mask_Trapezoid_01 col=#071A29E6 type=Sliced border=(65.00, 0.00, 65.00, 0.00) ppu=3
+        Fill Area size=860x50 pos=0,0 anch=0,0-1,1
+          Fill size=0x0 pos=0,0 anch=0,0-0,0 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_01 col=#1EB8FFFF type=Simple
+            RawImage_Sheen_Fast size=0x0 pos=0,0 anch=0,0-1,1
+            RawImage_Sheen_Slow size=0x0 pos=0,0 anch=0,0-1,1
+        Handle Slide Area size=860x50 pos=0,0 anch=0,0-1,1
+          Handle [inactive]
+          Handle size=40x40 pos=0,0 anch=0,0-0,0 IMG=SPR_HUD_FantasyWarrior_Circle_Small_02_Underlay col=#FFFFFFFF type=Simple
+      Label_XP size=400x50 pos=0,0 anch=0,5,0-0,5,1 TXT='999 / 999' font=Grenze-SemiBold SDF size=42 col=#FFFFFFFF style=Normal align=Midline outline=0 cs=2
+    SPR_Frame size=890x110 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Bar_Horizontal_10 col=#E2E2E2FF type=Sliced border=(360.00, 0.00, 360.00, 0.00) ppu=2

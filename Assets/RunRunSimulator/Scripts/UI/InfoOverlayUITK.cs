@@ -146,7 +146,7 @@ public class InfoOverlayUITK : MonoBehaviour
         expeditionToastLabel.RemoveFromClassList("toast--lose");
         expeditionToastLabel.RemoveFromClassList("toast--draw");
 
-        expeditionToastLabel.text = Loc.Tr(UncleCallKey, box.DisplayName);
+        expeditionToastLabel.text = Loc.Tr(UncleCallKey, DataLoc.BoxName(box));
         expeditionToastLabel.style.display = DisplayStyle.Flex;
         toastTimer = toastSeconds;
     }

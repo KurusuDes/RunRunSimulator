@@ -4,6 +4,34 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-16 (Session 162 — **HUD y run del Brawl con el Warrior HUD de Synty, pulido de pantallas (PC, Libro, Crianza, Almacén, Bajada), Loc de datos, 1,2 GB de assets de la bóveda, post procesado de la tienda, pasto nuevo (receta Genshin/Fenyx, máscara, relieve, pisoteo), bosque FantasyVillage y cielo con montañas** — 6 `.cs` creados, 23 modificados; consola 0 errores; verificado en Play con capturas en `Captures/S162/`)
+
+**Focus:** Juan: "termina la HUD de combate y todas las demás", después pasar el GDD a la bóveda de assets e importar lo útil; luego pasto (Genshin Impact e Immortals Fenyx Rising como referentes), árboles y cielo de POLYGON Fantasy Village. Visión dada (memoria `project-vision-pueblo-solarpunk`): pueblito rural-moderno solarpunk en rotonda con parque central, anillos de tiendas/misiones, bosque y montañas.
+
+**Hecho:**
+1. **HUD Brawl** (receta Warrior HUD Adventure/Companions): columnas laterales con retrato real (`MonchiPortraitUI`), marco dorado, barra con corazón, poderes con radial; reloj Container; feed de KO en pergamino; banner de resultado tipo Quest Complete (header Victoria/Derrota/Empate); placas y números sobre criaturas con piel del kit; laterales/centro se ocultan si están vacíos. `MonchiPortraitStudio` pasó a prefab (`Resources/Prefabs/UI/`) y está en GameScene y BrawlDemo.
+2. **Run Brawl:** plan del tramo con fila de equipo (retrato, barra, %), velo con líneas doradas y viñeta, mochila/tira/etiqueta de prueba en pergamino.
+3. **Loc de datos:** `BrawlLoc` (poderes, alas, cuerpo, postura) y `DataLoc` (partes, mejoras, ítems, decoraciones, cajas); ~160 claves es/en cargadas (inglés escrito por la IA, falta pasada de Juan).
+4. **Pantallas:** PC con huecos de runas, botón Comprar deshabilitado sin saldo, "Locked" corto; Libro 5 columnas sin scroll sobrante; Crianza y Almacén sin espacio muerto (plural "objetos distintos"); Bajada con filas de equipo.
+5. **Assets (bóveda, todo en `Assets/Synty`, gitignored):** Warrior HUD; animaciones Sidekick (BaseLocomotion, Idles, Emotes; 194 clips); Sidekick Villagers/Knights/Sorcerers (outfits); flora (FantasyVillage completo, Meadow, Enchanted, Alpine, Dungeon, DungeonRealms); Kingdom, Dog, ParticleFX, Icons; skydome y anillos de nubes (PNB_Core). Propuesta en `Captures/S162/assets_propuesta.md`. Herramienta `SyntyToonConverter` (menú `RunRunSimulator/Art`) genera materiales `ArenaPalette` en `Materials/SyntyToon/` (100).
+6. **Post procesado tienda:** perfil `ShopAtmosphere` (Arena sin DOF ni aberración) en el Global Volume; niebla lineal 45-650 m.
+7. **Pasto:** shader con inclinación por brizna, sombra muestreada en la raíz (`_ShadowAtRoot`), altura por UV1 (raíces con distinta Y), máscara global `_ShopGrassMaskTex` (`ShopGrassMask`: colliders que apoyan en el piso + rects de exclusión, borde suave; troncos como círculo); siembra sigue relieve (`reliefRoot` = `WORLD/ShopRelief`, 33 montículos de PolygonNature con `SH_Grass_Env`); briznas anchas a la rodilla, matas, densidad patio 150 / afuera 55; rampas `ShopGrassRamp_Genshin` (patio) y `_Fenyx` (afuera); flores blancas/lilas grandes. **Pisoteo** en la tienda: `ShopTrampleMap` (en `WORLD/ShopGrass`) + `GrassTrampler` en el Player y en `MorimonchiAgent.prefab`. Referentes y diagnóstico: `Index/36`.
+8. **Bosque y cielo:** `ENVIROMENT/ShopForest_FV` (238 árboles FantasyVillage en las posiciones del bosque viejo, 5 paletas de `Synty/Foliage` en `Materials/Shop/Forest/FV/`; shader Synty original, no toon); bosque viejo apagado como `ShopForest_Old`. `ENVIROMENT/Sky_FV`: domo (`FV_Skydome.mat` celeste), anillo de nubes, 19 montañas en dos anillos; cámara far 1500.
+
+**Quirks ⚠️:** (1) El MCP pierde la instancia en cada recompilación/Play: re-fijar `RunRunSimulator@a8b39199` (puerto variable 6401/6402); `execute_code` largos dan timeout pero corren. (2) La primera sembrada de la máscara usaba el AABB de la copa de los árboles → pasto pelado bajo el bosque; ahora mallas altas = círculo de tronco. (3) GUID duplicados de los dummies entre AnimationIdles y BaseLocomotion (solo Samples). (4) **Los assets Synty no están en git:** la otra PC debe importar lo mismo (subpaquetes en `%TEMP%\AssetVaultFinder_cache\subsets`), si no GameScene pierde bosque, cielo, relieve y HUD Warrior. (5) FPS en editor con bosque nuevo 16-31 (antes 43-47), medición ruidosa en segundo plano.
+
+**Siguiente paso (S163):**
+1. Medir FPS en build con bosque FV + pasto (2,7 M vért.); si hace falta, bajar distancias de LOD de los árboles o densidad lejana.
+2. Pasada de Juan al inglés de las ~160 claves nuevas; `order.Describe()` sigue sin localizar.
+3. Arena sandbox (`ArenaPlanPanel`/`ArenaRoundHud`): confirmar si se borra.
+4. Crianza: los huevos aparecen como candidatos a padre (`BreedingBreedTabPresenter.Eligible` no filtra `MonchiForm.Egg`); decidir.
+5. Ampliar `HumanBodyAssembler` a Villagers/Knights/Sorcerers y armar los NPC con las animaciones Sidekick nuevas; animaciones faltantes (agarrar/entregar) con Blender MCP.
+6. Video recorrido de la tienda (pedido al cierre).
+
+**Archivos `.cs` S162 — creados (6):** `Scripts/Editor/SyntyToonConverter.cs`, `Scripts/Systems/Localization/BrawlLoc.cs`, `Scripts/Systems/Localization/DataLoc.cs`, `Scripts/World/Store/GrassTrampler.cs`, `Scripts/World/Store/ShopGrassMask.cs`, `Scripts/World/Store/ShopTrampleMap.cs` · **modificados (23):** `UI/BrawlHud.cs`, `UI/BrawlHudCard.cs`, `UI/BrawlOverheads.cs`, `UI/BrawlRunPanel.cs`, `UI/BreedingBreedTabPresenter.cs`, `UI/BreedingInheritanceView.cs`, `UI/CreatureGridUITK.cs`, `UI/DetailInfoTabPresenter.cs`, `UI/DetailInheritancePresenter.cs`, `UI/ExpeditionCardBuilder.cs`, `UI/ExpeditionPanelUITK.cs`, `UI/ExpeditionReturnCardUITK.cs`, `UI/HotbarHUDUITK.cs`, `UI/InfoOverlayUITK.cs`, `UI/StoragePanelUITK.cs`, `UI/StoreDetailCard.cs`, `UI/StorePanelUITK.cs`, `UI/StoreRows.cs`, `UI/StoreTileView.cs`, `World/Brawl/BrawlBrain.cs`, `World/Brawl/BrawlFighter.cs`, `World/Expedition/ArenaGrassBlades.cs`, `World/Store/ShopGrassField.cs` · **shaders:** `Shaders/ArenaGrass.shader` (mod)
+
+---
+
 **Session:** 2026-10-15/16 (Session 161 — **overhaul de UI por pantalla con el kit de Synty: limpieza de UI vieja, HUD con encargos y avisos contextuales, hotbar estilo FarmingLife con íconos renderizados, Libro, Crianza, PC, Almacén, Venta, Regreso, Bajada, HUD del combate y carteles del mundo** — 8 `.cs` creados, 22 modificados, 2 borrados; consola 0 errores; todo verificado en Play con capturas en `Captures/S161/`)
 
 **Focus:** Juan: "termina de mostrarme la nueva UI, el roadmap de referencias y diseños"; "debemos deshacernos de toda la UI que no esté usando los nuevos asset packages"; la leyenda del HUD se adapta; "nuestra hotbar luce por debajo de Synty, no aprovechamos el paquete"; después "continúa con todo lo demás". Los assets nuevos (SyntyPass, 181 packs en `E:\GitHub\AssetVaultFinder`) quedaron para otra sesión.

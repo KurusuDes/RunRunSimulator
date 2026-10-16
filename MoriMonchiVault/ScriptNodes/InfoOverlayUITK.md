@@ -74,3 +74,4 @@ tags: [script, ui, overlay]
 - S151: el toast de encargo también comparte el label; el último aviso que llegue reemplaza al anterior.
 - S152: el toast de meta también comparte el label; mismo criterio.
 - S161: se quitaron `hints`, el selector EN/ES y la suscripción a `SettingsService.Changed`.
+- S162: revisado contra el código; sin cambios de contrato en el overlay.

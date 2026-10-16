@@ -1,0 +1,12 @@
+# Player_Health_Equipment/HUD_FantasyWarrior_XPLog_01
+HUD_FantasyWarrior_XPLog_01 size=420x340 pos=0,380 anch=0,5,0-0,5,0
+  Content size=420x340 pos=0,0 anch=0,0-1,1
+    HUD_XPLog_Item size=420x100 pos=0,0 anch=0,5,0,5-0,5,0,5
+      SPR_Shadow size=500x140 pos=0,-80 anch=0,0-1,1 IMG=SPR_FX_FantasyWarrior_Glow_Box_01_Stepped col=#16161688 type=Sliced border=(440.00, 220.00, 440.00, 240.00)
+      Gradient size=370x140 pos=0,-30 anch=0,0-1,1
+        SPR_Gradient size=370x140 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Smooth_01 col=#0768A8E6 type=Simple ppu=1,4
+          SPR_Gradient_Additive size=370x140 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Gradient_Vertical_Smooth_01 col=#0768A869 type=Simple ppu=1,4
+      Content size=380x100 pos=20,0 anch=0,0-1,1
+        Label_XP size=0x0 pos=0,0 anch=0,0-0,0 TXT='+80 XP' font=Grenze-SemiBold SDF size=64 col=#EBDFC6FF style=Normal align=Center outline=0 cs=2
+      Frame size=440x160 pos=0,45 anch=0,0-1,0
+        SPR_Greeble_Curlicue size=440x160 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Greeble_Curlicue_02 col=#FFFFFFFF type=Sliced border=(270.00, 0.00, 270.00, 0.00) ppu=1,9

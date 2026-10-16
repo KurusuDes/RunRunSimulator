@@ -23,6 +23,7 @@ public class BrawlHudCard
     private readonly Label intentLabel;
     private readonly VisualElement hpFill;
     private readonly VisualElement hpShield;
+    private readonly VisualElement damage;
     private readonly Label hpLabel;
     private readonly RadialSlot[] radials = new RadialSlot[SlotCount];
     private readonly VisualElement[] slots = new VisualElement[SlotCount];
@@ -38,13 +39,14 @@ public class BrawlHudCard
 | Componente | Clase CSS | Descripción |
 |-----------|-----------|-------------|
 | Root | brawl-card / brawl-card--blue/--red (`--ko` si está caído) | Card contenedora |
+| Retrato | brawl-portrait (img, `__damage`, `__hp`, `__ko`) | Foto del MoriMochi (`MonchiPortraitUI`), daño y HP numérico |
 | Head | brawl-card__head | Nombre + label cuerpo |
 | Line | brawl-card__line | Postura + intención |
-| HP Bar | brawl-hp | Vida (fill), escudo (overlay `brawl-hp__shield`), número (`brawl-hp__label`) y "KO" (`brawl-hp__ko`) |
+| HP Bar | brawl-hpbar (`__fill`, `__shield`, `__heart`) | Vida y escudo |
 | Slots | brawl-card__slots | Wing + Horn + Back (3 slots) |
-| Slot activo | brawl-slot / brawl-slot__box | Icono teñido con el tema, radial de carga (`brawl-slot__radial`) y etiqueta con el título |
-| Slot vacío | brawl-slot--empty | Parte sin kit: sin radial, etiqueta "—" |
-| Slot bloqueado | brawl-slot--locked, brawl-slot__lock | Espalda bloqueada: caja con "?" y etiqueta "—" |
+| Slot activo | brawl-slot / brawl-slot__box | Icono teñido con el tema, radial de carga (`brawl-slot__radial`) y anillo |
+| Slot vacío | brawl-slot--empty | Parte sin kit: sin radial |
+| Slot bloqueado | brawl-slot--locked, brawl-slot__lock | Espalda bloqueada: caja con "?" |
 
 ## Métodos Públicos
 
@@ -56,10 +58,11 @@ public class BrawlHudCard
 
 ## Constructor
 
-- Root según equipo (`brawl-card--blue` o `--red`), fondo `brawl-bg`.
+- Root según equipo (`brawl-card--blue` o `--red`).
+- Retrato con `MonchiPortraitUI.Apply` y textos de HP y KO.
 - Head: nombre (`DisplayName`) y cuerpo (`BodyLabel`).
 - Line: postura (`Brain.PostureLabel`) e intención.
-- HP: fill con color de equipo (`tuning.TeamColor`), shield, label y KO.
+- HP: fill con color de equipo (`tuning.TeamColor`), shield y número.
 - Slots, en orden: ala (índice 0, `WingKit`), cuerno (índice 1, `HornSkill`) y espalda (índice 2, `BackSkill`, con `BackLocked`). Luego `Refresh()`.
 
 ## Método Refresh() (llamado cada frame desde BrawlHud)
@@ -81,6 +84,7 @@ public void Refresh()
     {
         lastHp = hp01;
         hpFill.style.width = Length.Percent(hp01 * 100f);
+        damage.style.height = Length.Percent((1f - hp01) * 100f);
     }
 
     float shield01 = fighter.MaxHp > 0f ? Mathf.Clamp01(fighter.Shield / fighter.MaxHp) : 0f;
@@ -139,19 +143,19 @@ private static string IntentText(BrawlIntent intent)
 {
     switch (intent)
     {
-        case BrawlIntent.Engage: return "pelea";
-        case BrawlIntent.Kite: return "dispara de lejos";
-        case BrawlIntent.Hunt: return "caza";
-        case BrawlIntent.Protect: return "protege";
-        case BrawlIntent.Heal: return "cura";
-        case BrawlIntent.Retreat: return "huye";
-        case BrawlIntent.Cast: return "concentra";
-        default: return "espera";
+        case BrawlIntent.Engage: return Loc.Tr("ui.brawl.intent.engage");
+        case BrawlIntent.Kite: return Loc.Tr("ui.brawl.intent.kite");
+        case BrawlIntent.Hunt: return Loc.Tr("ui.brawl.intent.hunt");
+        case BrawlIntent.Protect: return Loc.Tr("ui.brawl.intent.protect");
+        case BrawlIntent.Heal: return Loc.Tr("ui.brawl.intent.heal");
+        case BrawlIntent.Retreat: return Loc.Tr("ui.brawl.intent.retreat");
+        case BrawlIntent.Cast: return Loc.Tr("ui.brawl.intent.cast");
+        default: return Loc.Tr("ui.brawl.intent.idle");
     }
 }
 ```
 
-Traduce `BrawlIntent` a texto legible (feedback de IA).
+Traduce `BrawlIntent` a texto localizado (feedback de IA).
 
 ## Método PulseSkill()
 
@@ -168,10 +172,10 @@ El `?.` evita fallar si el slot no tiene radial (parte sin kit o espalda bloquea
 
 ## Método AddSlot()
 
-`AddSlot(row, index, theme, title, active, locked)`:
-- `locked` → clase `brawl-slot--locked`, caja con "?" (`brawl-slot__lock`), etiqueta "—". No crea radial ni icono.
+`AddSlot(row, index, theme, active, locked)`:
+- `locked` → clase `brawl-slot--locked`, caja con "?" (`brawl-slot__lock`). No crea radial ni icono.
 - Si no está activo y no está bloqueado → clase `brawl-slot--empty`, sin radial.
-- Si está activo → icono `Image` con `theme.Icon` teñido con `theme.Color`, `RadialSlot` con `FillColor` = color del tema a `FillAlpha`, y etiqueta con el título del skill (o "—").
+- Si está activo → icono `Image` con `theme.Icon` teñido con `theme.Color` y `RadialSlot` con `FillColor` = color del tema a `FillAlpha`.
 - Guarda el slot en `slots[index]`, el radial en `radials[index]` (si hay) y `slotActive[index]`.
 
 ## Optimizaciones
@@ -188,6 +192,7 @@ El `?.` evita fallar si el slot no tiene radial (parte sin kit o espalda bloquea
 - `BrawlTuningSO` (colores de equipo)
 - `BrawlTheme` (ícono, color de tema para slots)
 - `RadialSlot` (custom element para charge radial)
+- [[Loc]] (textos de intención y KO)
 
 **Salida:**
 - VisualElement root integrado en BrawlHud (blueCards/redCards)
@@ -208,3 +213,9 @@ El `?.` evita fallar si el slot no tiene radial (parte sin kit o espalda bloquea
 ## Notas S161
 
 - Restyle con el kit de Synty (tarjetas, radiales y barra de HP con los íconos y colores del tema). Constructor, `Refresh`, `PulseSkill` y `Root` no cambiaron.
+
+## Notas S162
+
+- `IntentText()` resuelve con `Loc.Tr("ui.brawl.intent.*")`; ya no son cadenas fijas en español.
+- `AddSlot` ya no recibe título: los slots no llevan etiqueta de texto.
+- El HP numérico y el "KO" viven dentro del retrato (`brawl-portrait__hp`, `brawl-portrait__ko`).

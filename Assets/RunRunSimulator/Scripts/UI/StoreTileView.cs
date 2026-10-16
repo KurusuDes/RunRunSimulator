@@ -51,6 +51,17 @@ public static class StoreTileView
         return tile;
     }
 
+    public static VisualElement BuildEmpty()
+    {
+        var tile = new VisualElement { pickingMode = PickingMode.Ignore };
+        tile.AddToClassList("store-tile");
+        tile.AddToClassList("store-tile--empty");
+        var runes = new VisualElement { pickingMode = PickingMode.Ignore };
+        runes.AddToClassList("store-tile__runes");
+        tile.Add(runes);
+        return tile;
+    }
+
     private static VisualElement BuildPill(StoreRows.Row row, bool discountActive, VisualElement tile)
     {
         var pill = new VisualElement { pickingMode = PickingMode.Ignore };
@@ -61,7 +72,7 @@ public static class StoreTileView
         if (!string.IsNullOrEmpty(row.LockedBy))
         {
             tile.AddToClassList("store-tile--locked");
-            label.text = Loc.Tr("ui.store.locked").TrimEnd(':', ' ');
+            label.text = Loc.Tr("ui.store.locked.short");
             label.AddToClassList("store-tile__tag");
             return pill;
         }

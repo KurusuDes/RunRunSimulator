@@ -57,7 +57,7 @@ public class DetailInheritancePresenter
         string text = Loc.Tr("ui.detail.inherit.sep") + SlotText(origin);
 
         var decor = DecorOf(origin.DecorID);
-        if (decor != null) text += Loc.Tr("ui.detail.inherit.by", decor.DisplayName);
+        if (decor != null) text += Loc.Tr("ui.detail.inherit.by", DataLoc.DecorName(decor));
         return text;
     }
 

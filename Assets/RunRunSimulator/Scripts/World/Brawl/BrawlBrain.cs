@@ -60,9 +60,9 @@ public class BrawlBrain : MonoBehaviour
         var dna = owner.DNA;
         boldness = dna != null ? Mathf.Clamp01(dna.Boldness) : 0.5f;
         sociability = dna != null ? Mathf.Clamp01(dna.Sociability) : 0.5f;
-        string stance = boldness >= PostureHigh ? "Osado" : boldness <= PostureLow ? "Cauto" : "Templado";
-        string bond = sociability >= PostureHigh ? "protector" : sociability <= PostureLow ? "solitario" : "de equipo";
-        postureLabel = stance + " · " + bond;
+        string stance = boldness >= PostureHigh ? "bold" : boldness <= PostureLow ? "wary" : "even";
+        string bond = sociability >= PostureHigh ? "guardian" : sociability <= PostureLow ? "loner" : "team";
+        postureLabel = BrawlLoc.Posture(stance, bond);
         target = null;
         intent = BrawlIntent.Idle;
         retreating = false;

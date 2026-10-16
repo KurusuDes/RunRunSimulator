@@ -17,6 +17,10 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
 
     private const string CatActiveClass   = "store-cat--active";
     private const string TileSelectedClass = "store-tile--selected";
+    private const float TileCellWidth  = 212f;
+    private const float TileCellHeight = 242f;
+    private const int   DefaultColumns = 5;
+    private const int   MinGridRows    = 2;
 
     private VisualElement   tabsContainer;
     private ScrollView      grid;
@@ -188,6 +192,11 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
             container.Add(tile);
         }
 
+        int columns = ColumnCount(container);
+        int visibleRows = Mathf.Max(MinGridRows, VisibleRowCount(container));
+        int slots = Mathf.Max(columns * visibleRows, Mathf.CeilToInt(rows.Count / (float)columns) * columns);
+        for (int i = rows.Count; i < slots; i++) container.Add(StoreTileView.BuildEmpty());
+
         if (emptyLabel != null)
         {
             emptyLabel.text = Loc.Tr(tab == StoreRows.Tab.Orders ? "ui.store.empty.orders" : "ui.store.empty");
@@ -195,6 +204,26 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
         }
 
         Select(rows.Count == 0 ? -1 : Mathf.Clamp(selectedRow, 0, rows.Count - 1));
+    }
+
+    private static int ColumnCount(ScrollView container)
+    {
+        float width = container.contentViewport.resolvedStyle.width;
+        return width > 0f ? Mathf.Max(1, Mathf.FloorToInt(width / TileCellWidth)) : DefaultColumns;
+    }
+
+    private static int VisibleRowCount(ScrollView container)
+    {
+        float height = container.contentViewport.resolvedStyle.height;
+        return height > 0f ? Mathf.CeilToInt(height / TileCellHeight) : 0;
+    }
+
+    private bool CanAfford(StoreRows.Row row)
+    {
+        var inv = GameManager.CurrentInventory;
+        if (inv == null || row.Buy == null || StorePrice.IsMaxed(row)) return true;
+        var currency = row.Shop != null ? row.Shop.Currency : Currency.Dabloons;
+        return inv.Balance(currency) >= StorePrice.Resolve(row, discountActive).Final;
     }
 
     private void Purchase(StoreRows.Row row)
@@ -244,7 +273,7 @@ public class StorePanelUITK : MonoBehaviour, IUINavigable
         }
         UiPanels.SetActiveIndex(tileEls, selectedRow, TileSelectedClass);
         if (grid != null) grid.ScrollTo(tileEls[selectedRow]);
-        detail?.Show((StoreRows.Tab)activeTab, rows[selectedRow], discountActive);
+        detail?.Show((StoreRows.Tab)activeTab, rows[selectedRow], discountActive, CanAfford(rows[selectedRow]));
     }
 
     private void Resolve()

@@ -21,7 +21,7 @@ tags: [script, ui, store, detail, uitk]
 | `BuyButton` (`Button`) | Botón de compra. `StorePanelUITK` se suscribe a su `clicked` |
 | `StoreDetailCard(VisualElement root)` | Resuelve los elementos por nombre |
 | `SetEmpty()` | Oculta el contenido y deshabilita el botón (sin fila seleccionada) |
-| `Show(StoreRows.Tab tab, StoreRows.Row row, bool discountActive)` | Llena la ficha con la fila |
+| `Show(StoreRows.Tab tab, StoreRows.Row row, bool discountActive, bool affordable)` | Llena la ficha con la fila. `affordable` lo calcula `StorePanelUITK` (`CanAfford`) |
 
 ## Contenido de `Show`
 
@@ -33,14 +33,14 @@ tags: [script, ui, store, detail, uitk]
   - Mejoras: nivel `ui.store.level` con `Upgrade.CurrentLevel`/`MaxLevel`.
   - Precio si no está al tope, con `StorePrice.Text`; si hay descuento, precio base tachado y clase `store-fact__value--sale`. Minerita usa ícono propio.
   - Stock si es un producto con `Shop` limitado: "agotado" (crítico), "quedan 2 o menos" (advertencia) o cuenta.
-- Botón: "Máximo" si está al tope, "Comprar" si no; habilitado según `StorePrice.CanBuy`.
+- Botón: "Máximo" si está al tope, "Comprar" si no; habilitado si `affordable` y `StorePrice.CanBuy`.
 
 ## Conexiones
 
 - [[StoreRows]] — `Row` y `Tab`
 - [[StoreTileView]] — `ApplyIcon`
 - [[StorePrice]] — precio, descuento, tope y disponibilidad
-- [[StorePanelUITK]] — dueño; crea la ficha y reenvía el clic de compra
+- [[StorePanelUITK]] — dueño; crea la ficha, calcula `affordable` y reenvía el clic de compra
 - [[StoreManager]] — la compra la ejecuta el panel, no esta ficha
 - [[Loc]] — textos `ui.store.*`
 
@@ -48,3 +48,4 @@ tags: [script, ui, store, detail, uitk]
 
 - No compra ni persiste: solo presenta y expone el botón.
 - Todos los textos de la ficha pasan por `Loc`.
+- S162: `Show` recibe el parámetro `affordable`; el botón queda deshabilitado si el saldo no alcanza el precio final.

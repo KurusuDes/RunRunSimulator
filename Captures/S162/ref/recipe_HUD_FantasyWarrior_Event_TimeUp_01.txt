@@ -1,0 +1,6 @@
+# Timed/HUD_FantasyWarrior_Event_TimeUp_01
+HUD_FantasyWarrior_Event_TimeUp_01 size=1800x360 pos=0,-750 anch=0,5,1-0,5,1
+  TimeUp size=1800x360 pos=0,0 anch=0,0-1,1
+    Background size=1800x360 pos=0,0 anch=0,0-1,1
+      SPR_Background size=2000x360 pos=0,0 anch=0,0-1,1 IMG=SPR_FX_FantasyWarrior_Glow_01 col=#02020280 type=Simple
+    Label_TimeUp size=1800x360 pos=0,0 anch=0,0-1,1 TXT='TIME UP' font=Grenze-SemiBold SDF size=200 col=#FFFFFFFF style=Normal align=Center outline=0 cs=2

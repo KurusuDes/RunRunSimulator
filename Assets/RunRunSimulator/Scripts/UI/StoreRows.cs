@@ -69,13 +69,13 @@ public static class StoreRows
                 var locking = goals != null ? goals.LockingGoal(upgrade) : null;
                 if (locking != null)
                 {
-                    rows.Add(new Row { Name = NameOf(upgrade.DisplayName, upgrade.Id), LockedBy = LockedText(locking) });
+                    rows.Add(new Row { Name = DataLoc.UpgradeName(upgrade), LockedBy = LockedText(locking) });
                     continue;
                 }
                 var capturedUpgrade = upgrade;
                 rows.Add(new Row
                 {
-                    Name          = NameOf(upgrade.DisplayName, upgrade.Id),
+                    Name          = DataLoc.UpgradeName(upgrade),
                     Buy           = () => store.BuyUpgrade(capturedUpgrade),
                     PriceOverride = upgrade.PriceFor(upgrade.CurrentLevel),
                     Upgrade       = capturedUpgrade,
@@ -92,7 +92,7 @@ public static class StoreRows
             {
                 if (decor == null) continue;
                 var capturedDecor = decor;
-                string name = decor.IsDiscovered(bredTotal) ? NameOf(decor.DisplayName, decor.Id) : Loc.Tr("ui.store.decor.unknown");
+                string name = decor.IsDiscovered(bredTotal) ? DataLoc.DecorName(decor) : Loc.Tr("ui.store.decor.unknown");
                 int owned = inventory != null ? inventory.DecorCount(decor.Id) : 0;
                 if (owned > 0) name = $"{name} ×{owned}";
                 rows.Add(new Row
@@ -115,7 +115,7 @@ public static class StoreRows
                 var capturedShop = listing.Shop;
                 rows.Add(new Row
                 {
-                    Name          = NameOf(box.DisplayName, box.Id),
+                    Name          = DataLoc.BoxName(box),
                     Shop          = capturedShop,
                     Buy           = () => store.BuyCreatureBox(capturedBox, capturedShop),
                     PriceOverride = store.CreatureBoxPrice(capturedBox, capturedShop),
@@ -134,14 +134,14 @@ public static class StoreRows
             var lockingGoal = goals != null ? goals.LockingGoal(def) : null;
             if (lockingGoal != null)
             {
-                rows.Add(new Row { Name = NameOf(def.DisplayName, def.Id), Icon = def.Icon, LockedBy = LockedText(lockingGoal) });
+                rows.Add(new Row { Name = DataLoc.ItemName(def), Icon = def.Icon, LockedBy = LockedText(lockingGoal) });
                 continue;
             }
             var capturedDef  = def;
             var capturedShop = listing.Shop;
             rows.Add(new Row
             {
-                Name = NameOf(def.DisplayName, def.Id),
+                Name = DataLoc.ItemName(def),
                 Icon = def.Icon,
                 Shop = capturedShop,
                 Buy  = () => store.BuyWorldProp(capturedDef, capturedShop),
@@ -173,10 +173,10 @@ public static class StoreRows
         var names = new List<string>();
         if (goal.UnlocksExpansions != null)
             foreach (var upgrade in goal.UnlocksExpansions)
-                if (upgrade != null) names.Add(NameOf(upgrade.DisplayName, upgrade.Id));
+                if (upgrade != null) names.Add(DataLoc.UpgradeName(upgrade));
         if (goal.UnlocksItems != null)
             foreach (var item in goal.UnlocksItems)
-                if (item != null) names.Add(NameOf(item.DisplayName, item.Id));
+                if (item != null) names.Add(DataLoc.ItemName(item));
         return string.Join(", ", names);
     }
 
@@ -187,8 +187,5 @@ public static class StoreRows
         tab == Tab.WorldProps ? cat == WorldPropCategory.Tool
         : tab == Tab.Toys     ? cat == WorldPropCategory.Toy
         : cat == WorldPropCategory.Food || cat == WorldPropCategory.Medicine;
-
-    private static string NameOf(string display, string id) =>
-        string.IsNullOrEmpty(display) ? id : display;
 }
 }

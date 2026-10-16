@@ -15,7 +15,7 @@
                 <ui:VisualElement class="mm-bar" />
                 <ui:ScrollView name="grid-container" class="grid-container" mode="Vertical" />
                 <ui:Label name="grid-empty" text="" class="grid-empty" />
-                <ui:Label name="grid-count" text="" class="grid-count" />
+                <ui:Label name="grid-count" text="" class="grid-count mm-valuebox" />
             </ui:VisualElement>
 
             <ui:VisualElement class="grid-center detail-stage">

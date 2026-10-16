@@ -192,6 +192,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
+    justify-content: center;
 }
 
 .store-tile {
@@ -256,7 +257,7 @@
     left: 12px;
     right: 12px;
     bottom: 10px;
-    height: 38px;
+    min-height: 38px;
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -266,12 +267,37 @@
 }
 
 .store-tile__tag {
-    font-size: 20px;
+    font-size: 16px;
     -unity-font-style: bold;
     color: var(--mm-ink-soft);
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    padding: 0 4px;
     -unity-text-align: middle-center;
+}
+
+.store-tile--empty {
+    opacity: 0.45;
+}
+
+.store-tile--empty:hover {
+    scale: 1 1;
+}
+
+.store-tile__runes {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    right: 14px;
+    bottom: 14px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(36, 32, 26, 0.6);
+}
+
+.store-detail__buy:disabled,
+.store-detail__buy:disabled:hover {
+    opacity: 0.45;
+    scale: 1 1;
+    -unity-background-image-tint-color: var(--mm-gold);
 }
 
 .store-price__now,

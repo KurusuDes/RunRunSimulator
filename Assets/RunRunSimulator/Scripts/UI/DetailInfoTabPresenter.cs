@@ -195,7 +195,7 @@ public class DetailInfoTabPresenter
         label.AddToClassList("detail-slot__label");
         root.Add(label);
 
-        var name = new Label(part?.Name ?? "—");
+        var name = new Label(part != null ? DataLoc.PartName(part) : "—");
         name.AddToClassList("detail-slot__name");
         root.Add(name);
 
@@ -205,13 +205,13 @@ public class DetailInfoTabPresenter
     private void AddSkillRow(PartRole slot, BodyPart part, BrawlSkillSO skill, bool locked = false, VisualElement evolution = null)
     {
         if (locked) AddPowerPartRow(slot, part, Loc.Tr("ui.power.locked.title"), Loc.Tr("ui.power.locked.desc"), null, true, evolution);
-        else if (skill != null) AddPowerPartRow(slot, part, skill.Title, skill.Description, skill.Role, evolution: evolution);
+        else if (skill != null) AddPowerPartRow(slot, part, BrawlLoc.Title(skill), BrawlLoc.Description(skill), skill.Role, evolution: evolution);
         else AddPowerPartRow(slot, part, null, null, null, evolution: evolution);
     }
 
     private void AddWingRow(PartRole slot, BodyPart part, BrawlWingKitSO wing, VisualElement evolution = null)
     {
-        if (wing != null) AddPowerPartRow(slot, part, wing.Title, wing.Description, BrawlKitProfile.WingRole(wing), evolution: evolution);
+        if (wing != null) AddPowerPartRow(slot, part, BrawlLoc.Title(wing), BrawlLoc.Description(wing), BrawlKitProfile.WingRole(wing), evolution: evolution);
         else AddPowerPartRow(slot, part, null, null, null, evolution: evolution);
     }
 
@@ -280,7 +280,7 @@ public class DetailInfoTabPresenter
     }
 
     private static string PartText(PartRole slot, BodyPart part) =>
-        part != null ? $"{SlotName(slot)} · {part.Name}" : SlotName(slot);
+        part != null ? $"{SlotName(slot)} · {DataLoc.PartName(part)}" : SlotName(slot);
 
     private static VisualElement BuildPartSwatch(BodyPart part, BrawlSkillRole? ringRole)
     {

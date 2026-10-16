@@ -127,7 +127,7 @@ public class HotbarHUDUITK : MonoBehaviour
     private static string NameOf(string id, ItemDefinitionSO def)
     {
         if (string.IsNullOrEmpty(id)) return "";
-        return def != null && !string.IsNullOrEmpty(def.DisplayName) ? def.DisplayName : id;
+        return def != null ? DataLoc.ItemName(def) : id;
     }
 }
 }

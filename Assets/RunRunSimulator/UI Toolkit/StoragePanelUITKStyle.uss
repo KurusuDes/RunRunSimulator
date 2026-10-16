@@ -33,8 +33,15 @@
     padding: 8px 0 0 0;
 }
 
+.storage-grid .unity-scroll-view__vertical-scroller {
+    width: 12px;
+}
+
 .storage-hotbar {
     flex-direction: row;
+    justify-content: flex-start;
+    width: 832px;
+    margin-right: 12px;
     align-self: center;
     flex-shrink: 0;
     padding: 8px 0 6px 0;

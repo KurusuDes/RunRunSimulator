@@ -133,7 +133,7 @@ public static class ExpeditionCardBuilder
         return card;
     }
 
-    public static void FillTeam(VisualElement team, IReadOnlyList<BrawlKitProfile> profiles, IReadOnlyList<int> order, int maxPick)
+    public static void FillTeam(VisualElement team, IReadOnlyList<CreatureDNA> dnas, IReadOnlyList<BrawlKitProfile> profiles, IReadOnlyList<int> order, int maxPick)
     {
         team.Clear();
 
@@ -145,17 +145,19 @@ public static class ExpeditionCardBuilder
         count.AddToClassList("exp-team__count");
         team.Add(count);
 
-        var pills = new VisualElement();
-        pills.AddToClassList("exp-team__pills");
-
         bool support = false;
-        for (int i = 0; i < order.Count; i++)
+        for (int slot = 0; slot < maxPick; slot++)
         {
-            var profile = profiles[order[i]];
+            if (slot >= order.Count)
+            {
+                team.Add(BuildTeamEmptyRow());
+                continue;
+            }
+
+            var profile = profiles[order[slot]];
             if (profile.HasRole(BrawlSkillRole.Support)) support = true;
-            pills.Add(RolePill(profile, "exp-team__pill"));
+            team.Add(BuildTeamRow(dnas[order[slot]], profile));
         }
-        team.Add(pills);
 
         if (order.Count > 0 && !support)
         {
@@ -163,6 +165,47 @@ public static class ExpeditionCardBuilder
             warn.AddToClassList("exp-team__warn");
             team.Add(warn);
         }
+    }
+
+    private static VisualElement BuildTeamRow(CreatureDNA dna, BrawlKitProfile profile)
+    {
+        var row = new VisualElement();
+        row.AddToClassList("mm-row");
+        row.AddToClassList("exp-team__row");
+
+        var portrait = new VisualElement();
+        portrait.AddToClassList("exp-team__portrait");
+        portrait.pickingMode = PickingMode.Ignore;
+        MonchiPortraitUI.Apply(portrait, dna);
+        row.Add(portrait);
+
+        var name = new Label(dna.CustomName);
+        name.AddToClassList("exp-team__name");
+        name.pickingMode = PickingMode.Ignore;
+        row.Add(name);
+
+        row.Add(RolePill(profile, "exp-team__pill"));
+        return row;
+    }
+
+    private static VisualElement BuildTeamEmptyRow()
+    {
+        var row = new VisualElement();
+        row.AddToClassList("mm-row");
+        row.AddToClassList("exp-team__row");
+        row.AddToClassList("exp-team__row--empty");
+        row.pickingMode = PickingMode.Ignore;
+
+        var runes = new VisualElement();
+        runes.AddToClassList("exp-team__runes");
+        runes.pickingMode = PickingMode.Ignore;
+        row.Add(runes);
+
+        var hint = new Label(Loc.Tr("ui.expedition.slot.empty"));
+        hint.AddToClassList("exp-team__hint");
+        hint.pickingMode = PickingMode.Ignore;
+        row.Add(hint);
+        return row;
     }
 
     private static VisualElement Layer(string cls)
@@ -217,7 +260,7 @@ public static class ExpeditionCardBuilder
     private static Power PowerAt(BrawlKitProfile profile, int slot) => slot switch
     {
         0 => profile.Wing != null
-            ? new Power(profile.WingTheme, BrawlKitProfile.WingRole(profile.Wing), profile.Wing.Title)
+            ? new Power(profile.WingTheme, BrawlKitProfile.WingRole(profile.Wing), BrawlLoc.Title(profile.Wing))
             : new Power(profile.WingTheme, BrawlSkillRole.Offense, string.Empty),
         1 => SkillPower(profile.HornTheme, profile.Horn),
         _ => profile.BackLocked
@@ -227,7 +270,7 @@ public static class ExpeditionCardBuilder
 
     private static Power SkillPower(BrawlTheme theme, BrawlSkillSO skill) =>
         skill != null
-            ? new Power(theme, skill.Role, skill.Title)
+            ? new Power(theme, skill.Role, BrawlLoc.Title(skill))
             : new Power(theme, BrawlSkillRole.Offense, string.Empty);
 
     private static VisualElement BuildBar(NeedType need, float value)

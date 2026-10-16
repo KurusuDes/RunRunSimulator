@@ -1,0 +1,6 @@
+# Timed/HUD_FantasyWarrior_Countdown_Timer_01
+HUD_FantasyWarrior_Countdown_Timer_01 size=330x118 pos=0,-340 anch=0,5,1-0,5,1
+  Background size=330x118 pos=0,0 anch=0,0-1,1
+    SPR_Background size=370x118 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Container_01 col=#19292ECC type=Sliced border=(252.00, 0.00, 252.00, 0.00) ppu=2
+  Content size=330x118 pos=0,0 anch=0,0-1,1
+    Label_Time size=270x118 pos=0,0 anch=0,0-1,1 TXT='30.0' font=Grenze-SemiBold SDF size=72 col=#FFFFFFFF style=Normal align=Midline outline=0 cs=8

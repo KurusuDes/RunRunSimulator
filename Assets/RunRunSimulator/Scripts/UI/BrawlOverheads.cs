@@ -98,6 +98,7 @@ public class BrawlOverheads : MonoBehaviour
         layer = new VisualElement { name = "brawl-overheads", pickingMode = PickingMode.Ignore };
         layer.AddToClassList("mm-theme");
         layer.AddToClassList("mm-theme--night");
+        layer.AddToClassList("mm-skin");
         layer.AddToClassList("brawl-overheads");
         platesGroup = Element("brawl-overheads__group");
         floatsGroup = Element("brawl-overheads__group");
@@ -162,7 +163,7 @@ public class BrawlOverheads : MonoBehaviour
 
         var bar = Element("brawl-obar");
         plate.Fill = Element("brawl-obar__fill");
-        plate.Fill.style.backgroundColor = team;
+        plate.Fill.style.unityBackgroundImageTintColor = team;
         plate.Shield = Element("brawl-obar__shield");
         bar.Add(plate.Fill);
         bar.Add(plate.Shield);
@@ -212,7 +213,7 @@ public class BrawlOverheads : MonoBehaviour
 
     private void HandleShielded(BrawlFighter target, float amount)
     {
-        if (target != null) SpawnFloat(target.Center, "escudo", VariantShield);
+        if (target != null) SpawnFloat(target.Center, Loc.Tr("ui.brawl.float.shield"), VariantShield);
     }
 
     private void HandleCastStarted(BrawlFighter fighter, BrawlSkillSO skill, Vector3 aim)
@@ -220,17 +221,11 @@ public class BrawlOverheads : MonoBehaviour
         if (skill == null || fighter == null || !plates.TryGetValue(fighter, out var plate)) return;
 
         var theme = fighter.HornSkill == skill ? fighter.HornTheme : fighter.BackTheme;
-        var border = theme.Color;
-        border.a = 1f;
 
         plate.BubbleIcon.sprite = theme.Icon;
         plate.BubbleIcon.tintColor = theme.Color;
         plate.BubbleIcon.style.display = theme.Icon != null ? DisplayStyle.Flex : DisplayStyle.None;
-        plate.BubbleText.text = skill.Title + "!";
-        plate.Bubble.style.borderTopColor = border;
-        plate.Bubble.style.borderRightColor = border;
-        plate.Bubble.style.borderBottomColor = border;
-        plate.Bubble.style.borderLeftColor = border;
+        plate.BubbleText.text = BrawlLoc.Title(skill) + "!";
 
         plate.LastScale = PopScale(0f);
         plate.Bubble.style.scale = new Scale(new Vector3(plate.LastScale, plate.LastScale, 1f));

@@ -13,6 +13,7 @@ public class BreedingBreedTabPresenter : ITabPresenter
     private const string Empty = "breed-slot--empty";
     private const string FilterOn = "mm-button--selected";
     private const int Columns = 4;
+    private const int MinRows = 4;
 
     private enum SubFocus { Grid, Button }
 
@@ -184,6 +185,10 @@ public class BreedingBreedTabPresenter : ITabPresenter
             }
         }
 
+        int rows = Mathf.Max(MinRows, Mathf.CeilToInt(tiles.Count / (float)Columns));
+        for (int i = tiles.Count; i < rows * Columns; i++)
+            grid.Add(MakeEmptyTile());
+
         if (emptyLabel != null) emptyLabel.style.display = tiles.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
         gridIndex = tiles.Count == 0 ? 0 : Mathf.Clamp(gridIndex, 0, tiles.Count - 1);
         ApplyFocusIfActive();
@@ -192,6 +197,41 @@ public class BreedingBreedTabPresenter : ITabPresenter
     private static IEnumerable<CreatureDNA> Eligible(IEnumerable<CreatureDNA> all, CreatureGender gender) =>
         all.Where(d => CreatureAvailability.IsFree(d) && d.Gender == gender && d.BreedCount < BreedingService.MaxBreedCount)
            .OrderBy(d => d.CustomName);
+
+    private static VisualElement MakeEmptyTile()
+    {
+        var tile = new VisualElement { pickingMode = PickingMode.Ignore };
+        tile.AddToClassList("breed-tile");
+
+        var slot = new VisualElement { pickingMode = PickingMode.Ignore };
+        slot.AddToClassList("mm-slot");
+        slot.AddToClassList("breed-tile__slot");
+
+        var vignette = new VisualElement { pickingMode = PickingMode.Ignore };
+        vignette.AddToClassList("mm-layer");
+        vignette.AddToClassList("mm-slot__vignette");
+        slot.Add(vignette);
+
+        var runes = new VisualElement { pickingMode = PickingMode.Ignore };
+        runes.AddToClassList("breed-tile__runes");
+        slot.Add(runes);
+
+        var frame = new VisualElement { pickingMode = PickingMode.Ignore };
+        frame.AddToClassList("mm-layer");
+        frame.AddToClassList("mm-slot__frame");
+        slot.Add(frame);
+        tile.Add(slot);
+
+        var name = new Label(" ") { pickingMode = PickingMode.Ignore };
+        name.AddToClassList("breed-tile__name");
+        tile.Add(name);
+
+        var count = new Label(" ") { pickingMode = PickingMode.Ignore };
+        count.AddToClassList("breed-tile__count");
+        tile.Add(count);
+
+        return tile;
+    }
 
     private VisualElement MakeTile(CreatureDNA dna)
     {

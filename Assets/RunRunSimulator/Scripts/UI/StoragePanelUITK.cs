@@ -124,7 +124,8 @@ public class StoragePanelUITK : MonoBehaviour, IUINavigable
         for (int i = order.Count; i < total; i++)
             container.Add(BuildSlot().Root);
 
-        if (subtitle != null) subtitle.text = Loc.Tr("ui.storage.subtitle", order.Count);
+        if (subtitle != null)
+            subtitle.text = order.Count == 1 ? Loc.Tr("ui.storage.count.one") : Loc.Tr("ui.storage.count.many", order.Count);
 
         Select(filledSlots.Count == 0 ? -1 : Mathf.Clamp(selectedIndex, 0, filledSlots.Count - 1));
     }
@@ -188,7 +189,7 @@ public class StoragePanelUITK : MonoBehaviour, IUINavigable
         if (def != null && def.Icon != null)
             view.Icon.style.backgroundImage = new StyleBackground(def.Icon);
         else
-            view.Name.text = def != null && !string.IsNullOrEmpty(def.DisplayName) ? def.DisplayName : id;
+            view.Name.text = def != null ? DataLoc.ItemName(def) : id;
 
         if (count > 0) view.Count.text = $"×{count}";
     }

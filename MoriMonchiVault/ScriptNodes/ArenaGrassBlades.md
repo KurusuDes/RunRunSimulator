@@ -18,7 +18,7 @@ tags: [script, world, expedition, graphics, math]
 
 **Algoritmo Build():**
 
-1. **Inicializacion:** calcula `vertsPerBlade = segments * 2 + 1` y `trisPerBlade = (segments * 2 - 1) * 3`; aloca listas de vertices, normales, UVs, colores y triangulos con esa capacidad.
+1. **Inicializacion:** calcula `vertsPerBlade = segments * 2 + 1` y `trisPerBlade = (segments * 2 - 1) * 3`; aloca listas de vertices, normales, UVs, UV1, colores y triangulos con esa capacidad.
 
 2. **Loop por raiz (i < roots.Count):**
    - Samplea height, width, yaw aleatorios del RNG
@@ -33,14 +33,15 @@ tags: [script, world, expedition, graphics, math]
    - `center = root + up * (height * t) + tipOffset * t²` (la curva del lean crece cuadratica)
    - `halfWidth = width * 0.5 * (1 - t)` (se estrecha hacia la punta)
    - Dos vertices laterales `center ± sideAxis * halfWidth`, UVs `(0, t)` y `(1, t)`
-   - Al final, un vertice de punta `root + up * height + tipOffset`, UV `(0.5, 1)`
+   - **S162:** cada vertice lateral escribe UV1 `(height * t, height)`: la altura de la brizna viaja al shader por el canal 1 (raices a distinta Y)
+   - Al final, un vertice de punta `root + up * height + tipOffset`, UV `(0.5, 1)`, UV1 `(height, height)`
 
 4. **Triangulacion:**
    - Entre cada par de niveles consecutivos: 2 triangulos (franja izquierda-derecha)
    - Ultimo nivel: 1 triangulo que cierra en la punta
    - Con `segments = 1` queda solo el triangulo de la punta, como antes
 
-5. **Finalizacion:** SetVertices, SetNormals, SetUVs, SetColors, SetTriangles, RecalculateBounds()
+5. **Finalizacion:** SetVertices, SetNormals, SetUVs (canal 0 y canal 1), SetColors, SetTriangles, RecalculateBounds()
 
 **Internals:**
 - **Coordenadas relativas:** root se calcula como `roots[i] - origin` (para aplicar offset del chunk)
@@ -56,7 +57,7 @@ tags: [script, world, expedition, graphics, math]
 - **heightScales alineado con roots:** ambos crecen juntos en Build de ArenaGrassField y ShopGrassField
 - **Segments sin tope aqui:** el tope 1-4 vive en el campo serializado de ArenaGrassField; ShopGrassField pasa el valor del area tal cual (solo se clampa a 1)
 
-**Shader asociado:** `Shaders/ArenaGrass.shader`. Desde S154 el shader tiene rafagas (`_Gust*`), manchas (`_Patch*`), translucidez de punta (`_TipGlow*`) y trample seguro si `_ArenaTrampleArea.z <= 0`. Los UV `(0, t)` / `(1, t)` alimentan el gradiente a lo largo de la brizna. **S155:** el shader suma normal blend (`_NormalBlend`), raiz (`_Root*`), saturacion (`_Saturation`), color de punta (`_TipColor*`), variacion de tono (`_Hue*`) y de brizna (`_BladeVariation`). Los petalos de `MeadowFlowers` (flores de `ShopGrassField`) se identifican por alpha de vertice < 0.5 y reciben `_FlowerTint` / `_FlowerLift`. **S158:** el shader suma la propiedad `_Lean`; su efecto vive en el shader y este script no cambia.
+**Shader asociado:** `Shaders/ArenaGrass.shader`. Desde S154 el shader tiene rafagas (`_Gust*`), manchas (`_Patch*`), translucidez de punta (`_TipGlow*`) y trample seguro si `_ArenaTrampleArea.z <= 0`. Los UV `(0, t)` / `(1, t)` alimentan el gradiente a lo largo de la brizna. **S155:** el shader suma normal blend (`_NormalBlend`), raiz (`_Root*`), saturacion (`_Saturation`), color de punta (`_TipColor*`), variacion de tono (`_Hue*`) y de brizna (`_BladeVariation`). Los petalos de `MeadowFlowers` (flores de `ShopGrassField`) se identifican por alpha de vertice < 0.5 y reciben `_FlowerTint` / `_FlowerLift`. **S158:** el shader suma la propiedad `_Lean`; su efecto vive en el shader y este script no cambia. **S162:** el shader suma inclinacion por brizna, sombra muestreada en la raiz (`_ShadowAtRoot`) y altura tomada de UV1; este script solo escribe UV1.
 
 **S117 Cambios:**
 - Parametro `IReadOnlyList<float> heightScales` opcional
@@ -66,6 +67,8 @@ tags: [script, world, expedition, graphics, math]
 - Parametro `int segments = 1` opcional; briznas curvas con estrechamiento y lean cuadratico
 - Con `segments = 1` se conserva el comportamiento anterior
 
+**S162:** canal UV1 `(height * t, height)` por vertice (altura por brizna para el shader). Sin cambio de firma.
+
 **Conexiones:** [[ArenaGrassField]] (cliente de arena), [[ShopGrassField]] (cliente de tienda), [[MeadowFlowers]] (hermano de tienda para flores)
 
-**Vinculado a:** [[Index/23 - Arena Sandbox & Expedicion]], [[Index/22 - Bajada Nocturna y Linaje]], S117, S154, S155, S158
+**Vinculado a:** [[Index/23 - Arena Sandbox & Expedicion]], [[Index/22 - Bajada Nocturna y Linaje]], S117, S154, S155, S158, S162

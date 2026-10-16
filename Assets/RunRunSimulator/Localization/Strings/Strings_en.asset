@@ -2536,6 +2536,659 @@ MonoBehaviour:
     m_Localized: '{0} more to go'
     m_Metadata:
       m_Items: []
+  - m_Id: 29958641049436160
+    m_Localized: Victory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739328
+    m_Localized: Defeat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739329
+    m_Localized: Draw
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739330
+    m_Localized: shield
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910698147840
+    m_Localized: Gale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536448
+    m_Localized: A gust of wind that blows foes far away and slows them.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536449
+    m_Localized: Bubble
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536450
+    m_Localized: Wraps the most wounded ally in a bubble that soaks up damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536451
+    m_Localized: Snack Toss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536452
+    m_Localized: Tosses a snack to the most wounded ally.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536453
+    m_Localized: Spark
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536454
+    m_Localized: A spark that jumps between three foes and slows them.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536455
+    m_Localized: Ram Charge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536456
+    m_Localized: Charges in a line, stunning and shoving.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536457
+    m_Localized: Antler Sweep
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536458
+    m_Localized: A sweep of antlers to the front that shoves.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536459
+    m_Localized: Rainbow Pulse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536460
+    m_Localized: A pulse that heals every nearby ally.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536461
+    m_Localized: Headbutt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536462
+    m_Localized: A short charge that stuns and sends foes flying.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536463
+    m_Localized: Tail Whip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536464
+    m_Localized: Spins its tail to shove everyone around it.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536465
+    m_Localized: Comet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536466
+    m_Localized: Fires a comet that bursts on impact.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536467
+    m_Localized: Comet Swarm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536468
+    m_Localized: Three little comets that chase foes down.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536469
+    m_Localized: Shell Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536470
+    m_Localized: Hides in its shell and taunts nearby foes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536471
+    m_Localized: War Cry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536472
+    m_Localized: A cry that hastens and empowers nearby allies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536473
+    m_Localized: Crystal Lance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536474
+    m_Localized: A crystal lance that pierces everyone in its line.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536475
+    m_Localized: Crystal Rain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536476
+    m_Localized: Crystals rain down where foes cluster.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536477
+    m_Localized: Quick Rush
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536478
+    m_Localized: A fast, long charge.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536479
+    m_Localized: Hedgehog
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536480
+    m_Localized: Ten spines in every direction that slow foes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536481
+    m_Localized: Spur Kick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536482
+    m_Localized: A sweeping spur kick that shoves.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536483
+    m_Localized: Sickle Slash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536484
+    m_Localized: A wide slash that wounds and slows.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536485
+    m_Localized: Sleepy Cloud
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536486
+    m_Localized: Throws a wool cloud that puts foes to sleep.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536487
+    m_Localized: Wool Cloud
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536488
+    m_Localized: 'A fluffy cloud that follows it: heals allies inside and slows foes.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536489
+    m_Localized: Marshmallow Rain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536490
+    m_Localized: Sticky marshmallows that hit and slow for a while.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536491
+    m_Localized: Bouncy Gem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536492
+    m_Localized: A gem that bounces off walls twice.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536493
+    m_Localized: Plate Wall
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536494
+    m_Localized: Plates that shield it and the closest ally.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536495
+    m_Localized: Spiked Shell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536496
+    m_Localized: 'A spiked shield: reflects damage to close attackers and hastens
+      it.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536497
+    m_Localized: Spine Rain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536498
+    m_Localized: Fires twelve fine spines in every direction.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536499
+    m_Localized: Heavy Hedgehog
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536500
+    m_Localized: Eight thick spines that pierce and shove.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536501
+    m_Localized: Chain Lightning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536502
+    m_Localized: Lightning that jumps between four foes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536503
+    m_Localized: Stampede
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536504
+    m_Localized: A long, heavy charge that tramples everything.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536505
+    m_Localized: Abyss Lure
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536506
+    m_Localized: Its lantern draws nearby foes in and forces them to attack it.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536507
+    m_Localized: Bouncy Plug
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536508
+    m_Localized: A marshmallow that bounces three times.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536509
+    m_Localized: Triple Horn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536510
+    m_Localized: A wide charge that stuns.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536511
+    m_Localized: Healing Rainbow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536512
+    m_Localized: A rainbow beam that heals and hastens the most wounded ally.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910828171264
+    m_Localized: Squirt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365568
+    m_Localized: 'Water shotgun: five drops in a fan, brutal up close. Dodges with
+      a flip.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365569
+    m_Localized: Lash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365570
+    m_Localized: A ribbon lash in a line that slows. Short dash to hunt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365571
+    m_Localized: Nectar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365572
+    m_Localized: A burst of three darts; if an ally is low, it shoots healing nectar
+      instead. Short blink.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365573
+    m_Localized: Bite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365574
+    m_Localized: 'Melee: two bites in a fan. Leaps onto its target.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365575
+    m_Localized: True Feather
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365576
+    m_Localized: 'Sniper: a fast long-range feather with a laser sight. Hops back
+      to keep away.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365577
+    m_Localized: Boomerang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365578
+    m_Localized: 'Throws its sail like a boomerang: hits going out and coming back.
+      Glides far.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365579
+    m_Localized: balanced
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365580
+    m_Localized: sturdy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365581
+    m_Localized: nimble
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365582
+    m_Localized: heavy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365583
+    m_Localized: Bold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365584
+    m_Localized: Wary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365585
+    m_Localized: Steady
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365586
+    m_Localized: guardian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365587
+    m_Localized: loner
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365588
+    m_Localized: team player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29966699897061376
+    m_Localized: 1 different item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29966699959975936
+    m_Localized: '{0} different items'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771072
+    m_Localized: Fan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771073
+    m_Localized: Saddlebag
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771074
+    m_Localized: Tassel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771075
+    m_Localized: Tail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771076
+    m_Localized: Comet Swarm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771077
+    m_Localized: Shell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771078
+    m_Localized: Crest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771079
+    m_Localized: Crystals
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771080
+    m_Localized: Spines
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771081
+    m_Localized: Spurs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771082
+    m_Localized: Wool Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771083
+    m_Localized: Marshmallows
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771084
+    m_Localized: Plates
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771085
+    m_Localized: Double Quills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771086
+    m_Localized: Fine Quills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771087
+    m_Localized: Thick Quills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771088
+    m_Localized: Slurp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771089
+    m_Localized: Ooze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771090
+    m_Localized: Ooze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771091
+    m_Localized: Slime
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771092
+    m_Localized: Slurp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771093
+    m_Localized: Cheeky
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771094
+    m_Localized: Serene
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771095
+    m_Localized: Face Fins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771096
+    m_Localized: Antennae
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771097
+    m_Localized: Ram
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771098
+    m_Localized: Antlers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771099
+    m_Localized: Ram Horns
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771100
+    m_Localized: Comet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771101
+    m_Localized: Crystal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771102
+    m_Localized: Little Horns
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771103
+    m_Localized: Sickle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771104
+    m_Localized: Wool
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771105
+    m_Localized: Tuft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771106
+    m_Localized: Bolt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771107
+    m_Localized: Rhino
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771108
+    m_Localized: Lure
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771109
+    m_Localized: Plugs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771110
+    m_Localized: Triceratops
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771111
+    m_Localized: Unicorn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771112
+    m_Localized: Fins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771113
+    m_Localized: Ribbons
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771114
+    m_Localized: Hummingbird
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771115
+    m_Localized: Bat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771116
+    m_Localized: Feathers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771117
+    m_Localized: Sail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771118
+    m_Localized: Nursery
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771119
+    m_Localized: Playroom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771120
+    m_Localized: More Showcases
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771121
+    m_Localized: Mop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771122
+    m_Localized: Monchi Snack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771123
+    m_Localized: Ball
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771124
+    m_Localized: Bubbles
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771125
+    m_Localized: Chew Toy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771126
+    m_Localized: Hose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771127
+    m_Localized: Plushie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771128
+    m_Localized: Rope
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771129
+    m_Localized: Grandparents' Album
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771130
+    m_Localized: Family Tree
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771131
+    m_Localized: Mom's Cushion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771132
+    m_Localized: Dad's Cushion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771133
+    m_Localized: Lava Lamp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771134
+    m_Localized: Knitted Blanket
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771135
+    m_Localized: Star Mobile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771136
+    m_Localized: Family Portrait
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771137
+    m_Localized: Box of 5 MoriMonchis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771138
+    m_Localized: Starter Eggs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29968074785718272
+    m_Localized: Locked
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

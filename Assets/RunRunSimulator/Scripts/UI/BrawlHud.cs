@@ -31,18 +31,23 @@ public class BrawlHud : MonoBehaviour
     private VisualElement root;
     private VisualElement blueCards;
     private VisualElement redCards;
+    private VisualElement blueSide;
+    private VisualElement redSide;
+    private VisualElement center;
     private VisualElement feed;
     private VisualElement bannerBox;
     private Label phaseLabel;
     private Label matchLabel;
     private Label banner;
     private Label bannerSub;
+    private Label bannerHeader;
     private VisualElement controls;
     private Button newButton;
     private Button rematchButton;
     private IVisualElementScheduledItem popRelease;
     private float bannerHideAt = float.PositiveInfinity;
     private bool rivalHidden;
+    private bool centerHidden;
     private int lastCount = -1;
     private int lastPhase = -1;
     private int lastMatchIndex = -1;
@@ -85,12 +90,16 @@ public class BrawlHud : MonoBehaviour
         root = found;
         blueCards = root.Q("brawl-cards-blue");
         redCards = root.Q("brawl-cards-red");
+        blueSide = root.Q("brawl-team-blue");
+        redSide = root.Q("brawl-team-red");
+        center = root.Q("brawl-center");
         feed = root.Q("brawl-feed");
         bannerBox = root.Q("brawl-banner-box");
         phaseLabel = root.Q<Label>("brawl-phase");
         matchLabel = root.Q<Label>("brawl-match");
         banner = root.Q<Label>("brawl-banner");
         bannerSub = root.Q<Label>("brawl-banner-sub");
+        bannerHeader = root.Q<Label>("brawl-banner-header");
         controls = root.Q("brawl-controls");
         newButton = root.Q<Button>("brawl-new");
         rematchButton = root.Q<Button>("brawl-rematch");
@@ -110,6 +119,8 @@ public class BrawlHud : MonoBehaviour
 
         redCards.style.display = DisplayStyle.Flex;
         rivalHidden = false;
+        centerHidden = false;
+        center.style.display = DisplayStyle.Flex;
         lastCount = lastPhase = lastMatchIndex = -1;
         lastPalette = -2;
         bannerHideAt = float.PositiveInfinity;
@@ -160,22 +171,32 @@ public class BrawlHud : MonoBehaviour
         blueCards.Clear();
         redCards.Clear();
         feed.Clear();
-        if (fighters == null) return;
 
-        for (int i = 0; i < fighters.Count; i++)
+        if (fighters != null)
         {
-            var fighter = fighters[i];
-            if (fighter == null) continue;
+            for (int i = 0; i < fighters.Count; i++)
+            {
+                var fighter = fighters[i];
+                if (fighter == null) continue;
 
-            VisualElement column;
-            if (fighter.Team == ExpeditionTeam.Player) column = blueCards;
-            else if (fighter.Team == ExpeditionTeam.Rival) column = redCards;
-            else continue;
+                VisualElement column;
+                if (fighter.Team == ExpeditionTeam.Player) column = blueCards;
+                else if (fighter.Team == ExpeditionTeam.Rival) column = redCards;
+                else continue;
 
-            var card = new BrawlHudCard(fighter, tuning);
-            cards[fighter] = card;
-            column.Add(card.Root);
+                var card = new BrawlHudCard(fighter, tuning);
+                cards[fighter] = card;
+                column.Add(card.Root);
+            }
         }
+
+        RefreshSides();
+    }
+
+    private void RefreshSides()
+    {
+        blueSide.style.display = blueCards.childCount > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        redSide.style.display = !rivalHidden && redCards.childCount > 0 ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     private void HandlePhase(BrawlMatchPhase phase)
@@ -213,13 +234,13 @@ public class BrawlHud : MonoBehaviour
             return;
         }
 
-        var (text, colorClass) = winner switch
+        var (text, colorClass, header) = winner switch
         {
-            ExpeditionTeam.Player => (Loc.Tr("ui.brawl.banner.win.blue"), "brawl-banner--blue"),
-            ExpeditionTeam.Rival => (Loc.Tr("ui.brawl.banner.win.red"), "brawl-banner--red"),
-            _ => (Loc.Tr("ui.brawl.banner.draw"), "brawl-banner--ink")
+            ExpeditionTeam.Player => (Loc.Tr("ui.brawl.banner.win.blue"), "brawl-banner--blue", Loc.Tr("ui.brawl.banner.result.win")),
+            ExpeditionTeam.Rival => (Loc.Tr("ui.brawl.banner.win.red"), "brawl-banner--red", Loc.Tr("ui.brawl.banner.result.lose")),
+            _ => (Loc.Tr("ui.brawl.banner.draw"), "brawl-banner--ink", Loc.Tr("ui.brawl.banner.result.draw"))
         };
-        ShowBanner(text, MvpText(BrawlMatch.Current, winner), colorClass, float.PositiveInfinity);
+        ShowBanner(text, MvpText(BrawlMatch.Current, winner), colorClass, float.PositiveInfinity, header);
     }
 
     private void HandleKnockedOut(BrawlFighter victim, BrawlFighter killer)
@@ -227,7 +248,8 @@ public class BrawlHud : MonoBehaviour
         if (root == null || victim == null) return;
 
         var entry = Element("brawl-feed__entry");
-        entry.Add(Element("brawl-bg"));
+        entry.Add(Element("brawl-feed__bg"));
+        entry.Add(Element("brawl-feed__tracery"));
         if (killer != null)
         {
             entry.Add(NameLabel(killer));
@@ -274,6 +296,7 @@ public class BrawlHud : MonoBehaviour
 
         hudClock.Refresh(match);
         RefreshRivalCards();
+        RefreshCenter(match);
         RefreshPhase(match);
         RefreshMatch(match);
         RefreshCountdown(match);
@@ -289,6 +312,15 @@ public class BrawlHud : MonoBehaviour
         if (hidden == rivalHidden) return;
         rivalHidden = hidden;
         redCards.style.display = hidden ? DisplayStyle.None : DisplayStyle.Flex;
+        RefreshSides();
+    }
+
+    private void RefreshCenter(BrawlMatch match)
+    {
+        bool hidden = match.Phase == BrawlMatchPhase.Idle;
+        if (hidden == centerHidden) return;
+        centerHidden = hidden;
+        center.style.display = hidden ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
     private void RefreshPhase(BrawlMatch match)
@@ -331,10 +363,13 @@ public class BrawlHud : MonoBehaviour
         ShowBanner(count.ToString(), "", "brawl-banner--ink", float.PositiveInfinity);
     }
 
-    private void ShowBanner(string text, string sub, string colorClass, float holdSeconds)
+    private void ShowBanner(string text, string sub, string colorClass, float holdSeconds, string header = null)
     {
         banner.text = text;
         bannerSub.text = sub;
+        bool result = !string.IsNullOrEmpty(header);
+        bannerBox.EnableInClassList("brawl-banner-box--result", result);
+        if (result) bannerHeader.text = header;
         for (int i = 0; i < BannerClasses.Length; i++)
             banner.EnableInClassList(BannerClasses[i], BannerClasses[i] == colorClass);
 
@@ -350,7 +385,9 @@ public class BrawlHud : MonoBehaviour
     private void HideBanner()
     {
         bannerHideAt = float.PositiveInfinity;
-        if (bannerBox != null) bannerBox.RemoveFromClassList("brawl-banner-box--show");
+        if (bannerBox == null) return;
+        bannerBox.RemoveFromClassList("brawl-banner-box--show");
+        bannerBox.RemoveFromClassList("brawl-banner-box--result");
     }
 
     private static string MvpText(BrawlMatch match, ExpeditionTeam winner)

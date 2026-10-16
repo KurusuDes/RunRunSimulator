@@ -6,104 +6,75 @@
     bottom: 0;
 }
 
-.brawl-bg {
+.brawl-side {
     position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
-    -unity-background-image-tint-color: var(--hud-pill);
-    -unity-slice-scale: 0.2;
+    top: 34px;
+    width: 352px;
+    padding: 6px 0;
 }
 
-.brawl-frame {
+.brawl-side--blue {
+    left: 26px;
+}
+
+.brawl-side--red {
+    right: 26px;
+}
+
+.brawl-side__shadow {
+    display: none;
+}
+
+.brawl-side__tracery {
     position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Frame_Rounded_02.png");
-    -unity-slice-scale: 0.25;
+    top: -30px;
+    bottom: -30px;
+    width: 100px;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Tracery_Vertical_08.png");
+    -unity-slice-scale: 0.33;
 }
 
-.brawl-top {
-    position: absolute;
-    top: 10px;
-    left: 12px;
-    right: 12px;
+.brawl-side--blue > .brawl-side__tracery {
+    left: -5px;
 }
 
-.brawl-bar {
-    flex-direction: row;
-    align-items: flex-start;
+.brawl-side--red > .brawl-side__tracery {
+    right: -5px;
 }
 
-.brawl-team {
-    flex-grow: 1;
-    flex-basis: 0;
-    min-width: 0;
-    padding: 8px 12px 10px 12px;
-}
-
-.brawl-team > .brawl-bg {
-    opacity: 0.55;
-}
-
-.brawl-team--blue {
-    margin-right: 8px;
-}
-
-.brawl-team--red {
-    margin-left: 8px;
-}
-
-.brawl-team--blue > .brawl-frame {
-    -unity-background-image-tint-color: rgba(150, 200, 255, 0.5);
-}
-
-.brawl-team--red > .brawl-frame {
-    -unity-background-image-tint-color: rgba(255, 150, 140, 0.5);
-}
-
-.brawl-team__title {
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 20px;
-    letter-spacing: 3px;
-    margin: 0 6px 4px 6px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-.brawl-team__title--blue {
-    color: rgb(150, 200, 255);
-}
-
-.brawl-team__title--red {
-    color: rgb(255, 150, 140);
-    -unity-text-align: upper-right;
+.brawl-side__title {
+    display: none;
 }
 
 .brawl-cards {
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .brawl-center {
-    width: 330px;
-    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 22px;
     align-items: center;
-    padding: 8px 14px 10px 14px;
 }
 
-.brawl-frame--gold {
-    -unity-background-image-tint-color: var(--hud-gold);
+.brawl-clock {
+    width: 200px;
+    height: 64px;
+    justify-content: center;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Container_01.png");
+    -unity-background-image-tint-color: rgba(25, 41, 46, 0.86);
+    -unity-slice-scale: 0.25;
 }
 
 .brawl-timer {
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 54px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 40px;
+    letter-spacing: 4px;
     -unity-text-align: middle-center;
     color: rgb(255, 255, 255);
-    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
+    padding: 0;
+    margin: 0;
 }
 
 .brawl-timer--sudden {
@@ -112,11 +83,12 @@
 
 .brawl-phase {
     -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 20px;
+    font-size: 19px;
     letter-spacing: 3px;
-    color: var(--hud-gold);
-    margin-top: -6px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    color: rgb(250, 208, 136);
+    margin-top: 4px;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgba(10, 14, 16, 0.8);
 }
 
 .brawl-match {
@@ -126,144 +98,337 @@
 }
 
 .brawl-card {
-    flex-grow: 1;
-    flex-basis: 0;
-    min-width: 0;
-    max-width: 260px;
-    margin: 0 4px;
-    padding: 8px 10px 8px 10px;
+    flex-direction: row;
+    align-items: center;
+    height: 104px;
+    margin: 7px 0;
     transition-property: opacity;
-    transition-duration: 0.25s;
+    transition-duration: 0.3s;
 }
 
-.brawl-card--blue > .brawl-frame {
-    -unity-background-image-tint-color: rgba(150, 200, 255, 0.4);
-}
-
-.brawl-card--red > .brawl-frame {
-    -unity-background-image-tint-color: rgba(255, 150, 140, 0.4);
+.brawl-side--red .brawl-card {
+    flex-direction: row-reverse;
 }
 
 .brawl-card--ko {
-    opacity: 0.5;
+    opacity: 0.55;
 }
 
-.brawl-card--ko > .brawl-frame {
-    -unity-background-image-tint-color: rgba(160, 150, 140, 0.35);
-}
-
-.brawl-card--ko .brawl-card__name {
-    color: var(--mm-ink-soft);
-}
-
-.brawl-card__head {
-    flex-direction: row;
-    align-items: flex-end;
-}
-
-.brawl-card__name {
-    flex-shrink: 1;
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 19px;
-    color: rgb(255, 255, 255);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.brawl-card__body {
+.brawl-portrait {
+    width: 90px;
+    height: 100px;
     flex-shrink: 0;
-    font-size: 14px;
-    color: var(--mm-ink-soft);
-    margin: 0 0 1px 6px;
 }
 
-.brawl-card__line {
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 1px;
-}
-
-.brawl-card__posture {
-    font-size: 14px;
-    color: var(--mm-ink-soft);
-}
-
-.brawl-card__intent {
-    font-size: 14px;
-    color: var(--hud-gold);
-}
-
-.brawl-hp {
-    height: 22px;
-    margin-top: 4px;
-    border-radius: 11px;
-    background-color: rgba(17, 14, 12, 0.85);
-    overflow: hidden;
-    justify-content: center;
-}
-
-.brawl-hp__fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-}
-
-.brawl-hp__shield {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 40%;
-    width: 0;
-    background-color: var(--mm-ally);
-    opacity: 0.9;
-}
-
-.brawl-hp__label {
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 15px;
-    -unity-text-align: middle-center;
-    color: rgb(255, 255, 255);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.brawl-hp__ko {
+.brawl-portrait__bg,
+.brawl-portrait__grad,
+.brawl-portrait__tracery,
+.brawl-portrait__img,
+.brawl-portrait__vignette,
+.brawl-portrait__frame {
     position: absolute;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    display: none;
+}
+
+.brawl-portrait__bg {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_01.png");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.brawl-portrait__grad {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Gradient_Vertical_Smooth_01.png");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.brawl-portrait__tracery {
+    left: 6px;
+    right: 6px;
+    top: 4px;
+    bottom: 4px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.brawl-card--blue .brawl-portrait__bg {
+    -unity-background-image-tint-color: rgb(0, 19, 53);
+}
+
+.brawl-card--blue .brawl-portrait__grad {
+    -unity-background-image-tint-color: rgba(49, 99, 219, 0.9);
+}
+
+.brawl-card--blue .brawl-portrait__tracery {
+    -unity-background-image-tint-color: rgba(77, 119, 224, 0.4);
+}
+
+.brawl-card--red .brawl-portrait__bg {
+    -unity-background-image-tint-color: rgb(53, 6, 4);
+}
+
+.brawl-card--red .brawl-portrait__grad {
+    -unity-background-image-tint-color: rgba(204, 52, 40, 0.9);
+}
+
+.brawl-card--red .brawl-portrait__tracery {
+    -unity-background-image-tint-color: rgba(232, 102, 82, 0.4);
+}
+
+.brawl-portrait__img {
+    left: 3px;
+    right: 3px;
+    top: 4px;
+    bottom: 16px;
+}
+
+.brawl-portrait__damage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 0;
+    background-color: rgba(255, 6, 0, 0.32);
+}
+
+.brawl-portrait__vignette {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Vignette_Box_Large_01.png");
+    -unity-background-image-tint-color: rgba(1, 14, 37, 0.7);
+    -unity-slice-scale: 0.12;
+}
+
+.brawl-card--red .brawl-portrait__vignette {
+    -unity-background-image-tint-color: rgba(37, 6, 1, 0.7);
+}
+
+.brawl-portrait__frame {
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Frame_Box_Medium_01_Variant_01.png");
+    -unity-slice-scale: 0.28;
+}
+
+.brawl-portrait__detail {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: -8px;
+    height: 18px;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Frame_Box_Medium_01_Detail_01.png");
+    -unity-slice-scale: 0.2;
+}
+
+.brawl-portrait__hp,
+.brawl-portrait__ko {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 7px;
     -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
     font-size: 20px;
-    letter-spacing: 4px;
     -unity-text-align: middle-center;
-    color: rgb(214, 150, 96);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    color: rgb(255, 255, 255);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgba(5, 8, 16, 0.85);
+    padding: 0;
+    margin: 0;
 }
 
-.brawl-card--ko .brawl-hp__label {
+.brawl-portrait__ko {
+    display: none;
+    font-size: 30px;
+    letter-spacing: 3px;
+    top: 0;
+    bottom: 0;
+    color: rgb(250, 208, 136);
+}
+
+.brawl-card--ko .brawl-portrait__ko {
+    display: flex;
+}
+
+.brawl-card--ko .brawl-portrait__hp {
     display: none;
 }
 
-.brawl-card--ko .brawl-hp__ko {
-    display: flex;
+.brawl-card--ko .brawl-portrait__img {
+    -unity-background-image-tint-color: rgb(110, 110, 110);
+}
+
+.brawl-card__info {
+    flex-grow: 1;
+    min-width: 0;
+    margin: 0 0 0 8px;
+    padding: 5px 12px 6px 12px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Box_Small_Parchment_01.png");
+    -unity-background-image-tint-color: rgba(24, 21, 17, 0.78);
+    -unity-slice-scale: 0.33;
+}
+
+.brawl-side--red .brawl-card__info {
+    margin: 0 8px 0 0;
+    align-items: flex-end;
+}
+
+.brawl-card__head {
+    flex-direction: row;
+    align-items: flex-end;
+    max-width: 100%;
+}
+
+.brawl-side--red .brawl-card__head {
+    flex-direction: row-reverse;
+}
+
+.brawl-card__name {
+    flex-shrink: 1;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 21px;
+    color: rgb(255, 255, 255);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgba(10, 14, 16, 0.85);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0;
+    margin: 0;
+}
+
+.brawl-card__body {
+    flex-shrink: 0;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 15px;
+    color: rgb(250, 208, 136);
+    margin: 0 0 2px 7px;
+    padding: 0;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(10, 14, 16, 0.8);
+}
+
+.brawl-side--red .brawl-card__body {
+    margin: 0 7px 2px 0;
+}
+
+.brawl-hpbar {
+    width: 220px;
+    height: 26px;
+    margin-top: 2px;
+    justify-content: center;
+}
+
+.brawl-hpbar__track {
+    position: absolute;
+    left: 14px;
+    right: 0;
+    top: 7px;
+    height: 12px;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Bar_Horizontal_03_Mask.png");
+    -unity-background-image-tint-color: rgba(25, 26, 29, 0.9);
+    -unity-slice-scale: 0.12;
+    overflow: hidden;
+}
+
+.brawl-hpbar__fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Bar_Horizontal_05.png");
+    -unity-slice-scale: 0.12;
+    transition-property: width;
+    transition-duration: 0.15s;
+}
+
+.brawl-card--blue .brawl-hpbar__fill {
+    -unity-background-image-tint-color: rgb(84, 156, 255);
+}
+
+.brawl-card--red .brawl-hpbar__fill {
+    -unity-background-image-tint-color: rgb(214, 56, 48);
+}
+
+.brawl-hpbar__shield {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 40%;
+    width: 0;
+    background-color: rgba(220, 240, 255, 0.85);
+}
+
+.brawl-hpbar__heart {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Heart_03.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.brawl-side--red .brawl-hpbar__track {
+    left: 0;
+    right: 14px;
+    scale: -1 1;
+}
+
+.brawl-side--red .brawl-hpbar__heart {
+    left: auto;
+    right: 0;
+}
+
+.brawl-card__line {
+    flex-direction: row;
+    max-width: 220px;
+    margin-top: 1px;
+}
+
+.brawl-side--red .brawl-card__line {
+    flex-direction: row-reverse;
+}
+
+.brawl-card__posture,
+.brawl-card__intent {
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(10, 14, 16, 0.75);
+    white-space: nowrap;
+}
+
+.brawl-card__posture {
+    color: var(--mm-ink-soft);
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.brawl-card__intent {
+    color: var(--hud-gold);
+    margin: 0 0 0 8px;
+    flex-shrink: 0;
+}
+
+.brawl-side--red .brawl-card__intent {
+    margin: 0 8px 0 0;
 }
 
 .brawl-card__slots {
     flex-direction: row;
-    justify-content: space-between;
-    margin-top: 6px;
+    margin-top: 4px;
+}
+
+.brawl-side--red .brawl-card__slots {
+    flex-direction: row-reverse;
 }
 
 .brawl-slot {
-    flex-grow: 1;
-    flex-basis: 0;
-    min-width: 0;
-    align-items: center;
+    margin: 0 6px 0 0;
+}
+
+.brawl-side--red .brawl-slot {
+    margin: 0 0 0 6px;
 }
 
 .brawl-slot--empty {
@@ -271,10 +436,14 @@
 }
 
 .brawl-slot__box {
-    width: 46px;
-    height: 46px;
+    width: 36px;
+    height: 36px;
     background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Circle_Background_01.png");
-    -unity-background-image-tint-color: rgba(28, 24, 20, 0.9);
+    -unity-background-image-tint-color: rgba(1, 21, 37, 0.85);
+}
+
+.brawl-card--red .brawl-slot__box {
+    -unity-background-image-tint-color: rgba(37, 8, 4, 0.85);
 }
 
 .brawl-slot__ring {
@@ -284,7 +453,7 @@
     right: -2px;
     bottom: -2px;
     background-image: url("Skin/Synty/SPR_FantasyMenus_Ring_Medium_01.png");
-    -unity-background-image-tint-color: var(--hud-gold);
+    -unity-background-image-tint-color: var(--mm-frame);
 }
 
 .brawl-slot--locked .brawl-slot__ring {
@@ -298,23 +467,25 @@
     right: 0;
     bottom: 0;
     -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 22px;
+    font-size: 18px;
     -unity-text-align: middle-center;
     color: var(--mm-ink-soft);
+    padding: 0;
+    margin: 0;
 }
 
 .brawl-slot__icon {
     position: absolute;
-    left: 7px;
-    top: 7px;
-    right: 7px;
-    bottom: 7px;
+    left: 6px;
+    top: 6px;
+    right: 6px;
+    bottom: 6px;
     transition-property: opacity;
     transition-duration: 0.15s;
 }
 
 .brawl-slot--charging .brawl-slot__icon {
-    opacity: 0.55;
+    opacity: 0.5;
 }
 
 .brawl-slot__radial {
@@ -328,60 +499,78 @@
 }
 
 .brawl-slot__radial.radial--fired {
-    scale: 1.2 1.2;
+    scale: 1.25 1.25;
 }
 
 .brawl-slot__radial.radial--ready {
     scale: 1.06 1.06;
 }
 
-.brawl-slot__label {
-    max-width: 100%;
-    font-size: 14px;
-    color: rgb(255, 255, 255);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-    margin-top: 2px;
-    -unity-text-align: upper-center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .brawl-feed {
-    align-self: flex-end;
+    position: absolute;
+    right: 26px;
+    top: 420px;
     align-items: flex-end;
-    margin: 8px 0 0 0;
 }
 
 .brawl-feed__entry {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 4px;
-    padding: 3px 10px;
+    height: 36px;
+    margin-bottom: 5px;
+    padding: 0 14px;
+}
+
+.brawl-feed__bg,
+.brawl-feed__tracery {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.brawl-feed__bg {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Box_Small_Parchment_01.png");
+    -unity-background-image-tint-color: rgba(31, 27, 22, 0.82);
+    -unity-slice-scale: 0.33;
+}
+
+.brawl-feed__tracery {
+    left: 3px;
+    right: 3px;
+    top: 3px;
+    bottom: 3px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Tracery_Box_02.png");
+    -unity-background-image-tint-color: rgb(113, 91, 52);
+    -unity-slice-scale: 0.17;
 }
 
 .brawl-feed__name {
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 16px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 19px;
+    padding: 0;
+    margin: 0;
 }
 
 .brawl-feed__verb {
     font-size: 15px;
     color: var(--mm-ink-soft);
     margin: 0 6px;
+    padding: 0;
 }
 
 .brawl-feed__icon {
-    width: 20px;
-    height: 20px;
-    margin-left: 6px;
+    width: 22px;
+    height: 22px;
+    margin-left: 8px;
 }
 
 .brawl-banner-box {
     position: absolute;
     left: 0;
     right: 0;
-    top: 24%;
+    top: 26%;
     align-items: center;
     opacity: 0;
     transition-property: opacity;
@@ -392,19 +581,112 @@
     opacity: 1;
 }
 
+.brawl-banner__glow {
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    top: -40px;
+    bottom: -40px;
+    background-image: url("Skin/Synty/Warrior/SPR_FX_FantasyWarrior_Glow_01.png");
+    -unity-background-image-tint-color: rgba(2, 2, 2, 0.55);
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.brawl-banner__header,
+.brawl-banner__lines {
+    display: none;
+}
+
+.brawl-banner-box--result .brawl-banner__header,
+.brawl-banner-box--result .brawl-banner__lines {
+    display: flex;
+}
+
+.brawl-banner-box--result .brawl-banner__glow {
+    left: 6%;
+    right: 6%;
+    top: 84px;
+    bottom: 74px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Gradient_Outwards_Smooth_01.png");
+    -unity-background-image-tint-color: rgba(16, 20, 29, 0.8);
+}
+
+.brawl-banner__header {
+    width: 435px;
+    height: 65px;
+    justify-content: center;
+    margin-bottom: 8px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Gradient_Vertical_Solid_01.png");
+    -unity-background-image-tint-color: rgb(46, 56, 60);
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.brawl-banner__ribbon {
+    position: absolute;
+    left: -36px;
+    right: -36px;
+    top: -2px;
+    bottom: -2px;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Banner_07.png");
+    -unity-slice-scale: 0.16;
+}
+
+.brawl-banner__header-text {
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 40px;
+    letter-spacing: 3px;
+    -unity-text-align: middle-center;
+    color: rgb(250, 208, 136);
+    padding: 0;
+    margin: 0;
+}
+
+.brawl-banner__lines {
+    flex-direction: row;
+    width: 900px;
+    height: 24px;
+}
+
+.brawl-banner__line {
+    flex-grow: 1;
+    height: 24px;
+    -unity-background-image-tint-color: rgb(255, 204, 95);
+    -unity-slice-scale: 0.3;
+}
+
+.brawl-banner__line--l {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Line_03_Right.png");
+}
+
+.brawl-banner__line--r {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Line_03_Left.png");
+}
+
+.brawl-banner__lines--bottom {
+    scale: 1 -1;
+}
+
 .brawl-banner {
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 120px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 100px;
+    letter-spacing: 2px;
     -unity-text-align: middle-center;
     color: rgb(255, 255, 255);
-    text-shadow: 0 6px 8px rgba(0, 0, 0, 0.75);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgba(5, 8, 12, 0.7);
+    padding: 0;
+    margin: -6px 0;
     transition-property: scale;
     transition-duration: 0.22s;
     transition-timing-function: ease-out-back;
 }
 
+.brawl-banner-box--result .brawl-banner {
+    font-size: 78px;
+}
+
 .brawl-banner--pop {
-    scale: 1.6 1.6;
+    scale: 1.5 1.5;
     transition-duration: 0s;
 }
 
@@ -426,11 +708,20 @@
 
 .brawl-banner-sub {
     -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 36px;
+    font-size: 30px;
     -unity-text-align: middle-center;
-    color: var(--hud-gold);
-    margin-top: -6px;
-    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.75);
+    color: rgb(250, 208, 136);
+    margin-top: 8px;
+    padding: 6px 22px;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(5, 8, 12, 0.7);
+}
+
+.brawl-banner-box--result .brawl-banner-sub {
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Box_Small_Parchment_01.png");
+    -unity-background-image-tint-color: rgba(31, 43, 46, 0.9);
+    -unity-slice-scale: 0.33;
+    margin-top: 14px;
 }
 
 .brawl-controls {
@@ -503,13 +794,15 @@
 }
 
 .brawl-plate__name {
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 14px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 17px;
+    letter-spacing: 1px;
     -unity-text-align: middle-center;
     white-space: nowrap;
-    margin-bottom: 1px;
-    -unity-text-outline-width: 3px;
-    -unity-text-outline-color: var(--mm-bg-deep);
+    margin: 0 0 1px 0;
+    padding: 0;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgba(10, 14, 16, 0.9);
 }
 
 .brawl-plate__status {
@@ -517,22 +810,21 @@
     left: 0;
     right: 0;
     top: 100%;
-    font-size: 11px;
+    font-size: 12px;
     -unity-font-style: bold;
     -unity-text-align: upper-center;
     color: var(--mm-warn);
     white-space: nowrap;
     -unity-text-outline-width: 2px;
-    -unity-text-outline-color: var(--mm-bg-deep);
+    -unity-text-outline-color: rgba(10, 14, 16, 0.9);
 }
 
 .brawl-obar {
-    width: 90px;
-    height: 9px;
-    border-radius: 5px;
-    border-width: 1px;
-    border-color: var(--mm-bg-deep);
-    background-color: var(--mm-bg-deep);
+    width: 96px;
+    height: 11px;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Bar_Horizontal_03_Mask.png");
+    -unity-background-image-tint-color: rgba(25, 26, 29, 0.85);
+    -unity-slice-scale: 0.1;
     overflow: hidden;
 }
 
@@ -542,23 +834,24 @@
     top: 0;
     bottom: 0;
     width: 100%;
+    background-image: url("Skin/Synty/Warrior/SPR_FantasyWarrior_Bar_Horizontal_05.png");
+    -unity-slice-scale: 0.1;
 }
 
 .brawl-obar__shield {
     position: absolute;
     left: 0;
     top: 0;
-    height: 45%;
+    height: 40%;
     width: 0;
-    background-color: var(--mm-ally);
-    opacity: 0.9;
+    background-color: rgba(220, 240, 255, 0.85);
 }
 
 .brawl-bubble-row {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 36px;
+    bottom: 40px;
     align-items: center;
 }
 
@@ -566,10 +859,11 @@
     flex-direction: row;
     align-items: center;
     flex-shrink: 0;
-    padding: 3px 10px 3px 6px;
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
-    -unity-background-image-tint-color: var(--hud-pill);
-    -unity-slice-scale: 0.2;
+    height: 34px;
+    padding: 0 14px 0 8px;
+    background-image: url("Skin/Synty/Warrior/SPR_HUD_FantasyWarrior_Box_Small_Parchment_01.png");
+    -unity-background-image-tint-color: rgba(31, 27, 22, 0.88);
+    -unity-slice-scale: 0.33;
     opacity: 0;
     transform-origin: 50% 100%;
     transition-property: opacity;
@@ -583,14 +877,16 @@
 .brawl-bubble__icon {
     width: 22px;
     height: 22px;
-    margin-right: 5px;
+    margin-right: 6px;
 }
 
 .brawl-bubble__text {
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 16px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 18px;
     color: rgb(255, 255, 255);
     white-space: nowrap;
+    padding: 0;
+    margin: 0;
 }
 
 .brawl-float {
@@ -598,34 +894,36 @@
     left: 0;
     right: 0;
     bottom: 0;
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 22px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 26px;
+    letter-spacing: 1px;
     -unity-text-align: lower-center;
     white-space: nowrap;
-    color: var(--mm-ink);
+    color: rgb(255, 255, 255);
     -unity-text-outline-width: 2px;
-    -unity-text-outline-color: var(--mm-bg-deep);
+    -unity-text-outline-color: rgba(10, 8, 6, 0.9);
 }
 
 .brawl-float--hit {
-    color: var(--mm-ink);
+    color: rgb(255, 255, 255);
 }
 
 .brawl-float--skill {
-    font-size: 26px;
+    font-size: 30px;
+    color: rgb(255, 236, 200);
 }
 
 .brawl-float--big {
-    font-size: 32px;
-    color: var(--mm-gold);
+    font-size: 38px;
+    color: rgb(253, 210, 90);
 }
 
 .brawl-float--heal {
-    font-size: 24px;
-    color: var(--mm-good);
+    font-size: 26px;
+    color: rgb(130, 230, 110);
 }
 
 .brawl-float--shield {
-    font-size: 20px;
-    color: var(--mm-ally);
+    font-size: 22px;
+    color: rgb(170, 215, 255);
 }

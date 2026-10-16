@@ -31,11 +31,11 @@ tags: [script, ui]
 
 | Método | Descripción |
 |--------|-------------|
-| `OnEnable` / `OnDisable` | Suscribe y desuscribe `GameEvents.OnInventoryReloaded` |
+| `OnEnable` / `OnDisable` | Suscribe y desuscribe `GameEvents.OnInventoryReloaded` y `HotbarController.OnHotbarChanged` (→ `Refresh`) |
 | `Start()` | Resuelve el root y construye los slots |
 | `OnInventoryReloaded(inv)` | Guarda el inventario y refresca |
 | `BuildSlots()` | Crea los slots una sola vez |
-| `Refresh()` | Pinta cada slot con el ítem de su posición: si `Icon` existe, lo usa como fondo; si no, limpia el fondo |
+| `Refresh()` | Pinta cada slot con el ítem de su posición: si `Icon` existe, lo usa como fondo y limpia el nombre; si no, limpia el fondo y muestra el nombre (`DataLoc.ItemName`). Marca `hotbar-slot--active` en el slot de `HotbarController.ActiveSlot` |
 
 ## Visual (S161)
 
@@ -50,3 +50,7 @@ Receta estilo FarmingLife con el kit de Synty: caja marrón, runas de fondo, tec
 - [[GameManager]] — `CurrentInventory`
 - [[GameEvents]] — `OnInventoryReloaded`
 - [[StoragePanelUITK]] — muestra una copia del hotbar dentro del almacén
+
+## Notas
+
+- S162: sincronizado con el código: el HUD se refresca también por `HotbarController.OnHotbarChanged` (ítem activo y slots) y muestra el nombre del ítem cuando no tiene ícono.

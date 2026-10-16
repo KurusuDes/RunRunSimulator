@@ -1,0 +1,10 @@
+# Player_Health_Equipment/HUD_FantasyWarrior_HealthBar_02
+HUD_FantasyWarrior_HealthBar_02 size=760x80 pos=0,0 anch=0,5,0,5-0,5,0,5
+  Slider size=680x16 pos=40,0 anch=0,0,5-1,0,5
+    Background size=680x16 pos=0,0 anch=0,0-1,1 IMG=SPR_FantasyWarrior_Bar_Horizontal_03_Mask col=#191A1DE6 type=Sliced border=(50.00, 0.00, 50.00, 0.00) ppu=2
+    Fill Area size=680x16 pos=0,0 anch=0,0-1,1
+      Fill size=0x0 pos=0,0 anch=0,0-0,0 IMG=SPR_FantasyWarrior_Bar_Horizontal_04 col=#FFFFFFFF type=Sliced border=(50.00, 0.00, 50.00, 0.00) ppu=3
+    Handle Slide Area size=680x16 pos=0,0 anch=0,0-1,1
+      Handle [inactive]
+      Handle size=40x40 pos=0,0 anch=0,0-0,0 IMG=SPR_HUD_FantasyWarrior_Circle_Small_02_Underlay col=#FFFFFFFF type=Simple
+  ICON size=70x70 pos=0,0 anch=0,0,5-0,0,5 IMG=SPR_FantasyWarrior_Heart_03 col=#FFFFFFFF type=Simple

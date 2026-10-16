@@ -30,7 +30,7 @@ public class StoreDetailCard
         BuyButton.SetEnabled(false);
     }
 
-    public void Show(StoreRows.Tab tab, StoreRows.Row row, bool discountActive)
+    public void Show(StoreRows.Tab tab, StoreRows.Row row, bool discountActive, bool affordable)
     {
         content.style.display = DisplayStyle.Flex;
         StoreTileView.ApplyIcon(icon, tab, row.Icon);
@@ -45,7 +45,7 @@ public class StoreDetailCard
         BuildFacts(row, discountActive);
 
         BuyButton.text = StorePrice.IsMaxed(row) ? Loc.Tr("ui.store.max") : Loc.Tr("ui.store.buy");
-        BuyButton.SetEnabled(StorePrice.CanBuy(row));
+        BuyButton.SetEnabled(affordable && StorePrice.CanBuy(row));
     }
 
     private void BuildFacts(StoreRows.Row row, bool discountActive)

@@ -14,7 +14,7 @@
 }
 
 .grid-left {
-    width: 640px;
+    width: 700px;
     flex-shrink: 0;
 }
 
@@ -64,16 +64,21 @@
     flex-grow: 1;
 }
 
+.grid-container .unity-scroll-view__vertical-scroller {
+    width: 12px;
+}
+
 .grid-container .unity-scroll-view__content-container {
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
-    padding: 8px 4px 12px 4px;
+    width: 562px;
+    padding: 6px 0 8px 2px;
 }
 
 .tile {
-    width: 104px;
-    height: 104px;
+    width: 100px;
+    height: 100px;
     margin: 5px;
     transition-property: scale, -unity-background-image-tint-color;
     transition-duration: 0.12s;
@@ -131,8 +136,18 @@
     -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
     font-size: 20px;
     color: var(--mm-section);
-    -unity-text-align: middle-right;
+    align-self: flex-end;
     margin-top: 6px;
+}
+
+.tile__runes {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(36, 32, 26, 0.6);
 }
 
 .side-name {

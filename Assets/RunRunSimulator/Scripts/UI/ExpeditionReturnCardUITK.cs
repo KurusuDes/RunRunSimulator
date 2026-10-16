@@ -165,7 +165,7 @@ public class ExpeditionReturnCardUITK : MonoBehaviour, IUINavigable
         else icon.style.backgroundColor = profile.BackTheme.Color;
         row.Add(icon);
 
-        var text = new Label(Loc.Tr("ui.return.newpower", profile.Back.Title));
+        var text = new Label(Loc.Tr("ui.return.newpower", BrawlLoc.Title(profile.Back)));
         text.AddToClassList("ret-newpower__text");
         row.Add(text);
 

@@ -2533,6 +2533,661 @@ MonoBehaviour:
     m_Localized: "Quedan {0} m\xE1s"
     m_Metadata:
       m_Items: []
+  - m_Id: 29958641049436160
+    m_Localized: Victoria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739328
+    m_Localized: Derrota
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739329
+    m_Localized: Empate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29958641120739330
+    m_Localized: escudo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910698147840
+    m_Localized: "Ventarr\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536448
+    m_Localized: "R\xE1faga de viento que empuja lejos y frena."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536449
+    m_Localized: Burbuja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536450
+    m_Localized: "Envuelve al aliado m\xE1s herido en una burbuja que absorbe da\xF1o."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536451
+    m_Localized: Merienda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536452
+    m_Localized: "Le tira una merienda al aliado m\xE1s herido."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536453
+    m_Localized: Chispa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536454
+    m_Localized: Chispa que salta entre tres rivales y los frena.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536455
+    m_Localized: Carga de ariete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536456
+    m_Localized: "Embiste en l\xEDnea, aturde y empuja."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536457
+    m_Localized: Cornada en abanico
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536458
+    m_Localized: Barrido de astas al frente que empuja.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536459
+    m_Localized: "Pulso arco\xEDris"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536460
+    m_Localized: Pulso que cura a todos los aliados cercanos.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536461
+    m_Localized: Topetazo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536462
+    m_Localized: Embestida corta que aturde y manda lejos.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536463
+    m_Localized: Coletazo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536464
+    m_Localized: Giro con la cola que empuja a todos alrededor.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536465
+    m_Localized: Cometa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536466
+    m_Localized: Dispara un cometa que estalla al impactar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536467
+    m_Localized: Cometitas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536468
+    m_Localized: Tres cometitas que persiguen a los rivales.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536469
+    m_Localized: "Caparaz\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536470
+    m_Localized: Se encierra en su coraza y provoca a los rivales cercanos.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536471
+    m_Localized: Grito de guerra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536472
+    m_Localized: Grito que apura y potencia a los aliados cercanos.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536473
+    m_Localized: Lanza de cristal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536474
+    m_Localized: "Lanza de cristal que atraviesa a todos en la l\xEDnea."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536475
+    m_Localized: Lluvia de cristales
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536476
+    m_Localized: Una lluvia de cristales cae donde se agrupan los rivales.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536477
+    m_Localized: Embestida veloz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536478
+    m_Localized: "Embestida r\xE1pida y larga."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536479
+    m_Localized: Erizo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536480
+    m_Localized: Diez espinas en todas direcciones que frenan.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536481
+    m_Localized: Espolonazo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536482
+    m_Localized: Patada de espuelas en arco que empuja.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536483
+    m_Localized: Tajo de hoz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536484
+    m_Localized: Tajo amplio que hiere y frena.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536485
+    m_Localized: "Nube de sue\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536486
+    m_Localized: Lanza una nube de lana que duerme a los rivales.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536487
+    m_Localized: Nube de lana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536488
+    m_Localized: 'Nube mullida que lo sigue: cura a los aliados dentro y frena a
+      los rivales.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536489
+    m_Localized: Lluvia de malvaviscos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536490
+    m_Localized: Malvaviscos pegajosos que golpean y frenan durante un rato.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536491
+    m_Localized: Gema rebotina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536492
+    m_Localized: Gema que rebota dos veces en las paredes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536493
+    m_Localized: Muralla de placas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536494
+    m_Localized: "Placas que lo protegen a \xE9l y al aliado m\xE1s cercano."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536495
+    m_Localized: "Coraza de p\xFAas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536496
+    m_Localized: "Escudo con p\xFAas: devuelve da\xF1o a quien lo golpee de cerca
+      y lo apura."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536497
+    m_Localized: "Lluvia de p\xFAas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536498
+    m_Localized: "Dispara doce p\xFAas finas en todas direcciones."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536499
+    m_Localized: Erizo pesado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536500
+    m_Localized: "Ocho p\xFAas gruesas que atraviesan y empujan."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536501
+    m_Localized: Rayo en cadena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536502
+    m_Localized: Rayo que salta entre cuatro rivales.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536503
+    m_Localized: Estampida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536504
+    m_Localized: Carga larga y pesada que arrolla todo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536505
+    m_Localized: Luz del abismo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536506
+    m_Localized: Su farol atrae a los rivales cercanos y los obliga a atacarlo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536507
+    m_Localized: "Tap\xF3n rebot\xEDn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536508
+    m_Localized: Malvavisco que rebota tres veces.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536509
+    m_Localized: Triple cuerno
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536510
+    m_Localized: Carga ancha que aturde.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536511
+    m_Localized: "Arco\xEDris sanador"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910706536512
+    m_Localized: "Rayo arco\xEDris que cura al aliado m\xE1s herido y lo apura."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910828171264
+    m_Localized: Chorro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365568
+    m_Localized: 'Escopeta de agua: cinco gotas en abanico, brutal de cerca. Voltereta
+      para esquivar.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365569
+    m_Localized: Latigazo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365570
+    m_Localized: "Latigazo de cintas en l\xEDnea que frena. Carrera corta para cazar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365571
+    m_Localized: "N\xE9ctar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365572
+    m_Localized: "R\xE1faga de tres dardos; si un aliado est\xE1 bajo de vida, le
+      dispara n\xE9ctar que lo cura. Parpadeo corto."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365573
+    m_Localized: Mordisco
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365574
+    m_Localized: "Mel\xE9: dos mordiscos en abanico. Se lanza de un salto sobre el
+      blanco."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365575
+    m_Localized: Pluma certera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365576
+    m_Localized: "Francotirador: una pluma r\xE1pida de largo alcance con mira l\xE1ser.
+      Salta hacia atr\xE1s para alejarse."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365577
+    m_Localized: "Bumer\xE1n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365578
+    m_Localized: "Lanza su vela como bumer\xE1n: pega a la ida y a la vuelta. Planea
+      lejos."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365579
+    m_Localized: equilibrado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365580
+    m_Localized: robusto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365581
+    m_Localized: "\xE1gil"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365582
+    m_Localized: pesado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365583
+    m_Localized: Osado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365584
+    m_Localized: Cauto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365585
+    m_Localized: Templado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365586
+    m_Localized: protector
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365587
+    m_Localized: solitario
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29961910832365588
+    m_Localized: de equipo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29966699897061376
+    m_Localized: 1 objeto distinto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29966699959975936
+    m_Localized: '{0} objetos distintos'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771072
+    m_Localized: Abanico
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771073
+    m_Localized: Alforja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771074
+    m_Localized: Borla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771075
+    m_Localized: Cola
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771076
+    m_Localized: Cometitas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771077
+    m_Localized: Coraza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771078
+    m_Localized: Cresta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771079
+    m_Localized: Cristales
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771080
+    m_Localized: Espinas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771081
+    m_Localized: Espuelas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771082
+    m_Localized: Lomo de lana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771083
+    m_Localized: Malvaviscos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771084
+    m_Localized: Placas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771085
+    m_Localized: "P\xFAas dobles"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771086
+    m_Localized: "P\xFAas finas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771087
+    m_Localized: "P\xFAas gruesas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771088
+    m_Localized: Slurp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771089
+    m_Localized: Ooze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771090
+    m_Localized: Ooze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771091
+    m_Localized: Slime
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771092
+    m_Localized: Slurp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771093
+    m_Localized: "P\xEDcara"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771094
+    m_Localized: Serena
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771095
+    m_Localized: Aletas de cara
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771096
+    m_Localized: Antenas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771097
+    m_Localized: Ariete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771098
+    m_Localized: Astas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771099
+    m_Localized: Carnero
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771100
+    m_Localized: Cometa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771101
+    m_Localized: Cristal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771102
+    m_Localized: Cuernitos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771103
+    m_Localized: Hoz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771104
+    m_Localized: Lana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771105
+    m_Localized: "Mech\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771106
+    m_Localized: Rayo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771107
+    m_Localized: Rinoceronte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771108
+    m_Localized: "Se\xF1uelo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771109
+    m_Localized: Tapones
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771110
+    m_Localized: Triceratops
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771111
+    m_Localized: Unicornio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771112
+    m_Localized: Aletas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771113
+    m_Localized: Cintas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771114
+    m_Localized: "Colibr\xED"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771115
+    m_Localized: "Murci\xE9lago"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771116
+    m_Localized: Plumitas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771117
+    m_Localized: Vela
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771118
+    m_Localized: Criadero
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771119
+    m_Localized: Sala de juegos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771120
+    m_Localized: "M\xE1s vitrinas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771121
+    m_Localized: Mopa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771122
+    m_Localized: Snack Monchi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771123
+    m_Localized: Pelota
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771124
+    m_Localized: Burbujas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771125
+    m_Localized: Mordedor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771126
+    m_Localized: Manguera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771127
+    m_Localized: Peluche
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771128
+    m_Localized: Cuerda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771129
+    m_Localized: "\xC1lbum de los abuelos"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771130
+    m_Localized: "\xC1rbol geneal\xF3gico"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771131
+    m_Localized: "Coj\xEDn de mam\xE1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771132
+    m_Localized: "Coj\xEDn de pap\xE1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771133
+    m_Localized: "L\xE1mpara de lava"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771134
+    m_Localized: Manta tejida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771135
+    m_Localized: "M\xF3vil de estrellas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771136
+    m_Localized: Retrato familiar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771137
+    m_Localized: Caja de 5 MoriMonchis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29967005552771138
+    m_Localized: Huevos iniciales
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29968074785718272
+    m_Localized: Bloqueado
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

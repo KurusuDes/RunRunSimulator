@@ -20,7 +20,7 @@ tags: [script, ui, breeding, inheritance, static]
 
 - Caja `mm-statbox` con ícono `inherit-icon--{rol}`.
 - Nombre del rol con `Loc` (`ui.detail.slot.{rol}`).
-- Dos celdas `inherit-cell` (padre y madre): swatch con el color del `Set` de la parte (gris si no tiene set) y texto con el nombre de la parte, o "—" si no hay progenitor o parte.
+- Dos celdas `inherit-cell` (padre y madre): swatch con el color del `Set` de la parte (gris si no tiene set; oculto si no hay parte) y texto con el nombre de la parte (`DataLoc.PartName`, S162), o "—" si no hay progenitor o parte.
 - Clase `inherit-cell--same` en ambas celdas cuando las dos partes pertenecen al mismo set.
 
 ## Resolución de Partes (`PartOf`)
@@ -34,8 +34,10 @@ Usa `CreatureDatabaseSO` según el rol: `GetHorn`, `GetBack`, `GetWing`, `GetFac
 - [[CreatureDNA]] — IDs de partes
 - [[BodyPart]], [[PartRole]] — parte y rol
 - [[Loc]] — nombres de rol
+- [[DataLoc]] — nombre localizado de cada parte (S162)
 
 ## Notas
 
 - Clase estática sin estado ni eventos.
 - Los estilos viven en el kit `Skin.uss` (`inherit-row`, `inherit-cell`).
+- S162: los nombres de parte salen de `DataLoc`, no del asset crudo.

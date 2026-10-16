@@ -29,6 +29,7 @@
                 <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
                 <ui:Label name="run-title" text="" class="mm-title run-title" picking-mode="Ignore" />
                 <ui:VisualElement name="run-rooms" class="run-rooms" picking-mode="Ignore" />
+                <ui:VisualElement name="run-team" class="run-team" picking-mode="Ignore" />
                 <ui:Label name="run-info" text="" class="run-info" picking-mode="Ignore" />
                 <ui:VisualElement class="run-buttons" picking-mode="Ignore">
                     <ui:Button name="run-go" text="" focusable="false" class="mm-button mm-button--big run-btn" />
@@ -37,8 +38,17 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="run-veil" class="run-veil" picking-mode="Ignore">
+            <ui:VisualElement class="run-veil__vignette" picking-mode="Ignore" />
             <ui:VisualElement name="run-veil-glyph" class="run-veil__glyph" picking-mode="Ignore" />
+            <ui:VisualElement class="run-veil__line" picking-mode="Ignore">
+                <ui:VisualElement class="run-veil__half run-veil__half--l" picking-mode="Ignore" />
+                <ui:VisualElement class="run-veil__half run-veil__half--r" picking-mode="Ignore" />
+            </ui:VisualElement>
             <ui:Label name="run-veil-title" text="" class="run-veil__title" picking-mode="Ignore" />
+            <ui:VisualElement class="run-veil__line run-veil__line--bottom" picking-mode="Ignore">
+                <ui:VisualElement class="run-veil__half run-veil__half--l" picking-mode="Ignore" />
+                <ui:VisualElement class="run-veil__half run-veil__half--r" picking-mode="Ignore" />
+            </ui:VisualElement>
             <ui:VisualElement name="run-veil-pips" class="run-pips run-pips--big" picking-mode="Ignore" />
             <ui:Label name="run-veil-left" text="" class="run-veil__left" picking-mode="Ignore" />
         </ui:VisualElement>

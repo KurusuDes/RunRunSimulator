@@ -55,7 +55,7 @@ public static class BreedingInheritanceView
         else swatch.style.display = DisplayStyle.None;
         cell.Add(swatch);
 
-        var label = new Label(hasParent && part != null ? part.Name : "—");
+        var label = new Label(hasParent && part != null ? DataLoc.PartName(part) : "—");
         label.AddToClassList("inherit-cell__text");
         cell.Add(label);
         return cell;

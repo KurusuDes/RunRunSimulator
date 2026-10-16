@@ -63,7 +63,7 @@ private class FloatText
 | `headOffset` | float | Altura offset del head (1,5 = 1,5m sobre centro) |
 | `plates` | Dictionary<BrawlFighter, Plate> | Map fighters → overhead plates |
 | `pool` | FloatText[40] | Pool de números flotantes (reutilizable) |
-| `layer` | VisualElement | Capa raíz de overheads (`brawl-overheads`, clases `mm-theme mm-theme--night`) |
+| `layer` | VisualElement | Capa raíz de overheads (`brawl-overheads`, clases `mm-theme mm-theme--night mm-skin`) |
 | `platesGroup` | VisualElement | Contenedor de plates |
 | `floatsGroup` | VisualElement | Contenedor de floats |
 
@@ -92,8 +92,8 @@ private class FloatText
 | `SpawnFloat()` | Crea float desde pool, asigna posición y variante |
 | `HandleDamaged()` | Dispara SpawnFloat("-X"); ignora drenaje (`IsDrain`) y daños que redondean a 0 |
 | `HandleHealed()` | Dispara SpawnFloat("+X") |
-| `HandleShielded()` | Dispara SpawnFloat("escudo") |
-| `HandleCastStarted()` | Setea bubble icon, text, border, scale, timing |
+| `HandleShielded()` | Dispara SpawnFloat(`Loc` "ui.brawl.float.shield") |
+| `HandleCastStarted()` | Setea ícono, título localizado de la burbuja, scale, timing |
 | `Changed()` | Compara con umbral 0,001 o cruce de cero; evita reescribir el ancho de barra si no cambió |
 
 ## Flujo de Visualización (LateUpdate)
@@ -178,17 +178,11 @@ private void HandleCastStarted(BrawlFighter fighter, BrawlSkillSO skill, Vector3
     if (skill == null || fighter == null || !plates.TryGetValue(fighter, out var plate)) return;
 
     var theme = fighter.HornSkill == skill ? fighter.HornTheme : fighter.BackTheme;
-    var border = theme.Color;
-    border.a = 1f;
 
     plate.BubbleIcon.sprite = theme.Icon;
     plate.BubbleIcon.tintColor = theme.Color;
     plate.BubbleIcon.style.display = theme.Icon != null ? DisplayStyle.Flex : DisplayStyle.None;
-    plate.BubbleText.text = skill.Title + "!";
-    plate.Bubble.style.borderTopColor = border;
-    plate.Bubble.style.borderRightColor = border;
-    plate.Bubble.style.borderBottomColor = border;
-    plate.Bubble.style.borderLeftColor = border;
+    plate.BubbleText.text = BrawlLoc.Title(skill) + "!";
 
     plate.LastScale = PopScale(0f);
     plate.Bubble.style.scale = new Scale(new Vector3(plate.LastScale, plate.LastScale, 1f));
@@ -214,6 +208,8 @@ Pop animation: pequeño (60%) → grande (110%) → normal (100%) en 0,24s.
 
 **Entrada:**
 - `BrawlTuningSO` (colores de equipo)
+- `BrawlLoc` (título de skill en la burbuja)
+- [[Loc]] (texto de escudo)
 - Eventos estáticos de `BrawlFighter`, `BrawlSkillCaster`
 - UIDocument (overlay layer)
 
@@ -238,3 +234,10 @@ Pop animation: pequeño (60%) → grande (110%) → normal (100%) en 0,24s.
 - Los muñecos (`Dummy`) no muestran nombre en su plate.
 - Al caer (`IsAlive` falso), la plate recibe `brawl-plate--ko` y su burbuja se cierra.
 - La capa lleva las clases de tema `mm-theme mm-theme--night`.
+
+## Notas S162
+
+- El título del skill en la burbuja sale de `BrawlLoc.Title(skill)` (localizado, con el `Title` del SO como respaldo).
+- `HandleCastStarted` ya no pinta el borde de la burbuja con el color del tema; solo ícono, tinte y texto.
+- El escudo flotante usa `Loc.Tr("ui.brawl.float.shield")`.
+- Las etiquetas de estado "aturdido" y "provocado" siguen en español fijo.

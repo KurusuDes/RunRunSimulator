@@ -57,9 +57,17 @@ public class ShopGrassField : MonoBehaviour
     [Title("Exclusiones")]
     [SerializeField] private float exclusionMargin = 0.4f;
     [SerializeField] private List<Rect> exclusions = new List<Rect>();
+    [SerializeField, Min(0f)] private float exclusionInset = 0.5f;
     [SerializeField] private List<Transform> excludeColliderRoots = new List<Transform>();
+    [SerializeField] private bool blockByColliders = false;
+
+    [Title("Relieve")]
+    [SerializeField] private Transform reliefRoot;
 
     private GameObject grassField;
+    private List<Collider> reliefColliders = new List<Collider>();
+
+    public IReadOnlyList<Rect> Exclusions => exclusions;
 
     private void OnEnable()
     {
@@ -102,7 +110,8 @@ public class ShopGrassField : MonoBehaviour
         var rng = new System.Random(seed);
         var rngEdge = new System.Random(seed + 7);
         var rngFlower = new System.Random(seed + 13);
-        var colliders = CollectColliders();
+        var colliders = blockByColliders ? CollectColliders() : new List<Collider>();
+        reliefColliders = CollectReliefColliders();
         int totalBlades = 0;
 
         for (int a = 0; a < areas.Count; a++)
@@ -161,7 +170,7 @@ public class ShopGrassField : MonoBehaviour
                 heightScale *= Mathf.Lerp(0.3f, 1f, s);
             }
 
-            roots.Add(new Vector3(x, area.Height, z));
+            roots.Add(new Vector3(x, ReliefY(x, z, area.Height), z));
             heights.Add(heightScale);
         }
 
@@ -210,7 +219,7 @@ public class ShopGrassField : MonoBehaviour
             var baseColor = flowerColors[Mathf.Min((int)(CellHash(cellX, cellZ, seed + 101) * flowerColors.Count), flowerColors.Count - 1)];
             float brightness = Mathf.Lerp(0.92f, 1.05f, (float)rngFlower.NextDouble());
 
-            roots.Add(new Vector3(x, area.Height, z));
+            roots.Add(new Vector3(x, ReliefY(x, z, area.Height), z));
             colors.Add(new Color(baseColor.r * brightness, baseColor.g * brightness, baseColor.b * brightness, 1f));
         }
 
@@ -305,9 +314,39 @@ public class ShopGrassField : MonoBehaviour
         return result;
     }
 
+    private List<Collider> CollectReliefColliders()
+    {
+        var result = new List<Collider>();
+        if (reliefRoot == null) return result;
+        var found = reliefRoot.GetComponentsInChildren<Collider>();
+        for (int i = 0; i < found.Length; i++)
+            if (found[i].enabled && !found[i].isTrigger) result.Add(found[i]);
+        return result;
+    }
+
+    private float ReliefY(float x, float z, float baseHeight)
+    {
+        float best = baseHeight;
+        if (reliefColliders.Count == 0) return best;
+
+        var ray = new Ray(new Vector3(x, baseHeight + 20f, z), Vector3.down);
+        for (int i = 0; i < reliefColliders.Count; i++)
+        {
+            if (reliefColliders[i] == null) continue;
+            if (reliefColliders[i].Raycast(ray, out var hit, 40f) && hit.point.y > best) best = hit.point.y;
+        }
+        return best;
+    }
+
     private List<Rect> BuildBlockedRects(Area area, List<Collider> colliders)
     {
-        var blocked = new List<Rect>(exclusions);
+        var blocked = new List<Rect>(exclusions.Count);
+        for (int i = 0; i < exclusions.Count; i++)
+        {
+            var r = exclusions[i];
+            if (r.width > exclusionInset * 2f && r.height > exclusionInset * 2f)
+                blocked.Add(new Rect(r.x + exclusionInset, r.y + exclusionInset, r.width - exclusionInset * 2f, r.height - exclusionInset * 2f));
+        }
         for (int i = 0; i < colliders.Count; i++)
         {
             var bounds = colliders[i].bounds;

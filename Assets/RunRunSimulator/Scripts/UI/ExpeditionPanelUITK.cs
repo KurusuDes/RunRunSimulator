@@ -241,7 +241,7 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
                 }
             }
         }
-        if (team != null) ExpeditionCardBuilder.FillTeam(team, profiles, order, maxPick);
+        if (team != null) ExpeditionCardBuilder.FillTeam(team, dnas, profiles, order, maxPick);
     }
 
     private void UpdateGoButton()

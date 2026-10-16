@@ -14,13 +14,16 @@ tags: [script, ui, expedition, uitk]
 |-------|------|---------|-------------|
 | `document` | `UIDocument` | — | Root del panel (`UiPanels.RootOf`) |
 | `panel` | `UIPanelType` | `Expedition` | Clave de registro en `UIManager` |
+| `maxPick` | `int` | 3 | Máximo de criaturas en el equipo (`Min(1)`) |
 | `careGate` | `CareGateSO` | — | Criterio para `CreatureAvailability.CanExplore` |
 | `database` | `CreatureDatabaseSO` | — | Partes para resolver el kit de cada criatura |
 | `kits` | `BrawlKitDatabaseSO` | — | Kits de combate para el perfil de cada criatura |
 
 ## Elementos UXML
 
-- `exp-title`, `exp-subtitle`, `exp-empty`, `exp-list` (ScrollView de candidatos), `exp-team` (fila de equipo), `exp-close`, `exp-go`.
+- `exp-title`, `exp-subtitle`, `exp-empty`, `exp-list` (ScrollView de candidatos), `exp-prompt-move`, `exp-prompt-select` (leyenda localizada), `exp-close`, `exp-go`.
+- `exp-team-row`: fila de slots del equipo (cartas `BuildTeamCard` o `BuildEmptySlot`).
+- `exp-team`: contenedor que rellena `ExpeditionCardBuilder.FillTeam`.
 - Tarjetas de candidatos: `exp-card` (+ `--off`, `--on`, `--focus`) armadas por `ExpeditionCardBuilder.BuildTile`.
 
 ## Comportamiento
@@ -28,6 +31,7 @@ tags: [script, ui, expedition, uitk]
 - **Rebuild:** se llama en `Start`, al abrir el panel (`OnPanelSet` con show) y al alternar visibilidad. Excluye criaturas muertas o vendidas. Por cada criatura calcula `BrawlKitProfile.Of` y guarda en listas paralelas (`cards`, `dnas`, `profiles`, `eligible`, `picked`, `order`).
 - **Orden:** aptas primero; luego salud descendente.
 - **Selección:** click o submit alterna la elección. No deja pasar del máximo ni elegir no aptas. Tras cada cambio refresca el equipo (`RefreshTeam`).
+- **Quitar del equipo:** click en una carta del equipo la quita (`RemoveAt`).
 - **Foco:** `SetFocus` / `HoverAt` mueven el resaltado; hover no hace scroll.
 - **Navegación:** `OnUINavigate` (eje x) mueve el foco; `OnUISubmit` alterna; `OnUICancel` devuelve false.
 - **Botón Bajar** (`UpdateGoButton`): texto `ui.expedition.go` (n, máximo), con " · costo" si `BrawlRunRulesSO.Current.DescentCost > 0`. Habilitado si n ≥ 1, `ExpeditionOpen` y `Wallet.Balance(Dabloons) ≥ costo`.
@@ -68,3 +72,4 @@ tags: [script, ui, expedition, uitk]
 - La lista de tarjetas se reconstruye completa en cada `Rebuild`.
 - S145: las tarjetas y la fila de equipo salieron hacia `ExpeditionCardBuilder`; el perfil de cada criatura viene de `BrawlKitProfile`.
 - S161: el detalle lateral del enfocado salió del panel; el equipo se muestra como 3 cartas con slots vacíos y los candidatos en tira.
+- S162: el equipo se pinta en dos contenedores (`exp-team-row` con cartas y slots; `exp-team` con `FillTeam`), la leyenda de teclas sale de `ui.prompt.*` y el click sobre una carta del equipo la quita.

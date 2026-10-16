@@ -19,7 +19,7 @@ tags: [script, ui, expedition, return, uitk, navigable]
 
 ## Elementos UXML
 
-`ret-title`, `ret-minerita`, `ret-rooms`, `ret-lost`, `ret-noexploration`, `ret-team` (contenedor de tarjetas), `ret-continue` (botón de cierre). Las filas `ret-badge`, `ret-newpower` y `ret-pips` se crean en código.
+`ret-title`, `ret-minerita`, `ret-rooms`, `ret-lost`, `ret-noexploration`, `ret-team` (contenedor de tarjetas), `ret-continue` (botón de cierre), `ret-result-title` y `ret-loot-title` (encabezados localizados en `Start`). Las filas `ret-badge`, `ret-newpower` y `ret-pips` se crean en código.
 
 ## Métodos y Eventos
 
@@ -27,7 +27,7 @@ tags: [script, ui, expedition, return, uitk, navigable]
 |---------|-------------|
 | `OnEnable` / `OnDisable` | Suscribe y desuscribe `GameEvents.OnExpeditionReturned` |
 | `OnExpeditionReturned(r)` | Guarda `pending` y arranca una corrutina que espera dos frames antes de mostrar |
-| `Show(r)` | Llena labels, línea de pérdida (si `Lost` y `MineritaLost > 0`), equipo, línea de no exploración (si `Lost` y hay Slime) y llama `UIManager.RequestPanelSet(panel, true)` |
+| `Show(r)` | Llena labels, clase `ret-title--lost` si pierde, línea de pérdida (si `Lost` y `MineritaLost > 0`), equipo, línea de no exploración (si `Lost` y hay Slime) y llama `UIManager.RequestPanelSet(panel, true)` |
 | `BuildTeam(r)` | Tarjeta por MoriMochi. Si `EvolvedIds` contiene su `UniqueID`: clase `ret-card--grew`, badge `ui.return.grew` y, si aplica, el poder nuevo. Si no creció y es Slime: pips de exploración |
 | `BuildNewPower(dna)` | Fila `ret-newpower` con el ícono del tema de la espalda y el texto `ui.return.newpower` con el título del poder. Null si no hay kits o database, o si `Back` es null (espalda bloqueada) |
 | `OnUISubmit` / `Close` | Cierra con `RequestPanelSet(panel, false)` |
@@ -54,3 +54,4 @@ tags: [script, ui, expedition, return, uitk, navigable]
 - Si el evento llega antes de que `Start` enlace los elementos (`wired` false) y sigue sin enlazar tras dos frames, no muestra nada y deja `pending` guardado.
 - S146: un MoriMochi no adulto que crece no muestra poder nuevo, porque su espalda sigue bloqueada (`Back` null).
 - S161: restyle a pantalla de resultados con el kit de Synty (título, Minerita, salas, equipo). Pendiente S162: probar con una bajada real y revisar el título.
+- S162: `Start` localiza los encabezados `ret-result-title` (`ui.return.result_title`) y `ret-loot-title` (`ui.return.loot_title`), además del texto de `ret-continue`.

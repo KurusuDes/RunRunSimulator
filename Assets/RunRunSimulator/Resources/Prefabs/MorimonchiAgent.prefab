@@ -1040,6 +1040,7 @@ GameObject:
   - component: {fileID: 8878802987832227942}
   - component: {fileID: 7226857651512344601}
   - component: {fileID: 5912284952747808883}
+  - component: {fileID: 1670697318725607201}
   m_Layer: 8
   m_Name: MorimonchiAgent
   m_TagString: Untagged
@@ -1109,6 +1110,8 @@ MonoBehaviour:
   courtTendInterval: 0.5
   healthDecayPerGameMinute: 0.07
   energyDecayPerGameMinute: 0.1
+  energyRestPerGameMinute: 0.05
+  energyRestCap: 60
   affectDecayPerGameMinute: 0.1
   affectRestValue: 0
   affectRecoveryPerGameMinute: 0.3
@@ -1634,6 +1637,20 @@ MonoBehaviour:
   onPop: {fileID: 3934801315575141539}
   blinkController: {fileID: 2389579102656021165}
   popController: {fileID: 6923617383307863357}
+--- !u!114 &1670697318725607201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3990977039202299874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a83e38065416a2e4aac34b8a157aae90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.GrassTrampler
+  radius: 0.55
+  trail: 1
 --- !u!1 &4175857834481742551
 GameObject:
   m_ObjectHideFlags: 0
@@ -2176,6 +2193,12 @@ MonoBehaviour:
   allyNameColor: {r: 0.55, g: 0.75, b: 1, a: 1}
   rivalNameColor: {r: 0.96, g: 0.6, b: 0.6, a: 1}
   rivalRevealSpeed: 4
+  fadeUnlessLooked: 1
+  focusAngle: 10
+  unfocusedOpacity: 0.35
+  focusFadeSpeed: 6
+  closeShrinkDistance: 3
+  minCloseScale: 0.55
 --- !u!114 &227817693175286306
 MonoBehaviour:
   m_ObjectHideFlags: 0

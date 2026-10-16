@@ -1,0 +1,58 @@
+# Log/HUD_FantasyWarrior_EventLog_01
+HUD_FantasyWarrior_EventLog_01 size=700x1000 pos=0,0 anch=0,1-0,1
+  HUD_EventLog_Item size=0x80 pos=0,0 anch=0,0-0,0
+    Background size=0x80 pos=0,0 anch=0,0-1,1
+      EventLog_ItemBackground size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#1F1B16CC type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+        SPR_Tracery size=-10x70 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Box_02 col=#715B34FF type=Sliced border=(120.00, 120.00, 120.00, 120.00) ppu=3
+      Flash [inactive]
+      Flash size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Flash size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#67553280 type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+    Content size=0x0 pos=0,0 anch=0,0-0,0
+      Label_Event size=0x0 pos=0,0 anch=0,0-0,0 TXT='32 players remaining' font=Grenze-SemiBold SDF size=36 col=#FFFFFFFF style=Normal align=Left outline=0 cs=2
+  HUD_EventLog_ItemCurrency size=0x80 pos=0,0 anch=0,0-0,0
+    Background size=0x80 pos=0,0 anch=0,0-1,1
+      EventLog_ItemBackground size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#1F1B16CC type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+        SPR_Tracery size=-10x70 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Box_02 col=#715B34FF type=Sliced border=(120.00, 120.00, 120.00, 120.00) ppu=3
+      Flash [inactive]
+      Flash size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Flash size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#67553280 type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+    Content size=0x0 pos=0,0 anch=0,0-0,0
+      Label_Plus size=0x0 pos=0,0 anch=0,0-0,0 TXT='+' font=Grenze-SemiBold SDF size=36 col=#FFFFFFFF style=Normal align=Left outline=0 cs=2
+      ICON size=0x0 pos=0,0 anch=0,0-0,0 IMG=ICON_FantasyWarrior_Inventory_Currency_02_Underlay col=#FFFFFFFF type=Simple
+      Label_CurrencyValue size=0x0 pos=0,0 anch=0,0-0,0 TXT='3,400' font=Grenze-SemiBold SDF size=36 col=#FFFFFFFF style=Normal align=Left outline=0 cs=2
+  HUD_EventLog_ItemKill size=0x80 pos=0,0 anch=0,0-0,0
+    Background size=0x80 pos=0,0 anch=0,0-1,1
+      EventLog_ItemBackground size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#1F1B16CC type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+        SPR_Tracery size=-10x70 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Box_02 col=#715B34FF type=Sliced border=(120.00, 120.00, 120.00, 120.00) ppu=3
+      Flash [inactive]
+      Flash size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Flash size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#67553280 type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+    Content size=0x0 pos=0,0 anch=0,0-0,0
+      Label_UserName size=0x0 pos=0,0 anch=0,0-0,0 TXT='<color=#73CFF5>UserName' font=Grenze-SemiBold SDF size=36 col=#FFFFFFFF style=Normal align=Center outline=0 cs=2
+      ICON size=0x0 pos=0,0 anch=0,0-0,0 IMG=ICON_SM_Wep_Sword_14_Underlay col=#FFFFFFFF type=Simple
+      Label_KilledUser size=0x0 pos=0,0 anch=0,0-0,0 TXT='<color=#EC6161>UserName' font=Grenze-SemiBold SDF size=36 col=#FFFFFFFF style=Normal align=Left outline=0 cs=2
+  HUD_EventLog_ItemMapUpdate size=0x80 pos=0,0 anch=0,0-0,0
+    Background size=0x80 pos=0,0 anch=0,0-1,1
+      EventLog_ItemBackground size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#1F1B16CC type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+        SPR_Tracery size=-10x70 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Box_02 col=#715B34FF type=Sliced border=(120.00, 120.00, 120.00, 120.00) ppu=3
+      Flash [inactive]
+      Flash size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Flash size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#67553280 type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+    Content size=0x0 pos=0,0 anch=0,0-0,0
+      ICON size=0x0 pos=0,0 anch=0,0-0,0 IMG=ICON_FantasyWarrior_Map_Flag_01_Underlay col=#FFFFFFFF type=Simple
+      Label_Event size=0x0 pos=0,0 anch=0,0-0,0 TXT='Map Updated' font=Grenze-SemiBold SDF size=36 col=#FFFFFFFF style=Normal align=Center outline=0 cs=2
+  HUD_EventLog_ItemObjective size=0x80 pos=0,0 anch=0,0-0,0
+    Background size=0x80 pos=0,0 anch=0,0-1,1
+      EventLog_ItemBackground size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Background size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#1F1B16CC type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+        SPR_Tracery size=-10x70 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Tracery_Box_02 col=#715B34FF type=Sliced border=(120.00, 120.00, 120.00, 120.00) ppu=3
+      Flash [inactive]
+      Flash size=0x80 pos=0,0 anch=0,0-1,1
+        SPR_Flash size=0x80 pos=0,0 anch=0,0-1,1 IMG=SPR_HUD_FantasyWarrior_Box_Small_Parchment_01 col=#67553280 type=Sliced border=(50.00, 50.00, 50.00, 50.00) ppu=1,5
+    Content size=0x0 pos=0,0 anch=0,0-0,0
+      ICON size=0x0 pos=0,0 anch=0,0-0,0 IMG=SPR_FantasyWarrior_Map_Objective_01_Underlay col=#E5D64BFF type=Simple
+      Label_Objective size=0x0 pos=0,0 anch=0,0-0,0 TXT='Objective Updated' font=Grenze-SemiBold SDF size=36 col=#E5D64BFF style=Normal align=Center outline=0 cs=2

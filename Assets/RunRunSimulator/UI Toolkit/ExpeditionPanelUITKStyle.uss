@@ -204,6 +204,7 @@
 .exp-side {
     width: 460px;
     flex-shrink: 0;
+    padding: 44px 36px 34px 36px;
 }
 
 .exp-team {
@@ -220,16 +221,58 @@
 .exp-team__count {
     font-size: 26px;
     color: rgb(255, 255, 255);
-    margin: 4px 0 14px 0;
+    margin: 2px 0 8px 0;
 }
 
-.exp-team__pills {
-    flex-direction: row;
-    flex-wrap: wrap;
+.exp-team__row {
+    height: 58px;
+    min-height: 58px;
+    flex-shrink: 0;
+    padding: 4px 12px 4px 8px;
+}
+
+.exp-team__portrait {
+    width: 46px;
+    height: 46px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.exp-team__name {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 22px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    color: rgb(255, 255, 255);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.exp-team__row--empty {
+    opacity: 0.7;
+}
+
+.exp-team__runes {
+    width: 40px;
+    height: 40px;
+    margin: 0 14px 0 4px;
+    flex-shrink: 0;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(227, 187, 113, 0.35);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.exp-team__hint {
+    font-size: 20px;
+    color: var(--mm-ink-soft);
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
 }
 
 .exp-team__pill {
-    margin: 0 8px 8px 0;
+    flex-shrink: 0;
+    margin: 0;
 }
 
 .exp-team__pill .mm-rolepill__seg {
