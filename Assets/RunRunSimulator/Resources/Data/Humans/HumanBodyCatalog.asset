@@ -22,43 +22,60 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Bodies:
-  - Body: {fileID: 3870735287948711682, guid: 6d1182c53933dd740b21418104f940f2, type: 3}
+  - Archetype: {fileID: 11400000, guid: e93892a21603beb4bafc0375bdb45441, type: 2}
+    Body: {fileID: 3503841587104483074, guid: d9dea1544aa8d1143a8ba846424c2350, type: 3}
     Skins:
-    - {fileID: 2100000, guid: 09c03a4f32553854bb3222ad141b1c15, type: 2}
-    - {fileID: 2100000, guid: 37c16070368c86a47abcb8f33b613512, type: 2}
-    - {fileID: 2100000, guid: c3132e14367b08b43a62d7b3743fe0b4, type: 2}
-    - {fileID: 2100000, guid: f61eb2e2c93cbcd41aea05cfd811c9e4, type: 2}
-    - {fileID: 2100000, guid: c6a0868dc0ab70942b46c7436b9fa34e, type: 2}
-    - {fileID: 2100000, guid: 9d4cac277ba68ec44b98c104edb486e5, type: 2}
-  - Body: {fileID: 225824527329848260, guid: 37451f5ab535e6947a2cf9d23518666f, type: 3}
+    - {fileID: 2100000, guid: 48c1b0d0a265ad64b86113f37530650b, type: 2}
+    - {fileID: 2100000, guid: c6dd6296d8db775499ef29915469e9ed, type: 2}
+    - {fileID: 2100000, guid: c10d950a39f1d8e46a82c1f5393109be, type: 2}
+    - {fileID: 2100000, guid: 0f5f5bceb36978b40ba9bf2a74adf083, type: 2}
+  - Archetype: {fileID: 11400000, guid: b8573dfb6d0e0004cba408c6691bcb68, type: 2}
+    Body: {fileID: 1236491122687428140, guid: 11f5305a6c63fa44a9a06d629bd3b821, type: 3}
     Skins:
-    - {fileID: 2100000, guid: 09c03a4f32553854bb3222ad141b1c15, type: 2}
-    - {fileID: 2100000, guid: 37c16070368c86a47abcb8f33b613512, type: 2}
-    - {fileID: 2100000, guid: c3132e14367b08b43a62d7b3743fe0b4, type: 2}
-    - {fileID: 2100000, guid: f61eb2e2c93cbcd41aea05cfd811c9e4, type: 2}
-    - {fileID: 2100000, guid: c6a0868dc0ab70942b46c7436b9fa34e, type: 2}
-    - {fileID: 2100000, guid: 9d4cac277ba68ec44b98c104edb486e5, type: 2}
-  - Body: {fileID: 7180191723893214615, guid: be339ccd37409ba4c90fbc7d2dfc181f, type: 3}
+    - {fileID: 2100000, guid: 1785665d3114ff64ea2c8797246ae54b, type: 2}
+    - {fileID: 2100000, guid: f92733e5126a5c54ea1ea5e208622bbb, type: 2}
+    - {fileID: 2100000, guid: 8ef4c3e8030005b4f9464ea6f0c4161c, type: 2}
+    - {fileID: 2100000, guid: 2024bea9013fa1c4991c2f8aefa3aeaa, type: 2}
+  - Archetype: {fileID: 11400000, guid: 96acd0062b9110a459aa5b7c5a2874e2, type: 2}
+    Body: {fileID: 9118425851158637246, guid: 32ebf8b76fb556f4e8fd5d5b6794feef, type: 3}
     Skins:
-    - {fileID: 2100000, guid: 09c03a4f32553854bb3222ad141b1c15, type: 2}
-    - {fileID: 2100000, guid: 37c16070368c86a47abcb8f33b613512, type: 2}
-    - {fileID: 2100000, guid: c3132e14367b08b43a62d7b3743fe0b4, type: 2}
-    - {fileID: 2100000, guid: f61eb2e2c93cbcd41aea05cfd811c9e4, type: 2}
-    - {fileID: 2100000, guid: c6a0868dc0ab70942b46c7436b9fa34e, type: 2}
-    - {fileID: 2100000, guid: 9d4cac277ba68ec44b98c104edb486e5, type: 2}
-  - Body: {fileID: 327051844388930226, guid: 040b3db8d1c829f43bee4e2a638082a0, type: 3}
+    - {fileID: 2100000, guid: 6e92c415974cbee48bf070dc8b76890f, type: 2}
+    - {fileID: 2100000, guid: 5ec6b7c8ca75d6e4a87b76c56b27d5fd, type: 2}
+    - {fileID: 2100000, guid: a9f2682e438fc1441b17635c55b0b609, type: 2}
+    - {fileID: 2100000, guid: ff805a458dea43144aa75c74c7bbdf3e, type: 2}
+  - Archetype: {fileID: 11400000, guid: 96acd0062b9110a459aa5b7c5a2874e2, type: 2}
+    Body: {fileID: 4690586608582800450, guid: 3159d6fa5bfa10c45a7a47c1db50b599, type: 3}
     Skins:
-    - {fileID: 2100000, guid: 09c03a4f32553854bb3222ad141b1c15, type: 2}
-    - {fileID: 2100000, guid: 37c16070368c86a47abcb8f33b613512, type: 2}
-    - {fileID: 2100000, guid: c3132e14367b08b43a62d7b3743fe0b4, type: 2}
-    - {fileID: 2100000, guid: f61eb2e2c93cbcd41aea05cfd811c9e4, type: 2}
-    - {fileID: 2100000, guid: c6a0868dc0ab70942b46c7436b9fa34e, type: 2}
-    - {fileID: 2100000, guid: 9d4cac277ba68ec44b98c104edb486e5, type: 2}
-  - Body: {fileID: 7948765858999820756, guid: e083b1ec3eaee064795b590f2d6ca953, type: 3}
+    - {fileID: 2100000, guid: 1900593c798544d4f893cd901107bf89, type: 2}
+    - {fileID: 2100000, guid: 844060102e68a244ea6a21da2cb49eed, type: 2}
+    - {fileID: 2100000, guid: 10bbccbead6202a4db86207471c3ffcc, type: 2}
+    - {fileID: 2100000, guid: e2810207d2b43a24e9343fc3501940a4, type: 2}
+  - Archetype: {fileID: 11400000, guid: d5742c846282bf241aa6fd000cff6413, type: 2}
+    Body: {fileID: 2938110051217538250, guid: 312af513115a328449b3eee6616c28aa, type: 3}
     Skins:
-    - {fileID: 2100000, guid: 09c03a4f32553854bb3222ad141b1c15, type: 2}
-    - {fileID: 2100000, guid: 37c16070368c86a47abcb8f33b613512, type: 2}
-    - {fileID: 2100000, guid: c3132e14367b08b43a62d7b3743fe0b4, type: 2}
-    - {fileID: 2100000, guid: f61eb2e2c93cbcd41aea05cfd811c9e4, type: 2}
-    - {fileID: 2100000, guid: c6a0868dc0ab70942b46c7436b9fa34e, type: 2}
-    - {fileID: 2100000, guid: 9d4cac277ba68ec44b98c104edb486e5, type: 2}
+    - {fileID: 2100000, guid: 3e08372d3e9476f498afc26e0e8bdf37, type: 2}
+    - {fileID: 2100000, guid: 21c7adf12da45b14fb33bd40a727aafc, type: 2}
+    - {fileID: 2100000, guid: 0002dd42bde60d04485c5a7aa147158a, type: 2}
+    - {fileID: 2100000, guid: cca2290934467b34fa0a8f576cef0bd1, type: 2}
+  - Archetype: {fileID: 11400000, guid: a44a7a4dcd9b42c43a51589ae29bb27a, type: 2}
+    Body: {fileID: 7282746773621991919, guid: 40bec3aeca80eea46a9f6c8a7580e5d8, type: 3}
+    Skins:
+    - {fileID: 2100000, guid: 01107243c7c119a43b5de7c2cb40d3b6, type: 2}
+    - {fileID: 2100000, guid: 4d997379dc0b649408c04ddbace5b9ad, type: 2}
+    - {fileID: 2100000, guid: 79eb4f912ec6e934c86c28fad5d17eb1, type: 2}
+    - {fileID: 2100000, guid: ac3d17f75cd6b5f48a8e05aec1acd12d, type: 2}
+  - Archetype: {fileID: 11400000, guid: a44a7a4dcd9b42c43a51589ae29bb27a, type: 2}
+    Body: {fileID: 7477423648263499031, guid: 710dbef21777cd445a9eafa595086576, type: 3}
+    Skins:
+    - {fileID: 2100000, guid: 28069ae28d43707479f8d84cffa86bfa, type: 2}
+    - {fileID: 2100000, guid: 55660d1d8820a0143bf9f380cd7c1553, type: 2}
+    - {fileID: 2100000, guid: accc0b14ad1dad647a71ed0982b132f3, type: 2}
+    - {fileID: 2100000, guid: 90746791fa100cd4dae13b66ea91e09d, type: 2}
+  - Archetype: {fileID: 11400000, guid: 96acd0062b9110a459aa5b7c5a2874e2, type: 2}
+    Body: {fileID: 917897495158557493, guid: 9e9d143a6385bea42979abd1ff071633, type: 3}
+    Skins:
+    - {fileID: 2100000, guid: a08b0e58d82aa1a4ba7b722abe32c2b7, type: 2}
+  - Archetype: {fileID: 11400000, guid: 96acd0062b9110a459aa5b7c5a2874e2, type: 2}
+    Body: {fileID: 7576054456247305545, guid: 8f35300a4d83576419b281d34dd130ac, type: 3}
+    Skins:
+    - {fileID: 2100000, guid: 7f13c2e14fc24564087945f04d4eb7b0, type: 2}

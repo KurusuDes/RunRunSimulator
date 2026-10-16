@@ -27,6 +27,10 @@ tags: [index, arte, vegetacion, pasto]
 - **Ghost of Tsushima (GDC 2021, Eric Wohllaib):** briznas generadas en GPU, agrupadas en matas por ruido celular (comparten giro, altura y curva), normales curvadas en el fragment para que la brizna se vea redonda, ensanchamiento en espacio de vista cuando la brizna está de canto, color de base a punta y AO falso por altura.
 - **Comunidad (Godot, Unity, recreaciones de BotW/Genshin):** iluminar con la normal del terreno, color de la raíz = color del suelo (el pasto "sale" del piso), manchas de color por ruido de escala grande, sin sombras propias en la brizna, flores y matas como acentos de escala distinta.
 
+## Pendientes
+
+- **Fundido por distancia (Juan, S163)**: como en Genshin, el pasto tiene una distancia de dibujado: de lejos las briznas se desvanecen (encogen o bajan densidad) y aparecen al acercarse, así se ve bien de lejos y de cerca. Idea: en `ArenaGrass.shader` escalar la altura de la brizna a 0 entre dos distancias a cámara (`_FadeStart` / `_FadeEnd`, por ejemplo 35 y 60 m) con dither por brizna para que no se vea una línea; de lejos el suelo verde con la misma rampa de color sostiene la lectura. Además baja el costo (S163: 5 M vértices tras replicar el pasto del patio en toda la escena).
+
 ## Fuentes
 - [GDC Vault: Procedural Grass in Ghost of Tsushima](https://gdcvault.com/play/1027214/Advanced-Graphics-Summit-Procedural-Grass)
 - [2Retr0/GodotGrass (implementación basada en la charla)](https://github.com/2Retr0/GodotGrass)

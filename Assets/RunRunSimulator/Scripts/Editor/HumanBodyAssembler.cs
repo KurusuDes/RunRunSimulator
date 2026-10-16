@@ -10,21 +10,11 @@ namespace MoriMonchiSimulator
 {
 public static class HumanBodyAssembler
 {
-    private struct Recipe
-    {
-        public string Name;
-        public int Head;
-        public int Nose;
-        public int Hair;
-        public int Beard;
-        public string[] Attachments;
-    }
-
-    private const string SynRoot = "Assets/Synty/SidekickCharacters/Resources/Meshes";
     private const string ColorMapPath = "Assets/Synty/SidekickCharacters/Characters/Starter/Starter_01/Textures/T_Starter_01ColorMap.png";
     private const string MeshDir = "Assets/RunRunSimulator/Resources/Models/Humans";
-    private const string Knight = "Outfits/Starter/SK_FANT_KNGT_17_";
-    private const string Human = "Species/Humans/SK_HUMN_BASE_";
+    private const string Human = "SK_HUMN_BASE_";
+    private const string ControllerNpc = AnimDir + "/HumanNpcSK.controller";
+    private const string ControllerNpcFemn = AnimDir + "/HumanNpcSK_Femn.overrideController";
     private const string TemplatePath = "Assets/RunRunSimulator/Resources/Materials/Brawl/Scarecrow/SC_Burlap.mat";
     private const string TexDir = "Assets/RunRunSimulator/Resources/Textures/Humans";
     private const string MatDir = "Assets/RunRunSimulator/Resources/Materials/Humans";
@@ -37,19 +27,13 @@ public static class HumanBodyAssembler
     private static readonly string[] SkinPresets =
         { "Human - Light Tan", "Human - Tan", "Human - Dark Tan", "Human - Light Brown", "Human - Medium Brown", "Human - Dark Brown" };
 
-    private static readonly Recipe[] Recipes =
-    {
-        new Recipe { Name = "Knight_01", Head = 1, Nose = 1, Hair = 4, Beard = 10, Attachments = new[] { "29ASHL", "30ASHR", "25AHPF", "33AKNL", "34AKNR" } },
-        new Recipe { Name = "Knight_02", Head = 1, Nose = 3, Hair = 0, Beard = 8, Attachments = new[] { "22AHED", "29ASHL", "30ASHR", "26AHPB" } },
-        new Recipe { Name = "Knight_03", Head = 2, Nose = 7, Hair = 6, Beard = 0, Attachments = new[] { "25AHPF" } },
-        new Recipe { Name = "Knight_04", Head = 1, Nose = 5, Hair = 8, Beard = 1, Attachments = new[] { "24ABAC", "29ASHL", "30ASHR", "31AEBL", "32AEBR" } },
-        new Recipe { Name = "Knight_05", Head = 2, Nose = 11, Hair = 0, Beard = 0, Attachments = new[] { "22AHED", "29ASHL", "30ASHR", "27AHPL", "28AHPR", "33AKNL", "34AKNR" } },
-    };
+    private static readonly string[] RoleHumanSkins =
+        { "Human - Light Tan", "Human - Tan", "Human - Light Brown", "Human - Dark Brown" };
 
-    private static readonly string[] KnightBody =
-        { "10TORS", "11AUPL", "12AUPR", "13ALWL", "14ALWR", "15HNDL", "16HNDR", "17HIPS", "18LEGL", "19LEGR", "20FOTL", "21FOTR" };
+    private const string Civilian = "SK_SCFI_CIVL_09_";
 
-    private const string Civilian = "Outfits/Starter/SK_SCFI_CIVL_09_";
+    private static Dictionary<string, string> partIndex;
+    private static bool controllerErrorLogged;
 
     private static readonly string[] PlayerLegs = { "17HIPS", "18LEGL", "19LEGR", "20FOTL", "21FOTR" };
 
@@ -64,25 +48,115 @@ public static class HumanBodyAssembler
         EnsureFolder(CatalogDir);
         EnsureFolder(MeshDir);
 
+        partIndex = HumanRoleRecipes.BuildPartIndex();
+        controllerErrorLogged = false;
+
         var materials = BuildPresetMaterials();
         var runtime = new SidekickRuntime(Resources.Load<GameObject>("Meshes/SK_BaseModel"), materials[0]);
-        var bodies = new List<GameObject>();
 
-        foreach (var recipe in Recipes)
-        {
-            var body = BuildBodyPrefab(runtime, recipe, materials[0]);
-            if (body != null) bodies.Add(body);
-        }
-
+        SetShape(runtime, 0f, 0f, 0f);
         var arms = BuildArmsPrefab(runtime, materials[0]);
         BuildPlayerBodyPrefab(runtime, materials[0]);
-        UpdateCatalog(bodies, materials);
+
+        var roles = HumanRoleRecipes.Load();
+        var db = new DatabaseManager();
+        db.GetDbConnection(true);
+        var template = AssetDatabase.LoadAssetAtPath<Material>(TemplatePath);
+        var entries = new List<HumanBodyCatalogSO.Entry>();
+        int built = 0, neighbors = 0, missing = 0;
+
+        foreach (var role in roles)
+        {
+            var variants = BuildRoleMaterials(db, template, role);
+            if (variants == null) { missing++; continue; }
+            var body = BuildRoleBody(runtime, role, variants[0]);
+            if (body == null) { missing++; continue; }
+            built++;
+            if (string.IsNullOrEmpty(role.Archetype)) { neighbors++; continue; }
+            var archetype = FindArchetype(role.Archetype);
+            if (archetype == null)
+            {
+                Debug.LogError("[HumanBodyAssembler] Arquetipo no encontrado: " + role.Archetype + " (rol " + role.Name + ")");
+                missing++;
+                continue;
+            }
+            entries.Add(new HumanBodyCatalogSO.Entry { Archetype = archetype, Body = body, Skins = variants });
+        }
+
+        UpdateCatalog(entries);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.ImportAsset(MeshDir, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
         AssetDatabase.ImportAsset(PrefabDir, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
         AssetDatabase.Refresh();
-        Debug.Log("[HumanBodyAssembler] Materiales=" + materials.Count + " Cuerpos=" + bodies.Count + " FPArms=" + (arms != null) + " Catalogo=" + CatalogDir + "/HumanBodyCatalog.asset");
+        Debug.Log("[HumanBodyAssembler] Roles=" + built + " Vecinos=" + neighbors + " Catalogo=" + entries.Count + " Faltantes=" + missing + " FPArms=" + (arms != null));
+    }
+
+    private static void SetShape(SidekickRuntime runtime, float bodyType, float bodySize, float muscle)
+    {
+        runtime.BodyTypeBlendValue = bodyType;
+        runtime.MusclesBlendValue = muscle;
+        runtime.BodySizeHeavyBlendValue = bodySize > 0f ? bodySize : 0f;
+        runtime.BodySizeSkinnyBlendValue = bodySize < 0f ? -bodySize : 0f;
+    }
+
+    private static List<Material> BuildRoleMaterials(DatabaseManager db, Material template, HumanRoleRecipe role)
+    {
+        var colorMap = AssetDatabase.LoadAssetAtPath<Texture2D>(HumanRoleRecipes.ColorMapTexturePath(role.ColorMap));
+        if (colorMap == null)
+        {
+            Debug.LogError("[HumanBodyAssembler] ColorMap no encontrado para rol " + role.Name + ": " + role.ColorMap);
+            return null;
+        }
+
+        var source = ReadPixels(colorMap);
+        var skins = role.Species == "Elf" ? new string[] { null } : RoleHumanSkins;
+        var result = new List<Material>();
+        for (int i = 0; i < skins.Length; i++)
+        {
+            var tex = new Texture2D(colorMap.width, colorMap.height, TextureFormat.RGBA32, false, false);
+            tex.SetPixels(source);
+            if (skins[i] != null) ApplyPreset(db, tex, skins[i]);
+            tex.Apply();
+            var suffix = "Role_" + role.Name + "_" + i;
+            var saved = WriteTexture(TexDir + "/T_" + suffix + ".png", tex);
+            result.Add(SaveMaterial(MatDir + "/M_" + suffix + ".mat", template, saved));
+            Object.DestroyImmediate(tex);
+        }
+        return result;
+    }
+
+    private static CustomerArchetypeSO FindArchetype(string displayName)
+    {
+        foreach (var guid in AssetDatabase.FindAssets("t:CustomerArchetypeSO"))
+        {
+            var so = AssetDatabase.LoadAssetAtPath<CustomerArchetypeSO>(AssetDatabase.GUIDToAssetPath(guid));
+            if (so != null && so.DisplayName == displayName) return so;
+        }
+        return null;
+    }
+
+    private static GameObject BuildRoleBody(SidekickRuntime runtime, HumanRoleRecipe role, Material mat)
+    {
+        SetShape(runtime, role.BodyType, role.BodySize, role.Muscle);
+        var go = Combine(runtime, role.Name, role.Parts);
+        if (go == null) return null;
+
+        ApplyMaterial(go, mat);
+        var controllerPath = role.BodyType > 0f ? ControllerNpcFemn : ControllerNpc;
+        ConfigureAnimator(go, LoadController(controllerPath));
+        return SavePrefab(go, BodyDir + "/Human_" + role.Name + ".prefab");
+    }
+
+    private static RuntimeAnimatorController LoadController(string path)
+    {
+        var controller = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
+        if (controller == null && !controllerErrorLogged)
+        {
+            controllerErrorLogged = true;
+            Debug.LogError("[HumanBodyAssembler] Controller no encontrado: " + path);
+        }
+        return controller;
     }
 
     private static List<Material> BuildPresetMaterials()
@@ -104,7 +178,7 @@ public static class HumanBodyAssembler
             foreach (var group in new[] { ColorGroupOutfits, ColorGroupAttachments, ColorGroupMaterials })
                 ApplyPreset(db, tex, knight, group);
             tex.Apply();
-            result.Add(SaveMaterial(name, template, WriteTexture(TexDir + "/T_Human_" + name + ".png", tex)));
+            result.Add(SaveMaterial(MatDir + "/M_Human_" + name + ".mat", template,WriteTexture(TexDir + "/T_Human_" + name + ".png", tex)));
             Object.DestroyImmediate(tex);
         }
         return result;
@@ -162,9 +236,8 @@ public static class HumanBodyAssembler
         return px;
     }
 
-    private static Material SaveMaterial(string name, Material template, Texture2D tex)
+    private static Material SaveMaterial(string path, Material template, Texture2D tex)
     {
-        var path = MatDir + "/M_Human_" + name + ".mat";
         var mat = AssetDatabase.LoadAssetAtPath<Material>(path);
         if (mat == null)
         {
@@ -191,26 +264,6 @@ public static class HumanBodyAssembler
         return mat;
     }
 
-    private static GameObject BuildBodyPrefab(SidekickRuntime runtime, Recipe r, Material mat)
-    {
-        var names = new List<string>
-        {
-            HumanPart(r.Head, "01HEAD"), HumanPart(1, "03EBRL"), HumanPart(1, "04EBRR"), HumanPart(1, "05EYEL"), HumanPart(1, "06EYER"),
-            HumanPart(1, "07EARL"), HumanPart(1, "08EARR"), HumanPart(r.Nose, "35NOSE"), HumanPart(1, "36TETH"), HumanPart(1, "37TONG"),
-        };
-        if (r.Hair > 0) names.Add(HumanPart(r.Hair, "02HAIR"));
-        if (r.Beard > 0) names.Add(HumanPart(r.Beard, "09FCHR"));
-        foreach (var t in KnightBody) names.Add(Knight + t + "_HU01");
-        foreach (var t in r.Attachments) names.Add(Knight + t + "_HU01");
-
-        var go = Combine(runtime, r.Name, names);
-        if (go == null) return null;
-
-        ApplyMaterial(go, mat);
-        ConfigureAnimator(go, AnimDir + "/HumanNpc.controller");
-        return SavePrefab(go, BodyDir + "/Human_" + r.Name + ".prefab");
-    }
-
     private static GameObject BuildArmsPrefab(SidekickRuntime runtime, Material mat)
     {
         var names = new List<string>();
@@ -226,7 +279,7 @@ public static class HumanBodyAssembler
             smr.receiveShadows = false;
             smr.updateWhenOffscreen = true;
         }
-        var an = ConfigureAnimator(go, AnimDir + "/FPArms.controller");
+        var an = ConfigureAnimator(go, LoadController(AnimDir + "/FPArms.controller"));
         an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         go.AddComponent<PlayerAnimator>();
         EnsureFolder(PrefabDir);
@@ -261,7 +314,7 @@ public static class HumanBodyAssembler
             Object.DestroyImmediate(view);
         }
 
-        var an = ConfigureAnimator(go, AnimDir + "/PlayerBody.controller");
+        var an = ConfigureAnimator(go, LoadController(AnimDir + "/PlayerBody.controller"));
         an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         return SavePrefab(go, PrefabDir + "/PlayerBody.prefab");
     }
@@ -304,7 +357,8 @@ public static class HumanBodyAssembler
         var parts = new List<SkinnedMeshRenderer>();
         foreach (var n in partNames)
         {
-            var fbx = AssetDatabase.LoadAssetAtPath<GameObject>(SynRoot + "/" + n + ".fbx");
+            GameObject fbx = null;
+            if (partIndex.TryGetValue(n, out var fbxPath)) fbx = AssetDatabase.LoadAssetAtPath<GameObject>(fbxPath);
             if (fbx == null)
             {
                 Debug.LogError("[HumanBodyAssembler] Parte no encontrada: " + n);
@@ -352,12 +406,12 @@ public static class HumanBodyAssembler
         }
     }
 
-    private static Animator ConfigureAnimator(GameObject go, string controllerPath)
+    private static Animator ConfigureAnimator(GameObject go, RuntimeAnimatorController controller)
     {
         var an = go.GetComponent<Animator>();
         if (an == null) an = go.AddComponent<Animator>();
         an.applyRootMotion = false;
-        an.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(controllerPath);
+        an.runtimeAnimatorController = controller;
         return an;
     }
 
@@ -368,7 +422,7 @@ public static class HumanBodyAssembler
         return prefab;
     }
 
-    private static void UpdateCatalog(List<GameObject> bodies, List<Material> skins)
+    private static void UpdateCatalog(List<HumanBodyCatalogSO.Entry> entries)
     {
         var path = CatalogDir + "/HumanBodyCatalog.asset";
         var catalog = AssetDatabase.LoadAssetAtPath<HumanBodyCatalogSO>(path);
@@ -378,9 +432,7 @@ public static class HumanBodyAssembler
             AssetDatabase.CreateAsset(catalog, path);
         }
 
-        catalog.Bodies = new List<HumanBodyCatalogSO.Entry>();
-        foreach (var b in bodies)
-            catalog.Bodies.Add(new HumanBodyCatalogSO.Entry { Body = b, Skins = new List<Material>(skins) });
+        catalog.Bodies = entries;
 
         EditorUtility.SetDirty(catalog);
     }

@@ -4,6 +4,33 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-16 (Session 163 — **escenario alineado al estilo POLYGON Fantasy Village (techos de paja, muros de yeso, zócalo, remates, calle empedrada, relleno), pasto del patio en toda la escena, vidrio cartoon, NPCs Sidekick por rol (14 cuerpos con elfa y elfo) con Animator nuevo y 16 clips propios de Blender** — 2 `.cs` creados, 3 modificados, 1 shader nuevo; consola sin errores nuevos; verificado en Play con capturas en `Captures/S163/`)
+
+**Focus:** Juan: "exploremos qué props del paquete nos sirven de decorado… alinear nuestras estructuras para que parezcamos todos de un mismo estilo"; en paralelo NPCs Sidekick y animaciones faltantes (Blender). A mitad de sesión: "vi uno de elfos que me gustaría incluir".
+
+**Hecho:**
+1. **Pasto:** receta del patio (material, briznas, matas) replicada en toda la escena (áreas cerca 150 / lejos 85) + área `FrenteTienda` (franja entre vereda y tienda, nunca tuvo área) con exclusión de la rampa. 5 M vértices.
+2. **FantasyVillage** importado completo sin personajes (~640 MB, gitignored). Análisis y veredictos en `Captures/S163/analisis_fantasyvillage.md` (sección "Hecho" con todos los nombres de objetos).
+3. **Estructuras (sin tocar geometría ni colliders):** techo de paja `Roof_Thatch_Preset_04` en 11 alas (techos viejos apagados); muros con caras verticales a yeso (copias `*_FV` en `Models/Shop/FVRestyle/`); zócalo de cantos rodados (`FV_Zocalo`); remates (`FV_Remates`: verde en techos, hiedra, 3 chimeneas; `FV_RematesMuro`: hiedra y 46 postigos); calle empedrada y vereda de losas (`ShopStreet_FV`, UV planos); relleno sur (`ENVIROMENT/FV_Relleno`: banderines, campanarios, tablón de misiones, mercado, pozo); cerca del patio en madera envejecida (`SH_FVFence_A/B`).
+4. **Vidrio cartoon:** shader `MoriMonchi/CartoonGlass` (transparente, franjas diagonales en espacio objeto, fresnel) en `M_CartoonGlass`; reemplaza `SH_Glass_Env` en ventanas, vitrinas y mostrador (no en bebederos ni charcos). Juan: "tus ventanas salieron muy bien".
+5. **NPCs:** 14 roles en `ScriptableObjects/NPC/HumanRoles.json` (5 vecinos + 9 cuerpos de cliente, incluye `ClienteElfa`/`ClienteElfo` de SIDEKICK_ElvenWarriors); `HumanBodyAssembler` arma por rol con ColorMap del preset, forma (BodyType/Size/Muscle) y 4 pieles; catálogo filtra por arquetipo; Animator `HumanNpcSK` + override `_Femn` (locomoción, Browse/Queue/Talk, Pay→Happy, Upset); `NpcBody` traduce estados. 16 clips `A_MM_*` (recibir, cargar, entregar, pagar, levantar, sentarse ×M/F) creados en Blender por agente e importados como Humanoid (`CreateFromThisModel`: el nodo `Armature` rompe `CopyFromOther`). Informe: `Captures/S163/npcs_animaciones.md`.
+6. Limpieza: `POOLS/DefaultDamageNumberPo` (texto "Something: 1" suelto) apagado; zócalo quitado del umbral de la puerta del patio.
+
+**Quirks ⚠️:** (1) Las capturas con cámara posicionada del MCP salen **sin post procesado**: para ver el look real crear una cámara temporal con `UniversalAdditionalCameraData.renderPostProcessing=true` y capturar con `camera=`. (2) El MCP reintenta `execute_code` largos: todo script que crea objetos debe ser idempotente (el zócalo quedó triplicado una vez). (3) La otra PC necesita importar FantasyVillage (sin personajes), SIDEKICK_ElvenWarriors (outfits + especie + presets) y los ColorMap de Villagers/Sorcerers/Knights (subpaquetes en `%TEMP%\AssetVaultFinder_cache\subsets`). (4) Errores `Animator.GotoState`/`Invalid Layer Index` de `MonchiLocomotionAnimator.cs:185` en Play: preexistentes, no de esta sesión. (5) Los clientes se van al instante si las vitrinas no tienen MoriMonchis libres.
+
+**Siguiente paso (S164) — pedidos de Juan al cierre:**
+1. **Paleta de abajo vs techos:** los techos gustan; muros, zócalo y madera no cuadran en color. Unificar con la paleta de los techos FV.
+2. **Errores de modelado:** una banca de la fachada atraviesa el zócalo de piedra; revisar otras zonas donde no cuadra.
+3. **Kit modular en Blender (no rehacer de cero):** muro, esquina, ventana, puerta, zócalo y remates que encajen artísticamente con FV, editables como FBX, para reemplazar las estructuras de abajo pieza por pieza.
+4. **Como la referencia FV:** curvaturas suaves (no todo líneas rectas) y textura en paredes, efecto de ladrillo/piedra lisa con madera.
+5. **Pasto con fundido por distancia** tipo Genshin (anotado en `Index/36` → Pendientes).
+6. NPCs: poner a los vecinos en escena y usar los clips de recibir/cargar/sentarse; borrar los 5 `Human_Knight_*` viejos; Body Type del protagonista (sigue el cuerpo viejo).
+7. Arrastrados de S162: FPS en build, pasada de inglés de las ~160 claves, Arena sandbox, huevos como candidatos a padre.
+
+**Archivos `.cs` S163 — creados (2):** `Scripts/Editor/HumanNpcAnimatorBuilder.cs`, `Scripts/Editor/HumanRoleRecipes.cs` · **modificados (3):** `Scripts/Editor/HumanBodyAssembler.cs`, `Scripts/Data/Customers/HumanBodyCatalogSO.cs`, `Scripts/World/Npc/NpcBody.cs` · **shaders:** `Shaders/CartoonGlass.shader` (nuevo)
+
+---
+
 **Session:** 2026-10-16 (Session 162 — **HUD y run del Brawl con el Warrior HUD de Synty, pulido de pantallas (PC, Libro, Crianza, Almacén, Bajada), Loc de datos, 1,2 GB de assets de la bóveda, post procesado de la tienda, pasto nuevo (receta Genshin/Fenyx, máscara, relieve, pisoteo), bosque FantasyVillage y cielo con montañas** — 6 `.cs` creados, 23 modificados; consola 0 errores; verificado en Play con capturas en `Captures/S162/`)
 
 **Focus:** Juan: "termina la HUD de combate y todas las demás", después pasar el GDD a la bóveda de assets e importar lo útil; luego pasto (Genshin Impact e Immortals Fenyx Rising como referentes), árboles y cielo de POLYGON Fantasy Village. Visión dada (memoria `project-vision-pueblo-solarpunk`): pueblito rural-moderno solarpunk en rotonda con parque central, anillos de tiendas/misiones, bosque y montañas.

@@ -11,6 +11,7 @@ public class HumanBodyCatalogSO : SerializedScriptableObject
     [Serializable]
     public class Entry
     {
+        public CustomerArchetypeSO Archetype;
         public GameObject Body;
         public List<Material> Skins = new();
     }
@@ -18,17 +19,24 @@ public class HumanBodyCatalogSO : SerializedScriptableObject
     [Title("Bodies")]
     public List<Entry> Bodies = new();
 
-    public bool TryPick(out GameObject body, out Material skin)
+    public bool TryPick(CustomerArchetypeSO archetype, out GameObject body, out Material skin)
     {
         body = null;
         skin = null;
 
         var valid = new List<Entry>();
+        var matching = new List<Entry>();
         if (Bodies != null)
         {
             foreach (var e in Bodies)
-                if (e != null && e.Body != null) valid.Add(e);
+            {
+                if (e == null || e.Body == null) continue;
+                valid.Add(e);
+                if (archetype != null && e.Archetype == archetype) matching.Add(e);
+            }
         }
+
+        if (matching.Count > 0) valid = matching;
 
         if (valid.Count == 0)
         {
