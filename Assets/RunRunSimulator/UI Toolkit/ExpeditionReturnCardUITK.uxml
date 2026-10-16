@@ -1,31 +1,37 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="ExpeditionReturnCardUITKStyle.uss" />
-    <ui:VisualElement name="ret-root" class="mm-theme mm-skin ret">
-        <ui:VisualElement name="ret-backdrop" class="ret-scrim">
-            <ui:VisualElement name="ret-panel" class="mm-panel mm-panel--compact ret-panel">
-                <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
-                <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
-                <ui:Label name="ret-title" text="" class="mm-title ret-title" />
-                <ui:VisualElement class="mm-bar" />
-                <ui:VisualElement class="ret-body">
-                    <ui:VisualElement class="ret-reward">
-                        <ui:VisualElement class="mm-statbox ret-reward__box">
-                            <ui:VisualElement class="ret-reward__gem" />
-                        </ui:VisualElement>
-                        <ui:VisualElement class="ret-reward__text">
-                            <ui:Label name="ret-minerita" text="" class="ret-minerita" />
-                            <ui:Label name="ret-rooms" text="" class="ret-rooms" />
-                        </ui:VisualElement>
+    <ui:VisualElement name="ret-root" class="mm-theme mm-skin mm-screen ret">
+        <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
+        <ui:VisualElement class="ret-content">
+            <ui:Label name="ret-title" text="" class="mm-title ret-title" />
+            <ui:VisualElement class="mm-bar ret-bar" />
+            <ui:VisualElement name="ret-team" class="ret-team" />
+            <ui:Label name="ret-noexploration" text="" class="ret-note" />
+            <ui:VisualElement class="ret-columns">
+                <ui:VisualElement class="mm-panel mm-panel--compact ret-col">
+                    <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                    <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                    <ui:Label name="ret-result-title" text="" class="mm-section ret-col__title" />
+                    <ui:VisualElement class="mm-row ret-line">
+                        <ui:VisualElement class="mm-statbox"><ui:VisualElement class="ret-icon ret-icon--rooms" /></ui:VisualElement>
+                        <ui:Label name="ret-rooms" text="" class="ret-rooms" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="mm-panel mm-panel--compact ret-col">
+                    <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                    <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                    <ui:Label name="ret-loot-title" text="" class="mm-section ret-col__title" />
+                    <ui:VisualElement class="mm-row ret-line">
+                        <ui:VisualElement class="mm-statbox"><ui:VisualElement class="ret-icon ret-icon--gem" /></ui:VisualElement>
+                        <ui:Label name="ret-minerita" text="" class="ret-minerita" />
                     </ui:VisualElement>
                     <ui:Label name="ret-lost" text="" class="ret-lost" />
-                    <ui:VisualElement name="ret-team" class="ret-team" />
-                    <ui:Label name="ret-noexploration" text="" class="ret-note" />
-                </ui:VisualElement>
-                <ui:VisualElement class="ret-actions">
-                    <ui:Button name="ret-continue" text="" class="mm-button mm-button--big ret-continue" />
                 </ui:VisualElement>
             </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="ret-actions">
+            <ui:Button name="ret-continue" text="" class="mm-button mm-button--big ret-continue" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -4,6 +4,32 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-15/16 (Session 161 — **overhaul de UI por pantalla con el kit de Synty: limpieza de UI vieja, HUD con encargos y avisos contextuales, hotbar estilo FarmingLife con íconos renderizados, Libro, Crianza, PC, Almacén, Venta, Regreso, Bajada, HUD del combate y carteles del mundo** — 8 `.cs` creados, 22 modificados, 2 borrados; consola 0 errores; todo verificado en Play con capturas en `Captures/S161/`)
+
+**Focus:** Juan: "termina de mostrarme la nueva UI, el roadmap de referencias y diseños"; "debemos deshacernos de toda la UI que no esté usando los nuevos asset packages"; la leyenda del HUD se adapta; "nuestra hotbar luce por debajo de Synty, no aprovechamos el paquete"; después "continúa con todo lo demás". Los assets nuevos (SyntyPass, 181 packs en `E:\GitHub\AssetVaultFinder`) quedaron para otra sesión.
+
+**Hecho:**
+1. **Galería y roadmap** (artifact `claude.ai/artifact/N3UpoMexRkG49b9T2GmT44`, v2, archivo `Captures/S161/ui_roadmap.html`): las 11 pantallas en Play al lado de su referencia Synty con veredicto, inventario de UI a eliminar y roadmap por pantalla.
+2. **Limpieza:** borrado el Canvas UGUI (grilla vieja + cruz), el UIDocument de prueba (`TestGrid.uxml`, `MainMenuStyle.uss`), `CreatureGridUI.cs`, `CreatureVisualUI.cs`, `CreatureCardUITK.uxml` y sus prefabs, y las etiquetas TMP de depuración de corrales, incubadora, caja, sala de juegos, vitrinas, comederos y decoraciones (prefabs y escena). `ChasRegister.prefab` tenía un script faltante: se quitó para poder guardarlo.
+3. **HUD:** leyenda de teclas y EN/ES fuera; arriba a la izquierda **encargos del día** (`OrdersHudUITK`); retícula del kit (punto → anillo dorado al apuntar) y **aviso contextual** (`PlayerFocusProbe` + `FocusPromptUITK`: E Acariciar / Mantener E Agarrar / E Usar / Soltar / Lanzar), con rótulo de muebles vía `IFocusLabel` (reemplaza los TMP flotantes); saldos solo con número. El toggle `ShowKeyHints` ahora controla los avisos.
+4. **Bug arreglado:** el rayo de interacción de `PlayerController` chocaba con el propio cuerpo del jugador al mirar abajo (desde el cuello de S158): ahora se saltean los colliders propios.
+5. **Hotbar:** receta FarmingLife (caja marrón, runas Tracery_Diamond, tecla abajo, marco dorado en la activa, fondo al 30 %). `ItemDefinitionSO.Icon` nuevo; 8 íconos renderizados de los prefabs de cada ítem en `Skin/Icons/Items/`.
+6. **Pantallas:** Libro (grilla de retratos + vitrina en vivo + ficha resumida, reusa `DetailInfoTabPresenter`, filtros por forma), Crianza (composición de crafteo: candidatos, pareja, herencia por parte sin %), PC (escudos de categoría, tarjetas con ícono, ficha de compra), Almacén (cofre de dos grillas), Venta (retrato real, runas en vez de gris), Regreso (pantalla de resultados), Bajada (3 cartas de equipo + tira de candidatos), combate Brawl (tarjetas, cronómetro, banner y run con el kit; depuración oculta con `showDebugInfo`), nombres sobre MoriMonchis (píldora, sin "[E] Acariciar"), carteles de zona bloqueada con fuente TMP `LTMuseum-Bold SDF`.
+7. **Retrato en vivo:** `MonchiLivePortrait.framePadding` 0,5 → 1,15 en escena: se acabó el retrato que tapaba las ranuras de la ficha y cortaba huevos.
+8. **Loc:** ~80 claves nuevas es/en (`ui.focus.*`, `ui.grid.*`, `ui.prompt.*`, `ui.store.*`, `ui.storage.*`, `ui.expedition.*`, `ui.return.*`, `ui.brawl.*`).
+
+**Quirks ⚠️:** (1) **Probar inventario en Play escribe el save real** (JSON en `AppData/LocalLow/.../player_inventory_*.json` y nube): mis pruebas del hotbar le regalaron 6 objetos y mopas/snacks a Juan; restaurado (almacén 9 snacks, hotbar vacío). Ver memoria. (2) El MCP no conectó en toda la sesión: todo por CLI con la junction `C:\Users\USUARIO\Documents\GitHub\RunRunSimulator` como `--project-path`. (3) `eval` inline por PowerShell pierde las comillas: usar siempre `eval_file`. (4) En una ScrollView, el selector `> .unity-scroll-view__content-container` no matchea (no es hijo directo): usar descendiente. (5) Copiar sprites de Synty a `Skin/Synty/` con un `.meta` nuevo PISA el GUID si el archivo ya existía: revisar antes (pasó con el marco y las runas; restaurados).
+
+**Siguiente paso (S162):**
+1. Pasar por Loc los textos de datos que siguen en español con el juego en inglés: nombres/descripciones de poderes (`BrawlSkillSO`, `BrawlWingKitSO`), personalidades ("robusto", "Cauto · de equipo").
+2. Probar el Regreso con una bajada real; revisar título y la ficha (botón rojo "Not ready" se lee como error).
+3. Decisiones de Juan pendientes: PC diegética o panel; mostrar % de herencia en la Crianza.
+4. Incorporación de assets de la SyntyPass (pedido de apertura).
+
+**Archivos `.cs` S161 — creados (8):** `Scripts/Core/IFocusLabel.cs`, `Scripts/Player/PlayerFocusProbe.cs`, `Scripts/UI/FocusPromptUITK.cs`, `Scripts/UI/OrdersHudUITK.cs`, `Scripts/UI/BreedingInheritanceView.cs`, `Scripts/UI/StoreDetailCard.cs`, `Scripts/UI/StorePrice.cs`, `Scripts/UI/StoreTileView.cs` · **modificados (22):** `Core/Enums/UIEnums.cs`, `Data/Items/ItemDefinitionSO.cs`, `Player/PlayerController.cs`, `UI/BrawlHud.cs`, `UI/BrawlHudCard.cs`, `UI/BrawlRunHud.cs`, `UI/BrawlRunPanel.cs`, `UI/BrawlRunVeil.cs`, `UI/BreedingBreedTabPresenter.cs`, `UI/CreatureGridUITK.cs`, `UI/ExpeditionCardBuilder.cs`, `UI/ExpeditionPanelUITK.cs`, `UI/ExpeditionReturnCardUITK.cs`, `UI/HotbarHUDUITK.cs`, `UI/InfoOverlayUITK.cs`, `UI/StoragePanelUITK.cs`, `UI/StorePanelUITK.cs`, `UI/StoreRows.cs`, `UI/TransactionPanelUITK.cs`, `World/Breeding/DecorSlot.cs`, `World/Creatures/NameTag.cs`, `World/Needs/StationSupply.cs` · **borrados (2):** `UI/CreatureGridUI.cs`, `UI/CreatureVisualUI.cs`
+
+---
+
 **Session:** 2026-10-15 (Session 160 — **overhaul de UI con los packs Synty Interface (Fantasy Menus / Screens / Warrior HUD): kit v2 "Linterna de bosque", ficha de MoriMochi modelo, piel aplicada a todos los paneles y HUD cozy; propuesta de overhaul por pantalla** — 2 `.cs` modificados; consola 0 errores; ficha verificada en Play contra Synty)
 
 **Focus:** Juan importó los 3 packs Synty de UI y pidió un overhaul completo con feel cozy/fantasía moderna y una línea gráfica común (cartas y menús). Elegida la dirección **B "Linterna de bosque"** (pino + oro, UITK, no prefabs UGUI). Juan: "el kit parecía slop" frente a Synty → se rehízo con las capas nativas de Synty; luego "examinar juegos similares y copiar su distribución, no reinventar la rueda"; regla nueva: tras cada pantalla apuntar lo aprendido en `Index/05` §Kit v2 y compararse con la referencia (igual o mejor).

@@ -1,0 +1,476 @@
+<title>Overhaul de UI MoriMonchis</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze:wght@500;600;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: single dark world (the game's pine-and-gold kit). Part 1 = gallery, each screen as our capture beside its Synty reference plus a verdict; part 2 = what gets deleted; part 3 = ordered roadmap of dossiers. */
+:root {
+  --bg: #0a1d19;
+  --panel: #10302a;
+  --panel-2: #0c2520;
+  --slot: #06171a;
+  --gold: #e3bb71;
+  --gold-soft: rgba(227, 187, 113, .38);
+  --ink: #f5f0e6;
+  --soft: #a9c3b9;
+  --teal: #4cc7a6;
+  --coral: #e8785a;
+  --plum: #b78bdc;
+  --display: "Grenze", "Georgia", serif;
+  --body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 44px; }
+header { display: grid; gap: 14px; }
+.eyebrow { font-family: var(--display); color: var(--gold); letter-spacing: .08em; text-transform: uppercase; font-size: 15px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(34px, 5vw, 52px); line-height: 1.05; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 28px; margin: 0; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 19px; color: var(--gold); margin: 0; }
+p { margin: 0; max-width: 70ch; }
+.lede { color: var(--soft); font-size: 19px; }
+.rule { height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); border: 0; margin: 0; }
+section { display: grid; gap: 18px; }
+.section-head { display: grid; gap: 6px; }
+.section-head p { color: var(--soft); }
+
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 16px; }
+nav.toc a { color: var(--teal); text-decoration: none; border-bottom: 1px solid rgba(76,199,166,.4); }
+nav.toc a:hover { border-color: var(--teal); }
+
+.tally { display: flex; flex-wrap: wrap; gap: 10px; }
+.tally span { background: var(--panel-2); border: 1px solid var(--gold-soft); border-radius: 8px; padding: 6px 12px; font-size: 15px; color: var(--soft); }
+.tally b { color: var(--ink); font-family: var(--display); font-size: 18px; margin-right: 4px; }
+
+.chip { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; }
+.chip--worse { color: var(--coral); }
+.chip--close { color: var(--gold); }
+.chip--same { color: var(--teal); }
+.chip--nodata { color: var(--soft); }
+.chip--p1 { color: var(--coral); }
+.chip--p2 { color: var(--gold); }
+.chip--p3 { color: var(--teal); }
+
+.screen { background: var(--panel); border: 1px solid var(--gold-soft); border-radius: 14px; padding: 20px; display: grid; gap: 14px; }
+.screen-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; }
+.screen-head .file { font-size: 14px; color: var(--soft); }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.pair.single { grid-template-columns: minmax(0, 1fr); max-width: 760px; }
+figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; border: 1px solid var(--gold-soft); background: var(--slot); aspect-ratio: 16 / 9; object-fit: cover; }
+figcaption { font-size: 14px; color: var(--soft); }
+figcaption b { color: var(--ink); font-weight: 700; }
+.faults { margin: 0; padding-left: 20px; display: grid; gap: 4px; max-width: 80ch; }
+.faults li::marker { color: var(--coral); }
+.faults li { font-size: 16px; }
+
+.purge { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.purge-card { background: var(--panel-2); border: 1px solid var(--gold-soft); border-radius: 12px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; }
+.purge-card h3 { font-size: 18px; }
+.purge-card ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 15px; }
+.purge-card .what { color: var(--soft); font-size: 15px; }
+.tag-del { color: var(--coral); font-weight: 700; }
+.tag-skin { color: var(--gold); font-weight: 700; }
+.tag-ask { color: var(--plum); font-weight: 700; }
+
+.dossier { background: var(--panel); border: 1px solid var(--gold-soft); border-radius: 14px; padding: 22px; display: grid; gap: 18px; }
+.dossier-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
+.dossier-head .step { font-family: var(--display); color: var(--gold); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dossier-head .file { font-size: 14px; color: var(--soft); }
+.dossier-body { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.facts { display: grid; gap: 14px; min-width: 0; }
+.fact { display: grid; gap: 4px; }
+.fact p { font-size: 16px; }
+.fact .ref { color: var(--soft); }
+.fact .code { color: var(--plum); }
+.stack { display: grid; gap: 10px; min-width: 0; }
+
+.wf { aspect-ratio: 16 / 9; max-width: 100%; background: var(--slot); border: 1px solid var(--gold-soft); border-radius: 8px; padding: 2.2%; display: grid; gap: 1.6%; font-size: clamp(9px, 1.15vw, 12.5px); line-height: 1.2; }
+.b { background: rgba(76, 199, 166, .08); border: 1px solid rgba(227, 187, 113, .55); border-radius: 4px; display: grid; place-items: center; text-align: center; color: var(--soft); padding: 4px; min-width: 0; min-height: 0; overflow: hidden; }
+.b--hero { background: rgba(227, 187, 113, .12); color: var(--ink); font-weight: 700; }
+.b--bar { background: rgba(255, 255, 255, .03); border-style: dashed; }
+.b--grid { background-image: linear-gradient(rgba(227,187,113,.35) 1px, transparent 1px), linear-gradient(90deg, rgba(227,187,113,.35) 1px, transparent 1px); background-size: 20% 25%; background-color: rgba(76,199,166,.06); }
+.b--world { background: repeating-linear-gradient(135deg, rgba(76,199,166,.06) 0 8px, transparent 8px 16px); border-style: dotted; }
+
+.decisions { background: var(--panel-2); border: 1px solid var(--gold); border-radius: 14px; padding: 22px; display: grid; gap: 12px; }
+.decisions ol, .decisions ul { margin: 0; padding-left: 22px; display: grid; gap: 10px; max-width: 76ch; }
+.decisions li::marker { color: var(--gold); font-family: var(--display); font-weight: 700; }
+.decided { color: var(--soft); }
+.decided b { color: var(--teal); }
+.sources { color: var(--soft); font-size: 14px; display: grid; gap: 6px; }
+.sources a { color: var(--teal); }
+a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+@media (max-width: 760px) {
+  .pair, .dossier-body { grid-template-columns: minmax(0, 1fr); }
+  .dossier, .screen { padding: 16px; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">S161 · Estado real y roadmap</div>
+    <h1>Overhaul de UI MoriMonchis</h1>
+    <p class="lede">Las 11 pantallas de la tienda, capturadas hoy en Play a 1920×1080, cada una junto a la referencia de Synty que tiene que igualar. Después va lo que se elimina y el orden de trabajo.</p>
+    <nav class="toc" aria-label="Secciones">
+      <a href="#galeria">Galería en Play</a>
+      <a href="#eliminar">UI a eliminar</a>
+      <a href="#roadmap">Roadmap por pantalla</a>
+      <a href="#decisiones">Decisiones</a>
+    </nav>
+    <hr class="rule">
+  </header>
+
+  <section id="galeria" aria-labelledby="galeria-h">
+    <div class="section-head">
+      <h2 id="galeria-h">Galería: cómo se ve hoy contra Synty</h2>
+      <p>El veredicto compara recortes a la misma escala con la regla de S160: igual o mejor que Synty. La piel ya está en todas las pantallas; lo que falla es la estructura.</p>
+    </div>
+    <div class="tally" aria-label="Resumen de veredictos">
+      <span><b>6</b>peor que Synty</span>
+      <span><b>3</b>cerca</span>
+      <span><b>1</b>igual</span>
+      <span><b>1</b>sin datos para juzgar</span>
+    </div>
+
+    <article class="screen" id="g-hud">
+      <div class="screen-head"><h3>HUD de la tienda</h3><span class="chip chip--worse">Peor</span><span class="file">InfoOverlay · Hotbar</span></div>
+      <div class="pair">
+        <figure><img src="img/00_hud.jpg" alt="HUD actual de la tienda con la leyenda de teclas arriba a la izquierda" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_05_FantasyScreens_HUD_FarmingLife_01.jpg" alt="HUD FarmingLife de Synty" loading="lazy"><figcaption><b>Synty</b> FantasyScreens HUD FarmingLife</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>La leyenda de teclas y el selector EN/ES son de desarrollo y ocupan la esquina donde Synty pone las misiones.</li>
+        <li>Monedas sin el formato de Synty: ícono y número en la misma píldora, sin la palabra "Dabloons:".</li>
+        <li>La hotbar tiene ranuras planas sin ítems ni marco de selección claro.</li>
+        <li>La cruz del centro es una imagen UGUI vieja, no la retícula del kit.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-libro">
+      <div class="screen-head"><h3>Libro de MoriMonchis</h3><span class="chip chip--worse">Peor</span><span class="file">CreatureGridUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/01_libro_grilla.jpg" alt="Grilla actual con cartas grandes" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_13_FantasyScreens_Inventory_01.jpg" alt="Inventario de Synty con grilla, personaje y ficha" loading="lazy"><figcaption><b>Synty</b> FantasyScreens Inventory 01</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Cuatro cartas por fila: con 5 MoriMonchis ya hay que hacer scroll y la quinta queda cortada.</li>
+        <li>No hay ficha lateral: para ver algo hay que abrir otra pantalla.</li>
+        <li>Pie "Cerrar" en español con el juego en inglés.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-ficha">
+      <div class="screen-head"><h3>Ficha del MoriMochi</h3><span class="chip chip--close">Cerca</span><span class="file">MorimonchiDetailInfoUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/02_ficha.jpg" alt="Ficha actual con el retrato tapando las ranuras de partes" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_13_FantasyScreens_Inventory_01.jpg" alt="Inventario de Synty como referencia de la ficha" loading="lazy"><figcaption><b>Synty</b> FantasyScreens Inventory 01</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Bug: el retrato en vivo es más grande que la vitrina y tapa las ranuras de cuerno, espalda y alas.</li>
+        <li>El botón rojo "Not ready" se lee como un error; en Synty el estado va como dato, no como botón.</li>
+        <li>Nombres y descripciones de poderes en español con el juego en inglés.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-crianza">
+      <div class="screen-head"><h3>Corral de crianza</h3><span class="chip chip--worse">Peor</span><span class="file">BreedingPanelUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/03_crianza.jpg" alt="Crianza actual con cuadros grises vacíos" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_18_FantasyScreens_Crafting_01.jpg" alt="Pantalla de crafteo de Synty" loading="lazy"><figcaption><b>Synty</b> FantasyScreens Crafting 01</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Cuadros grises de relleno en Padre y Madre, y una barra de huevo vacía sin texto.</li>
+        <li>La mitad inferior es un marco vacío con un cristal suelto.</li>
+        <li>Las listas de padres y madres ocupan dos columnas enteras con tres filas.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-almacen">
+      <div class="screen-head"><h3>Almacén</h3><span class="chip chip--worse">Peor</span><span class="file">StoragePanelUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/04_almacen.jpg" alt="Almacén actual con una sola fila" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_14_FantasyScreens_Inventory_02.jpg" alt="Inventario 02 de Synty con ranuras" loading="lazy"><figcaption><b>Synty</b> FantasyScreens Inventory 02</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Una fila con botón "Take out (Q)" dentro de un marco que ocupa media pantalla.</li>
+        <li>No muestra tu inventario al lado: no hay forma de ver qué cabe.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-pc">
+      <div class="screen-head"><h3>PC de la tienda</h3><span class="chip chip--worse">Peor</span><span class="file">StorePanelUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/05_pc_tienda.jpg" alt="Tienda actual con ocho pestañas de texto" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_18_FantasyScreens_Crafting_01.jpg" alt="Crafteo de Synty con categorías como escudos" loading="lazy"><figcaption><b>Synty</b> Crafting 01 (categorías con escudo + ficha)</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Ocho pestañas de solo texto; Synty usa escudos con ícono por categoría.</li>
+        <li>El mismo ícono de bolsa para cada producto.</li>
+        <li>"Nv" en español y dos tercios del marco vacíos.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-venta">
+      <div class="screen-head"><h3>Venta en el mostrador</h3><span class="chip chip--worse">Peor</span><span class="file">TransactionPanel</span></div>
+      <div class="pair">
+        <figure><img src="img/06_venta.jpg" alt="Oferta de compra actual sin cliente" loading="lazy"><figcaption><b>Hoy</b> en Play (abierta sin cliente)</figcaption></figure>
+        <figure><img src="img/ref_25_FantasyMenus_Popups_01.jpg" alt="Popups de Synty" loading="lazy"><figcaption><b>Synty</b> FantasyMenus Popups 01</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Cuadro gris de relleno donde va el MoriMochi.</li>
+        <li>"Ask for more" no tiene forma de botón y se lee como desactivado.</li>
+        <li>Con el panel abierto la leyenda de teclas y la hotbar siguen encima del mundo.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-expedicion">
+      <div class="screen-head"><h3>Bajada nocturna</h3><span class="chip chip--close">Cerca</span><span class="file">ExpeditionPanelUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/07_expedicion.jpg" alt="Selección de equipo para la bajada" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_15_FantasyScreens_PartyManagement_01.jpg" alt="Gestión de grupo de Synty" loading="lazy"><figcaption><b>Synty</b> FantasyScreens PartyManagement 01</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Los huevos que no pueden bajar ocupan una carta entera; deberían ir apagados en una tira.</li>
+        <li>Los tres lugares del equipo no se ven: no hay huecos fijos como en Synty.</li>
+        <li>Pie "Mover" y textos de poderes en español.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-retorno">
+      <div class="screen-head"><h3>Regreso de la bajada</h3><span class="chip chip--nodata">Sin datos</span><span class="file">ExpeditionReturnCardUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/08_retorno.jpg" alt="Tarjeta de regreso vacía" loading="lazy"><figcaption><b>Hoy</b> en Play (sin expedición previa)</figcaption></figure>
+        <figure><img src="img/ref_20_FantasyScreens_Results_01.jpg" alt="Pantalla de resultados de Synty" loading="lazy"><figcaption><b>Synty</b> FantasyScreens Results 01</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Abierta sin una bajada real queda vacía; hay que probarla con un resultado.</li>
+        <li>Es un recuadro sobre el mundo; Synty usa pantalla completa con equipo, botín y estadísticas.</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-pausa">
+      <div class="screen-head"><h3>Pausa</h3><span class="chip chip--close">Cerca</span><span class="file">PauseMenuUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/09_pausa.jpg" alt="Menú de pausa actual" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_04_FantasyMenus_Screen_MainMenu_01.jpg" alt="Menú principal de Synty" loading="lazy"><figcaption><b>Synty</b> FantasyMenus MainMenu 01</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>La distribución es la de Synty, pero la leyenda de teclas del HUD queda encima del título "Paused".</li>
+      </ul>
+    </article>
+
+    <article class="screen" id="g-ajustes">
+      <div class="screen-head"><h3>Ajustes</h3><span class="chip chip--same">Igual</span><span class="file">SettingsPanelUITK</span></div>
+      <div class="pair">
+        <figure><img src="img/10_ajustes.jpg" alt="Ajustes actuales" loading="lazy"><figcaption><b>Hoy</b> en Play</figcaption></figure>
+        <figure><img src="img/ref_16_FantasyMenus_Settings_01.jpg" alt="Ajustes de Synty" loading="lazy"><figcaption><b>Synty</b> FantasyMenus Settings 01</figcaption></figure>
+      </div>
+      <ul class="faults">
+        <li>Igual a Synty. La pestaña General solo tiene el idioma; ahí puede ir lo que hoy está en la leyenda de teclas.</li>
+      </ul>
+    </article>
+    <p class="decided">El título vive en otra escena y no entró en esta tanda de capturas.</p>
+  </section>
+
+  <section id="eliminar" aria-labelledby="eliminar-h">
+    <div class="section-head">
+      <h2 id="eliminar-h">UI a eliminar: todo lo que no usa los packs nuevos</h2>
+      <p>Barrido de la escena de la tienda y de todos los documentos de UI del proyecto. <span class="tag-del">Borrar</span> sale del juego; <span class="tag-skin">Rehacer</span> sigue haciendo falta pero con el kit; <span class="tag-ask">Preguntar</span> depende de si la pantalla sigue viva.</p>
+    </div>
+    <div class="purge">
+      <div class="purge-card">
+        <h3>Canvas UGUI viejo de la tienda</h3>
+        <ul>
+          <li><span class="tag-del">Borrar</span> CreatureGridUI: la grilla vieja en UGUI, apagada pero en la escena.</li>
+          <li><span class="tag-skin">Rehacer</span> la cruz del centro con la retícula de Fantasy Warrior HUD, dentro del HUD UITK.</li>
+        </ul>
+      </div>
+      <div class="purge-card">
+        <h3>Documento de prueba vivo</h3>
+        <ul>
+          <li><span class="tag-del">Borrar</span> el UIDocument que carga TestGrid.uxml con MainMenuStyle.uss, junto a la ficha real.</li>
+          <li><span class="tag-del">Borrar</span> TestGrid.uxml y MainMenuStyle.uss, que solo usa ese documento.</li>
+        </ul>
+      </div>
+      <div class="purge-card">
+        <h3>Etiquetas de depuración sobre muebles</h3>
+        <p class="what">Textos TMP flotantes: "Rest", "Feeder" ×2, "Breeding" ×4, "Incubadora", "Play", "Cash Register", "Store Container" ×4 y tres etiquetas vacías de decoración.</p>
+        <ul>
+          <li><span class="tag-del">Borrar</span> todas; la pista contextual del HUD ya nombra lo que mirás.</li>
+          <li><span class="tag-skin">Rehacer</span> los carteles de zona bloqueada ("CRIADERO, cómpralo en la PC") con fuente y colores del kit.</li>
+        </ul>
+      </div>
+      <div class="purge-card">
+        <h3>Leyenda de teclas del HUD</h3>
+        <ul>
+          <li><span class="tag-del">Borrar</span> la lista fija de teclas y el selector EN/ES.</li>
+          <li><span class="tag-skin">Rehacer</span> esa esquina como encargos del día, igual que las misiones del HUD FarmingLife.</li>
+          <li><span class="tag-skin">Rehacer</span> las teclas como avisos junto a la cruz solo cuando aplican ("E Agarrar"), y la lista completa en Ajustes › Controles.</li>
+        </ul>
+      </div>
+      <div class="purge-card">
+        <h3>Etiquetas en el mundo sin piel</h3>
+        <ul>
+          <li><span class="tag-skin">Rehacer</span> el nombre sobre cada MoriMochi (NameTag) con la píldora del registro HUD.</li>
+          <li><span class="tag-del">Borrar</span> el número de daño de ejemplo ("Something: 1") que quedó en la escena.</li>
+        </ul>
+      </div>
+      <div class="purge-card">
+        <h3>Pantallas de combate</h3>
+        <ul>
+          <li><span class="tag-skin">Rehacer</span> HUD y panel de la run del Brawl, que es el combate vigente.</li>
+          <li><span class="tag-ask">Preguntar</span> panel de plan y marcador del sandbox de arena: si ya no entra al juego, se borran.</li>
+          <li>Los laboratorios de huevos y slimes son herramientas de desarrollo; no se tocan.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="roadmap" aria-labelledby="roadmap-h">
+    <div class="section-head">
+      <h2 id="roadmap-h">Roadmap: en este orden</h2>
+      <p>Cada pantalla tiene un juego que ya resolvió la tarea y una pantalla de Synty de la que se copia la composición. Al cerrar cada una se compara de nuevo contra su referencia.</p>
+    </div>
+
+    <article class="dossier" id="r-limpieza">
+      <div class="dossier-head"><span class="step">1</span><h2>Limpieza</h2><span class="chip chip--p1">Primero</span><span class="file">escena de la tienda + HUD</span></div>
+      <div class="dossier-body">
+        <div class="wf" style="grid-template-columns: 1fr 2fr 1fr; grid-template-rows: auto 1fr auto auto; grid-template-areas: 'enc . clock' 'world world world' '. hint .' '. bar .';">
+          <div class="b" style="grid-area: enc;">Encargos del día</div>
+          <div class="b" style="grid-area: clock;">Día · hora · estación<br>monedas en píldora</div>
+          <div class="b b--world" style="grid-area: world;">mundo, sin etiquetas de depuración<br>retícula del kit al centro</div>
+          <div class="b b--bar" style="grid-area: hint;">[E] Agarrar · aparece solo al mirar algo</div>
+          <div class="b" style="grid-area: bar;">Hotbar con ranuras del kit</div>
+        </div>
+        <div class="facts">
+          <div class="fact"><h3>Referencia</h3><p class="ref">HUD FarmingLife de Synty, Stardew Valley y Slime Rancher.</p></div>
+          <div class="fact"><h3>Qué se hace</h3><p>Se borra todo lo de la sección anterior. La esquina de la leyenda pasa a encargos del día y las teclas aparecen como aviso solo cuando aplican.</p></div>
+          <div class="fact"><h3>Fuera de código</h3><p class="code">Muta la escena (canvas, documento de prueba, etiquetas). Necesita tu OK.</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dossier" id="r-libro">
+      <div class="dossier-head"><span class="step">2</span><h2>Libro de MoriMonchis</h2><span class="chip chip--p1">Prioridad 1</span><span class="file">reemplaza CreatureGridUITK</span></div>
+      <div class="dossier-body">
+        <div class="stack">
+          <div class="wf" style="grid-template-columns: 1.1fr .9fr 1fr; grid-template-rows: auto 1fr auto; grid-template-areas: 'tabs tabs tabs' 'grid hero card' 'foot foot foot';">
+            <div class="b b--bar" style="grid-area: tabs;">Filtros con escudo: Todos · En tienda · Corral · Vendidos</div>
+            <div class="b b--grid" style="grid-area: grid;">Grilla 5×6 de retratos<br>caja 1 de N</div>
+            <div class="b b--hero" style="grid-area: hero;">Retrato en vivo<br>partes en ranuras a los lados</div>
+            <div class="b" style="grid-area: card;">Nombre · sexo · rol<br>necesidades<br>poderes<br>[Ficha completa]</div>
+            <div class="b b--bar" style="grid-area: foot;">Teclas: mover · ficha · caja · cerrar</div>
+          </div>
+        </div>
+        <div class="facts">
+          <div class="fact"><h3>Referencia</h3><p class="ref">Palbox de Palworld y la caja del PC de Pokémon para la tarea; Synty Inventory 01 para la composición (grilla, figura al centro, ficha a la derecha).</p></div>
+          <div class="fact"><h3>Qué cambia</h3><p>Retratos chicos en grilla y la ficha resumida al lado, sin salir de la pantalla. La ficha completa se abre desde ahí.</p></div>
+          <div class="fact"><h3>Código</h3><p class="code">Controlador nuevo de grilla y ficha lateral; los filtros leen el registro que ya existe.</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dossier" id="r-crianza">
+      <div class="dossier-head"><span class="step">3</span><h2>Corral de crianza</h2><span class="chip chip--p1">Prioridad 1</span><span class="file">BreedingPanelUITK</span></div>
+      <div class="dossier-body">
+        <div class="wf" style="grid-template-columns: 1fr 1.3fr 1fr; grid-template-rows: 1fr auto auto; grid-template-areas: 'p hero m' 'p odds m' 'pick btn btn';">
+          <div class="b" style="grid-area: p;">Padre<br>retrato en vivo<br>sus 5 partes</div>
+          <div class="b b--hero" style="grid-area: hero;">Huevo resultante</div>
+          <div class="b" style="grid-area: odds;">Probabilidad por parte<br>cuerno · espalda · alas · cara · cuerpo</div>
+          <div class="b" style="grid-area: m;">Madre<br>retrato en vivo<br>sus 5 partes</div>
+          <div class="b b--bar" style="grid-area: pick;">Tira de candidatos</div>
+          <div class="b b--bar" style="grid-area: btn;">Costo · tiempo · [Criar]</div>
+        </div>
+        <div class="facts">
+          <div class="fact"><h3>Referencia</h3><p class="ref">Calculadoras de crianza de Palworld y simuladores de Axie para la tarea; Synty Crafting 01 para la composición (lista de ingredientes con cantidades y botón grande).</p></div>
+          <div class="fact"><h3>Qué cambia</h3><p>Fuera los cuadros grises: los padres van con su retrato en vivo y las partes como "ingredientes" del huevo.</p></div>
+          <div class="fact"><h3>Código</h3><p class="code">Exponer las probabilidades de la regla de herencia para mostrarlas antes de criar (si decidís mostrarlas).</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dossier" id="r-pc">
+      <div class="dossier-head"><span class="step">4</span><h2>PC de la tienda</h2><span class="chip chip--p1">Prioridad 1</span><span class="file">StorePanelUITK</span></div>
+      <div class="dossier-body">
+        <div class="wf" style="grid-template-columns: 1.6fr 1fr; grid-template-rows: auto auto 1fr; grid-template-areas: 'top top' 'apps apps' 'list item';">
+          <div class="b b--bar" style="grid-area: top;">Saldo: dabloons · Minerita</div>
+          <div class="b" style="grid-area: apps;">Escudos de categoría: Mejoras · Muebles · Juguetes · Encargos · Metas</div>
+          <div class="b b--grid" style="grid-area: list;">Tarjetas de producto<br>ícono propio · precio</div>
+          <div class="b b--hero" style="grid-area: item;">Ficha del producto<br>qué hace · nivel<br>[Comprar]</div>
+        </div>
+        <div class="facts">
+          <div class="fact"><h3>Referencia</h3><p class="ref">TCG Card Shop Simulator y Supermarket Simulator para la tarea (una app por trabajo); Synty Crafting 01 para la composición.</p></div>
+          <div class="fact"><h3>Qué cambia</h3><p>Las ocho pestañas de texto pasan a categorías con ícono; cada producto con su ícono y una ficha de compra a la derecha.</p></div>
+          <div class="fact"><h3>Código</h3><p class="code">Reordenar categorías y pasar filas a tarjetas. Falta un ícono por producto: se sacan de los packs de íconos de Synty.</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dossier" id="r-resto">
+      <div class="dossier-head"><span class="step">5</span><h2>Almacén, venta y regreso</h2><span class="chip chip--p2">Prioridad 2</span><span class="file">StoragePanelUITK · TransactionPanel · ExpeditionReturnCardUITK</span></div>
+      <div class="dossier-body">
+        <div class="wf" style="grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr auto; grid-template-areas: 'box sale res' 'fb fs fr';">
+          <div class="b b--grid" style="grid-area: box;">Almacén<br>dos grillas de ranuras</div>
+          <div class="b b--hero" style="grid-area: sale;">Venta<br>cliente · MoriMochi · cara del cliente</div>
+          <div class="b" style="grid-area: res;">Regreso<br>equipo · botín · datos</div>
+          <div class="b b--bar" style="grid-area: fb;">Inventory 02</div>
+          <div class="b b--bar" style="grid-area: fs;">Popups + Moonlighter</div>
+          <div class="b b--bar" style="grid-area: fr;">Results 01</div>
+        </div>
+        <div class="facts">
+          <div class="fact"><h3>Almacén</h3><p>Cofres de Stardew Valley: tu inventario y el del almacén en ranuras, un clic transfiere.</p></div>
+          <div class="fact"><h3>Venta</h3><p>Moonlighter: el cliente reacciona con una cara según el precio. Retrato real del MoriMochi en lugar del cuadro gris.</p></div>
+          <div class="fact"><h3>Regreso</h3><p>Pantalla de resultados de Synty: el equipo arriba con su barra, botín y datos de la bajada.</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dossier" id="r-combate">
+      <div class="dossier-head"><span class="step">6</span><h2>Combate y textos</h2><span class="chip chip--p3">Prioridad 3</span><span class="file">BrawlHud · BrawlRunPanel · Loc</span></div>
+      <div class="facts">
+        <div class="fact"><h3>Combate</h3><p>Piel del kit para el HUD y el panel de la run del Brawl, con la receta del HUD Adventure de Fantasy Warrior.</p></div>
+        <div class="fact"><h3>Textos</h3><p>Todos los pies de pantalla ("Cerrar", "Pestaña", "Mover", "Nv") y las descripciones de poderes pasan por la localización, para que el juego en inglés no muestre español.</p></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="decisions" id="decisiones" aria-labelledby="dec-h">
+    <h2 id="dec-h">Decisiones</h2>
+    <ul class="decided">
+      <li><b>Resuelto:</b> el orden Libro, Crianza, PC.</li>
+      <li><b>Resuelto:</b> se elimina toda la UI que no usa los packs nuevos.</li>
+      <li><b>Resuelto:</b> la leyenda de teclas se adapta: encargos del día en esa esquina y teclas como aviso contextual.</li>
+    </ul>
+    <h3>Abiertas</h3>
+    <ol>
+      <li><b>PC de la tienda:</b> ¿pantalla de computadora dentro del mundo, con apps, o panel de fantasía como el resto?</li>
+      <li><b>Crianza:</b> ¿se muestran las probabilidades de herencia por parte antes de criar, o se descubren?</li>
+      <li><b>Arena:</b> el panel de plan y el marcador del sandbox de arena, ¿siguen en el juego o se borran?</li>
+    </ol>
+  </section>
+
+  <section class="sources" aria-label="Fuentes">
+    <h3>Fuentes consultadas</h3>
+    <a href="https://palworld.wiki.gg/wiki/Palbox">Palworld Wiki: Palbox</a>
+    <a href="https://shacknews.com/article/138447/assign-pals-base-palworld?amphtml=1">Shacknews: asignar Pals desde el Palbox</a>
+    <a href="https://palworld.wiki.gg/wiki/Breeding">Palworld Wiki: crianza</a>
+    <a href="https://wikily.gg/palworld/breeding-calculator/">Wikily: calculadora de crianza de Palworld</a>
+    <a href="https://tcg-card-shop-sim.upcomer.com/wiki/Phone">TCG Card Shop Simulator Wiki: teléfono y apps</a>
+    <a href="https://steamcommunity.com/app/3070070/discussions/0/4849904345520154196">Steam: pedidos de jugadores sobre el teléfono de TCG Card Shop</a>
+    <a href="https://siliconera.com/?p=709874">Siliconera: los precios en Moonlighter</a>
+    <a href="https://primagames.com/tips/moonlighter-2-shop-guide-pricing-furniture-perks-explained">Prima Games: precios y reacciones en Moonlighter 2</a>
+    <a href="https://bulbapedia.bulbagarden.net/wiki/Battle_Team">Bulbapedia: sistema de cajas de Pokémon</a>
+  </section>
+</div>

@@ -12,136 +12,180 @@ public static class ExpeditionCardBuilder
         public readonly BrawlTheme Theme;
         public readonly BrawlSkillRole Role;
         public readonly string Title;
-        public readonly string Description;
         public readonly bool Locked;
 
-        public Power(BrawlTheme theme, BrawlSkillRole role, string title, string description, bool locked = false)
+        public Power(BrawlTheme theme, BrawlSkillRole role, string title, bool locked = false)
         {
             Theme = theme;
             Role = role;
             Title = title;
-            Description = description;
             Locked = locked;
         }
     }
 
-    public static VisualElement BuildCard(CreatureDNA dna, bool ok, BrawlKitProfile profile, CareGateSO careGate)
+    public static VisualElement BuildTile(CreatureDNA dna, bool ok, CareGateSO careGate)
     {
-        var card = new VisualElement();
-        card.AddToClassList("exp-card");
-        if (!ok) card.AddToClassList("exp-card--off");
+        var tile = new VisualElement();
+        tile.AddToClassList("exp-tile");
+        if (!ok) tile.AddToClassList("exp-tile--off");
+
+        var slot = new VisualElement();
+        slot.AddToClassList("mm-slot");
+        slot.AddToClassList("exp-tile__slot");
 
         var icon = new VisualElement();
-        icon.AddToClassList("exp-card__icon");
+        icon.AddToClassList("exp-tile__icon");
+        icon.pickingMode = PickingMode.Ignore;
         MonchiPortraitUI.Apply(icon, dna);
-        card.Add(icon);
-
-        var name = new Label(dna.CustomName);
-        name.AddToClassList("exp-card__name");
-        card.Add(name);
-
-        if (ok)
-        {
-            card.Add(RolePill(profile, "exp-card__role"));
-
-            var powers = new VisualElement();
-            powers.AddToClassList("exp-card__powers");
-            for (int slot = 0; slot < PowerCount; slot++)
-                powers.Add(PowerIcon(PowerAt(profile, slot), "exp-power"));
-            card.Add(powers);
-        }
-        else
-        {
-            var state = new Label(StateTextFor(dna));
-            state.AddToClassList("exp-card__state");
-            card.Add(state);
-
-            NeedType? weak = CreatureAvailability.WeakestNeed(dna, careGate);
-            if (weak.HasValue)
-            {
-                var bars = new VisualElement();
-                bars.AddToClassList("exp-card__bars");
-                bars.Add(BuildBar(weak.Value, NeedValue(dna, weak.Value)));
-                card.Add(bars);
-            }
-        }
+        slot.Add(icon);
 
         var check = new Label("✓");
-        check.AddToClassList("exp-card__check");
-        card.Add(check);
+        check.AddToClassList("exp-tile__check");
+        check.pickingMode = PickingMode.Ignore;
+        slot.Add(check);
+        tile.Add(slot);
+
+        var name = new Label(dna.CustomName);
+        name.AddToClassList("exp-tile__name");
+        name.pickingMode = PickingMode.Ignore;
+        tile.Add(name);
+
+        if (!ok)
+        {
+            var state = new Label(StateTextFor(dna));
+            state.AddToClassList("exp-tile__state");
+            state.pickingMode = PickingMode.Ignore;
+            tile.Add(state);
+
+            NeedType? weak = CreatureAvailability.WeakestNeed(dna, careGate);
+            if (weak.HasValue) tile.Add(BuildBar(weak.Value, NeedValue(dna, weak.Value)));
+        }
+
+        return tile;
+    }
+
+    public static VisualElement BuildTeamCard(CreatureDNA dna, BrawlKitProfile profile)
+    {
+        var card = new VisualElement();
+        card.AddToClassList("mm-panel");
+        card.AddToClassList("exp-member");
+        card.Add(Layer("mm-panel__lip"));
+        card.Add(Layer("mm-panel__frame"));
+
+        var stage = new VisualElement();
+        stage.AddToClassList("exp-member__stage");
+        stage.pickingMode = PickingMode.Ignore;
+
+        var floor = new VisualElement();
+        floor.AddToClassList("exp-member__floor");
+        floor.pickingMode = PickingMode.Ignore;
+        var ring = new VisualElement();
+        ring.AddToClassList("exp-member__floor-ring");
+        ring.pickingMode = PickingMode.Ignore;
+        floor.Add(ring);
+        stage.Add(floor);
+
+        var portrait = new VisualElement();
+        portrait.AddToClassList("exp-member__portrait");
+        portrait.pickingMode = PickingMode.Ignore;
+        MonchiPortraitUI.Apply(portrait, dna);
+        stage.Add(portrait);
+        card.Add(stage);
+
+        var name = new Label(dna.CustomName);
+        name.AddToClassList("exp-member__name");
+        name.pickingMode = PickingMode.Ignore;
+        card.Add(name);
+
+        var pill = RolePill(profile, "exp-member__role");
+        pill.pickingMode = PickingMode.Ignore;
+        card.Add(pill);
+
+        var powers = new VisualElement();
+        powers.AddToClassList("exp-member__powers");
+        powers.pickingMode = PickingMode.Ignore;
+        for (int slot = 0; slot < PowerCount; slot++)
+            powers.Add(PowerColumn(PowerAt(profile, slot)));
+        card.Add(powers);
 
         return card;
     }
 
-    public static void FillDetail(VisualElement detail, CreatureDNA dna, BrawlKitProfile profile)
+    public static VisualElement BuildEmptySlot()
     {
-        detail.Clear();
+        var card = new VisualElement();
+        card.AddToClassList("mm-panel");
+        card.AddToClassList("exp-member");
+        card.AddToClassList("exp-member--empty");
+        card.Add(Layer("mm-panel__lip"));
+        card.Add(Layer("mm-panel__frame"));
 
-        var head = new VisualElement();
-        head.AddToClassList("exp-detail__head");
+        var runes = new VisualElement();
+        runes.AddToClassList("exp-member__runes");
+        runes.pickingMode = PickingMode.Ignore;
+        card.Add(runes);
 
-        var name = new Label(dna.CustomName);
-        name.AddToClassList("exp-detail__name");
-        head.Add(name);
-        head.Add(RolePill(profile, "exp-detail__role"));
-        detail.Add(head);
+        var label = new Label(Loc.Tr("ui.expedition.slot.empty"));
+        label.AddToClassList("exp-member__hint");
+        label.pickingMode = PickingMode.Ignore;
+        card.Add(label);
 
-        for (int slot = 0; slot < PowerCount; slot++)
-            detail.Add(DetailRow(PowerAt(profile, slot)));
+        return card;
     }
 
-    public static void FillTeam(VisualElement team, IReadOnlyList<BrawlKitProfile> profiles, IReadOnlyList<bool> picked)
+    public static void FillTeam(VisualElement team, IReadOnlyList<BrawlKitProfile> profiles, IReadOnlyList<int> order, int maxPick)
     {
         team.Clear();
 
-        var row = new VisualElement();
-        row.AddToClassList("exp-team__row");
-
         var title = new Label(Loc.Tr("ui.expedition.team"));
         title.AddToClassList("exp-team__title");
-        row.Add(title);
+        team.Add(title);
 
-        bool any = false;
+        var count = new Label(Loc.Tr("ui.expedition.members", order.Count, maxPick));
+        count.AddToClassList("exp-team__count");
+        team.Add(count);
+
+        var pills = new VisualElement();
+        pills.AddToClassList("exp-team__pills");
+
         bool support = false;
-        for (int i = 0; i < picked.Count; i++)
+        for (int i = 0; i < order.Count; i++)
         {
-            if (!picked[i]) continue;
-            any = true;
-            if (profiles[i].HasRole(BrawlSkillRole.Support)) support = true;
-            row.Add(RolePill(profiles[i], "exp-team__pill"));
+            var profile = profiles[order[i]];
+            if (profile.HasRole(BrawlSkillRole.Support)) support = true;
+            pills.Add(RolePill(profile, "exp-team__pill"));
         }
-        team.Add(row);
+        team.Add(pills);
 
-        if (any && !support)
+        if (order.Count > 0 && !support)
         {
             var warn = new Label(Loc.Tr("ui.expedition.nosupport"));
             warn.AddToClassList("exp-team__warn");
             team.Add(warn);
         }
-
-        team.style.visibility = any ? Visibility.Visible : Visibility.Hidden;
     }
 
-    private static VisualElement DetailRow(Power power)
+    private static VisualElement Layer(string cls)
     {
-        var row = new VisualElement();
-        row.AddToClassList("exp-detail__row");
-        row.Add(PowerIcon(power, "exp-detail__icon"));
+        var layer = new VisualElement();
+        layer.AddToClassList("mm-layer");
+        layer.AddToClassList(cls);
+        layer.pickingMode = PickingMode.Ignore;
+        return layer;
+    }
 
-        var text = new VisualElement();
-        text.AddToClassList("exp-detail__text");
+    private static VisualElement PowerColumn(Power power)
+    {
+        var column = new VisualElement();
+        column.AddToClassList("exp-power-col");
+        column.pickingMode = PickingMode.Ignore;
+        column.Add(PowerIcon(power));
 
         var title = new Label(power.Title);
-        title.AddToClassList("exp-detail__title");
-        if (!power.Locked) title.AddToClassList("mm-role-text--" + BrawlKitProfile.RoleClass(power.Role));
-        text.Add(title);
-
-        var desc = new Label(power.Description);
-        desc.AddToClassList("exp-detail__desc");
-        text.Add(desc);
-
-        row.Add(text);
-        return row;
+        title.AddToClassList("exp-power-col__title");
+        title.pickingMode = PickingMode.Ignore;
+        column.Add(title);
+        return column;
     }
 
     private static VisualElement RolePill(in BrawlKitProfile profile, string extraClass)
@@ -151,10 +195,11 @@ public static class ExpeditionCardBuilder
         return pill;
     }
 
-    private static VisualElement PowerIcon(Power power, string iconClass)
+    private static VisualElement PowerIcon(Power power)
     {
         var icon = new VisualElement();
-        icon.AddToClassList(iconClass);
+        icon.AddToClassList("exp-power");
+        icon.pickingMode = PickingMode.Ignore;
         if (power.Locked)
         {
             icon.AddToClassList("exp-power--locked");
@@ -172,30 +217,31 @@ public static class ExpeditionCardBuilder
     private static Power PowerAt(BrawlKitProfile profile, int slot) => slot switch
     {
         0 => profile.Wing != null
-            ? new Power(profile.WingTheme, BrawlKitProfile.WingRole(profile.Wing), profile.Wing.Title, profile.Wing.Description)
-            : new Power(profile.WingTheme, BrawlSkillRole.Offense, string.Empty, string.Empty),
+            ? new Power(profile.WingTheme, BrawlKitProfile.WingRole(profile.Wing), profile.Wing.Title)
+            : new Power(profile.WingTheme, BrawlSkillRole.Offense, string.Empty),
         1 => SkillPower(profile.HornTheme, profile.Horn),
         _ => profile.BackLocked
-            ? new Power(default, BrawlSkillRole.Offense, Loc.Tr("ui.power.locked.title"), Loc.Tr("ui.power.locked.desc"), true)
+            ? new Power(default, BrawlSkillRole.Offense, Loc.Tr("ui.power.locked.title"), true)
             : SkillPower(profile.BackTheme, profile.Back),
     };
 
     private static Power SkillPower(BrawlTheme theme, BrawlSkillSO skill) =>
         skill != null
-            ? new Power(theme, skill.Role, skill.Title, skill.Description)
-            : new Power(theme, BrawlSkillRole.Offense, string.Empty, string.Empty);
+            ? new Power(theme, skill.Role, skill.Title)
+            : new Power(theme, BrawlSkillRole.Offense, string.Empty);
 
     private static VisualElement BuildBar(NeedType need, float value)
     {
         var track = new VisualElement();
-        track.AddToClassList("exp-card__bar-track");
-        track.AddToClassList("exp-card__bar-track--weak");
+        track.AddToClassList("exp-tile__bar-track");
         track.tooltip = Loc.Tr(NeedsLabelKey(need));
+        track.pickingMode = PickingMode.Ignore;
 
         var fill = new VisualElement();
-        fill.AddToClassList("exp-card__bar-fill");
+        fill.AddToClassList("exp-tile__bar-fill");
         fill.AddToClassList(NeedsDisplay.ColorClass(need, value));
         fill.style.width = new StyleLength(new Length(NeedsDisplay.Fill01(need, value) * 100f, LengthUnit.Percent));
+        fill.pickingMode = PickingMode.Ignore;
         track.Add(fill);
 
         return track;

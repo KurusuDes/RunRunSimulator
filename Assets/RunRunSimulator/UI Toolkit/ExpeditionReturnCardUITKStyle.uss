@@ -1,93 +1,26 @@
 .ret {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-}
-
-.ret-scrim {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
     align-items: center;
-    justify-content: center;
-    background-color: rgba(3, 14, 12, 0.72);
 }
 
-.ret-panel {
-    width: 1040px;
-    max-width: 96%;
-    max-height: 94%;
+.ret-content {
+    flex-grow: 1;
+    width: 100%;
+    align-items: center;
+    padding: 40px 80px 120px 80px;
 }
 
 .ret-title {
-    font-size: 56px;
-    letter-spacing: 3px;
+    font-size: 72px;
+    letter-spacing: 4px;
 }
 
 .ret-title--lost {
     color: var(--mm-crit);
 }
 
-.ret-body {
-    align-items: center;
-    padding: 4px 0 6px 0;
-}
-
-.ret-reward {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    min-width: 460px;
-    padding: 12px 30px;
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
-    -unity-background-image-tint-color: var(--mm-row-fill);
-    -unity-slice-scale: 0.22;
-}
-
-.ret-reward__box {
-    width: 84px;
-    height: 84px;
-    margin-right: 22px;
-}
-
-.ret-reward__gem {
-    width: 54px;
-    height: 54px;
-    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.ret-reward__text {
-    align-items: flex-start;
-}
-
-.ret-minerita {
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 48px;
-    color: var(--mm-teal);
-}
-
-.ret-rooms {
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 24px;
-    color: var(--mm-section);
-}
-
-.ret-lost {
-    margin-top: 14px;
-    padding: 8px 26px;
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
-    -unity-background-image-tint-color: rgb(150, 40, 30);
-    -unity-slice-scale: 0.45;
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 24px;
-    color: rgb(255, 255, 255);
-    white-space: normal;
-    -unity-text-align: middle-center;
+.ret-bar {
+    width: 640px;
+    align-self: center;
 }
 
 .ret-team {
@@ -95,7 +28,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 18px;
+    margin-top: 6px;
 }
 
 .ret-card {
@@ -120,7 +53,7 @@
     border-radius: 8px;
     border-width: 2px;
     border-color: rgba(227, 187, 113, 0.4);
-    background-color: rgb(40, 60, 56);
+    background-color: var(--mm-bg-deep);
 }
 
 .ret-card--grew .ret-card__icon {
@@ -204,16 +137,79 @@
 }
 
 .ret-note {
-    margin-top: 12px;
+    margin-top: 6px;
     font-size: 20px;
     color: var(--mm-ink-soft);
     white-space: normal;
     -unity-text-align: middle-center;
 }
 
+.ret-columns {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 14px;
+}
+
+.ret-col {
+    width: 420px;
+    min-height: 190px;
+    margin: 0 16px;
+}
+
+.ret-col__title {
+    -unity-text-align: middle-center;
+    margin-top: 0;
+}
+
+.ret-line {
+    min-height: 70px;
+}
+
+.ret-icon {
+    width: 40px;
+    height: 40px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ret-icon--gem {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Inventory_Minerals_01_Clean.png");
+}
+
+.ret-icon--rooms {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Up_01_Clean.png");
+}
+
+.ret-minerita {
+    margin-left: 14px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 40px;
+    color: var(--mm-teal);
+}
+
+.ret-rooms {
+    margin-left: 14px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 36px;
+    color: var(--mm-section);
+}
+
+.ret-lost {
+    margin-top: 6px;
+    padding: 8px 26px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
+    -unity-background-image-tint-color: rgb(150, 40, 30);
+    -unity-slice-scale: 0.45;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 24px;
+    color: rgb(255, 255, 255);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
 .ret-actions {
-    align-items: center;
-    padding-top: 12px;
+    position: absolute;
+    right: 70px;
+    bottom: 50px;
 }
 
 .ret-continue {

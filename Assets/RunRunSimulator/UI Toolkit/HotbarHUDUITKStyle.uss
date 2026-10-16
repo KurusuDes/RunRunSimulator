@@ -45,56 +45,98 @@
 .hotbar-slots {
     flex-direction: row;
     background-image: url("Skin/Synty/SPR_FantasyScreens_Bar_Rounded_01.png");
-    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-background-image-tint-color: rgba(43, 40, 36, 0.3);
     -unity-slice-scale: 0.5;
-    padding: 10px 14px;
+    padding: 18px 20px 16px 20px;
 }
 
 .hotbar-slot {
-    width: 104px;
-    height: 104px;
-    margin: 0 5px;
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_01.png");
-    -unity-background-image-tint-color: var(--hud-slot);
-    -unity-slice-scale: 0.2;
+    width: 90px;
+    margin: 0 3px;
     align-items: center;
-    justify-content: center;
-    padding: 6px;
+}
+
+.hotbar-slot__box {
+    width: 80px;
+    height: 80px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_01.png");
+    -unity-background-image-tint-color: rgb(99, 75, 49);
+    -unity-slice-scale: 0.2;
     transition-property: scale, -unity-background-image-tint-color;
     transition-duration: 0.12s;
 }
 
-.hotbar-slot--active {
-    -unity-background-image-tint-color: var(--hud-slot-active);
-    scale: 1.08 1.08;
-}
-
-.hotbar-slot__index {
+.hotbar-slot__runes {
     position: absolute;
-    top: -8px;
-    left: -6px;
-    min-width: 28px;
-    height: 28px;
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
-    -unity-background-image-tint-color: var(--hud-key);
-    -unity-slice-scale: 0.12;
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 18px;
-    color: rgb(255, 255, 255);
-    -unity-text-align: middle-center;
+    left: 5px;
+    top: 5px;
+    width: 70px;
+    height: 70px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(36, 32, 26, 0.6);
 }
 
-.hotbar-slot--active .hotbar-slot__index {
-    -unity-background-image-tint-color: var(--hud-gold);
-    color: var(--hud-bubble-ink);
+.hotbar-slot__icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80px;
+    height: 80px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .hotbar-slot__name {
-    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80px;
+    height: 80px;
     -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
     -unity-text-align: middle-center;
     white-space: normal;
-    font-size: 17px;
+    font-size: 15px;
     color: rgb(255, 255, 255);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.hotbar-slot__frame {
+    position: absolute;
+    left: -6px;
+    top: -1px;
+    right: -6px;
+    bottom: -11px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Frame_Rounded_02.png");
+    -unity-background-image-tint-color: var(--hud-gold);
+    -unity-slice-scale: 0.25;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.12s;
+}
+
+.hotbar-slot__key {
+    height: 25px;
+    min-width: 28px;
+    margin-top: 4px;
+    padding: 0 8px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: rgba(70, 62, 52, 0.95);
+    -unity-slice-scale: 0.12;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+}
+
+.hotbar-slot--active .hotbar-slot__box {
+    -unity-background-image-tint-color: rgb(122, 92, 60);
+    scale: 1.06 1.06;
+}
+
+.hotbar-slot--active .hotbar-slot__frame {
+    opacity: 1;
+}
+
+.hotbar-slot--active .hotbar-slot__key {
+    -unity-background-image-tint-color: var(--hud-gold);
+    color: var(--hud-bubble-ink);
 }

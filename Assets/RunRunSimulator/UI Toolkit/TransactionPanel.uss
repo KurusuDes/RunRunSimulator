@@ -144,13 +144,23 @@
     -unity-slice-scale: 0.4;
 }
 
-.mm-swatch {
+.mm-portrait {
     position: absolute;
     left: 10px;
     right: 10px;
     top: 10px;
     bottom: 10px;
-    background-color: rgb(40, 60, 56);
+}
+
+.tx-runes {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    top: 40px;
+    bottom: 40px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(227, 187, 113, 0.35);
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .target-name {
@@ -180,10 +190,10 @@
     justify-content: center;
 }
 
-.tx-gem {
-    width: 64px;
-    height: 64px;
-    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
+.tx-coin {
+    width: 72px;
+    height: 72px;
+    background-image: url("Skin/Synty/ICON_SM_Item_Coins_02_Dungeon.png");
     -unity-background-scale-mode: scale-to-fit;
 }
 
@@ -219,6 +229,15 @@
 
 .tx-btn--accept {
     flex-grow: 1.3;
+}
+
+.tx-btn--counter {
+    -unity-background-image-tint-color: rgb(20, 130, 106);
+    color: rgb(255, 255, 255);
+}
+
+.tx-btn--counter:hover {
+    -unity-background-image-tint-color: rgb(36, 168, 138);
 }
 
 .tx-btn--reject {

@@ -343,6 +343,7 @@ public class PlayerController : MonoBehaviour
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
         foreach (var hit in hits)
         {
+            if (hit.collider.transform.IsChildOf(transform)) continue;
             component = hit.collider.GetComponentInParent<T>();
             if (component != null) return true;
 

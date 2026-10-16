@@ -15,6 +15,15 @@ public enum UIPanelType
     Settings         = 11,
 }
 
+public enum FocusPrompt
+{
+    None         = 0,
+    Creature     = 1,
+    Interactable = 2,
+    Carrying     = 3,
+    Item         = 4,
+}
+
 public enum PlayerStateType
 {
     None      = 0,

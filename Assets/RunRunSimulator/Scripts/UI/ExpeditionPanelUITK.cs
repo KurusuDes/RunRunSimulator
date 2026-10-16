@@ -17,7 +17,7 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
     private Label emptyLabel;
     private Label subtitleLabel;
     private ScrollView list;
-    private VisualElement detail;
+    private VisualElement teamRow;
     private VisualElement team;
     private Button closeButton;
     private Button goButton;
@@ -27,6 +27,7 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
     private readonly List<BrawlKitProfile> profiles = new List<BrawlKitProfile>();
     private readonly List<bool> eligible = new List<bool>();
     private readonly List<bool> picked = new List<bool>();
+    private readonly List<int> order = new List<int>();
     private int focused = -1;
     private bool wired;
 
@@ -59,13 +60,18 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
 
         emptyLabel = root.Q<Label>("exp-empty");
         list = root.Q<ScrollView>("exp-list");
-        detail = root.Q<VisualElement>("exp-detail");
+        teamRow = root.Q<VisualElement>("exp-team-row");
         team = root.Q<VisualElement>("exp-team");
+
+        var moveLabel = root.Q<Label>("exp-prompt-move");
+        if (moveLabel != null) moveLabel.text = Loc.Tr("ui.prompt.move");
+        var selectLabel = root.Q<Label>("exp-prompt-select");
+        if (selectLabel != null) selectLabel.text = Loc.Tr("ui.prompt.select");
 
         closeButton = root.Q<Button>("exp-close");
         if (closeButton != null)
         {
-            closeButton.text = Loc.Tr("ui.expedition.close");
+            closeButton.text = Loc.Tr("ui.prompt.close");
             closeButton.clicked += Close;
         }
 
@@ -104,6 +110,7 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         profiles.Clear();
         eligible.Clear();
         picked.Clear();
+        order.Clear();
 
         var gm = GameManager.Instance;
         var registry = gm != null ? gm.Registry : null;
@@ -124,7 +131,7 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         {
             bool ok = CreatureAvailability.CanExplore(dna, careGate);
             var profile = BrawlKitProfile.Of(dna, kits, database);
-            var card = ExpeditionCardBuilder.BuildCard(dna, ok, profile, careGate);
+            var card = ExpeditionCardBuilder.BuildTile(dna, ok, careGate);
 
             int index = cards.Count;
             card.RegisterCallback<ClickEvent>(_ => ToggleAt(index));
@@ -182,7 +189,19 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
         if (index < 0 || index >= eligible.Count || !eligible[index]) return;
         if (!picked[index] && CountPicked() >= maxPick) return;
         picked[index] = !picked[index];
-        cards[index].EnableInClassList("exp-card--on", picked[index]);
+        if (picked[index]) order.Add(index);
+        else order.Remove(index);
+        cards[index].EnableInClassList("exp-tile--on", picked[index]);
+        UpdateGoButton();
+        RefreshTeam();
+    }
+
+    private void RemoveAt(int index)
+    {
+        if (index < 0 || index >= picked.Count || !picked[index]) return;
+        picked[index] = false;
+        order.Remove(index);
+        cards[index].RemoveFromClassList("exp-tile--on");
         UpdateGoButton();
         RefreshTeam();
     }
@@ -198,21 +217,31 @@ public class ExpeditionPanelUITK : MonoBehaviour, IUINavigable
     private void SetFocus(int index, bool scroll = true)
     {
         focused = UiPanels.ClampSelection(cards.Count, index);
-        UiPanels.SetActiveIndex(cards, focused, "exp-card--focus");
+        UiPanels.SetActiveIndex(cards, focused, "exp-tile--focus");
         if (scroll && focused >= 0) list?.ScrollTo(cards[focused]);
-        RefreshDetail();
-    }
-
-    private void RefreshDetail()
-    {
-        if (detail == null) return;
-        detail.style.display = focused >= 0 ? DisplayStyle.Flex : DisplayStyle.None;
-        if (focused >= 0) ExpeditionCardBuilder.FillDetail(detail, dnas[focused], profiles[focused]);
     }
 
     private void RefreshTeam()
     {
-        if (team != null) ExpeditionCardBuilder.FillTeam(team, profiles, picked);
+        if (teamRow != null)
+        {
+            teamRow.Clear();
+            for (int slot = 0; slot < maxPick; slot++)
+            {
+                if (slot < order.Count)
+                {
+                    int index = order[slot];
+                    var member = ExpeditionCardBuilder.BuildTeamCard(dnas[index], profiles[index]);
+                    member.RegisterCallback<ClickEvent>(_ => RemoveAt(index));
+                    teamRow.Add(member);
+                }
+                else
+                {
+                    teamRow.Add(ExpeditionCardBuilder.BuildEmptySlot());
+                }
+            }
+        }
+        if (team != null) ExpeditionCardBuilder.FillTeam(team, profiles, order, maxPick);
     }
 
     private void UpdateGoButton()

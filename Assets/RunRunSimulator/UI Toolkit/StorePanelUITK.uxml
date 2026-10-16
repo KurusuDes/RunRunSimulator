@@ -8,7 +8,7 @@
             <ui:VisualElement class="store-column">
 
                 <ui:VisualElement name="header" class="store-header">
-                    <ui:Label text="Tienda" class="store-title mm-title" />
+                    <ui:Label text="" class="store-title mm-title" />
                     <ui:VisualElement class="store-counter" picking-mode="Ignore">
                         <ui:VisualElement class="store-counter__coin" picking-mode="Ignore" />
                         <ui:Label name="balance" text="" class="store-balance" picking-mode="Ignore" />
@@ -18,12 +18,34 @@
 
                 <ui:VisualElement name="tabs" class="store-tabs" />
 
-                <ui:VisualElement name="panel" class="store-panel mm-panel">
-                    <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
-                    <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
-                    <ui:ScrollView name="list" class="store-list" mode="Vertical" />
-                    <ui:Label name="empty" text="No hay nada a la venta en esta categoría." class="store-empty" picking-mode="Ignore" />
-                    <ui:Label name="notify" text="" class="store-notify" style="display: none;" picking-mode="Ignore" />
+                <ui:VisualElement class="store-body">
+
+                    <ui:VisualElement name="panel" class="store-panel mm-panel">
+                        <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                        <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                        <ui:ScrollView name="grid" class="store-grid" mode="Vertical" horizontal-scroller-visibility="Hidden" />
+                        <ui:Label name="empty" text="" class="store-empty" picking-mode="Ignore" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="detail" class="store-detail mm-panel">
+                        <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                        <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                        <ui:VisualElement name="detail-content" class="store-detail__content">
+                            <ui:VisualElement class="store-pedestal" picking-mode="Ignore">
+                                <ui:VisualElement class="store-pedestal__disc" picking-mode="Ignore" />
+                                <ui:VisualElement class="store-pedestal__ring" picking-mode="Ignore" />
+                                <ui:VisualElement name="detail-icon" class="store-icon store-pedestal__icon" picking-mode="Ignore" />
+                            </ui:VisualElement>
+                            <ui:Label name="detail-name" text="" class="store-detail__name mm-title" />
+                            <ui:Label name="detail-category" text="" class="store-detail__category mm-subtitle" />
+                            <ui:VisualElement class="mm-bar" />
+                            <ui:VisualElement name="detail-facts" class="store-facts" />
+                            <ui:Label name="detail-lock" text="" class="store-lock" style="display: none;" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:Label name="notify" text="" class="store-notify" style="display: none;" picking-mode="Ignore" />
+                        <ui:Button name="detail-buy" text="" class="mm-button mm-button--big store-detail__buy" />
+                    </ui:VisualElement>
+
                 </ui:VisualElement>
 
             </ui:VisualElement>
@@ -33,20 +55,20 @@
             <ui:VisualElement class="mm-prompt">
                 <ui:Label text="A" class="mm-key" />
                 <ui:Label text="D" class="mm-key" style="margin-left: 4px;" />
-                <ui:Label text="Categoría" class="mm-prompt__label" />
+                <ui:Label name="prompt-category" text="" class="mm-prompt__label" />
             </ui:VisualElement>
             <ui:VisualElement class="mm-prompt">
                 <ui:Label text="W" class="mm-key" />
                 <ui:Label text="S" class="mm-key" style="margin-left: 4px;" />
-                <ui:Label text="Elegir" class="mm-prompt__label" />
+                <ui:Label name="prompt-move" text="" class="mm-prompt__label" />
             </ui:VisualElement>
             <ui:VisualElement class="mm-prompt">
                 <ui:Label text="Enter" class="mm-key" />
-                <ui:Label text="Comprar" class="mm-prompt__label" />
+                <ui:Label name="prompt-buy" text="" class="mm-prompt__label" />
             </ui:VisualElement>
             <ui:Button name="close-button" text="" class="mm-prompt mm-prompt--button">
                 <ui:Label text="Esc" class="mm-key" picking-mode="Ignore" />
-                <ui:Label text="Cerrar" class="mm-prompt__label" picking-mode="Ignore" />
+                <ui:Label name="prompt-close" text="" class="mm-prompt__label" picking-mode="Ignore" />
             </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>

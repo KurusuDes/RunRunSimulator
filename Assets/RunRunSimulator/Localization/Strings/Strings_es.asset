@@ -2217,6 +2217,322 @@ MonoBehaviour:
     m_Localized: Cerrar
     m_Metadata:
       m_Items: []
+  - m_Id: 29850053865930752
+    m_Localized: Acariciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565568
+    m_Localized: Agarrar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565569
+    m_Localized: Usar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565570
+    m_Localized: Soltar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565571
+    m_Localized: Lanzar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565572
+    m_Localized: Usar objeto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565573
+    m_Localized: Mantener {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565574
+    m_Localized: Clic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565575
+    m_Localized: "Encargos del d\xEDa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793771393024
+    m_Localized: Todos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416448
+    m_Localized: Adultos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416449
+    m_Localized: Slimes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416450
+    m_Localized: Huevos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416451
+    m_Localized: '{0} MoriMonchis'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416452
+    m_Localized: No hay MoriMonchis en este filtro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416453
+    m_Localized: Mover
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416454
+    m_Localized: Ver ficha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861048969625600
+    m_Localized: No hay candidatos libres
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861048969625601
+    m_Localized: Herencia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861048969625602
+    m_Localized: Elegir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861296039297024
+    m_Localized: Nv {0}/{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861296043491328
+    m_Localized: "Categor\xEDa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861296043491329
+    m_Localized: Comprar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861900853739520
+    m_Localized: Resultado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861900853739521
+    m_Localized: "Bot\xEDn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861968839213056
+    m_Localized: '{0} objetos distintos'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861968839213057
+    m_Localized: "Almac\xE9n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861968839213058
+    m_Localized: Tu hotbar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861968839213059
+    m_Localized: Sacar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29862111118393344
+    m_Localized: "M\xE1x"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29866792934735872
+    m_Localized: "Eleg\xED un MoriMochi"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29866793039593472
+    m_Localized: Integrantes {0}/{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422016
+    m_Localized: AZUL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422017
+    m_Localized: ROJO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422018
+    m_Localized: PREPARADOS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422019
+    m_Localized: PELEA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422020
+    m_Localized: "MUERTE S\xDABITA"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422021
+    m_Localized: FIN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422022
+    m_Localized: " \xB7 da\xF1o \xD7{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422023
+    m_Localized: "\xA1A PELEAR!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422024
+    m_Localized: "\xA1MUERTE S\xDABITA!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422025
+    m_Localized: la vida baja para todos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422026
+    m_Localized: "\xA1\xDALTIMO EN PIE!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422027
+    m_Localized: '{0} no se rinde'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422028
+    m_Localized: "\xA1GANA AZUL!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422029
+    m_Localized: "\xA1GANA ROJO!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422030
+    m_Localized: "\xA1EMPATE!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422031
+    m_Localized: "MVP: {0} \xB7 {1} de da\xF1o \xB7 {2} de curaci\xF3n \xB7 {3} KO"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422032
+    m_Localized: "derrib\xF3 a"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422033
+    m_Localized: "cay\xF3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422034
+    m_Localized: KO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422035
+    m_Localized: pelea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422036
+    m_Localized: dispara de lejos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422037
+    m_Localized: caza
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422038
+    m_Localized: protege
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422039
+    m_Localized: cura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422040
+    m_Localized: huye
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422041
+    m_Localized: concentra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422042
+    m_Localized: espera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422043
+    m_Localized: Nueva partida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422044
+    m_Localized: Revancha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422045
+    m_Localized: "\xDAltima sala"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422046
+    m_Localized: Falta 1 sala
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422047
+    m_Localized: Faltan {0} salas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422048
+    m_Localized: "Mu\xF1ecos \xB7 p\xE9gales para curar al equipo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422049
+    m_Localized: "Minerales \xB7 p\xE9gale al cristal para empezar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422050
+    m_Localized: "Minerales \xB7 +{0} Minerita"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422051
+    m_Localized: "Tramo {0} \xB7 {1} salas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422052
+    m_Localized: 'Minerita: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422053
+    m_Localized: Enfrentar tramo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422054
+    m_Localized: Volver a la tienda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422055
+    m_Localized: Salir con {0} Minerita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422056
+    m_Localized: Perdiste el combate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422057
+    m_Localized: "Se pierden {0} Minerita \xB7 te llevas {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422058
+    m_Localized: "Sin bot\xEDn que perder"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422059
+    m_Localized: Sala {0} de {1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422060
+    m_Localized: "\xDAltima sala del tramo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422061
+    m_Localized: "Queda 1 m\xE1s"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422062
+    m_Localized: "Quedan {0} m\xE1s"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -9,24 +9,29 @@ namespace MoriMonchiSimulator
 public class BreedingBreedTabPresenter : ITabPresenter
 {
     private const string Focus = "breed-focus";
+    private const string Chosen = "breed-tile--chosen";
+    private const string Empty = "breed-slot--empty";
+    private const string FilterOn = "mm-button--selected";
+    private const int Columns = 4;
 
-    private enum SubFocus { Slots, FatherList, MotherList }
+    private enum SubFocus { Grid, Button }
 
     private readonly Func<CreatureRegistrySO> getRegistry;
     private readonly CreatureDatabaseSO database;
     private readonly IncubationService incubation;
     private readonly Action onBred;
 
-    private readonly VisualElement fatherSlot, motherSlot, preview, fatherSlotImg, motherSlotImg;
-    private readonly Label fatherSlotName, motherSlotName, timeLabel;
-    private readonly Button breedButton;
-    private readonly ScrollView fatherList, motherList;
+    private readonly VisualElement fatherSlot, motherSlot, fatherSlotImg, motherSlotImg, inheritList;
+    private readonly Label fatherSlotName, motherSlotName, timeLabel, emptyLabel;
+    private readonly Button breedButton, filterFathers, filterMothers;
+    private readonly ScrollView grid;
 
     private string selectedFatherId = "", selectedMotherId = "";
-    private readonly List<VisualElement> fatherCards = new List<VisualElement>();
-    private readonly List<VisualElement> motherCards = new List<VisualElement>();
-    private int criarIndex, fatherIndex, motherIndex;
-    private SubFocus focus = SubFocus.Slots;
+    private readonly List<VisualElement> tiles = new List<VisualElement>();
+    private CreatureGender filter = CreatureGender.Male;
+    private int gridIndex;
+    private bool focusVisible;
+    private SubFocus focus = SubFocus.Grid;
 
     public BreedingBreedTabPresenter(VisualElement root, Func<CreatureRegistrySO> getRegistry,
         CreatureDatabaseSO database, IncubationService incubation, Action onBred)
@@ -40,168 +45,229 @@ public class BreedingBreedTabPresenter : ITabPresenter
         motherSlot     = root.Q<VisualElement>("mother-slot");
         fatherSlotImg  = root.Q<VisualElement>("father-slot-img");
         motherSlotImg  = root.Q<VisualElement>("mother-slot-img");
-        preview        = root.Q<VisualElement>("preview");
+        inheritList    = root.Q<VisualElement>("inherit-list");
         fatherSlotName = root.Q<Label>("father-slot-name");
         motherSlotName = root.Q<Label>("mother-slot-name");
         timeLabel      = root.Q<Label>("time-label");
+        emptyLabel     = root.Q<Label>("candidate-empty");
         breedButton    = root.Q<Button>("breed-button");
-        fatherList     = root.Q<ScrollView>("father-list");
-        motherList     = root.Q<ScrollView>("mother-list");
+        filterFathers  = root.Q<Button>("filter-fathers");
+        filterMothers  = root.Q<Button>("filter-mothers");
+        grid           = root.Q<ScrollView>("candidate-grid");
+
+        SetText(root.Q<Label>("inherit-title"), "ui.breeding.section.inheritance");
+        SetText(root.Q<Label>("prompt-move"), "ui.prompt.move");
+        SetText(root.Q<Label>("prompt-select"), "ui.prompt.select");
+        SetText(root.Q<Label>("prompt-tab"), "ui.prompt.tab");
+        SetText(root.Q<Label>("prompt-close"), "ui.prompt.close");
+        SetText(emptyLabel, "ui.breeding.list.empty");
+        if (filterFathers != null) filterFathers.text = Loc.Tr("ui.breeding.column.fathers");
+        if (filterMothers != null) filterMothers.text = Loc.Tr("ui.breeding.column.mothers");
 
         if (breedButton != null) breedButton.clicked += TryBreed;
-        fatherSlot?.RegisterCallback<ClickEvent>(_ => OpenList(SubFocus.FatherList));
-        motherSlot?.RegisterCallback<ClickEvent>(_ => OpenList(SubFocus.MotherList));
+        if (filterFathers != null) filterFathers.clicked += OnFilterFathers;
+        if (filterMothers != null) filterMothers.clicked += OnFilterMothers;
+        fatherSlot?.RegisterCallback<ClickEvent>(_ => ChangeFilter(CreatureGender.Male));
+        motherSlot?.RegisterCallback<ClickEvent>(_ => ChangeFilter(CreatureGender.Female));
     }
 
     public void Enter()
     {
-        focus = SubFocus.Slots;
-        criarIndex = 0;
-        ApplyCriarFocus();
+        gridIndex = 0;
+        focus = tiles.Count > 0 ? SubFocus.Grid : SubFocus.Button;
+        ApplyFocus();
     }
 
     public bool Navigate(int h, int v)
     {
-        int delta = h + v;
-
-        switch (focus)
+        if (focus == SubFocus.Button)
         {
-            case SubFocus.Slots:
-                int next = criarIndex + delta;
-                if (next < 0) { ClearCriarFocus(); return false; }
-                criarIndex = Mathf.Clamp(next, 0, 2);
-                ApplyCriarFocus();
-                return true;
-
-            case SubFocus.FatherList:
-                MoveList(fatherCards, ref fatherIndex, delta, fatherList);
-                return true;
-
-            default:
-                MoveList(motherCards, ref motherIndex, delta, motherList);
-                return true;
+            if (v >= 0) return true;
+            if (tiles.Count == 0) { ClearFocus(); return false; }
+            focus = SubFocus.Grid;
+            gridIndex = Mathf.Clamp(gridIndex, 0, tiles.Count - 1);
+            ApplyFocus();
+            return true;
         }
+
+        if (tiles.Count == 0) { focus = SubFocus.Button; ApplyFocus(); return true; }
+
+        if (v < 0)
+        {
+            if (gridIndex < Columns) { ClearFocus(); return false; }
+            gridIndex -= Columns;
+        }
+        else if (v > 0)
+        {
+            if (gridIndex + Columns < tiles.Count) gridIndex += Columns;
+            else if (gridIndex / Columns == (tiles.Count - 1) / Columns) focus = SubFocus.Button;
+            else gridIndex = tiles.Count - 1;
+        }
+
+        if (h != 0) gridIndex = Mathf.Clamp(gridIndex + h, 0, tiles.Count - 1);
+
+        ApplyFocus();
+        return true;
     }
 
     public void Submit()
     {
-        switch (focus)
-        {
-            case SubFocus.Slots:
-                if      (criarIndex == 0) OpenList(SubFocus.FatherList);
-                else if (criarIndex == 1) OpenList(SubFocus.MotherList);
-                else                      TryBreed();
-                break;
-            case SubFocus.FatherList:
-                if (InRange(fatherCards, fatherIndex)) SelectFather((string)fatherCards[fatherIndex].userData);
-                break;
-            case SubFocus.MotherList:
-                if (InRange(motherCards, motherIndex)) SelectMother((string)motherCards[motherIndex].userData);
-                break;
-        }
+        if (focus == SubFocus.Button) { TryBreed(); return; }
+        if (gridIndex >= 0 && gridIndex < tiles.Count) Assign((string)tiles[gridIndex].userData);
     }
 
     public bool Cancel()
     {
-        if (focus == SubFocus.FatherList || focus == SubFocus.MotherList)
-        {
-            ClearListFocus();
-            focus = SubFocus.Slots;
-            ApplyCriarFocus();
-            return true;
-        }
-        return false;
+        if (focus != SubFocus.Button || tiles.Count == 0) return false;
+        focus = SubFocus.Grid;
+        gridIndex = Mathf.Clamp(gridIndex, 0, tiles.Count - 1);
+        ApplyFocus();
+        return true;
     }
 
     public void ClearFocus()
     {
-        ClearCriarFocus();
-        ClearListFocus();
-        focus = SubFocus.Slots;
+        breedButton?.RemoveFromClassList(Focus);
+        foreach (var t in tiles) t.RemoveFromClassList(Focus);
+        focus = SubFocus.Grid;
+        focusVisible = false;
     }
 
     public void Rebuild()
     {
-        RebuildCandidates();
+        RebuildGrid();
         RefreshSlots();
     }
 
     public void Teardown()
     {
         if (breedButton != null) breedButton.clicked -= TryBreed;
+        if (filterFathers != null) filterFathers.clicked -= OnFilterFathers;
+        if (filterMothers != null) filterMothers.clicked -= OnFilterMothers;
     }
 
-    private void RebuildCandidates()
+    private static void SetText(Label label, string key)
     {
-        if (fatherList == null || motherList == null) return;
-        fatherList.Clear(); motherList.Clear();
-        fatherCards.Clear(); motherCards.Clear();
-        var registry = getRegistry();
-        if (registry == null) return;
+        if (label != null) label.text = Loc.Tr(key);
+    }
 
-        var all = registry.GetAll().Values;
-        foreach (var dna in Eligible(all, CreatureGender.Male))
-            fatherList.Add(MakeCandidate(dna, fatherCards, isFather: true));
-        foreach (var dna in Eligible(all, CreatureGender.Female))
-            motherList.Add(MakeCandidate(dna, motherCards, isFather: false));
+    private void OnFilterFathers() => ChangeFilter(CreatureGender.Male);
+    private void OnFilterMothers() => ChangeFilter(CreatureGender.Female);
+
+    private void ChangeFilter(CreatureGender gender)
+    {
+        if (filter == gender) return;
+        filter = gender;
+        gridIndex = 0;
+        RebuildGrid();
+    }
+
+    private void RebuildGrid()
+    {
+        if (grid == null) return;
+        grid.Clear();
+        tiles.Clear();
+
+        filterFathers?.EnableInClassList(FilterOn, filter == CreatureGender.Male);
+        filterMothers?.EnableInClassList(FilterOn, filter == CreatureGender.Female);
+
+        var registry = getRegistry();
+        if (registry != null)
+        {
+            string chosenId = filter == CreatureGender.Male ? selectedFatherId : selectedMotherId;
+            foreach (var dna in Eligible(registry.GetAll().Values, filter))
+            {
+                var tile = MakeTile(dna);
+                tile.EnableInClassList(Chosen, dna.UniqueID == chosenId);
+                grid.Add(tile);
+                tiles.Add(tile);
+            }
+        }
+
+        if (emptyLabel != null) emptyLabel.style.display = tiles.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        gridIndex = tiles.Count == 0 ? 0 : Mathf.Clamp(gridIndex, 0, tiles.Count - 1);
+        ApplyFocusIfActive();
     }
 
     private static IEnumerable<CreatureDNA> Eligible(IEnumerable<CreatureDNA> all, CreatureGender gender) =>
         all.Where(d => CreatureAvailability.IsFree(d) && d.Gender == gender && d.BreedCount < BreedingService.MaxBreedCount)
            .OrderBy(d => d.CustomName);
 
-    private VisualElement MakeCandidate(CreatureDNA dna, List<VisualElement> bucket, bool isFather)
+    private VisualElement MakeTile(CreatureDNA dna)
     {
-        var row = new VisualElement();
-        row.AddToClassList("breed-candidate");
-        row.userData = dna.UniqueID;
+        var tile = new VisualElement();
+        tile.AddToClassList("breed-tile");
+        tile.userData = dna.UniqueID;
 
-        var l = new Label($"{dna.CustomName}  ·  {dna.BreedCount}/{BreedingService.MaxBreedCount}");
-        l.AddToClassList("breed-candidate-text");
-        row.Add(l);
+        var slot = new VisualElement();
+        slot.AddToClassList("mm-slot");
+        slot.AddToClassList("breed-tile__slot");
+        slot.pickingMode = PickingMode.Ignore;
+
+        var vignette = new VisualElement { pickingMode = PickingMode.Ignore };
+        vignette.AddToClassList("mm-layer");
+        vignette.AddToClassList("mm-slot__vignette");
+        slot.Add(vignette);
+
+        var img = new VisualElement { pickingMode = PickingMode.Ignore };
+        img.AddToClassList("breed-tile__img");
+        MonchiPortraitUI.Apply(img, dna);
+        slot.Add(img);
+
+        var frame = new VisualElement { pickingMode = PickingMode.Ignore };
+        frame.AddToClassList("mm-layer");
+        frame.AddToClassList("mm-slot__frame");
+        slot.Add(frame);
+        tile.Add(slot);
+
+        var name = new Label(dna.CustomName) { pickingMode = PickingMode.Ignore };
+        name.AddToClassList("breed-tile__name");
+        tile.Add(name);
+
+        var count = new Label($"{dna.BreedCount}/{BreedingService.MaxBreedCount}") { pickingMode = PickingMode.Ignore };
+        count.AddToClassList("breed-tile__count");
+        tile.Add(count);
 
         string id = dna.UniqueID;
-        row.RegisterCallback<ClickEvent>(_ => { if (isFather) SelectFather(id); else SelectMother(id); });
-        bucket.Add(row);
-        return row;
+        tile.RegisterCallback<ClickEvent>(_ => Assign(id));
+        return tile;
     }
 
     private void RefreshSlots()
     {
-        SetSlot(fatherSlotName, fatherSlotImg, selectedFatherId);
-        SetSlot(motherSlotName, motherSlotImg, selectedMotherId);
-        BuildPreview();
-    }
-
-    private void SetSlot(Label nameLabel, VisualElement img, string id)
-    {
         var registry = getRegistry();
-        CreatureDNA dna = null;
-        if (!string.IsNullOrEmpty(id) && registry != null) registry.TryGet(id, out dna);
-
-        if (nameLabel != null) nameLabel.text = dna != null ? dna.CustomName : Loc.Tr("ui.breeding.slot.empty");
-        if (img != null) MonchiPortraitUI.Apply(img, dna);
-    }
-
-    private void BuildPreview()
-    {
-        if (preview == null) return;
-        preview.Clear();
-
-        var registry = getRegistry();
-        if (registry == null
-            || !registry.TryGet(selectedFatherId, out var father)
-            || !registry.TryGet(selectedMotherId, out var mother))
+        CreatureDNA father = null, mother = null;
+        if (registry != null)
         {
-            if (timeLabel != null) timeLabel.text = "";
-            return;
+            if (!string.IsNullOrEmpty(selectedFatherId)) registry.TryGet(selectedFatherId, out father);
+            if (!string.IsNullOrEmpty(selectedMotherId)) registry.TryGet(selectedMotherId, out mother);
         }
 
-        preview.Add(ParentSummary(father));
-        preview.Add(ParentSummary(mother));
+        SetSlot(fatherSlot, fatherSlotName, fatherSlotImg, father);
+        SetSlot(motherSlot, motherSlotName, motherSlotImg, mother);
+        BreedingInheritanceView.Build(inheritList, database, father, mother);
 
+        bool both = father != null && mother != null;
+        breedButton?.SetEnabled(both);
+
+        if (timeLabel == null) return;
+        if (timeLabel.parent != null) timeLabel.parent.style.visibility = both ? Visibility.Visible : Visibility.Hidden;
+        if (!both) { timeLabel.text = ""; return; }
         int mins = (BreedingController.Instance != null && BreedingController.Instance.InheritanceOdds != null) ? BreedingController.Instance.InheritanceOdds.BreedDurationMinutes : 360;
-        if (timeLabel != null) timeLabel.text = Loc.Tr("ui.breeding.time.estimate.hours", FormatGameDuration(mins));
+        timeLabel.text = Loc.Tr("ui.breeding.time.estimate.hours", FormatGameDuration(mins));
+    }
+
+    private static void SetSlot(VisualElement slot, Label nameLabel, VisualElement img, CreatureDNA dna)
+    {
+        slot?.EnableInClassList(Empty, dna == null);
+        if (nameLabel != null) nameLabel.text = dna != null ? dna.CustomName : Loc.Tr("ui.breeding.slot.empty");
+        if (img == null) return;
+        if (dna != null) MonchiPortraitUI.Apply(img, dna);
+        else
+        {
+            img.style.backgroundImage = StyleKeyword.Null;
+            img.style.backgroundColor = Color.clear;
+        }
     }
 
     private static string FormatGameDuration(int minutes)
@@ -212,71 +278,20 @@ public class BreedingBreedTabPresenter : ITabPresenter
         return $"{h}h {m:00}m";
     }
 
-    private VisualElement ParentSummary(CreatureDNA dna)
+    private void Assign(string id)
     {
-        var col = new VisualElement();
-        col.AddToClassList("preview-parent");
-
-        var name = new Label(dna.CustomName);
-        name.AddToClassList("preview-name");
-        col.Add(name);
-
-        if (database != null)
+        if (filter == CreatureGender.Male)
         {
-            AddPartRow(col, database.GetBodyShape(dna.BodyShapeID));
-            AddPartRow(col, database.GetHorn(dna.HornID));
-            AddPartRow(col, database.GetBack(dna.BackID));
-            AddPartRow(col, database.GetWing(dna.WingID));
-            AddPartRow(col, database.GetFace(dna.FaceID));
-        }
-        return col;
-    }
-
-    private static void AddPartRow(VisualElement parent, BodyPart part)
-    {
-        var row = new VisualElement();
-        row.AddToClassList("preview-part-row");
-
-        var swatch = new VisualElement();
-        swatch.AddToClassList("preview-swatch");
-
-        Color setColor = part?.Set != null ? part.Set.Color : Color.gray;
-
-        if (part != null && part.Icon != null)
-        {
-            swatch.AddToClassList("preview-icon");
-            swatch.style.backgroundImage = new StyleBackground(part.Icon);
-            swatch.style.backgroundColor = new Color(0f, 0f, 0f, 0f);
-            switch (part.GetPartRole())
-            {
-                case PartRole.Horn: swatch.AddToClassList("preview-icon--horn"); break;
-                case PartRole.Back: swatch.AddToClassList("preview-icon--back"); break;
-                case PartRole.Wing: swatch.AddToClassList("preview-icon--wing"); break;
-            }
+            selectedFatherId = id;
+            if (string.IsNullOrEmpty(selectedMotherId)) { filter = CreatureGender.Female; gridIndex = 0; }
         }
         else
         {
-            swatch.style.backgroundColor = setColor;
+            selectedMotherId = id;
+            if (string.IsNullOrEmpty(selectedFatherId)) { filter = CreatureGender.Male; gridIndex = 0; }
         }
-        row.Add(swatch);
-
-        var text = new Label(part != null ? $"{part.Name} · {(part.Set != null ? part.Set.Name : "—")}" : "—");
-        text.AddToClassList("preview-part-text");
-        row.Add(text);
-
-        parent.Add(row);
-    }
-
-    private void SelectFather(string id) { selectedFatherId = id; AfterSelect(0); }
-    private void SelectMother(string id) { selectedMotherId = id; AfterSelect(1); }
-
-    private void AfterSelect(int slot)
-    {
-        ClearListFocus();
-        focus = SubFocus.Slots;
-        criarIndex = slot;
+        RebuildGrid();
         RefreshSlots();
-        ApplyCriarFocus();
     }
 
     private void TryBreed()
@@ -299,58 +314,27 @@ public class BreedingBreedTabPresenter : ITabPresenter
         if (started)
         {
             selectedFatherId = selectedMotherId = "";
+            filter = CreatureGender.Male;
+            gridIndex = 0;
+            focus = SubFocus.Grid;
+            RebuildGrid();
             RefreshSlots();
             onBred();
         }
     }
 
-    private void MoveList(List<VisualElement> cards, ref int idx, int delta, ScrollView scroll)
+    private void ApplyFocusIfActive()
     {
-        if (cards.Count == 0) return;
-        idx = Mathf.Clamp(idx + delta, 0, cards.Count - 1);
-        UiPanels.SetActiveIndex(cards, idx, Focus);
-        scroll?.ScrollTo(cards[idx]);
+        if (focusVisible) ApplyFocus();
     }
 
-    private void OpenList(SubFocus which)
+    private void ApplyFocus()
     {
-        ClearListFocus();
-        ClearCriarFocus();
-        focus = which;
-        if (which == SubFocus.FatherList)
-        {
-            fatherIndex = 0;
-            UiPanels.SetActiveIndex(fatherCards, 0, Focus);
-            if (fatherCards.Count > 0) fatherList?.ScrollTo(fatherCards[0]);
-        }
-        else
-        {
-            motherIndex = 0;
-            UiPanels.SetActiveIndex(motherCards, 0, Focus);
-            if (motherCards.Count > 0) motherList?.ScrollTo(motherCards[0]);
-        }
+        focusVisible = true;
+        bool onGrid = focus == SubFocus.Grid;
+        UiPanels.SetActiveIndex(tiles, onGrid ? gridIndex : -1, Focus);
+        breedButton?.EnableInClassList(Focus, !onGrid);
+        if (onGrid && gridIndex >= 0 && gridIndex < tiles.Count) grid?.ScrollTo(tiles[gridIndex]);
     }
-
-    private void ApplyCriarFocus()
-    {
-        fatherSlot?.EnableInClassList(Focus, criarIndex == 0);
-        motherSlot?.EnableInClassList(Focus, criarIndex == 1);
-        breedButton?.EnableInClassList(Focus, criarIndex == 2);
-    }
-
-    private void ClearCriarFocus()
-    {
-        fatherSlot?.RemoveFromClassList(Focus);
-        motherSlot?.RemoveFromClassList(Focus);
-        breedButton?.RemoveFromClassList(Focus);
-    }
-
-    private void ClearListFocus()
-    {
-        foreach (var c in fatherCards) c.RemoveFromClassList(Focus);
-        foreach (var c in motherCards) c.RemoveFromClassList(Focus);
-    }
-
-    private static bool InRange(List<VisualElement> list, int i) => i >= 0 && i < list.Count;
 }
 }

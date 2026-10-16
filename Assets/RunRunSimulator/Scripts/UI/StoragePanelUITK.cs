@@ -11,15 +11,27 @@ public class StoragePanelUITK : MonoBehaviour, IUINavigable
     [SerializeField] private UIPanelType panel = UIPanelType.Storage;
     [SerializeField] private ItemDatabaseSO database;
 
-    private const string RowClass         = "storage-row";
-    private const string RowSelectedClass = "storage-row--selected";
+    private const int Columns         = 8;
+    private const int MinRows         = 2;
+    private const string SlotClass         = "storage-slot";
+    private const string SlotFilledClass   = "storage-slot--filled";
+    private const string SlotSelectedClass = "storage-slot--selected";
 
-    private ScrollView list;
-    private Label emptyLabel;
+    private sealed class SlotView
+    {
+        public VisualElement Root;
+        public VisualElement Icon;
+        public Label Name;
+        public Label Count;
+    }
+
+    private ScrollView grid;
+    private VisualElement hotbarHost;
+    private Label subtitle;
     private Button closeButton;
 
-    private readonly List<VisualElement> rows = new List<VisualElement>();
-    private readonly List<string> rowIds = new List<string>();
+    private readonly List<VisualElement> filledSlots = new List<VisualElement>();
+    private readonly List<string> slotIds = new List<string>();
     private int selectedIndex = -1;
     private PlayerInventorySO inventory;
 
@@ -28,12 +40,14 @@ public class StoragePanelUITK : MonoBehaviour, IUINavigable
         inventory = GameManager.CurrentInventory;
         GameEvents.OnInventoryChanged  += Rebuild;
         GameEvents.OnInventoryReloaded += Rebuild;
+        HotbarController.OnHotbarChanged += RebuildHotbar;
     }
 
     private void OnDisable()
     {
         GameEvents.OnInventoryChanged  -= Rebuild;
         GameEvents.OnInventoryReloaded -= Rebuild;
+        HotbarController.OnHotbarChanged -= RebuildHotbar;
     }
 
     private void Start()
@@ -51,10 +65,12 @@ public class StoragePanelUITK : MonoBehaviour, IUINavigable
 
     public void OnUINavigate(Vector2 dir)
     {
-        if (rows.Count == 0) return;
+        if (filledSlots.Count == 0) return;
         int idx = selectedIndex < 0 ? 0 : selectedIndex;
-        if      (dir.y < -0.5f) idx += 1;
-        else if (dir.y >  0.5f) idx -= 1;
+        if      (dir.x >  0.5f) idx += 1;
+        else if (dir.x < -0.5f) idx -= 1;
+        else if (dir.y < -0.5f) idx += Columns;
+        else if (dir.y >  0.5f) idx -= Columns;
         Select(idx);
     }
 
@@ -66,19 +82,24 @@ public class StoragePanelUITK : MonoBehaviour, IUINavigable
 
     private void RebuildFromInventory()
     {
-        var container = ResolveList();
+        RebuildGrid();
+        RebuildHotbar();
+    }
+
+    private void RebuildGrid()
+    {
+        var container = ResolveGrid();
         if (container == null) return;
 
         container.Clear();
-        rows.Clear();
-        rowIds.Clear();
+        filledSlots.Clear();
+        slotIds.Clear();
 
         var counts = new Dictionary<string, int>();
         var order  = new List<string>();
-        var inv = inventory;
-        if (inv != null)
+        if (inventory != null)
         {
-            foreach (var id in inv.WorldPropsStored)
+            foreach (var id in inventory.WorldPropsStored)
             {
                 if (string.IsNullOrEmpty(id)) continue;
                 if (!counts.ContainsKey(id)) { counts[id] = 0; order.Add(id); }
@@ -88,32 +109,88 @@ public class StoragePanelUITK : MonoBehaviour, IUINavigable
 
         foreach (var id in order)
         {
-            var row = BuildRow(id, counts[id]);
-            rows.Add(row);
-            rowIds.Add(id);
-            container.Add(row);
+            var view = BuildSlot();
+            Fill(view, id, counts[id]);
+            string captured = id;
+            view.Root.AddToClassList(SlotFilledClass);
+            view.Root.RegisterCallback<ClickEvent>(_ => Eject(captured));
+            filledSlots.Add(view.Root);
+            slotIds.Add(id);
+            container.Add(view.Root);
         }
 
-        if (emptyLabel != null)
-            emptyLabel.style.display = rows.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        int rows  = Mathf.Max(MinRows, Mathf.CeilToInt(order.Count / (float)Columns));
+        int total = rows * Columns;
+        for (int i = order.Count; i < total; i++)
+            container.Add(BuildSlot().Root);
 
-        Select(rows.Count == 0 ? -1 : Mathf.Clamp(selectedIndex, 0, rows.Count - 1), false);
+        if (subtitle != null) subtitle.text = Loc.Tr("ui.storage.subtitle", order.Count);
+
+        Select(filledSlots.Count == 0 ? -1 : Mathf.Clamp(selectedIndex, 0, filledSlots.Count - 1));
     }
 
-    private VisualElement BuildRow(string id, int count)
+    private void RebuildHotbar()
     {
-        var row = new VisualElement();
-        row.AddToClassList(RowClass);
+        var host = ResolveHotbar();
+        if (host == null) return;
 
-        var name = new Label(count > 1 ? $"{DisplayNameOf(id)}  x{count}" : DisplayNameOf(id));
-        name.AddToClassList("storage-row__name");
-        row.Add(name);
+        host.Clear();
+        for (int i = 0; i < PlayerInventorySO.HotbarSize; i++)
+        {
+            var view = BuildSlot();
+            string id = inventory != null ? inventory.GetHotbarSlot(i) : null;
+            if (!string.IsNullOrEmpty(id)) Fill(view, id, 0);
+            host.Add(view.Root);
+        }
+    }
 
-        var eject = new Button(() => Eject(id)) { text = Loc.Tr("ui.storage.eject") };
-        eject.AddToClassList("storage-row__eject");
-        row.Add(eject);
+    private static SlotView BuildSlot()
+    {
+        var root = new VisualElement();
+        root.AddToClassList(SlotClass);
 
-        return row;
+        var box = new VisualElement();
+        box.AddToClassList("storage-slot__box");
+        box.pickingMode = PickingMode.Ignore;
+        root.Add(box);
+
+        var runes = new VisualElement();
+        runes.AddToClassList("storage-slot__runes");
+        runes.pickingMode = PickingMode.Ignore;
+        box.Add(runes);
+
+        var icon = new VisualElement();
+        icon.AddToClassList("storage-slot__icon");
+        icon.pickingMode = PickingMode.Ignore;
+        box.Add(icon);
+
+        var name = new Label("");
+        name.AddToClassList("storage-slot__name");
+        name.pickingMode = PickingMode.Ignore;
+        box.Add(name);
+
+        var count = new Label("");
+        count.AddToClassList("storage-slot__count");
+        count.pickingMode = PickingMode.Ignore;
+        box.Add(count);
+
+        var frame = new VisualElement();
+        frame.AddToClassList("storage-slot__frame");
+        frame.pickingMode = PickingMode.Ignore;
+        box.Add(frame);
+
+        return new SlotView { Root = root, Icon = icon, Name = name, Count = count };
+    }
+
+    private void Fill(SlotView view, string id, int count)
+    {
+        var def = database != null ? database.GetByID(id) : null;
+        if (def != null && def.Icon != null)
+            view.Icon.style.backgroundImage = new StyleBackground(def.Icon);
+        else
+            view.Name.text = def != null && !string.IsNullOrEmpty(def.DisplayName) ? def.DisplayName : id;
+
+        if (count > 0) view.Count.text = $"×{count}";
     }
 
     private void Eject(string id)
@@ -128,45 +205,58 @@ public class StoragePanelUITK : MonoBehaviour, IUINavigable
 
     private void EjectSelected()
     {
-        if (selectedIndex >= 0 && selectedIndex < rowIds.Count)
-            Eject(rowIds[selectedIndex]);
+        if (selectedIndex >= 0 && selectedIndex < slotIds.Count)
+            Eject(slotIds[selectedIndex]);
     }
 
-    private void Select(int idx, bool _ = true)
+    private void Select(int idx)
     {
-        selectedIndex = UiPanels.ClampSelection(rows.Count, idx);
+        selectedIndex = UiPanels.ClampSelection(filledSlots.Count, idx);
         if (selectedIndex < 0) return;
-        UiPanels.SetActiveIndex(rows, selectedIndex, RowSelectedClass);
+        UiPanels.SetActiveIndex(filledSlots, selectedIndex, SlotSelectedClass);
     }
 
     private void WireChrome()
     {
         var root = UiPanels.RootOf(document);
         if (root == null) return;
-        emptyLabel  = root.Q<Label>("empty");
         closeButton = root.Q<Button>("close-button");
+        subtitle    = root.Q<Label>("subtitle");
 
-        var titleLabel = root.Q<Label>(className: "storage-title");
-        if (titleLabel != null) titleLabel.text = Loc.Tr("ui.storage.title");
-        if (emptyLabel != null) emptyLabel.text = Loc.Tr("ui.storage.empty");
+        SetLabelText(root, "title", "ui.storage.title");
+        SetLabelText(root, "section-box", "ui.storage.section.box");
+        SetLabelText(root, "section-hotbar", "ui.storage.section.hotbar");
+        SetLabelText(root, "prompt-move", "ui.prompt.move");
+        SetLabelText(root, "prompt-take", "ui.storage.prompt.take");
+        SetLabelText(root, "prompt-close", "ui.prompt.close");
+
         if (closeButton != null) closeButton.clicked += OnCloseClicked;
+    }
+
+    private static void SetLabelText(VisualElement root, string name, string key)
+    {
+        var label = root.Q<Label>(name);
+        if (label != null) label.text = Loc.Tr(key);
     }
 
     private void OnCloseClicked() => UIManager.RequestPanelToggle(panel);
 
-    private ScrollView ResolveList()
+    private ScrollView ResolveGrid()
     {
-        if (list != null && list.panel != null) return list;
+        if (grid != null && grid.panel != null) return grid;
         var root = UiPanels.RootOf(document);
         if (root == null) return null;
-        list = root.Q<ScrollView>("list");
-        return list;
+        grid = root.Q<ScrollView>("grid");
+        return grid;
     }
 
-    private string DisplayNameOf(string id)
+    private VisualElement ResolveHotbar()
     {
-        var def = database != null ? database.GetByID(id) : null;
-        return def != null && !string.IsNullOrEmpty(def.DisplayName) ? def.DisplayName : id;
+        if (hotbarHost != null && hotbarHost.panel != null) return hotbarHost;
+        var root = UiPanels.RootOf(document);
+        if (root == null) return null;
+        hotbarHost = root.Q<VisualElement>("hotbar");
+        return hotbarHost;
     }
 }
 }

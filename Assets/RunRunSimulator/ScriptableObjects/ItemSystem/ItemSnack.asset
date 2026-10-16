@@ -24,4 +24,5 @@ MonoBehaviour:
   Id: I1
   DisplayName: Snack Monchi
   Category: 1
+  Icon: {fileID: 21300000, guid: eccf8d50901757545a6041c0c622e191, type: 3}
   Prefab: {fileID: 4597857602551343232, guid: 429e2957d28e62e42b44b1c6174992c2, type: 3}

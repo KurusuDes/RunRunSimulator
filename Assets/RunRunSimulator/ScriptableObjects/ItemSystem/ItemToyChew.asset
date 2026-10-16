@@ -24,4 +24,5 @@ MonoBehaviour:
   Id: I3
   DisplayName: Mordedor
   Category: 3
+  Icon: {fileID: 21300000, guid: ff776a242441a084892a2146bb43dd8d, type: 3}
   Prefab: {fileID: 5705197648943313294, guid: b5a3555addb8654488569aca4e562de8, type: 3}

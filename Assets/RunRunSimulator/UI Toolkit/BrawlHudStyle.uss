@@ -12,9 +12,19 @@
     top: 0;
     right: 0;
     bottom: 0;
-    border-radius: 10px;
-    background-color: var(--mm-surface);
-    opacity: 0.82;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.2;
+}
+
+.brawl-frame {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Frame_Rounded_02.png");
+    -unity-slice-scale: 0.25;
 }
 
 .brawl-top {
@@ -33,34 +43,43 @@
     flex-grow: 1;
     flex-basis: 0;
     min-width: 0;
-    padding: 6px 8px 8px 8px;
-    border-radius: 10px;
-    border-width: 2px;
+    padding: 8px 12px 10px 12px;
+}
+
+.brawl-team > .brawl-bg {
+    opacity: 0.55;
 }
 
 .brawl-team--blue {
-    border-color: var(--mm-ally);
     margin-right: 8px;
 }
 
 .brawl-team--red {
-    border-color: var(--mm-foe);
     margin-left: 8px;
 }
 
+.brawl-team--blue > .brawl-frame {
+    -unity-background-image-tint-color: rgba(150, 200, 255, 0.5);
+}
+
+.brawl-team--red > .brawl-frame {
+    -unity-background-image-tint-color: rgba(255, 150, 140, 0.5);
+}
+
 .brawl-team__title {
-    font-size: 14px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 20px;
     letter-spacing: 3px;
-    -unity-font-style: bold;
     margin: 0 6px 4px 6px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .brawl-team__title--blue {
-    color: var(--mm-ally);
+    color: rgb(150, 200, 255);
 }
 
 .brawl-team__title--red {
-    color: var(--mm-foe);
+    color: rgb(255, 150, 140);
     -unity-text-align: upper-right;
 }
 
@@ -72,17 +91,19 @@
     width: 330px;
     flex-shrink: 0;
     align-items: center;
-    padding: 6px 14px 8px 14px;
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: var(--mm-frame-soft);
+    padding: 8px 14px 10px 14px;
+}
+
+.brawl-frame--gold {
+    -unity-background-image-tint-color: var(--hud-gold);
 }
 
 .brawl-timer {
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
     font-size: 54px;
-    -unity-font-style: bold;
     -unity-text-align: middle-center;
-    color: var(--mm-ink);
+    color: rgb(255, 255, 255);
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
 }
 
 .brawl-timer--sudden {
@@ -90,15 +111,16 @@
 }
 
 .brawl-phase {
-    font-size: 15px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 20px;
     letter-spacing: 3px;
-    -unity-font-style: bold;
-    color: var(--mm-gold);
+    color: var(--hud-gold);
     margin-top: -6px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .brawl-match {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--mm-ink-soft);
     margin-top: 2px;
 }
@@ -109,31 +131,25 @@
     min-width: 0;
     max-width: 260px;
     margin: 0 4px;
-    padding: 6px 8px 6px 8px;
-    border-radius: 10px;
-    border-width: 2px;
-    border-top-width: 4px;
-    border-color: var(--mm-frame-soft);
+    padding: 8px 10px 8px 10px;
     transition-property: opacity;
     transition-duration: 0.25s;
 }
 
-.brawl-card > .brawl-bg {
-    background-color: var(--mm-surface-2);
-    opacity: 0.9;
+.brawl-card--blue > .brawl-frame {
+    -unity-background-image-tint-color: rgba(150, 200, 255, 0.4);
 }
 
-.brawl-card--blue {
-    border-color: var(--mm-ally);
-}
-
-.brawl-card--red {
-    border-color: var(--mm-foe);
+.brawl-card--red > .brawl-frame {
+    -unity-background-image-tint-color: rgba(255, 150, 140, 0.4);
 }
 
 .brawl-card--ko {
-    opacity: 0.45;
-    border-color: var(--mm-frame-soft);
+    opacity: 0.5;
+}
+
+.brawl-card--ko > .brawl-frame {
+    -unity-background-image-tint-color: rgba(160, 150, 140, 0.35);
 }
 
 .brawl-card--ko .brawl-card__name {
@@ -147,9 +163,10 @@
 
 .brawl-card__name {
     flex-shrink: 1;
-    font-size: 17px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 19px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -157,7 +174,7 @@
 
 .brawl-card__body {
     flex-shrink: 0;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--mm-ink-soft);
     margin: 0 0 1px 6px;
 }
@@ -169,24 +186,20 @@
 }
 
 .brawl-card__posture {
-    font-size: 12px;
-    -unity-font-style: italic;
+    font-size: 14px;
     color: var(--mm-ink-soft);
 }
 
 .brawl-card__intent {
-    font-size: 12px;
-    -unity-font-style: bold;
-    color: var(--mm-gold);
+    font-size: 14px;
+    color: var(--hud-gold);
 }
 
 .brawl-hp {
-    height: 20px;
+    height: 22px;
     margin-top: 4px;
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: var(--mm-frame-soft);
-    background-color: var(--mm-bg-deep);
+    border-radius: 11px;
+    background-color: rgba(17, 14, 12, 0.85);
     overflow: hidden;
     justify-content: center;
 }
@@ -210,12 +223,11 @@
 }
 
 .brawl-hp__label {
-    font-size: 13px;
-    -unity-font-style: bold;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 15px;
     -unity-text-align: middle-center;
-    color: var(--mm-ink);
-    -unity-text-outline-width: 2px;
-    -unity-text-outline-color: var(--mm-bg-deep);
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .brawl-hp__ko {
@@ -225,11 +237,12 @@
     right: 0;
     bottom: 0;
     display: none;
-    font-size: 17px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 20px;
     letter-spacing: 4px;
-    -unity-font-style: bold;
     -unity-text-align: middle-center;
-    color: var(--mm-crit);
+    color: rgb(214, 150, 96);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .brawl-card--ko .brawl-hp__label {
@@ -258,15 +271,24 @@
 }
 
 .brawl-slot__box {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Circle_Background_01.png");
+    -unity-background-image-tint-color: rgba(28, 24, 20, 0.9);
 }
 
-.brawl-slot--locked .brawl-slot__box {
-    border-radius: 8px;
-    border-width: 2px;
-    border-color: var(--mm-frame-soft);
-    background-color: var(--mm-bg-deep);
+.brawl-slot__ring {
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    right: -2px;
+    bottom: -2px;
+    background-image: url("Skin/Synty/SPR_FantasyMenus_Ring_Medium_01.png");
+    -unity-background-image-tint-color: var(--hud-gold);
+}
+
+.brawl-slot--locked .brawl-slot__ring {
+    -unity-background-image-tint-color: rgba(160, 120, 60, 0.7);
 }
 
 .brawl-slot__lock {
@@ -275,18 +297,18 @@
     top: 0;
     right: 0;
     bottom: 0;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
     font-size: 22px;
-    -unity-font-style: bold;
     -unity-text-align: middle-center;
     color: var(--mm-ink-soft);
 }
 
 .brawl-slot__icon {
     position: absolute;
-    left: 5px;
-    top: 5px;
-    right: 5px;
-    bottom: 5px;
+    left: 7px;
+    top: 7px;
+    right: 7px;
+    bottom: 7px;
     transition-property: opacity;
     transition-duration: 0.15s;
 }
@@ -315,8 +337,9 @@
 
 .brawl-slot__label {
     max-width: 100%;
-    font-size: 12px;
-    color: var(--mm-ink);
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
     margin-top: 2px;
     -unity-text-align: upper-center;
     overflow: hidden;
@@ -338,12 +361,12 @@
 }
 
 .brawl-feed__name {
-    font-size: 14px;
-    -unity-font-style: bold;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 16px;
 }
 
 .brawl-feed__verb {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--mm-ink-soft);
     margin: 0 6px;
 }
@@ -370,12 +393,11 @@
 }
 
 .brawl-banner {
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
     font-size: 120px;
-    -unity-font-style: bold;
     -unity-text-align: middle-center;
-    color: var(--mm-ink);
-    -unity-text-outline-width: 4px;
-    -unity-text-outline-color: var(--mm-bg-deep);
+    color: rgb(255, 255, 255);
+    text-shadow: 0 6px 8px rgba(0, 0, 0, 0.75);
     transition-property: scale;
     transition-duration: 0.22s;
     transition-timing-function: ease-out-back;
@@ -387,15 +409,15 @@
 }
 
 .brawl-banner--ink {
-    color: var(--mm-ink);
+    color: rgb(255, 255, 255);
 }
 
 .brawl-banner--blue {
-    color: var(--mm-ally);
+    color: rgb(150, 200, 255);
 }
 
 .brawl-banner--red {
-    color: var(--mm-foe);
+    color: rgb(255, 150, 140);
 }
 
 .brawl-banner--coral {
@@ -403,13 +425,12 @@
 }
 
 .brawl-banner-sub {
-    font-size: 30px;
-    -unity-font-style: bold;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 36px;
     -unity-text-align: middle-center;
-    color: var(--mm-ink);
+    color: var(--hud-gold);
     margin-top: -6px;
-    -unity-text-outline-width: 3px;
-    -unity-text-outline-color: var(--mm-bg-deep);
+    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.75);
 }
 
 .brawl-controls {
@@ -418,24 +439,14 @@
     bottom: 14px;
     flex-direction: row;
     align-items: center;
+    display: none;
 }
 
 .brawl-btn {
-    height: 40px;
+    min-height: 36px;
     margin: 0 6px 0 0;
-    padding: 0 14px;
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: var(--mm-frame-soft);
-    background-color: var(--mm-surface);
-    color: var(--mm-ink);
-    font-size: 16px;
-    -unity-font-style: bold;
-    -unity-text-align: middle-center;
-}
-
-.brawl-btn:hover {
-    border-color: var(--mm-frame);
+    padding: 0 16px;
+    font-size: 17px;
 }
 
 .brawl-btn--group {
@@ -448,8 +459,8 @@
 }
 
 .brawl-btn--on {
-    border-color: var(--mm-gold);
-    color: var(--mm-gold);
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
+    color: rgb(255, 255, 255);
 }
 
 .brawl-overheads {
@@ -492,8 +503,8 @@
 }
 
 .brawl-plate__name {
-    font-size: 13px;
-    -unity-font-style: bold;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 14px;
     -unity-text-align: middle-center;
     white-space: nowrap;
     margin-bottom: 1px;
@@ -556,10 +567,9 @@
     align-items: center;
     flex-shrink: 0;
     padding: 3px 10px 3px 6px;
-    border-radius: 12px;
-    border-width: 2px;
-    border-color: var(--mm-frame);
-    background-color: var(--mm-surface);
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.2;
     opacity: 0;
     transform-origin: 50% 100%;
     transition-property: opacity;
@@ -577,9 +587,9 @@
 }
 
 .brawl-bubble__text {
-    font-size: 15px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 16px;
+    color: rgb(255, 255, 255);
     white-space: nowrap;
 }
 
@@ -588,8 +598,8 @@
     left: 0;
     right: 0;
     bottom: 0;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
     font-size: 22px;
-    -unity-font-style: bold;
     -unity-text-align: lower-center;
     white-space: nowrap;
     color: var(--mm-ink);

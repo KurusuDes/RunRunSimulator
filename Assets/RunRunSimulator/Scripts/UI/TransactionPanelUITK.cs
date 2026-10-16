@@ -10,7 +10,8 @@ public class TransactionPanelUITK : MonoBehaviour
     private VisualElement root;
     private Label         customerNameLbl;
     private Label         archetypeLbl;
-    private VisualElement mmSwatch;
+    private VisualElement mmPortrait;
+    private VisualElement mmRunes;
     private Label         targetNameLbl;
     private Label         targetInfoLbl;
     private Label         offerLbl;
@@ -72,7 +73,8 @@ public class TransactionPanelUITK : MonoBehaviour
 
         customerNameLbl = root.Q<Label>("customer-name");
         archetypeLbl    = root.Q<Label>("archetype");
-        mmSwatch        = root.Q<VisualElement>("mm-swatch");
+        mmPortrait      = root.Q<VisualElement>("mm-portrait");
+        mmRunes         = root.Q<VisualElement>("mm-runes");
         targetNameLbl   = root.Q<Label>("target-name");
         targetInfoLbl   = root.Q<Label>("target-info");
         offerLbl        = root.Q<Label>("offer");
@@ -126,7 +128,12 @@ public class TransactionPanelUITK : MonoBehaviour
             if (targetNameLbl   != null) targetNameLbl.text   = "";
             if (targetInfoLbl   != null) targetInfoLbl.text   = "";
             if (offerLbl        != null) offerLbl.text        = "";
-            if (mmSwatch        != null) mmSwatch.style.backgroundColor = new StyleColor(new Color(0.47f, 0.47f, 0.47f));
+            if (mmPortrait      != null)
+            {
+                mmPortrait.style.backgroundImage = StyleKeyword.Null;
+                mmPortrait.style.backgroundColor = Color.clear;
+            }
+            if (mmRunes         != null) mmRunes.style.display = DisplayStyle.Flex;
             if (acceptBtn  != null) acceptBtn.SetEnabled(false);
             if (counterBtn != null) counterBtn.SetEnabled(false);
             if (rejectBtn  != null) rejectBtn.SetEnabled(false);
@@ -137,7 +144,8 @@ public class TransactionPanelUITK : MonoBehaviour
         var mm   = currentCustomer.TargetMM;
         if (customerNameLbl != null) customerNameLbl.text = Loc.Tr("ui.transaction.customer");
         if (archetypeLbl    != null) archetypeLbl.text    = arch != null ? arch.DisplayName : "";
-        if (mmSwatch        != null) MonchiPortraitUI.Apply(mmSwatch, mm);
+        if (mmRunes         != null) mmRunes.style.display = DisplayStyle.None;
+        if (mmPortrait      != null) MonchiPortraitUI.Apply(mmPortrait, mm);
         if (targetNameLbl   != null) targetNameLbl.text   = string.IsNullOrEmpty(mm.CustomName) ? Loc.Tr("ui.transaction.default_mm_name") : mm.CustomName;
         int today = GameClock.Instance != null ? GameClock.Instance.Day : 1;
         if (targetInfoLbl   != null) targetInfoLbl.text   = Loc.Tr("ui.transaction.target_info", GenderGlyph(mm.Gender), mm.AgeDays(today));

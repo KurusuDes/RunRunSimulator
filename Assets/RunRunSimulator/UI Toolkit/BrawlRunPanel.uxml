@@ -1,15 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
     <Style src="BrawlRunPanelStyle.uss" />
-    <ui:VisualElement name="run-root" class="mm-theme mm-theme--night run" picking-mode="Ignore">
+    <ui:VisualElement name="run-root" class="mm-theme mm-theme--night mm-hud run" picking-mode="Ignore">
         <ui:VisualElement name="run-hud" class="run-hud" picking-mode="Ignore">
             <ui:VisualElement name="run-bag" class="run-bag" picking-mode="Ignore">
                 <ui:VisualElement class="run-bag__icon" picking-mode="Ignore" />
                 <ui:Label name="run-bag-count" text="0" class="run-bag__count" picking-mode="Ignore" />
             </ui:VisualElement>
             <ui:VisualElement name="run-left" class="run-left" picking-mode="Ignore">
-                <ui:VisualElement name="run-left-pips" class="run-pips" picking-mode="Ignore" />
-                <ui:Label name="run-left-text" text="" class="run-left__text" picking-mode="Ignore" />
+                <ui:VisualElement class="run-left__pill" picking-mode="Ignore">
+                    <ui:VisualElement name="run-left-pips" class="run-pips" picking-mode="Ignore" />
+                    <ui:Label name="run-left-text" text="" class="run-left__text" picking-mode="Ignore" />
+                </ui:VisualElement>
             </ui:VisualElement>
             <ui:Label name="run-trial" text="" class="run-trial" picking-mode="Ignore" />
             <ui:VisualElement name="run-loot" class="run-loot" picking-mode="Ignore">
@@ -22,14 +24,15 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="run-card-wrap" class="run-card-wrap" picking-mode="Ignore">
-            <ui:VisualElement name="run-card" class="run-card">
-                <ui:VisualElement class="run-bg" picking-mode="Ignore" />
-                <ui:Label name="run-title" text="" class="run-title" picking-mode="Ignore" />
+            <ui:VisualElement name="run-card" class="mm-skin mm-panel mm-panel--compact run-card">
+                <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                <ui:Label name="run-title" text="" class="mm-title run-title" picking-mode="Ignore" />
                 <ui:VisualElement name="run-rooms" class="run-rooms" picking-mode="Ignore" />
                 <ui:Label name="run-info" text="" class="run-info" picking-mode="Ignore" />
                 <ui:VisualElement class="run-buttons" picking-mode="Ignore">
-                    <ui:Button name="run-go" text="Enfrentar tramo" focusable="false" class="run-btn run-btn--go" />
-                    <ui:Button name="run-leave" text="Volver a la tienda" focusable="false" class="run-btn" />
+                    <ui:Button name="run-go" text="" focusable="false" class="mm-button mm-button--big run-btn" />
+                    <ui:Button name="run-leave" text="" focusable="false" class="mm-button mm-button--alt run-btn" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

@@ -41,7 +41,6 @@ public class NameTag : MonoBehaviour
     private Label         priceLabel;
     private Label         statusLabel;
     private Label         intentLabel;
-    private Label         petHintLabel;
     private Label         genderLabel;
     private Label         roleLabel;
     private Label         stageLabel;
@@ -110,7 +109,6 @@ public class NameTag : MonoBehaviour
         priceLabel       = root.Q<Label>("price-label");
         statusLabel      = root.Q<Label>("status-label");
         intentLabel      = root.Q<Label>("intent-label");
-        petHintLabel     = root.Q<Label>("pet-hint-label");
         genderLabel      = root.Q<Label>("gender-label");
         roleLabel        = root.Q<Label>("role-label");
         stageLabel       = root.Q<Label>("stage-label");
@@ -190,7 +188,6 @@ public class NameTag : MonoBehaviour
     {
         SetDisplay(statusLabel,      false);
         SetDisplay(intentLabel,      false);
-        SetDisplay(petHintLabel,     false);
         SetDisplay(genderLabel,      false);
         SetDisplay(roleLabel, false);
         SetDisplay(stageLabel,       false);
@@ -212,7 +209,6 @@ public class NameTag : MonoBehaviour
         SetDisplay(priceLabel,   false);
         SetDisplay(statusLabel,  false);
         SetDisplay(intentLabel,  false);
-        SetDisplay(petHintLabel, false);
 
         if (genderLabel != null)
         {
@@ -259,23 +255,14 @@ public class NameTag : MonoBehaviour
         SetDisplay(timerLabel,  false);
         SetDisplay(stageLabel,  false);
 
-        bool isBeingPetted = agent != null && agent.IsBeingPetted;
-        bool showPetHint   = isBeingPetted ||
-                              (agent != null && !dna.IsDead &&
-                               agent.IsInFriendlyReaction && agent.IsPlayerFacingMe());
-
         var (statusText, statusColor) = StatusOf(dna);
-        bool showStatus = !showPetHint && !string.IsNullOrEmpty(statusText);
+        bool showStatus = !string.IsNullOrEmpty(statusText);
 
         bool intentInteresting = agent != null && !dna.IsDead &&
                                   agent.Intent != CreatureIntent.Idle &&
                                   agent.Intent != CreatureIntent.Wandering &&
                                   (agent == null || agent.Team == ExpeditionTeam.None);
-        bool showIntent = !showPetHint && !showStatus && intentInteresting;
-
-        SetDisplay(petHintLabel, showPetHint);
-        if (showPetHint && petHintLabel != null)
-            petHintLabel.text = isBeingPetted ? Loc.Tr("nametag.petting") : Loc.Tr("nametag.pethint");
+        bool showIntent = !showStatus && intentInteresting;
 
         SetDisplay(statusLabel, showStatus);
         if (showStatus && statusLabel != null)

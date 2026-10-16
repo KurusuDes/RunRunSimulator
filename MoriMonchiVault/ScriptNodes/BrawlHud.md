@@ -19,6 +19,7 @@ tags: [script, ui, component]
 | `clock` | ArenaClockControl | Optional; se pasa a `BrawlHudClock` para los botones de velocidad |
 | `palette` | ArenaPaletteApplier | Optional, para nombre del mapa |
 | `trial` | BrawlTrialRoom | Optional; mientras `Active`, oculta la columna roja y se pasa al reloj |
+| `showDebugInfo` | bool | (S161) Controla la información de depuración del HUD. Con `false` queda oculta |
 | `cards` | Dictionary<BrawlFighter, BrawlHudCard> | Map de fighters → cards del HUD |
 | `hudClock` | BrawlHudClock | Reloj y velocidad; se crea y une en `TryBind` |
 | `rivalHidden` | bool | Estado de la columna roja (evita reescribir el estilo) |
@@ -159,3 +160,9 @@ brawl-root
 ## Notas S147
 
 - El MVP del banner de fin sale solo del equipo ganador (`MvpText` filtra por `Team == winner`). En empate (`None`) se evalúan todos los fighters. Antes el MVP era global.
+
+## Notas S161
+
+- Restyle del HUD de combate con el kit de Synty: cartas, cronómetro (`BrawlHudClock`), banner con clases de color (`brawl-banner--ink/blue/red/coral`) y run.
+- `showDebugInfo` (serializado) controla la información de depuración: con `false` queda oculta.
+- Sin cambios en eventos ni en el flujo de partida.

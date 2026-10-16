@@ -1,23 +1,107 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="Theme.uss" />
+    <Style src="MorimonchiDetailInfoUITKStyle.uss" />
     <Style src="CreatureGridUITKStyle.uss" />
     <ui:VisualElement name="root" class="mm-theme mm-skin mm-screen grid-root">
         <ui:VisualElement class="mm-screen__vignette" picking-mode="Ignore" />
 
         <ui:VisualElement name="window" class="grid-window">
-            <ui:VisualElement class="grid-panel mm-panel">
+
+            <ui:VisualElement class="grid-left mm-panel">
                 <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
                 <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
-                <ui:Label name="grid-title" text="MoriMonchis" class="grid-title mm-title" />
+                <ui:Label name="grid-title" text="" class="grid-title mm-title" />
+                <ui:VisualElement name="grid-filters" class="grid-filters" />
                 <ui:VisualElement class="mm-bar" />
                 <ui:ScrollView name="grid-container" class="grid-container" mode="Vertical" />
+                <ui:Label name="grid-empty" text="" class="grid-empty" />
+                <ui:Label name="grid-count" text="" class="grid-count" />
             </ui:VisualElement>
+
+            <ui:VisualElement class="grid-center detail-stage">
+                <ui:VisualElement name="slots-left" class="detail-slots" />
+                <ui:VisualElement class="detail-stage__core grid-core">
+                    <ui:VisualElement class="detail-stage__floor" picking-mode="Ignore">
+                        <ui:VisualElement class="detail-stage__floor-ring" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="portrait" class="portrait grid-portrait" />
+                </ui:VisualElement>
+                <ui:VisualElement name="slots-right" class="detail-slots" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="grid-right mm-panel">
+                <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
+                <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
+                <ui:Label name="side-name" text="" class="side-name mm-title" />
+                <ui:Label name="subtitle" text="" class="mm-subtitle" />
+                <ui:VisualElement class="mm-bar" />
+                <ui:Label name="care-title" text="" class="care-title mm-section mm-section--ornate" />
+                <ui:VisualElement name="needs" class="needs">
+                    <ui:VisualElement name="need-health" class="detail-need">
+                        <ui:VisualElement class="mm-statbox"><ui:VisualElement class="mm-icon mm-icon--health" /></ui:VisualElement>
+                        <ui:VisualElement class="detail-need__body">
+                            <ui:VisualElement class="detail-need__head">
+                                <ui:Label name="need-health-label" text="" class="detail-need__label" />
+                                <ui:Label name="need-health-value" text="" class="detail-need__value" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="detail-need__bar-track">
+                                <ui:VisualElement name="need-health-fill" class="detail-need__bar-fill" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="need-energy" class="detail-need">
+                        <ui:VisualElement class="mm-statbox"><ui:VisualElement class="mm-icon mm-icon--energy" /></ui:VisualElement>
+                        <ui:VisualElement class="detail-need__body">
+                            <ui:VisualElement class="detail-need__head">
+                                <ui:Label name="need-energy-label" text="" class="detail-need__label" />
+                                <ui:Label name="need-energy-value" text="" class="detail-need__value" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="detail-need__bar-track">
+                                <ui:VisualElement name="need-energy-fill" class="detail-need__bar-fill" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="need-affect" class="detail-need">
+                        <ui:VisualElement class="mm-statbox"><ui:VisualElement class="mm-icon mm-icon--affect" /></ui:VisualElement>
+                        <ui:VisualElement class="detail-need__body">
+                            <ui:VisualElement class="detail-need__head">
+                                <ui:Label name="need-affect-label" text="" class="detail-need__label" />
+                                <ui:Label name="need-affect-value" text="" class="detail-need__value" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="detail-need__bar-track">
+                                <ui:VisualElement name="need-affect-fill" class="detail-need__bar-fill" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label name="explore-status" text="" class="explore-status" />
+                <ui:VisualElement class="mm-bar" />
+                <ui:Label name="personality-name" text="" class="detail-personality__name" />
+                <ui:VisualElement name="combat-role" class="combat-role">
+                    <ui:Label name="combat-role-title" text="" class="combat-role__title" />
+                    <ui:VisualElement name="combat-role-pill" class="combat-role__pill" />
+                </ui:VisualElement>
+                <ui:VisualElement class="side-spacer" />
+                <ui:Button name="open-detail" text="" class="mm-button mm-button--big side-open" />
+            </ui:VisualElement>
+
         </ui:VisualElement>
 
         <ui:VisualElement class="mm-footer" picking-mode="Ignore">
+            <ui:VisualElement class="mm-prompt">
+                <ui:Label text="W" class="mm-key" />
+                <ui:Label text="A" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label text="S" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label text="D" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label name="prompt-move" text="" class="mm-prompt__label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="mm-prompt">
+                <ui:Label text="Enter" class="mm-key" />
+                <ui:Label name="prompt-open" text="" class="mm-prompt__label" />
+            </ui:VisualElement>
             <ui:Button name="close-button" text="" class="mm-prompt mm-prompt--button">
                 <ui:Label text="Esc" class="mm-key" picking-mode="Ignore" />
-                <ui:Label text="Cerrar" class="mm-prompt__label" picking-mode="Ignore" />
+                <ui:Label name="prompt-close" text="" class="mm-prompt__label" picking-mode="Ignore" />
             </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>

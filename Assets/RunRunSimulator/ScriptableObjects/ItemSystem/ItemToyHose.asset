@@ -24,4 +24,5 @@ MonoBehaviour:
   Id: I4
   DisplayName: Manguera
   Category: 3
+  Icon: {fileID: 21300000, guid: 1be6ba9e6630e6443a33a7d5038d8c30, type: 3}
   Prefab: {fileID: 6087155345162217595, guid: 9d5032c24fcabd84ebd65a6a78987c0e, type: 3}

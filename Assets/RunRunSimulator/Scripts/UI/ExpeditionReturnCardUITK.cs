@@ -40,6 +40,11 @@ public class ExpeditionReturnCardUITK : MonoBehaviour, IUINavigable
         noExplorationLabel = root.Q<Label>("ret-noexploration");
         teamRow = root.Q<VisualElement>("ret-team");
 
+        var resultTitle = root.Q<Label>("ret-result-title");
+        if (resultTitle != null) resultTitle.text = Loc.Tr("ui.return.result_title");
+        var lootTitle = root.Q<Label>("ret-loot-title");
+        if (lootTitle != null) lootTitle.text = Loc.Tr("ui.return.loot_title");
+
         continueButton = root.Q<Button>("ret-continue");
         if (continueButton != null)
         {

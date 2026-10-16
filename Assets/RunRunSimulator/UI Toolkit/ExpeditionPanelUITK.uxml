@@ -12,24 +12,29 @@
             </ui:VisualElement>
 
             <ui:VisualElement class="exp-body">
-                <ui:ScrollView name="exp-list" class="exp-list" mode="Vertical" />
+                <ui:VisualElement name="exp-team-row" class="exp-team-row" />
 
                 <ui:VisualElement name="exp-panel" class="mm-panel exp-side">
                     <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
                     <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
-                    <ui:Label name="exp-empty" text="" class="mm-text mm-text--soft exp-empty" />
-                    <ui:VisualElement name="exp-detail" class="exp-detail" />
                     <ui:VisualElement name="exp-team" class="exp-team" />
                     <ui:Button name="exp-go" text="" class="mm-button mm-button--big exp-go" />
                 </ui:VisualElement>
             </ui:VisualElement>
+
+            <ui:Label name="exp-empty" text="" class="mm-text mm-text--soft exp-empty" />
+            <ui:ScrollView name="exp-list" class="exp-list" mode="Horizontal" vertical-scroller-visibility="Hidden" />
         </ui:VisualElement>
 
         <ui:VisualElement class="mm-footer" picking-mode="Ignore">
             <ui:VisualElement class="mm-prompt">
                 <ui:Label text="A" class="mm-key" />
                 <ui:Label text="D" class="mm-key" style="margin-left: 4px;" />
-                <ui:Label name="exp-prompt-move" text="Mover" class="mm-prompt__label" />
+                <ui:Label name="exp-prompt-move" text="" class="mm-prompt__label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="mm-prompt">
+                <ui:Label text="Enter" class="mm-key" />
+                <ui:Label name="exp-prompt-select" text="" class="mm-prompt__label" />
             </ui:VisualElement>
             <ui:Button name="exp-close" text="" class="mm-prompt mm-prompt--button exp-close">
                 <ui:Label text="Esc" class="mm-key exp-close__key" picking-mode="Ignore" />

@@ -58,3 +58,4 @@ tags: [script, ui, brawl, run, hud, uitk]
 - Textos en español hardcodeados (no pasan por `Loc`), como en `BrawlHud`.
 - No tiene reglas propias: todo lo que muestra sale de `BrawlRun` y del director.
 - S146: nuevo. Reemplaza la tira de pelea que tenía `BrawlRunPanel`.
+- S161: restyle con el kit de Synty (tira superior, pips, mochila y etiqueta de prueba). Sin cambios de reglas.

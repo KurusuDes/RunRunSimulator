@@ -22,6 +22,7 @@ public class BrawlHud : MonoBehaviour
     [SerializeField] private ArenaClockControl clock;
     [SerializeField] private ArenaPaletteApplier palette;
     [SerializeField] private BrawlTrialRoom trial;
+    [SerializeField] private bool showDebugInfo;
 
     private readonly Dictionary<BrawlFighter, BrawlHudCard> cards = new();
 
@@ -36,6 +37,7 @@ public class BrawlHud : MonoBehaviour
     private Label matchLabel;
     private Label banner;
     private Label bannerSub;
+    private VisualElement controls;
     private Button newButton;
     private Button rematchButton;
     private IVisualElementScheduledItem popRelease;
@@ -89,8 +91,16 @@ public class BrawlHud : MonoBehaviour
         matchLabel = root.Q<Label>("brawl-match");
         banner = root.Q<Label>("brawl-banner");
         bannerSub = root.Q<Label>("brawl-banner-sub");
+        controls = root.Q("brawl-controls");
         newButton = root.Q<Button>("brawl-new");
         rematchButton = root.Q<Button>("brawl-rematch");
+
+        root.Q<Label>("brawl-title-blue").text = Loc.Tr("ui.brawl.team.blue");
+        root.Q<Label>("brawl-title-red").text = Loc.Tr("ui.brawl.team.red");
+        newButton.text = Loc.Tr("ui.brawl.debug.new");
+        rematchButton.text = Loc.Tr("ui.brawl.debug.rematch");
+        controls.style.display = showDebugInfo ? DisplayStyle.Flex : DisplayStyle.None;
+        matchLabel.style.display = showDebugInfo ? DisplayStyle.Flex : DisplayStyle.None;
 
         newButton.clicked += OnNewClicked;
         rematchButton.clicked += OnRematchClicked;
@@ -179,10 +189,10 @@ public class BrawlHud : MonoBehaviour
                 HideBanner();
                 break;
             case BrawlMatchPhase.Fight:
-                ShowBanner("¡A PELEAR!", "", "brawl-banner--ink", FightHold);
+                ShowBanner(Loc.Tr("ui.brawl.banner.fight"), "", "brawl-banner--ink", FightHold);
                 break;
             case BrawlMatchPhase.SuddenDeath:
-                ShowBanner("¡MUERTE SÚBITA!", "la vida baja para todos", "brawl-banner--coral", SuddenHold);
+                ShowBanner(Loc.Tr("ui.brawl.banner.sudden"), Loc.Tr("ui.brawl.banner.sudden.sub"), "brawl-banner--coral", SuddenHold);
                 break;
         }
     }
@@ -191,7 +201,7 @@ public class BrawlHud : MonoBehaviour
     {
         if (!TryBind() || survivor == null) return;
         string colorClass = survivor.Team == ExpeditionTeam.Player ? "brawl-banner--blue" : "brawl-banner--red";
-        ShowBanner("¡ÚLTIMO EN PIE!", survivor.DisplayName + " no se rinde", colorClass, SuddenHold);
+        ShowBanner(Loc.Tr("ui.brawl.banner.laststand"), Loc.Tr("ui.brawl.banner.laststand.sub", survivor.DisplayName), colorClass, SuddenHold);
     }
 
     private void HandleEnded(ExpeditionTeam winner)
@@ -205,9 +215,9 @@ public class BrawlHud : MonoBehaviour
 
         var (text, colorClass) = winner switch
         {
-            ExpeditionTeam.Player => ("¡GANA AZUL!", "brawl-banner--blue"),
-            ExpeditionTeam.Rival => ("¡GANA ROJO!", "brawl-banner--red"),
-            _ => ("¡EMPATE!", "brawl-banner--ink")
+            ExpeditionTeam.Player => (Loc.Tr("ui.brawl.banner.win.blue"), "brawl-banner--blue"),
+            ExpeditionTeam.Rival => (Loc.Tr("ui.brawl.banner.win.red"), "brawl-banner--red"),
+            _ => (Loc.Tr("ui.brawl.banner.draw"), "brawl-banner--ink")
         };
         ShowBanner(text, MvpText(BrawlMatch.Current, winner), colorClass, float.PositiveInfinity);
     }
@@ -228,13 +238,13 @@ public class BrawlHud : MonoBehaviour
                 icon.AddToClassList("brawl-feed__icon");
                 entry.Add(icon);
             }
-            entry.Add(MakeLabel("derribó a", "brawl-feed__verb"));
+            entry.Add(MakeLabel(Loc.Tr("ui.brawl.feed.killed"), "brawl-feed__verb"));
             entry.Add(NameLabel(victim));
         }
         else
         {
             entry.Add(NameLabel(victim));
-            entry.Add(MakeLabel("cayó", "brawl-feed__verb"));
+            entry.Add(MakeLabel(Loc.Tr("ui.brawl.feed.fell"), "brawl-feed__verb"));
         }
 
         feed.Add(entry);
@@ -288,19 +298,20 @@ public class BrawlHud : MonoBehaviour
         lastPhase = phase;
         string label = match.Phase switch
         {
-            BrawlMatchPhase.Countdown => "PREPARADOS",
-            BrawlMatchPhase.Fight => "PELEA",
-            BrawlMatchPhase.SuddenDeath => "MUERTE SÚBITA",
-            BrawlMatchPhase.Ended => "FIN",
+            BrawlMatchPhase.Countdown => Loc.Tr("ui.brawl.phase.countdown"),
+            BrawlMatchPhase.Fight => Loc.Tr("ui.brawl.phase.fight"),
+            BrawlMatchPhase.SuddenDeath => Loc.Tr("ui.brawl.phase.sudden"),
+            BrawlMatchPhase.Ended => Loc.Tr("ui.brawl.phase.ended"),
             _ => ""
         };
         bool live = match.Phase == BrawlMatchPhase.Fight || match.Phase == BrawlMatchPhase.SuddenDeath;
-        if (live && match.KnockOuts > 0) label += " · daño ×" + match.DamageRamp.ToString("0.##");
+        if (live && match.KnockOuts > 0) label += Loc.Tr("ui.brawl.phase.ramp", match.DamageRamp.ToString("0.##"));
         phaseLabel.text = label;
     }
 
     private void RefreshMatch(BrawlMatch match)
     {
+        if (!showDebugInfo) return;
         int paletteIndex = palette != null ? palette.CurrentIndex : -1;
         if (match.MatchIndex == lastMatchIndex && match.Seed == lastSeed && paletteIndex == lastPalette) return;
         lastMatchIndex = match.MatchIndex;
@@ -357,7 +368,7 @@ public class BrawlHud : MonoBehaviour
         }
         if (best == null) return "";
 
-        return "MVP: " + best.DisplayName + " · " + Grouped(best.DamageDealt) + " de daño · " + Grouped(best.HealingDone) + " de curación · " + best.KOs + " KO";
+        return Loc.Tr("ui.brawl.banner.mvp", best.DisplayName, Grouped(best.DamageDealt), Grouped(best.HealingDone), best.KOs);
     }
 
     private static string Grouped(float value) => Mathf.RoundToInt(value).ToString("N0", GroupFormat);

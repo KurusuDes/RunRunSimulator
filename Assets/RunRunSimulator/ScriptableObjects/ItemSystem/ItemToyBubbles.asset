@@ -24,4 +24,5 @@ MonoBehaviour:
   Id: I7
   DisplayName: Burbujas
   Category: 3
+  Icon: {fileID: 21300000, guid: d8d067ad4049a734fa3ec0c0d0468dec, type: 3}
   Prefab: {fileID: 8428278260184251215, guid: d4d244ddc9865e146a4f45944d86caf1, type: 3}

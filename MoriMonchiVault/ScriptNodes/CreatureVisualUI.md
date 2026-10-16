@@ -1,13 +1,7 @@
 ---
-tags: [script, ui]
+tags: [script, deprecated, borrado]
 ---
 
 # CreatureVisualUI.cs
 
-**Ruta:** `UI/CreatureVisualUI.cs`
-
-**Responsabilidad:** Renderiza criatura en 3D dentro de paneles UI (RenderTexture). **S57b:** Icono swatch ahora es retrato fotomatón vía [[MonchiPortraitUI]].Apply() en lugar de backgroundColor BaseColor. **S75:** Eliminado estado "In Queue" que requería QueuedForCombat (desapareció en demolición del combate). **S93:** Estado usa `CreatureDisplay.StateOf()`.
-
-**Vinculado a:** [[Index/05 - UI System]]
-
-**Conexiones:** [[MorimonchiDetailInfoUITK]], [[MoriMonchiVisualizer]], [[MonchiPortraitUI]], [[CreatureDisplay]]
+> 🪦 **Borrado en S161.** Renderizaba la criatura en 3D dentro de paneles UI (RenderTexture) para la UI anterior. Retirado en el overhaul de UI con el kit de Synty; el retrato actual lo da `MonchiPortraitUI`. El historial previo queda en git.

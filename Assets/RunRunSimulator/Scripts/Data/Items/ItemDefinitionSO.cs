@@ -11,6 +11,7 @@ public class ItemDefinitionSO : SerializedScriptableObject
     [ReadOnly] public string Id;
     public string DisplayName = "";
     public WorldPropCategory Category = WorldPropCategory.Tool;
+    [PreviewField(60)] public Sprite Icon;
 
     [Title("World Prop")]
     [Required, AssetsOnly]

@@ -12,7 +12,7 @@
     right: 0;
     top: 0;
     bottom: 62px;
-    padding: 22px 56px 20px 56px;
+    padding: 18px 56px 14px 56px;
 }
 
 .exp-head {
@@ -31,163 +31,152 @@
 .exp-rule {
     width: 560px;
     align-self: center;
-    margin: 10px 0 8px 0;
+    margin: 8px 0 6px 0;
 }
 
 .exp-body {
     flex-direction: row;
-    flex-grow: 1;
-    flex-shrink: 1;
+    flex-shrink: 0;
     align-items: stretch;
-    min-height: 0;
-}
-
-.exp-list {
-    flex-grow: 1;
-    flex-shrink: 1;
-    margin-right: 24px;
-}
-
-.exp-list .unity-scroll-view__content-container {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: flex-start;
     justify-content: center;
-    padding: 8px 4px;
+    height: 486px;
 }
 
-.exp-list .unity-scroller--vertical {
-    width: 12px;
-    margin-left: 6px;
-    border-width: 0;
-    background-color: rgba(0, 0, 0, 0);
+.exp-team-row {
+    flex-direction: row;
+    flex-shrink: 0;
+    margin-right: 20px;
 }
 
-.exp-list .unity-scroller--vertical .unity-scroller__low-button,
-.exp-list .unity-scroller--vertical .unity-scroller__high-button {
-    display: none;
+.exp-member {
+    width: 300px;
+    height: 470px;
+    margin: 0 10px;
+    padding: 18px 16px 14px 16px;
+    align-items: center;
+    flex-shrink: 0;
 }
 
-.exp-list .unity-scroller--vertical .unity-base-slider__tracker {
-    background-color: rgba(1, 14, 12, 0.9);
-    border-width: 0;
-    border-radius: 6px;
+.exp-member:hover {
+    scale: 1.02 1.02;
 }
 
-.exp-list .unity-scroller--vertical .unity-base-slider__dragger {
-    background-color: var(--mm-gold);
-    border-width: 0;
-    border-radius: 6px;
-    left: 2px;
-    right: 2px;
+.exp-member--empty {
+    justify-content: center;
+    opacity: 0.6;
 }
 
-.exp-list .unity-scroller--vertical .unity-base-slider__drag-container {
+.exp-member--empty:hover {
+    scale: 1 1;
+}
+
+.exp-member__runes {
+    width: 160px;
+    height: 160px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(227, 187, 113, 0.35);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.exp-member__hint {
+    margin-top: 14px;
+    width: 100%;
+    font-size: 24px;
+    color: var(--mm-ink-soft);
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.exp-member__stage {
+    width: 100%;
+    height: 200px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.exp-member__floor {
+    position: absolute;
+    bottom: 10px;
+    width: 220px;
+    height: 56px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Circle_Background_01.png");
+    -unity-background-image-tint-color: rgba(0, 10, 8, 0.55);
+}
+
+.exp-member__floor-ring {
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    top: -3px;
+    bottom: -3px;
+    border-radius: 50%;
+    border-width: 3px;
+    border-color: rgba(227, 187, 113, 0.65);
+}
+
+.exp-member__portrait {
+    position: absolute;
+    left: 0;
+    right: 0;
     top: 0;
     bottom: 0;
 }
 
-.exp-card {
-    width: 262px;
-    height: 372px;
-    margin: 10px;
-    padding: 24px 22px 18px 22px;
-    align-items: center;
-    background-color: var(--mm-slot-fill);
-    background-image: url("Skin/Synty/SPR_FantasyMenus_Frame_Box_Small_01.png");
-    -unity-background-image-tint-color: rgb(209, 205, 194);
-    -unity-slice-scale: 0.22;
-    transition-property: scale, background-color, -unity-background-image-tint-color;
-    transition-duration: 140ms, 140ms, 140ms;
-    transition-timing-function: ease-out, ease-out, ease-out;
-}
-
-.exp-card:hover {
-    -unity-background-image-tint-color: rgb(255, 232, 178);
-}
-
-.exp-card--focus {
-    background-color: rgb(8, 52, 44);
-    -unity-background-image-tint-color: rgb(255, 232, 178);
-    scale: 1.04 1.04;
-}
-
-.exp-card--on {
-    background-color: rgb(0, 92, 72);
-    -unity-background-image-tint-color: rgb(120, 240, 200);
-}
-
-.exp-card--on:hover {
-    -unity-background-image-tint-color: rgb(150, 255, 214);
-}
-
-.exp-card--off {
-    opacity: 0.5;
-}
-
-.exp-card__icon {
+.exp-member__name {
     width: 100%;
-    height: 176px;
-    flex-shrink: 0;
-    border-radius: 8px;
-    border-width: 2px;
-    border-color: rgba(227, 187, 113, 0.4);
-    background-color: rgb(40, 60, 56);
-}
-
-.exp-card__name {
     height: 40px;
-    width: 100%;
     margin-top: 6px;
     -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 16px 30px;
+    -unity-text-auto-size: best-fit 18px 32px;
     -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
     color: rgb(255, 255, 255);
     -unity-text-align: middle-center;
     white-space: normal;
 }
 
-.exp-card__state {
-    height: 30px;
-    width: 100%;
-    margin-top: 4px;
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 14px 24px;
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    color: var(--mm-section);
-    -unity-text-align: middle-center;
-    white-space: normal;
-}
-
-.exp-card--off .exp-card__state {
-    color: var(--mm-ink-soft);
-}
-
-.exp-card__role {
+.exp-member__role {
     align-self: center;
     margin-top: 4px;
 }
 
-.exp-card__role .mm-rolepill__seg {
+.exp-member__role .mm-rolepill__seg {
     padding: 3px 14px;
     font-size: 18px;
 }
 
-.exp-card__role .mm-rolepill__seg--minor {
+.exp-member__role .mm-rolepill__seg--minor {
     padding: 3px 10px;
     font-size: 15px;
 }
 
-.exp-card__powers {
+.exp-member__powers {
     flex-direction: row;
     justify-content: center;
-    margin-top: 12px;
+    align-items: flex-start;
+    margin-top: 14px;
+    width: 100%;
+}
+
+.exp-power-col {
+    width: 88px;
+    align-items: center;
+    margin: 0 2px;
+}
+
+.exp-power-col__title {
+    width: 100%;
+    margin-top: 6px;
+    font-size: 16px;
+    color: var(--mm-section);
+    -unity-text-align: upper-center;
+    white-space: normal;
 }
 
 .exp-power {
     width: 54px;
     height: 54px;
-    margin: 0 5px;
     border-width: 3px;
     border-radius: 10px;
     background-color: var(--mm-bg-deep);
@@ -212,165 +201,35 @@
     color: var(--mm-ink-soft);
 }
 
-.exp-card__check {
-    display: none;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    border-width: 2px;
-    border-color: var(--mm-bg-deep);
-    background-color: var(--mm-gold);
-    background-image: url("Skin/Synty/ICON_FantasyScreens_Menu_Done_01_Clean.png");
-    -unity-background-image-tint-color: var(--mm-ink-dark);
-    -unity-background-scale-mode: scale-to-fit;
-    color: rgba(0, 0, 0, 0);
-    font-size: 1px;
-    padding: 0;
-    margin: 0;
-}
-
-.exp-card--on .exp-card__check {
-    display: flex;
-}
-
-.exp-card__bars {
-    width: 100%;
-    margin-top: 14px;
-}
-
-.exp-card__bar-track {
-    width: 100%;
-    height: 22px;
-    background-image: url("Skin/Synty/SPR_FantasyMenus_Box_Small_Parchment_01.png");
-    -unity-background-image-tint-color: rgb(1, 14, 12);
-    -unity-slice-scale: 0.15;
-    padding: 3px;
-}
-
-.exp-card__bar-fill {
-    height: 100%;
-    border-radius: 5px;
-}
-
-.exp-bar--good { background-color: var(--mm-good); }
-.exp-bar--warn { background-color: var(--mm-warn); }
-.exp-bar--crit { background-color: var(--mm-crit); }
-
 .exp-side {
-    width: 600px;
+    width: 460px;
     flex-shrink: 0;
-}
-
-.exp-empty {
-    margin: 4px 0 12px 0;
-    -unity-text-align: middle-center;
-}
-
-.exp-detail {
-    flex-grow: 1;
-    flex-shrink: 1;
-}
-
-.exp-detail__head {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-}
-
-.exp-detail__name {
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    font-size: 34px;
-    color: rgb(255, 255, 255);
-    margin-right: 12px;
-    flex-shrink: 1;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.exp-detail__role {
-    flex-shrink: 0;
-}
-
-.exp-detail__role .mm-rolepill__seg {
-    padding: 4px 14px;
-    font-size: 18px;
-}
-
-.exp-detail__role .mm-rolepill__seg--minor {
-    padding: 4px 10px;
-    font-size: 15px;
-}
-
-.exp-detail__row {
-    flex-direction: row;
-    align-items: center;
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
-    -unity-background-image-tint-color: var(--mm-row-fill);
-    -unity-slice-scale: 0.22;
-    min-height: 92px;
-    padding: 10px 14px;
-    margin-bottom: 8px;
-}
-
-.exp-detail__icon {
-    width: 58px;
-    height: 58px;
-    margin-right: 14px;
-    flex-shrink: 0;
-    border-width: 3px;
-    border-radius: 10px;
-    background-color: var(--mm-bg-deep);
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.exp-detail__text {
-    flex-grow: 1;
-    flex-shrink: 1;
-    justify-content: center;
-}
-
-.exp-detail__title {
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 24px;
-    white-space: nowrap;
-}
-
-.exp-detail__desc {
-    font-size: 18px;
-    color: var(--mm-ink-soft);
-    white-space: normal;
 }
 
 .exp-team {
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
-    -unity-background-image-tint-color: var(--mm-row-fill);
-    -unity-slice-scale: 0.22;
-    min-height: 66px;
-    padding: 10px 16px;
-    margin-top: 4px;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.exp-team__row {
-    flex-direction: row;
-    align-items: center;
-    min-height: 40px;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 .exp-team__title {
     -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 22px;
+    font-size: 30px;
     color: var(--mm-section);
-    margin-right: 14px;
+}
+
+.exp-team__count {
+    font-size: 26px;
+    color: rgb(255, 255, 255);
+    margin: 4px 0 14px 0;
+}
+
+.exp-team__pills {
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .exp-team__pill {
-    margin-right: 8px;
+    margin: 0 8px 8px 0;
 }
 
 .exp-team__pill .mm-rolepill__seg {
@@ -394,6 +253,159 @@
     margin: 14px 0 0 0;
     flex-shrink: 0;
 }
+
+.exp-empty {
+    margin: 6px 0 0 0;
+    -unity-text-align: middle-center;
+}
+
+.exp-list {
+    flex-shrink: 0;
+    height: 218px;
+    margin-top: 10px;
+}
+
+.exp-list .unity-scroll-view__content-container {
+    flex-direction: row;
+    justify-content: center;
+    padding: 8px 4px;
+}
+
+.exp-list .unity-scroller--horizontal {
+    height: 12px;
+    margin-top: 4px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.exp-list .unity-scroller--horizontal .unity-scroller__low-button,
+.exp-list .unity-scroller--horizontal .unity-scroller__high-button {
+    display: none;
+}
+
+.exp-list .unity-scroller--horizontal .unity-base-slider__tracker {
+    background-color: rgba(1, 14, 12, 0.9);
+    border-width: 0;
+    border-radius: 6px;
+}
+
+.exp-list .unity-scroller--horizontal .unity-base-slider__dragger {
+    background-color: var(--mm-gold);
+    border-width: 0;
+    border-radius: 6px;
+    top: 2px;
+    bottom: 2px;
+}
+
+.exp-tile {
+    width: 132px;
+    margin: 0 8px;
+    align-items: center;
+    flex-shrink: 0;
+    transition-property: scale;
+    transition-duration: 140ms;
+    transition-timing-function: ease-out;
+}
+
+.exp-tile__slot {
+    width: 120px;
+    height: 120px;
+    border-width: 3px;
+    border-color: rgba(227, 187, 113, 0.35);
+    border-radius: 8px;
+}
+
+.exp-tile:hover {
+    scale: 1.05 1.05;
+}
+
+.exp-tile--focus {
+    scale: 1.08 1.08;
+}
+
+.exp-tile--focus .exp-tile__slot {
+    border-color: rgb(255, 232, 178);
+}
+
+.exp-tile--on .exp-tile__slot {
+    border-color: var(--mm-gold);
+    border-width: 4px;
+    background-color: rgb(0, 92, 72);
+}
+
+.exp-tile--off {
+    opacity: 0.4;
+}
+
+.exp-tile__icon {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.exp-tile__name {
+    width: 100%;
+    height: 26px;
+    margin-top: 6px;
+    font-size: 20px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.exp-tile__state {
+    width: 100%;
+    font-size: 16px;
+    color: var(--mm-ink-soft);
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+}
+
+.exp-tile__check {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    border-width: 2px;
+    border-color: var(--mm-bg-deep);
+    background-color: var(--mm-gold);
+    background-image: url("Skin/Synty/ICON_FantasyScreens_Menu_Done_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-ink-dark);
+    -unity-background-scale-mode: scale-to-fit;
+    color: rgba(0, 0, 0, 0);
+    font-size: 1px;
+    padding: 0;
+    margin: 0;
+}
+
+.exp-tile--on .exp-tile__check {
+    display: flex;
+}
+
+.exp-tile__bar-track {
+    width: 100px;
+    height: 10px;
+    margin-top: 4px;
+    border-radius: 5px;
+    background-color: rgb(1, 14, 12);
+}
+
+.exp-tile__bar-fill {
+    height: 100%;
+    border-radius: 5px;
+}
+
+.exp-bar--good { background-color: var(--mm-good); }
+.exp-bar--warn { background-color: var(--mm-warn); }
+.exp-bar--crit { background-color: var(--mm-crit); }
 
 .exp-close {
     padding: 4px 12px 4px 62px;

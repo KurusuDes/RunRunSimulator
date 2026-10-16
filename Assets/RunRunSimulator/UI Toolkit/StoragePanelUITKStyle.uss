@@ -5,8 +5,8 @@
 }
 
 .storage-panel {
-    width: 820px;
-    height: 72%;
+    width: 1100px;
+    height: 760px;
 }
 
 .storage-title {
@@ -15,95 +15,114 @@
     height: 54px;
 }
 
-.storage-list {
-    flex-grow: 1;
+.storage-subtitle {
+    height: 30px;
 }
 
-.storage-row {
+.storage-grid {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin-bottom: 6px;
+}
+
+.storage-grid .unity-scroll-view__content-container {
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 68px;
-    padding: 8px 18px 8px 16px;
-    margin: 0 4px 8px 0;
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
-    -unity-background-image-tint-color: var(--mm-row-fill);
-    -unity-slice-scale: 0.22;
-    transition-property: -unity-background-image-tint-color;
+    flex-wrap: wrap;
+    width: 832px;
+    align-self: center;
+    padding: 8px 0 0 0;
+}
+
+.storage-hotbar {
+    flex-direction: row;
+    align-self: center;
+    flex-shrink: 0;
+    padding: 8px 0 6px 0;
+}
+
+.storage-slot {
+    width: 96px;
+    height: 96px;
+    margin: 0 4px 10px 4px;
+}
+
+.storage-slot__box {
+    width: 96px;
+    height: 96px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_01.png");
+    -unity-background-image-tint-color: rgb(99, 75, 49);
+    -unity-slice-scale: 0.2;
+    transition-property: scale, -unity-background-image-tint-color;
     transition-duration: 0.12s;
 }
 
-.storage-row:hover {
-    -unity-background-image-tint-color: rgba(0, 58, 48, 0.95);
-}
-
-.storage-row--selected {
-    -unity-background-image-tint-color: rgba(0, 96, 76, 0.95);
-}
-
-.storage-row__name {
-    flex-grow: 1;
-    flex-shrink: 1;
-    padding-left: 60px;
-    min-height: 48px;
-    -unity-text-align: middle-left;
-    background-image: url("Skin/Synty/ICON_FantasyScreens_Inventory_Backpack_01_Clean.png");
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: 44px 44px;
-    -unity-background-image-tint-color: var(--mm-gold);
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 24px;
-    color: var(--mm-ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.storage-row--selected .storage-row__name {
-    color: rgb(255, 255, 255);
-}
-
-.storage-row__eject {
-    flex-shrink: 0;
-    min-width: 128px;
-    min-height: 46px;
-    margin: 0 0 0 16px;
-    padding: 0 22px;
-    background-image: url("Skin/Synty/SPR_FantasyMenus_Box_Small_Parchment_03.png");
-    -unity-background-image-tint-color: var(--mm-gold);
-    -unity-slice-scale: 0.35;
-    background-color: rgba(0, 0, 0, 0);
-    border-width: 0;
-    border-radius: 0;
-    font-size: 21px;
-    -unity-font-style: bold;
-    color: var(--mm-ink-dark);
-    -unity-text-align: middle-center;
-}
-
-.storage-row__eject:hover {
-    -unity-background-image-tint-color: rgb(250, 214, 150);
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.storage-row__eject:active {
-    scale: 0.97 0.97;
-}
-
-.storage-empty {
+.storage-slot__runes {
     position: absolute;
-    left: 54px;
-    right: 54px;
-    top: 170px;
-    padding: 96px 20px 0 20px;
-    background-image: url("Skin/Synty/ICON_FantasyScreens_Inventory_Backpack_01_Clean.png");
-    background-position: center top;
-    background-repeat: no-repeat;
-    background-size: 84px 84px;
-    -unity-background-image-tint-color: rgba(170, 196, 186, 0.55);
-    font-size: 24px;
-    color: var(--mm-ink-soft);
-    -unity-text-align: upper-center;
+    left: 6px;
+    top: 6px;
+    width: 84px;
+    height: 84px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(36, 32, 26, 0.6);
+}
+
+.storage-slot__icon {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 80px;
+    height: 80px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.storage-slot__name {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 96px;
+    height: 96px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    -unity-text-align: middle-center;
     white-space: normal;
+    font-size: 15px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.storage-slot__count {
+    position: absolute;
+    right: 8px;
+    bottom: 4px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    -unity-text-align: lower-right;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.8);
+}
+
+.storage-slot__frame {
+    position: absolute;
+    left: -7px;
+    top: -7px;
+    right: -7px;
+    bottom: -7px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Frame_Rounded_02.png");
+    -unity-background-image-tint-color: rgb(253, 230, 124);
+    -unity-slice-scale: 0.25;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.12s;
+}
+
+.storage-slot--filled:hover .storage-slot__box {
+    -unity-background-image-tint-color: rgb(115, 88, 58);
+}
+
+.storage-slot--selected .storage-slot__box {
+    -unity-background-image-tint-color: rgb(122, 92, 60);
+    scale: 1.06 1.06;
+}
+
+.storage-slot--selected .storage-slot__frame {
+    opacity: 1;
 }

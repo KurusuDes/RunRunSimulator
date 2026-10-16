@@ -147,7 +147,7 @@ public class BrawlRunHud : MonoBehaviour
     {
         int count = run.Rooms.Count;
         int left = Mathf.Max(0, fighting ? count - run.RoomIndex - 1 : count - run.RoomIndex);
-        leftText.text = left == 0 ? "Última sala" : left == 1 ? "Falta 1 sala" : "Faltan " + left + " salas";
+        leftText.text = left == 0 ? Loc.Tr("ui.brawl.run.left.last") : left == 1 ? Loc.Tr("ui.brawl.run.left.one") : Loc.Tr("ui.brawl.run.left.many", left);
 
         leftPips.Clear();
         for (int i = 0; i < count; i++)
@@ -173,9 +173,9 @@ public class BrawlRunHud : MonoBehaviour
         SetVisible(trialLabel, active);
         if (!active) return;
 
-        if (trial.Kind != BrawlRoomKind.Minerals) trialLabel.text = "Muñecos · pégales para curar al equipo";
-        else if (!started) trialLabel.text = "Minerales · pégale al cristal para empezar";
-        else trialLabel.text = "Minerales · +" + Minerita(material) + " Minerita";
+        if (trial.Kind != BrawlRoomKind.Minerals) trialLabel.text = Loc.Tr("ui.brawl.run.trial.dummies");
+        else if (!started) trialLabel.text = Loc.Tr("ui.brawl.run.trial.mineral.start");
+        else trialLabel.text = Loc.Tr("ui.brawl.run.trial.mineral.count", Minerita(material));
     }
 
     private static int Minerita(int loot)

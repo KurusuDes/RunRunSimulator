@@ -6,17 +6,6 @@
     bottom: 0;
 }
 
-.run-bg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 10px;
-    background-color: var(--mm-surface);
-    opacity: 0.82;
-}
-
 .run-hud {
     position: absolute;
     left: 0;
@@ -31,26 +20,25 @@
     right: 32px;
     flex-direction: row;
     align-items: center;
-    padding: 8px 16px 8px 10px;
-    border-radius: 16px;
-    border-width: 2px;
-    border-color: rgba(51, 191, 166, 0.4);
-    background-color: rgba(14, 10, 9, 0.78);
+    padding: 6px 24px 6px 18px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Bar_Rounded_01.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.4;
 }
 
 .run-bag__icon {
     width: 40px;
     height: 40px;
-    background-image: resource("Sprites/Brawl/RoomGlyph_Mineral");
+    background-image: url("Skin/Synty/ICON_SM_Item_Crystal_02.png");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: var(--mm-teal);
 }
 
 .run-bag__count {
-    margin-left: 8px;
+    margin-left: 10px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
     font-size: 34px;
-    -unity-font-style: bold;
-    color: var(--mm-teal);
+    color: rgb(255, 255, 255);
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
 }
 
 .run-left {
@@ -61,11 +49,19 @@
     align-items: center;
 }
 
+.run-left__pill {
+    align-items: center;
+    padding: 8px 22px 8px 22px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.2;
+}
+
 .run-left__text {
-    margin-top: 6px;
-    font-size: 15px;
-    color: var(--mm-ink);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+    margin-top: 4px;
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .run-pips {
@@ -83,20 +79,21 @@
 }
 
 .run-pip--done {
-    background-color: var(--mm-teal);
-    border-color: var(--mm-teal);
+    background-color: rgb(168, 124, 66);
+    border-color: rgb(168, 124, 66);
 }
 
 .run-pip--current {
     width: 16px;
     height: 16px;
     border-radius: 8px;
-    background-color: var(--mm-gold);
-    border-color: var(--mm-gold);
+    background-color: var(--hud-gold);
+    border-color: var(--hud-gold);
 }
 
 .run-pip--upcoming {
-    border-color: var(--mm-frame-soft);
+    background-color: rgba(17, 14, 12, 0.7);
+    border-color: rgb(99, 75, 49);
 }
 
 .run-pips--big .run-pip {
@@ -118,13 +115,15 @@
     left: 50%;
     top: 174px;
     translate: -50% 0;
-    padding: 4px 12px;
-    border-radius: 10px;
-    background-color: rgba(14, 10, 9, 0.78);
-    font-size: 16px;
-    -unity-font-style: bold;
+    padding: 8px 22px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.2;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 19px;
     -unity-text-align: middle-center;
-    color: var(--mm-ink);
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .run-loot {
@@ -144,9 +143,8 @@
     margin-left: -22px;
     margin-top: -22px;
     opacity: 0;
-    background-image: resource("Sprites/Brawl/RoomGlyph_Mineral");
+    background-image: url("Skin/Synty/ICON_SM_Item_Crystal_02.png");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: var(--mm-teal);
 }
 
 .run-veil {
@@ -169,47 +167,75 @@
 }
 
 .run-veil__title {
-    margin-bottom: 14px;
-    font-size: 40px;
-    -unity-font-style: bold;
-    color: var(--mm-ink);
+    margin-bottom: 18px;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 64px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.75);
 }
 
 .run-veil .run-pips {
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 
 .run-veil__left {
-    font-size: 18px;
-    color: var(--mm-ink-soft);
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 26px;
+    color: var(--hud-gold);
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.7);
 }
 
 .run-rooms {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 14px;
 }
 
 .run-room {
     width: 72px;
     height: 72px;
-    margin: 0 5px;
+    margin: 0 6px;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    border-width: 2px;
-    border-color: var(--mm-frame-soft);
-    background-color: rgba(14, 10, 9, 0.6);
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_01.png");
+    -unity-background-image-tint-color: var(--hud-slot);
+    -unity-slice-scale: 0.2;
 }
 
 .run-room--current {
-    border-width: 3px;
-    border-color: var(--mm-gold);
+    -unity-background-image-tint-color: var(--hud-slot-active);
+    scale: 1.08 1.08;
 }
 
 .run-room--done {
     opacity: 0.35;
+}
+
+.run-room__runes {
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    right: 6px;
+    bottom: 6px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(36, 32, 26, 0.6);
+}
+
+.run-room__frame {
+    position: absolute;
+    left: -5px;
+    top: -1px;
+    right: -5px;
+    bottom: -9px;
+    background-image: url("Skin/Synty/SPR_FantasyScreens_Frame_Rounded_02.png");
+    -unity-background-image-tint-color: var(--hud-gold);
+    -unity-slice-scale: 0.25;
+    opacity: 0;
+}
+
+.run-room--current .run-room__frame {
+    opacity: 1;
 }
 
 .run-room__glyph {
@@ -239,41 +265,29 @@
 }
 
 .run-card {
-    width: 560px;
+    width: 620px;
     max-width: 90%;
     align-items: center;
-    padding: 14px 20px 16px 20px;
-    border-radius: 12px;
-    border-width: 2px;
-    border-color: var(--mm-frame);
-}
-
-.run-card > .run-bg {
-    border-radius: 12px;
-    opacity: 0.94;
 }
 
 .run-title {
-    font-size: 26px;
-    -unity-font-style: bold;
-    -unity-text-align: middle-center;
-    color: var(--mm-ink);
+    font-size: 34px;
 }
 
 .run-minerita {
     max-width: 100%;
-    margin-top: 10px;
-    font-size: 18px;
-    -unity-font-style: bold;
+    margin-top: 12px;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 24px;
     -unity-text-align: upper-center;
     white-space: normal;
-    color: var(--mm-teal);
+    color: var(--hud-gold);
 }
 
 .run-info {
     max-width: 100%;
     margin-top: 6px;
-    font-size: 15px;
+    font-size: 19px;
     -unity-text-align: upper-center;
     white-space: normal;
     color: var(--mm-ink-soft);
@@ -282,33 +296,9 @@
 .run-buttons {
     flex-direction: row;
     justify-content: center;
-    margin-top: 14px;
+    margin-top: 12px;
 }
 
 .run-btn {
-    height: 46px;
     min-width: 200px;
-    margin: 0 8px;
-    padding: 0 22px;
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: var(--mm-frame-soft);
-    background-color: var(--mm-surface);
-    color: var(--mm-ink);
-    font-size: 18px;
-    -unity-font-style: bold;
-    -unity-text-align: middle-center;
-}
-
-.run-btn:hover {
-    border-color: var(--mm-frame);
-}
-
-.run-btn--go {
-    border-color: var(--mm-gold);
-    color: var(--mm-gold);
-}
-
-.run-btn--go:hover {
-    border-color: var(--mm-ink);
 }

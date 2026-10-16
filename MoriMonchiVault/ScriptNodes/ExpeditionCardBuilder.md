@@ -6,31 +6,36 @@ tags: [script, ui, expedition, builder, uitk]
 
 **Ruta:** `UI/ExpeditionCardBuilder.cs`
 
-**Responsabilidad:** Builder estático de la presentación del panel de expedición: tarjeta de cada MoriMochi, panel de detalle del enfocado y fila de equipo elegido. Solo construye `VisualElement`; no guarda estado, no suscribe eventos y no escribe en `GameManager`. Lo llama `ExpeditionPanelUITK` en cada `Rebuild`, cada cambio de foco y cada cambio de selección.
+**Responsabilidad:** Builder estático de la presentación del panel de bajada: tile de cada candidato, carta de cada integrante del equipo y slot vacío. Solo construye `VisualElement`; no guarda estado, no suscribe eventos y no escribe en `GameManager`. Lo llama `ExpeditionPanelUITK` en cada `Rebuild` y cada cambio de selección.
+
+## Tipos Públicos
+
+`Power` (readonly struct): `Theme` (`BrawlTheme`), `Role` (`BrawlSkillRole`), `Title`, `Locked`. Describe un poder de la carta.
 
 ## Métodos Públicos
 
 | Método | Descripción |
 |--------|-------------|
-| `BuildCard(dna, ok, profile, careGate)` | Tarjeta `exp-card` con retrato, nombre y marca `✓`. Si es apta (`ok`): píldora de rol y tres iconos de poder (ala, cuerno, espalda). Si no: estado (`ui.expedition.busy` o `ui.expedition.notready`) y barra de la necesidad más débil (`CreatureAvailability.WeakestNeed`). No apta: clase `exp-card--off` |
-| `FillDetail(detail, dna, profile)` | Limpia el contenedor y lo llena: nombre, píldora de rol y tres filas de poder (icono, título, descripción) |
-| `FillTeam(team, profiles, picked)` | Fila `exp-team` con una píldora por elegido. Si hay elegidos y ninguno tiene `Support`, agrega el aviso `ui.expedition.nosupport`. Visibilidad oculta si no hay elegidos |
+| `BuildTile(dna, ok, careGate)` | Tile de candidato. Si es apta (`ok`), muestra estado listo; si no, estado ocupado o no listo y la barra de la necesidad más débil (`CreatureAvailability.WeakestNeed`). No apta: clase `exp-card--off` |
+| `BuildTeamCard(dna, profile)` | Carta de un integrante elegido con sus poderes (ala, cuerno, espalda) |
+| `BuildEmptySlot()` | Slot vacío de la fila de equipo |
+| `FillTeam(team, profiles, order, maxPick)` | Llena la fila de equipo con una carta por elegido y slots vacíos hasta `maxPick` |
+
+Cambio S161: `BuildCard` pasó a `BuildTile`, y `FillTeam` recibe `order` y `maxPick` en lugar de la lista de elegidos.
 
 ## Poderes
 
 - Slot 0: ala, con rol `BrawlKitProfile.WingRole`.
 - Slot 1: cuerno (`BrawlSkillSO`).
-- Slot 2: espalda (`BrawlSkillSO`). Si `BackLocked`, es un poder bloqueado: icono con clase `exp-power--locked` y "?" (`exp-power__lock`), título y descripción `ui.power.locked.title` / `ui.power.locked.desc`, sin anillo de rol. Aplica en la tarjeta y en el detalle.
-- Icono: `Theme.Icon` como fondo o `Theme.Color` si no hay icono. Clase `mm-role-ring--{rol}`.
+- Slot 2: espalda (`BrawlSkillSO`). Si `BackLocked`, es un poder bloqueado: ícono con "?" (`exp-power__lock`) y textos de `ui.power.locked.*`.
+- Ícono: `Theme.Icon` como fondo o `Theme.Color` si no hay ícono. Clase `mm-role-ring--{rol}`.
 - Parte sin kit: poder vacío con rol Offense.
-- En el detalle, la fila bloqueada no lleva clase de color de rol en el título.
 
 ## Conexiones
 
 - [[ExpeditionPanelUITK]] — único consumidor
 - [[BrawlKitProfile]] — rol, temas, kits y `BackLocked` de cada poder
-- [[BrawlRolePill]] — píldora de rol
-- [[BrawlTheme]], [[BrawlSkillSO]], [[BrawlWingKitSO]] — iconos, colores, títulos y descripciones
+- [[BrawlTheme]], [[BrawlSkillSO]], [[BrawlWingKitSO]] — iconos, colores, títulos
 - [[CreatureAvailability]], [[CareGateSO]] — aptitud y necesidad más débil
 - [[NeedsDisplay]] — color y relleno de la barra
 - [[MonchiPortraitUI]] — retrato de la tarjeta
@@ -40,5 +45,5 @@ tags: [script, ui, expedition, builder, uitk]
 ## Notas
 
 - Estático y sin estado: cada llamada reemplaza el contenido del contenedor que recibe.
-- Los nombres de los poderes salen de los SO de kit (`Title`, `Description`), no de `Loc`. La excepción es el poder bloqueado, que sale de `Loc`.
+- Los nombres de los poderes salen de los SO de kit (`Title`, `Description`), no de `Loc`. La excepción es el poder bloqueado.
 - S146: espalda bloqueada para formas no adultas, con el mismo criterio que la ficha y el HUD.

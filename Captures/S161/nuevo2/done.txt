@@ -1,0 +1,12 @@
+00_hud ok
+01_libro_grilla ok
+02_ficha ok
+03_crianza ok
+04_almacen ok
+05_pc_tienda ok
+06_venta ok
+07_expedicion ok
+08_retorno ok
+09_pausa ok
+10_ajustes ok
+hotbar vaciado

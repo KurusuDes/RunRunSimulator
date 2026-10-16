@@ -6,89 +6,76 @@ tags: [script, ui, presenter]
 
 **Ruta:** `UI/BreedingBreedTabPresenter.cs`
 
-**Responsabilidad:** Presenter UITK para tab "Criar" (seleccionar padre+madre, preview, iniciar breed). Implementa `ITabPresenter`. Flujo: entrada a tab → foco en slots → seleccionar padre → seleccionar madre → TryBreed() → transición a tab Huevos. **S131:** Cría síncrona; borrados `Busy` y async/await. **S135:** Sin cambios sustanciales en estructura; mantiene compatibilidad con BodyPart modular.
+**Responsabilidad:** Presenter UITK para el tab "Criar" de la Crianza (`ITabPresenter`). Elige padre y madre desde una grilla filtrada por sexo, muestra la herencia por parte con `BreedingInheritanceView` y dispara la cría síncrona. Al criar con éxito avisa con `onBred`. Flujo: entrar al tab → foco en la grilla → elegir padre → elegir madre → botón Criar → `TryBreed()`.
 
-## Subestados (SubFocus enum)
+**Vinculado a:** [[Index/02 - Genetics & Breeding]], [[Index/09 - Active Context]]
 
-| Estado | Descripción |
-|--------|-------------|
-| `Slots` | Navegación entre padre/madre/criar button (3 slots) |
-| `FatherList` | ScrollView de padres seleccionables |
-| `MotherList` | ScrollView de madres seleccionables |
-
-## Campos Privados
+## Estado Privado
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `getRegistry` | `Func<CreatureRegistrySO>` | Acceso dinámico a registry |
-| `database` | `CreatureDatabaseSO` | Acceso a partes para preview |
-| `incubation` | `IncubationService` | Servicio de incubación |
-| `onBred` | `Action` | Callback al completar cría |
+| `getRegistry` | `Func<CreatureRegistrySO>` | Acceso dinámico al registry |
+| `database` | `CreatureDatabaseSO` | Partes para la vista de herencia |
+| `incubation` | `IncubationService` | Verificación de estado de huevo |
+| `onBred` | `Action` | Callback al completar la cría |
+| `grid` | `ScrollView` | Grilla de candidatos |
+| `tiles` | `List<VisualElement>` | Tiles renderizadas |
 | `selectedFatherId` / `selectedMotherId` | `string` | IDs seleccionados |
-| `fatherCards` / `motherCards` | `List<VisualElement>` | Tarjetas renderizadas |
-| `criarIndex` / `fatherIndex` / `motherIndex` | `int` | Índice de navegación por subestado |
-| `focus` | `SubFocus` | Subestado actual |
+| `filter` | `CreatureGender` | Sexo mostrado (Male = padres, Female = madres). Default Male |
+| `gridIndex` | `int` | Cursor en la grilla |
+| `focus` | `SubFocus` | Subestado actual. Default `Grid` |
 
-## Métodos ITabPresenter
+## Métodos ITabPresenter y Públicos
 
 | Método | Descripción |
 |--------|-------------|
-| `Enter()` | Al entrar tab: reset foco a Slots, índice 0 |
-| `Navigate(h, v)` | Manejo de input: mueve cursor en subestado actual |
-| `Submit()` | Acción Enter: abre listas o confirma selección |
+| `Enter()` | Al entrar al tab, vuelve al foco de la grilla |
+| `Navigate(h, v)` | Mueve el cursor según el subestado actual |
+| `Submit()` | Asigna el candidato del cursor o dispara la cría |
+| `Cancel()` | Deshace el subestado actual; devuelve si consumió la acción |
+| `ClearFocus()` | Quita el resaltado de foco |
+| `Rebuild()` | Reconstruye la grilla y los slots desde el registry |
+| `Teardown()` | Libera suscripciones y referencias del tab |
 
-## Flujo de Cría (S131)
+## Métodos Privados Clave
+
+| Método | Descripción |
+|--------|-------------|
+| `OnFilterFathers` / `OnFilterMothers` / `ChangeFilter(gender)` | Cambia el sexo mostrado y reconstruye la grilla |
+| `RebuildGrid()` | Arma las tiles del sexo filtrado |
+| `RefreshSlots()` | Actualiza los slots de padre y madre y llama a `BreedingInheritanceView.Build` |
+| `Assign(id)` | Asigna el candidato al slot que corresponde al filtro |
+| `TryBreed()` | Valida selección y llama `BreedingController.StartBreeding()` (síncrono, retorna bool) |
+| `ApplyFocus()` / `ApplyFocusIfActive()` | Pinta el foco visual |
+
+## Flujo de Cría
 
 ```
-1. Usuario en Tab 0 selecciona padre (índice criarIndex=0) → abre FatherList
-2. Selecciona padre → selectedFatherId = ID
-3. Regresa a Slots, mueve a madres (índice criarIndex=1) → abre MotherList
-4. Selecciona madre → selectedMotherId = ID
-5. Regresa a Slots, mueve a criar button (índice criarIndex=2)
-6. Submit → TryBreed()
+1. Tab Criar: la grilla muestra padres (filtro Male) por defecto
+2. Elegir padre → selectedFatherId; RefreshSlots muestra herencia
+3. Cambiar filtro a madres → elegir madre → selectedMotherId
+4. Criar → TryBreed()
    - BreedingController.StartBreeding(selectedMotherId, selectedFatherId) [síncrono]
-   - Si ok: UIManager.Toast + transición a Tab 1 (Huevos)
-   - Si error: UIManager.Toast("Error") + permanece en Tab 0
+   - Si ok: UIManager.Toast + onBred (transición al tab Huevos)
+   - Si error: UIManager.Toast("Error") + permanece en el tab
 ```
-
-## Métodos Clave
-
-| Método | Descripción |
-|--------|-------------|
-| `Enter()` | Reset estado: focus=SubFocus.Slots, criarIndex=0 |
-| `Navigate(h, v)` | Maneja navegación según `focus` (slots/listas) |
-| `Submit()` | Dispara acción según `focus` |
-| `OpenList(SubFocus which)` | Cambia focus a lista padre/madre |
-| `SelectFather(id)` | Asigna selectedFatherId, redibuja preview |
-| `SelectMother(id)` | Asigna selectedMotherId, redibuja preview |
-| `TryBreed()` | Valida selecciones + BreedingController.StartBreeding() |
-| `ApplyCriarFocus()` / `ClearCriarFocus()` | Manejo visual de focus |
-| `MoveList()` | Navegación dentro de ScrollView |
-
-## Integración
-
-- Instanciado en `BreedingPanelUITK` (host del UITK document)
-- Inyecta `IncubationService` para verificación de estado de huevo
-- Consumidor de `CreatureRegistrySO` (padre/madre disponibles)
-- Transición a tab "Huevos" via `onBred` callback
-
-## Cambios S131
-
-**Cría síncrona:** TryBreed() ya no es async; BreedingController.StartBreeding() retorna bool inmediatamente.
-
-**Removidos:** 
-- `public bool Busy` property
-- `private void SetBreedBusy(bool)` method
-- `private async Task TryBreedAsync()` method
-
-**Nuevo:**
-- `private void TryBreed()` — síncrono, retorna bool de BreedingController
-
-## Vinculado a
-
-- [[Index/02 - Genetics & Breeding]]
-- [[Index/09 - Active Context]]
 
 ## Conexiones
 
-[[ITabPresenter]], [[BreedingPanelUITK]], [[BreedingController]], [[IncubationService]], [[CreatureRegistrySO]], [[CreatureDatabaseSO]]
+- [[ITabPresenter]], [[BreedingPanelUITK]] (host), [[BreedingController]], [[IncubationService]]
+- [[CreatureRegistrySO]], [[CreatureDatabaseSO]], [[CreatureDNA]]
+- [[BreedingInheritanceView]] (S161) — vista de herencia por parte
+
+## Cambios S161
+
+- La vista de herencia sale de `BreedingInheritanceView` (fila por parte con color de set, sin porcentajes).
+- La grilla se filtra por sexo con el selector de padres/madres; el tab "Criar" se rehizo como composición de crafteo.
+- Pendiente de Juan: mostrar % de herencia (S162).
+
+## Cambios S131
+
+**Cría síncrona:** `TryBreed()` ya no es async; `BreedingController.StartBreeding()` retorna bool inmediatamente. Se removieron `Busy`, `SetBreedBusy` y `TryBreedAsync`.
+
+## Notas
+
+- `BreedingPanelUITK` es el host del documento; este presenter no abre ni cierra el panel.

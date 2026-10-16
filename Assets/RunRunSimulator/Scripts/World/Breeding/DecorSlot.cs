@@ -1,10 +1,9 @@
 using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
 namespace MoriMonchiSimulator
 {
 
-public class DecorSlot : MonoBehaviour, IInteractable
+public class DecorSlot : MonoBehaviour, IInteractable, IFocusLabel
 {
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
     private const float FallbackCubeSize = 0.4f;
@@ -12,7 +11,6 @@ public class DecorSlot : MonoBehaviour, IInteractable
     [Required, SerializeField] private BreedingContainer owner;
     [SerializeField, Min(0)] private int index;
     [SerializeField] private Transform anchor;
-    [SerializeField] private TextMeshPro label;
 
     private MaterialPropertyBlock block;
 
@@ -31,20 +29,17 @@ public class DecorSlot : MonoBehaviour, IInteractable
     {
         GameEvents.OnWorldStateChanged  += OnWorldState;
         GameEvents.OnWorldStateReloaded += OnWorldState;
-        UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
     }
 
     private void OnDisable()
     {
         GameEvents.OnWorldStateChanged  -= OnWorldState;
         GameEvents.OnWorldStateReloaded -= OnWorldState;
-        UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
     }
 
     private void Start() => Refresh();
 
     private void OnWorldState(WorldStateSO state) => Refresh();
-    private void OnLocaleChanged(UnityEngine.Localization.Locale locale) => Refresh();
 
     public void Interact()
     {
@@ -91,25 +86,29 @@ public class DecorSlot : MonoBehaviour, IInteractable
         for (int i = root.childCount - 1; i >= 0; i--)
             Destroy(root.GetChild(i).gameObject);
 
-        var gm       = GameManager.Instance;
-        var world    = gm != null ? gm.WorldState : null;
         var database = BreedingController.Instance != null ? BreedingController.Instance.DecorDatabase : null;
         var decor    = database != null ? database.Get(DecorId) : null;
 
-        if (decor == null)
-        {
-            if (label != null) label.text = Loc.Tr("ui.decor.slot.empty");
-            return;
-        }
+        if (decor == null) return;
 
         SpawnVisual(decor, root);
+    }
 
-        if (label != null)
+    public string FocusTitle
+    {
+        get
         {
+            var gm       = GameManager.Instance;
+            var world    = gm != null ? gm.WorldState : null;
+            var database = BreedingController.Instance != null ? BreedingController.Instance.DecorDatabase : null;
+            var decor    = database != null ? database.Get(DecorId) : null;
+            if (decor == null) return Loc.Tr("ui.decor.slot.empty");
             int bred = world != null ? world.BredTotal : 0;
-            label.text = decor.IsDiscovered(bred) ? decor.DisplayName : Loc.Tr("ui.store.decor.unknown");
+            return decor.IsDiscovered(bred) ? decor.DisplayName : Loc.Tr("ui.store.decor.unknown");
         }
     }
+
+    public string FocusDetail => null;
 
     private void SpawnVisual(BreedingDecorSO decor, Transform root)
     {

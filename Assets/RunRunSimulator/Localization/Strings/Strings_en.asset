@@ -2220,6 +2220,322 @@ MonoBehaviour:
     m_Localized: Close
     m_Metadata:
       m_Items: []
+  - m_Id: 29850053865930752
+    m_Localized: Pet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565568
+    m_Localized: Grab
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565569
+    m_Localized: Use
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565570
+    m_Localized: Drop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565571
+    m_Localized: Throw
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565572
+    m_Localized: Use item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565573
+    m_Localized: Hold {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565574
+    m_Localized: Click
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29850053987565575
+    m_Localized: Today's orders
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793771393024
+    m_Localized: All
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416448
+    m_Localized: Grown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416449
+    m_Localized: Slimes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416450
+    m_Localized: Eggs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416451
+    m_Localized: '{0} MoriMonchis'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416452
+    m_Localized: No MoriMonchis in this filter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416453
+    m_Localized: Move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29860793901416454
+    m_Localized: View details
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861048969625600
+    m_Localized: No free candidates
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861048969625601
+    m_Localized: Inheritance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861048969625602
+    m_Localized: Select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861296039297024
+    m_Localized: Lv {0}/{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861296043491328
+    m_Localized: Category
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861296043491329
+    m_Localized: Buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861900853739520
+    m_Localized: Result
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861900853739521
+    m_Localized: Loot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861968839213056
+    m_Localized: '{0} different items'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861968839213057
+    m_Localized: Storage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861968839213058
+    m_Localized: Your hotbar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29861968839213059
+    m_Localized: Take out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29862111118393344
+    m_Localized: Max
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29866792934735872
+    m_Localized: Pick a MoriMochi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29866793039593472
+    m_Localized: Members {0}/{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422016
+    m_Localized: BLUE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422017
+    m_Localized: RED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422018
+    m_Localized: GET READY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422019
+    m_Localized: FIGHT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422020
+    m_Localized: SUDDEN DEATH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422021
+    m_Localized: END
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422022
+    m_Localized: " \xB7 damage \xD7{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422023
+    m_Localized: FIGHT!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422024
+    m_Localized: SUDDEN DEATH!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422025
+    m_Localized: everyone's health is draining
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422026
+    m_Localized: LAST ONE STANDING!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422027
+    m_Localized: '{0} won''t give up'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422028
+    m_Localized: BLUE WINS!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422029
+    m_Localized: RED WINS!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422030
+    m_Localized: DRAW!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422031
+    m_Localized: "MVP: {0} \xB7 {1} damage \xB7 {2} healing \xB7 {3} KO"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422032
+    m_Localized: knocked out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422033
+    m_Localized: fell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422034
+    m_Localized: KO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422035
+    m_Localized: fights
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422036
+    m_Localized: shoots from afar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422037
+    m_Localized: hunts
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422038
+    m_Localized: protects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422039
+    m_Localized: heals
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422040
+    m_Localized: flees
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422041
+    m_Localized: focusing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422042
+    m_Localized: waiting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422043
+    m_Localized: New match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422044
+    m_Localized: Rematch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422045
+    m_Localized: Last room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422046
+    m_Localized: 1 room left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422047
+    m_Localized: '{0} rooms left'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422048
+    m_Localized: "Dummies \xB7 hit them to heal the team"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422049
+    m_Localized: "Minerals \xB7 hit the crystal to start"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422050
+    m_Localized: "Minerals \xB7 +{0} Minerita"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422051
+    m_Localized: "Stretch {0} \xB7 {1} rooms"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422052
+    m_Localized: 'Minerita: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422053
+    m_Localized: Take on the stretch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422054
+    m_Localized: Back to the shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422055
+    m_Localized: Leave with {0} Minerita
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422056
+    m_Localized: You lost the fight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422057
+    m_Localized: "{0} Minerita lost \xB7 you keep {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422058
+    m_Localized: No loot to lose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422059
+    m_Localized: Room {0} of {1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422060
+    m_Localized: Last room of the stretch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422061
+    m_Localized: 1 more to go
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29867344846422062
+    m_Localized: '{0} more to go'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

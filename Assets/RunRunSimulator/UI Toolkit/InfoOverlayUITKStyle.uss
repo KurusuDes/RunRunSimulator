@@ -6,71 +6,150 @@
     bottom: 0;
 }
 
-.overlay-hints {
+.orders {
     position: absolute;
-    top: 22px;
-    left: 22px;
+    top: 24px;
+    left: 24px;
+    max-width: 460px;
     background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
     -unity-background-image-tint-color: var(--hud-pill);
-    -unity-slice-scale: 0.15;
-    padding: 12px 16px;
+    -unity-slice-scale: 0.2;
+    padding: 12px 18px 10px 18px;
+    display: none;
 }
 
-.hint-row {
+.orders-title {
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 22px;
+    color: var(--hud-gold);
+    margin-bottom: 6px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.orders-list {
+    flex-direction: column;
+}
+
+.orders-row {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
-.hint-key {
-    min-width: 64px;
-    height: 28px;
-    padding: 0 8px;
+.orders-bullet {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background-color: var(--hud-gold);
     margin-right: 10px;
+}
+
+.orders-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    white-space: normal;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.orders-reward {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 14px;
+}
+
+.orders-reward__amount {
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 20px;
+    color: var(--hud-gold);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.orders-reward__coin {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    margin-left: 2px;
+    background-image: url("Skin/Synty/ICON_SM_Item_Coins_02_Dungeon.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.crosshair {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    translate: -50% -50%;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Reticle_Dot_01.png");
+    -unity-background-image-tint-color: rgb(240, 230, 200);
+    -unity-background-scale-mode: scale-to-fit;
+    transition-property: width, height, -unity-background-image-tint-color;
+    transition-duration: 0.12s;
+}
+
+.crosshair--target {
+    width: 34px;
+    height: 34px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Reticle_Ring01_Sml.png");
+    -unity-background-image-tint-color: var(--hud-gold);
+}
+
+.focus-prompt {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: 36px;
+    translate: -50% 0;
+    align-items: flex-start;
     background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
-    -unity-background-image-tint-color: var(--hud-key);
-    -unity-slice-scale: 0.12;
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    -unity-background-image-tint-color: var(--hud-pill);
+    -unity-slice-scale: 0.2;
+    padding: 8px 14px 4px 14px;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.12s;
+}
+
+.focus-prompt--visible {
+    opacity: 1;
+}
+
+.focus-title {
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 22px;
+    color: rgb(255, 255, 255);
+    margin-bottom: 2px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+.focus-detail {
+    -unity-font-definition: url("Skin/Fonts/AlegreyaSans-Medium.ttf");
     font-size: 18px;
     color: var(--hud-gold);
-    -unity-text-align: middle-center;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
 }
 
-.hint-action {
-    font-size: 18px;
-    color: rgb(255, 255, 255);
-}
-
-.lang-row {
+.focus-row {
     flex-direction: row;
-    justify-content: flex-start;
-    margin-top: 8px;
+    align-items: center;
+    margin-bottom: 4px;
 }
 
-.lang-btn {
-    min-width: 46px;
-    height: 30px;
-    padding: 0 8px;
-    margin: 0 8px 0 0;
-    border-width: 0;
-    border-radius: 0;
-    background-color: rgba(0, 0, 0, 0);
-    background-image: url("Skin/Synty/SPR_FantasyScreens_Box_Rounded_Medium_02.png");
-    -unity-background-image-tint-color: var(--hud-key);
-    -unity-slice-scale: 0.12;
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 17px;
+.focus-key {
+    min-width: 34px;
+    -unity-text-align: middle-center;
+    margin-right: 10px;
+    color: var(--hud-gold);
+}
+
+.focus-action {
+    font-size: 20px;
     color: rgb(255, 255, 255);
-}
-
-.lang-btn:hover {
-    background-color: rgba(0, 0, 0, 0);
-    -unity-background-image-tint-color: var(--hud-slot);
-}
-
-.lang-btn--active {
-    -unity-background-image-tint-color: var(--hud-gold);
-    color: var(--hud-bubble-ink);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
 }
 
 .overlay-top-right {

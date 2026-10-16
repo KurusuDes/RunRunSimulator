@@ -24,7 +24,8 @@
           <ui:Label text="MORIMONCHI" class="col__label mm-section" />
           <ui:VisualElement class="mm-slot tx-portrait">
             <ui:VisualElement class="mm-layer mm-slot__vignette" picking-mode="Ignore" />
-            <ui:VisualElement name="mm-swatch" class="mm-swatch" />
+            <ui:VisualElement name="mm-runes" class="tx-runes" picking-mode="Ignore" />
+            <ui:VisualElement name="mm-portrait" class="mm-portrait" />
             <ui:VisualElement class="mm-layer mm-slot__frame" picking-mode="Ignore" />
           </ui:VisualElement>
           <ui:Label name="target-name" text="" class="target-name" />
@@ -36,7 +37,7 @@
         <ui:VisualElement class="tx-col col--value">
           <ui:Label text="OFRECE" class="col__label mm-section" />
           <ui:VisualElement class="tx-price">
-            <ui:VisualElement class="tx-gem" />
+            <ui:VisualElement class="tx-coin" />
             <ui:Label name="offer" text="+0" class="offer" />
             <ui:Label text="Dabloons" class="offer-unit" />
           </ui:VisualElement>
@@ -45,7 +46,7 @@
 
       <ui:VisualElement class="tx-actions">
         <ui:Button name="reject" text="Cancelar" class="mm-button tx-btn tx-btn--reject" />
-        <ui:Button name="counter" text="Pedir más" class="mm-button mm-button--alt tx-btn" />
+        <ui:Button name="counter" text="Pedir más" class="mm-button mm-button--alt tx-btn tx-btn--counter" />
         <ui:Button name="accept" text="Aceptar" class="mm-button mm-button--big tx-btn tx-btn--accept" />
       </ui:VisualElement>
     </ui:VisualElement>

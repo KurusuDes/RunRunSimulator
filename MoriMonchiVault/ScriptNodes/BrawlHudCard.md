@@ -204,3 +204,7 @@ El `?.` evita fallar si el slot no tiene radial (parte sin kit o espalda bloquea
 
 - Espalda bloqueada (forma no adulta): slot con "?" en lugar de icono y radial. Lo decide `BrawlFighter.BackLocked`, que viene de `BrawlKitProfile`.
 - El pulse de skill está implementado sobre `RadialSlot.Pulse()`; ya no es opcional.
+
+## Notas S161
+
+- Restyle con el kit de Synty (tarjetas, radiales y barra de HP con los íconos y colores del tema). Constructor, `Refresh`, `PulseSkill` y `Root` no cambiaron.

@@ -6,26 +6,37 @@ tags: [world, breeding, decor, interactable, slot]
 
 **Ruta:** `World/Breeding/DecorSlot.cs`
 
-**Responsabilidad:** Ranura fisica de decoracion en un `BreedingContainer`. Implementa `IInteractable`. Cada interaccion devuelve la decoracion actual al inventario y toma la siguiente disponible del catalogo (orden de `BreedingDecorDatabaseSO`). Persiste el contenido en `WorldStateSO` y muestra el visual o un cubo tintado de fallback.
+**Responsabilidad:** Ranura física de decoración en un `BreedingContainer`. Implementa `IInteractable` e `IFocusLabel` (S161). Cada interacción devuelve la decoración actual al inventario y toma la siguiente disponible del catálogo (orden de `BreedingDecorDatabaseSO`). Persiste el contenido en `WorldStateSO` y muestra el visual o un cubo tintado de fallback.
 
 ## Identidad
 
 `SlotId = {owner.name}_{index}`. Es la clave de persistencia en `WorldStateSO.GetDecorSlot/SetDecorSlot`.
 
-## Interaccion (`Interact`, solo Play)
+## Interacción (`Interact`, solo Play)
 
-1. Si hay decoracion, la devuelve al inventario (`AddDecor`) y arranca el ciclo desde la siguiente del catalogo.
-2. Toma la primera decoracion del catalogo con stock (`TryTakeDecor`).
-3. Si no habia nada y no hay nada que tomar, no hace nada.
+1. Si hay decoración, la devuelve al inventario (`AddDecor`) y arranca el ciclo desde la siguiente del catálogo.
+2. Toma la primera decoración del catálogo con stock (`TryTakeDecor`).
+3. Si no había nada y no hay nada que tomar, no hace nada.
 4. Guarda en `WorldStateSO` y dispara `InventoryChanged` + `WorldStateChanged`. No persiste directamente.
 
 ## Visual (`Refresh`)
 
-Destruye los hijos de `anchor` y spawnea `Prefab` o un cubo sin collider tintado con `_BaseColor`. La etiqueta muestra el nombre si `IsDiscovered(BredTotal)`, o `ui.store.decor.unknown`. Sin decoracion, `ui.decor.slot.empty`.
+Destruye los hijos de `anchor` (o del propio transform) y spawnea `Prefab` de la decoración o un cubo sin collider tintado con `_BaseColor`. Sin decoración no spawnea nada.
+
+## Rótulo de Foco (S161)
+
+Ya no hay etiqueta TMP flotante (se quitó el campo `label` y las etiquetas de decoraciones en prefabs y escena). El rótulo sale por `IFocusLabel`:
+
+| Miembro | Valor |
+|---------|-------|
+| `FocusTitle` | `ui.decor.slot.empty` si no hay decoración; el nombre si `IsDiscovered(BredTotal)`; si no, `ui.store.decor.unknown` |
+| `FocusDetail` | `null` |
+
+Lo consume [[PlayerFocusProbe]] y lo pinta [[FocusPromptUITK]].
 
 ## Suscripciones
 
-| Evento | Accion |
+| Evento | Acción |
 |--------|--------|
 | `OnWorldStateChanged`, `OnWorldStateReloaded` | `Refresh()` |
 | `LocalizationSettings.SelectedLocaleChanged` | `Refresh()` |
@@ -39,6 +50,5 @@ Se desuscribe en `OnDisable`.
 | `owner` | `BreedingContainer` | Si |
 | `index` | `int` | No (Min 0) |
 | `anchor` | `Transform` | No |
-| `label` | `TextMeshPro` | No |
 
-**Conexiones:** [[BreedingContainer]], [[BreedingController]] (`DecorDatabase`), [[BreedingDecorSO]], [[BreedingDecorDatabaseSO]], [[PlayerInventorySO]], [[WorldStateSO]], [[GameEvents]], [[IInteractable]], [[Loc]]
+**Conexiones:** [[BreedingContainer]], [[BreedingController]] (`DecorDatabase`), [[BreedingDecorSO]], [[BreedingDecorDatabaseSO]], [[PlayerInventorySO]], [[WorldStateSO]], [[GameEvents]], [[IInteractable]], [[IFocusLabel]] (S161), [[Loc]]

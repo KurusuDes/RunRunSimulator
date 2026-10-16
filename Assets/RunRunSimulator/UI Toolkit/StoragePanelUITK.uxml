@@ -7,16 +7,30 @@
         <ui:VisualElement name="panel" class="storage-panel mm-panel">
             <ui:VisualElement class="mm-layer mm-panel__lip" picking-mode="Ignore" />
             <ui:VisualElement class="mm-layer mm-panel__frame" picking-mode="Ignore" />
-            <ui:Label text="Almacén" class="storage-title mm-title" />
+            <ui:Label name="title" text="" class="storage-title mm-title" picking-mode="Ignore" />
+            <ui:Label name="subtitle" text="" class="storage-subtitle mm-subtitle" picking-mode="Ignore" />
             <ui:VisualElement class="mm-bar" />
-            <ui:ScrollView name="list" class="storage-list" mode="Vertical" />
-            <ui:Label name="empty" text="Vacío — tira objetos aquí para guardarlos." class="storage-empty" picking-mode="Ignore" />
+            <ui:Label name="section-box" text="" class="mm-section" picking-mode="Ignore" />
+            <ui:ScrollView name="grid" class="storage-grid" mode="Vertical" horizontal-scroller-visibility="Hidden" />
+            <ui:Label name="section-hotbar" text="" class="mm-section" picking-mode="Ignore" />
+            <ui:VisualElement name="hotbar" class="storage-hotbar" picking-mode="Ignore" />
         </ui:VisualElement>
 
         <ui:VisualElement class="mm-footer" picking-mode="Ignore">
+            <ui:VisualElement class="mm-prompt">
+                <ui:Label text="W" class="mm-key" />
+                <ui:Label text="A" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label text="S" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label text="D" class="mm-key" style="margin-left: 4px;" />
+                <ui:Label name="prompt-move" text="" class="mm-prompt__label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="mm-prompt">
+                <ui:Label text="Enter" class="mm-key" />
+                <ui:Label name="prompt-take" text="" class="mm-prompt__label" />
+            </ui:VisualElement>
             <ui:Button name="close-button" text="" class="mm-prompt mm-prompt--button">
                 <ui:Label text="Esc" class="mm-key" picking-mode="Ignore" />
-                <ui:Label text="Cerrar" class="mm-prompt__label" picking-mode="Ignore" />
+                <ui:Label name="prompt-close" text="" class="mm-prompt__label" picking-mode="Ignore" />
             </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -6,7 +6,7 @@ tags: [script, ui, store, data, rows]
 
 **Ruta:** `UI/StoreRows.cs`
 
-**Responsabilidad:** Utilidad estática: convierte el catálogo en rows de UI. Abstracción agnóstica de presentación. **S138:** la pestaña de mejoras con `Upgrade` field. **S149:** las pestañas cambian: sale Furniture y entran Expansions (mejoras), Decor (decoraciones de cría) y Toys (juguetes). **S151:** entra la pestaña Orders (encargos del día) y `Row` gana el campo `Reward` para filas de solo lectura. **S152:** entra la pestaña Goals (metas) y las filas de expansiones y productos bloqueados por una meta se dibujan como solo lectura.
+**Responsabilidad:** Utilidad estática: convierte el catálogo en rows de UI. Abstracción agnóstica de presentación. **S138:** la pestaña de mejoras con `Upgrade` field. **S149:** las pestañas cambian: sale Furniture y entran Expansions (mejoras), Decor (decoraciones de cría) y Toys (juguetes). **S151:** entra la pestaña Orders (encargos del día) y `Row` gana el campo `Reward` para filas de solo lectura. **S152:** entra la pestaña Goals (metas) y las filas de expansiones y productos bloqueados por una meta se dibujan como solo lectura. **S161:** `Row` gana `Icon` y `LockedBy`, que usan las tiles y la ficha de la tienda.
 
 ## Enumeraciones
 
@@ -31,6 +31,8 @@ public struct Row
     public Func<BuyResult> Buy;             // Lambda compra (null en filas de solo lectura)
     public int?            PriceOverride;   // Precio fijo (mejoras, decoraciones, cajas)
     public ShopUpgradeSO   Upgrade;         // Referencia si es mejora
+    public Sprite          Icon;            // S161: ícono de la tile y la ficha (null = ícono de la pestaña)
+    public string          LockedBy;        // S161: nombre de la meta que bloquea la fila (vacío si no está bloqueada)
 }
 ```
 
@@ -54,7 +56,7 @@ public struct Row
 
 **Expansions (S138, renombrada S149):**
 1. Itera `catalog.UpgradeListings`.
-2. Si `GoalService.LockingGoal(upgrade)` devuelve meta (S152): Row solo con `Name = "{nombre} · Bloqueado {meta}"`, sin `Buy`.
+2. Si `GoalService.LockingGoal(upgrade)` devuelve meta (S152): Row solo con `Name = "{nombre} · Bloqueado {meta}"`, `LockedBy` = meta, sin `Buy`.
 3. Si no: Row con Upgrade + `PriceOverride = upgrade.PriceFor(upgrade.CurrentLevel)` + Buy → `BuyUpgrade`. Sin Shop (no tiene stock).
 
 **Decor (S149):**
@@ -71,12 +73,12 @@ public struct Row
 **WorldProps / Consumables / Toys:**
 - Itera `catalog.ItemListings` y filtra por `WorldPropCategory`: WorldProps = Tool, Toys = Toy, Consumables = Food o Medicine.
 - **S149:** un listing con `RequiresExpansion` solo aparece si esa expansión tiene nivel >= 1.
-- **S152:** si `GoalService.LockingGoal(def)` devuelve meta, Row solo con `Name = "{nombre} · Bloqueado {meta}"`, sin `Buy`.
-- Si no: Row con Shop + Buy → `BuyWorldProp`.
+- **S152:** si `GoalService.LockingGoal(def)` devuelve meta, Row solo con `Name = "{nombre} · Bloqueado {meta}"`, `LockedBy` = meta, sin `Buy`.
+- Si no: Row con Shop + Icon + Buy → `BuyWorldProp`.
 
 ## Integración
 
-**StorePanelUITK** llama `Collect` por pestaña; la UI renderiza el row, ejecuta `row.Buy()` al click y usa `row.PriceOverride` si existe, o `row.Shop.Price` en caso contrario. Si `Buy` es null, la fila es de solo lectura (recompensa de encargo, meta o ítem bloqueado).
+**StorePanelUITK** llama `Collect` por pestaña y construye una tile por fila con `StoreTileView`; la ficha `StoreDetailCard` ejecuta `row.Buy()` al click del botón y el precio sale de `StorePrice` (usa `row.PriceOverride` si existe, o `row.Shop` en caso contrario). Si `Buy` es null, la fila es de solo lectura (recompensa de encargo, meta o ítem bloqueado).
 
 ## Invariantes
 
@@ -92,4 +94,4 @@ public struct Row
 - [[Index/28 - Currency & Monetization]]
 - [[Index/04 - Store & Transactions]]
 
-**Conexiones:** [[StorePanelUITK]], [[StoreManager]], [[ShopCatalogSO]], [[ShopUpgradeSO]], [[CreatureBoxSO]], [[BreedingDecorSO]], [[WorldPropCategory]], [[WorldStateSO]], [[PlayerInventorySO]], [[OrderBoardService]] (S151), [[ShopOrder]] (S151), [[GoalService]] (S152), [[GoalSO]] (S152), [[Loc]]
+**Conexiones:** [[StorePanelUITK]], [[StoreManager]], [[ShopCatalogSO]], [[ShopUpgradeSO]], [[CreatureBoxSO]], [[BreedingDecorSO]], [[WorldPropCategory]], [[WorldStateSO]], [[PlayerInventorySO]], [[OrderBoardService]] (S151), [[ShopOrder]] (S151), [[GoalService]] (S152), [[GoalSO]] (S152), [[StoreTileView]] (S161), [[StorePrice]] (S161), [[StoreDetailCard]] (S161), [[Loc]]

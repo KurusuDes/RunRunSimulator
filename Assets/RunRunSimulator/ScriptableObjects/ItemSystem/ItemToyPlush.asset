@@ -24,4 +24,5 @@ MonoBehaviour:
   Id: I6
   DisplayName: Peluche
   Category: 3
+  Icon: {fileID: 21300000, guid: f14f59df7b5439a4c8233651be8c3907, type: 3}
   Prefab: {fileID: 4192254117038491635, guid: 0ce1d9d054b2b18428191b4513421c1c, type: 3}

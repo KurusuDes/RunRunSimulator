@@ -105,7 +105,7 @@ public class BrawlRunVeil : MonoBehaviour
             _ => MineralClass
         });
 
-        title.text = "Sala " + (run.RoomIndex + 1) + " de " + count;
+        title.text = Loc.Tr("ui.brawl.run.veil.room", run.RoomIndex + 1, count);
 
         pips.Clear();
         for (int i = 0; i < count; i++)
@@ -117,7 +117,7 @@ public class BrawlRunVeil : MonoBehaviour
         }
 
         int remaining = count - run.RoomIndex - 1;
-        left.text = remaining <= 0 ? "Última sala del tramo" : remaining == 1 ? "Queda 1 más" : "Quedan " + remaining + " más";
+        left.text = remaining <= 0 ? Loc.Tr("ui.brawl.run.veil.last") : remaining == 1 ? Loc.Tr("ui.brawl.run.veil.one") : Loc.Tr("ui.brawl.run.veil.many", remaining);
     }
 }
 }

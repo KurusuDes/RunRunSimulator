@@ -53,3 +53,4 @@ tags: [script, ui, brawl, run, veil, uitk]
 
 - El velo aparece entre salas de un tramo y al aceptar un tramo nuevo. Al terminar un tramo el director pasa a `Planning` sin `Transition`, así que no hay velo.
 - S146: nuevo.
+- S161: restyle con el kit de Synty (glifo, título, pips y restantes). Sin cambios de reglas.

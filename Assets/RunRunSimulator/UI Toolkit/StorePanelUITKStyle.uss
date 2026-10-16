@@ -12,14 +12,14 @@
     right: 0;
     top: 0;
     bottom: 62px;
-    padding: 22px 48px 20px 48px;
+    padding: 18px 48px 16px 48px;
     align-items: center;
 }
 
 .store-column {
     flex-grow: 1;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1760px;
 }
 
 .store-header {
@@ -66,120 +66,228 @@
 }
 
 .store-bar {
-    margin: 4px 0 10px 0;
+    margin: 4px 0 6px 0;
+}
+
+.store-icon {
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.store-icon--expansions {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Up_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-icon--worldprops {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Inventory_Items_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-icon--consumables {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Health_02_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-icon--creatures {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Charmed_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-icon--decor {
+    background-image: url("Skin/Synty/ICON_SM_Item_Crystal_02.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-icon--toys {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_SpeedUp_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-icon--orders {
+    background-image: url("Skin/Synty/ICON_FantasyScreens_Inventory_Backpack_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-icon--goals {
+    background-image: url("Skin/Synty/ICON_FantasyScreens_Menu_Done_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
 }
 
 .store-tabs {
     flex-direction: row;
     justify-content: center;
-    align-items: center;
-    height: 70px;
+    align-items: flex-start;
+    height: 128px;
     flex-shrink: 0;
 }
 
-.store-tab {
-    height: 54px;
-    padding: 0 16px;
-    margin: 0 3px;
-    font-size: 23px;
-    letter-spacing: 1px;
-    color: var(--mm-ink-soft);
-    -unity-text-align: middle-center;
-    background-color: rgba(0, 0, 0, 0);
-    border-bottom-width: 3px;
-    border-bottom-color: rgba(0, 0, 0, 0);
-    transition-property: color;
+.store-cat {
+    width: 150px;
+    margin: 0 4px;
+    align-items: center;
+}
+
+.store-cat__slot {
+    width: 78px;
+    height: 78px;
+    border-width: 3px;
+    border-color: var(--mm-frame-soft);
+    border-radius: 12px;
+    transition-property: scale, border-color;
     transition-duration: 0.12s;
 }
 
-.store-tab:hover {
+.store-cat__icon {
+    width: 52px;
+    height: 52px;
+}
+
+.store-cat__label {
+    margin-top: 6px;
+    font-size: 21px;
+    color: var(--mm-ink-soft);
+    -unity-text-align: upper-center;
+    white-space: normal;
+}
+
+.store-cat:hover .store-cat__label {
     color: rgb(255, 255, 255);
 }
 
-.store-tab--active {
-    color: rgb(255, 255, 255);
+.store-cat:hover .store-cat__slot {
+    scale: 1.05 1.05;
+}
+
+.store-cat--active .store-cat__slot {
+    border-color: var(--mm-gold);
+    background-color: var(--mm-tab-fill-on);
+    scale: 1.1 1.1;
+}
+
+.store-cat--active .store-cat__label {
+    color: var(--mm-gold);
     -unity-font-style: bold;
-    background-image: url("Skin/Synty/SPR_FantasyMenus_Gradient_Vertical_05.png");
-    -unity-background-image-tint-color: rgba(40, 220, 160, 0.4);
-    -unity-slice-scale: 0.4;
-    border-bottom-color: var(--mm-gold);
 }
 
-.store-panel {
+.store-body {
+    flex-direction: row;
     flex-grow: 1;
     flex-shrink: 1;
     min-height: 0;
     margin-top: 4px;
 }
 
-.store-list {
-    flex-grow: 1;
+.store-panel {
+    width: 1130px;
+    flex-shrink: 0;
+    margin-right: 24px;
 }
 
-.store-row {
+.store-grid {
+    flex-grow: 1;
+    padding: 18px 8px 10px 18px;
+}
+
+.store-grid .unity-scroll-view__content-container {
     flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.store-tile {
+    width: 200px;
+    height: 230px;
+    margin: 6px;
+    padding: 10px 8px 8px 8px;
     align-items: center;
-    min-height: 76px;
-    padding: 8px 18px 8px 14px;
-    margin-bottom: 8px;
     background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
     -unity-background-image-tint-color: var(--mm-row-fill);
     -unity-slice-scale: 0.22;
-    border-left-width: 5px;
-    border-left-color: rgba(0, 0, 0, 0);
+    border-width: 3px;
+    border-color: rgba(0, 0, 0, 0);
+    border-radius: 6px;
+    transition-property: scale;
+    transition-duration: 0.12s;
 }
 
-.store-row--selected {
+.store-tile:hover {
+    scale: 1.03 1.03;
+}
+
+.store-tile--selected {
     -unity-background-image-tint-color: var(--mm-tab-fill);
-    border-left-color: var(--mm-gold);
+    border-color: var(--mm-gold);
 }
 
-.store-row__name {
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-height: 56px;
-    padding-left: 66px;
-    font-size: 25px;
+.store-tile--locked,
+.store-tile--soldout {
+    opacity: 0.6;
+}
+
+.store-tile__slot {
+    width: 128px;
+    height: 128px;
+}
+
+.store-tile__icon {
+    width: 110px;
+    height: 110px;
+}
+
+.store-tile__name {
+    width: 100%;
+    height: 54px;
+    margin-top: 6px;
+    padding: 0 2px;
+    font-size: 21px;
     color: var(--mm-ink);
     white-space: normal;
-    -unity-text-align: middle-left;
-    background-image: url("Skin/Synty/ICON_FantasyWarrior_Inventory_Items_01_Clean.png");
-    -unity-background-image-tint-color: var(--mm-gold);
-    background-size: 48px 48px;
-    background-position-x: left;
-    background-position-y: center;
-    background-repeat: no-repeat;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -unity-text-align: upper-center;
 }
 
-.store-row--selected .store-row__name {
+.store-tile--selected .store-tile__name {
     color: rgb(255, 255, 255);
 }
 
-.store-row__price {
+.store-tile__pill {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+    height: 38px;
     flex-direction: row;
     align-items: center;
-    flex-shrink: 1;
-    max-width: 620px;
-    min-height: 44px;
-    margin-left: 14px;
-    padding: 0 16px;
+    justify-content: center;
     background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
     -unity-background-image-tint-color: rgb(1, 14, 12);
     -unity-slice-scale: 0.45;
 }
 
+.store-tile__tag {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--mm-ink-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -unity-text-align: middle-center;
+}
+
 .store-price__now,
 .store-price__now--sale {
-    padding-left: 38px;
-    font-size: 23px;
+    padding-left: 34px;
+    font-size: 21px;
     -unity-font-style: bold;
     color: rgb(255, 255, 255);
-    white-space: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     -unity-text-align: middle-left;
-    min-height: 34px;
+    min-height: 30px;
     background-image: url("Skin/Synty/ICON_FantasyWarrior_Inventory_Currency_01_Clean.png");
     -unity-background-image-tint-color: var(--mm-gold);
-    background-size: 30px 30px;
+    background-size: 26px 26px;
     background-position-x: left;
     background-position-y: center;
     background-repeat: no-repeat;
@@ -196,102 +304,163 @@
 }
 
 .store-price__was {
-    font-size: 18px;
+    font-size: 20px;
     color: var(--mm-ink-soft);
     margin-right: 10px;
     opacity: 0.75;
-}
-
-.store-row__stock {
-    min-width: 84px;
-    min-height: 38px;
-    margin-left: 14px;
-    padding: 2px 12px;
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
-    -unity-background-image-tint-color: rgb(1, 14, 12);
-    -unity-slice-scale: 0.45;
-    font-size: 20px;
-    -unity-font-style: bold;
-    color: var(--mm-ink-soft);
-    -unity-text-align: middle-center;
-}
-
-.store-row__stock--low {
-    color: var(--mm-warn);
-}
-
-.store-row__stock--empty {
-    color: var(--mm-crit);
-}
-
-.store-row__buy {
-    min-width: 150px;
-    height: 54px;
-    margin: 0 0 0 16px;
-    padding: 0 22px;
-    border-width: 0;
-    border-radius: 0;
-    background-color: rgba(0, 0, 0, 0);
-    background-image: url("Skin/Synty/SPR_FantasyMenus_Box_Small_Parchment_03.png");
-    -unity-background-image-tint-color: var(--mm-gold);
-    -unity-slice-scale: 0.35;
-    font-size: 23px;
-    -unity-font-style: bold;
-    color: var(--mm-ink-dark);
-    -unity-text-align: middle-center;
-    transition-property: scale, -unity-background-image-tint-color;
-    transition-duration: 0.12s;
-}
-
-.store-row__buy:hover {
-    -unity-background-image-tint-color: rgb(250, 214, 150);
-    background-color: rgba(0, 0, 0, 0);
-    scale: 1.04 1.04;
-}
-
-.store-row__buy:active {
-    scale: 0.97 0.97;
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.store-row__buy:focus {
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.store-row__buy:disabled {
-    opacity: 0.45;
-    scale: 1 1;
-}
-
-.store-row__buy--disabled {
-    -unity-background-image-tint-color: var(--mm-frame-soft);
-    background-color: rgba(0, 0, 0, 0);
 }
 
 .store-empty {
     position: absolute;
     left: 54px;
     right: 54px;
-    top: 38%;
+    top: 0;
+    bottom: 0;
     font-size: 28px;
     color: var(--mm-ink-soft);
     -unity-text-align: middle-center;
     white-space: normal;
 }
 
-.store-notify {
+.store-detail {
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 26px 28px 24px 28px;
+}
+
+.store-detail__content {
+    flex-grow: 1;
+}
+
+.store-pedestal {
+    height: 250px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.store-pedestal__disc {
     position: absolute;
-    left: 140px;
-    right: 140px;
-    bottom: 26px;
-    min-height: 54px;
-    padding: 6px 24px;
+    bottom: 12px;
+    width: 300px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: rgba(1, 14, 12, 0.85);
+}
+
+.store-pedestal__ring {
+    position: absolute;
+    bottom: 12px;
+    width: 300px;
+    height: 70px;
+    border-radius: 50%;
+    border-width: 3px;
+    border-color: var(--mm-gold);
+}
+
+.store-pedestal__icon {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 30px;
+}
+
+.store-detail__name {
+    font-size: 40px;
+    margin-top: 4px;
+}
+
+.store-detail__category {
+    margin-top: 2px;
+}
+
+.store-facts {
+    margin-top: 4px;
+}
+
+.store-fact {
+    min-height: 62px;
+    padding: 6px 14px;
+    margin-bottom: 8px;
+}
+
+.store-fact__box {
+    width: 50px;
+    height: 50px;
+    margin-right: 14px;
+}
+
+.store-fact__icon--coin {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Inventory_Currency_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-fact__icon--minerita {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Inventory_Minerals_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-teal);
+}
+
+.store-fact__icon--stock {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Inventory_Items_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-fact__icon--level {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Up_01_Clean.png");
+    -unity-background-image-tint-color: var(--mm-gold);
+}
+
+.store-fact__value,
+.store-fact__value--sale,
+.store-fact__value--warn,
+.store-fact__value--crit {
+    flex-shrink: 1;
+    font-size: 26px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    white-space: normal;
+}
+
+.store-fact__value--sale {
+    color: var(--mm-good);
+}
+
+.store-fact__value--warn {
+    color: var(--mm-warn);
+}
+
+.store-fact__value--crit {
+    color: var(--mm-crit);
+}
+
+.store-lock {
+    margin-top: 6px;
+    padding: 8px 16px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
+    -unity-background-image-tint-color: rgb(1, 14, 12);
+    -unity-slice-scale: 0.45;
+    font-size: 22px;
+    color: var(--mm-warn);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.store-notify {
+    margin-bottom: 8px;
+    min-height: 46px;
+    padding: 6px 18px;
     background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
     -unity-background-image-tint-color: rgb(120, 28, 20);
     -unity-slice-scale: 0.3;
     -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 25px;
+    font-size: 23px;
     color: rgb(255, 255, 255);
     -unity-text-align: middle-center;
     white-space: normal;
+}
+
+.store-detail__buy {
+    align-self: stretch;
+    min-height: 72px;
+    margin: 0;
+    flex-shrink: 0;
 }

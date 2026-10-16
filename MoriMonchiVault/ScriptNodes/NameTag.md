@@ -6,9 +6,9 @@ tags: [script, ui, world-ui, creature-display]
 
 **Ruta:** `World/Creatures/NameTag.cs`
 
-**Responsabilidad:** Placa flotante UITK sobre MoriMochi. Muestra nombre, gender, role, life stage, intent, precio (si está en venta), timer de cría (si está criando) y estado (muerto, en cría, frágil). Solo presenta; el modo de visibilidad viene de los ajustes (`SettingsService`).
+**Responsabilidad:** Placa flotante UITK sobre MoriMochi, en forma de píldora (S161). Muestra nombre, gender, role, life stage, intent, precio (si está en venta), timer de cría (si está criando) y estado (muerto, en cría, frágil). Solo presenta; el modo de visibilidad viene de los ajustes (`SettingsService`). Desde S161 no muestra la pista "[E] Acariciar": la pista de teclas la da el aviso de foco (`FocusPromptUITK`).
 
-**Historia breve:** S97 expone `ShowDistance`. S98 renderiza gestos y beating. S99 `ScreenSizeReferenceDistance` y colores de placa por team. S131 calcula la edad en días con `CreatureDNA.AgeDays(GameClock.Instance.Day)` para actualizar la etapa de vida en vivo. S149/S151: modo de visibilidad por ajustes, foco por mirada y estado "frágil".
+**Historia breve:** S97 expone `ShowDistance`. S98 renderiza gestos y beating. S99 `ScreenSizeReferenceDistance` y colores de placa por team. S131 calcula la edad en días con `CreatureDNA.AgeDays(GameClock.Instance.Day)` para actualizar la etapa de vida en vivo. S149/S151: modo de visibilidad por ajustes, foco por mirada y estado "frágil". S161: placa en píldora con el kit de Synty y sin pista de caricia.
 
 ## Campos Serializados
 
@@ -66,7 +66,7 @@ tags: [script, ui, world-ui, creature-display]
 | `Refresh()` | Selector: RefreshStore / RefreshPenned / RefreshDefault según estado |
 | `RefreshStore()` | Muestra precio solo (`CustomerService.EstimateAverage`) |
 | `RefreshPenned()` | Muestra gender/role/stage/breed/heart+timer si criando |
-| `RefreshDefault()` | Muestra nombre, estado (muerto, en cría, frágil), intent o pista de caricia |
+| `RefreshDefault()` | Muestra nombre, estado (muerto, en cría, frágil) e intent (S161: sin pista de caricia) |
 | `StatusOf(dna)` | Muerto → rojo; en cría → rosa; `CreatureFrailty.IsFrail` → gris "frágil" (S151) |
 | `StageText(int ageDays)` | Etapa de vida desde días con `BreedingController.LifeStageTable`; sin tabla, muestra "Xd" |
 | `CountdownText(long readyAtMinutes)` | Cuenta atrás hasta `BreedReadyAt` (en minutos de juego) |
@@ -100,7 +100,7 @@ stageLabel.text = StageText(dna.AgeDays(today));
 |-------|------|----------|
 | `document` | UIDocument | Componente del mismo GO |
 | `root` | VisualElement | Raíz UXML |
-| `nameLabel`, `stageLabel`, `breedLabel`, `timerLabel`, `statusLabel`, `intentLabel`, `petHintLabel`, `priceLabel`, `genderLabel`, `roleLabel`, `heartLabel` | Label | Labels |
+| `nameLabel`, `stageLabel`, `breedLabel`, `timerLabel`, `statusLabel`, `intentLabel`, `priceLabel`, `genderLabel`, `roleLabel`, `heartLabel` | Label | Labels |
 | `agent`, `dna` | ref | Wireadas en Bind |
 | `cam` | Transform | Camera.main para LOD |
 | `shown` | bool | Bandera de visibilidad actual |
@@ -124,7 +124,7 @@ stageLabel.text = StageText(dna.AgeDays(today));
 - [[CreatureDNA]] — lee `AgeDays(int)`, `IsDead`, `BusyState`
 - [[CreatureFrailty]] — estado "frágil" (S151)
 - [[SettingsService]], [[GameSettings]] — modo de visibilidad (`NameTags`)
-- [[MoriMochiAgent]] — referencia para lógica (Team, Intent, IsPenned, IsForSale, IsBeingPetted)
+- [[MoriMonchiAgent]] — referencia para lógica (Team, Intent, IsPenned, IsForSale, IsBeingPetted)
 
 **Sistemas:**
 - [[GameClock]] — proporciona `Day` y `TotalMinutes`
@@ -132,3 +132,4 @@ stageLabel.text = StageText(dna.AgeDays(today));
 - [[CreatureLifeStageTableSO]] — lookup etapa por edad
 - [[CustomerService]] — precio promedio en tienda
 - [[ExpeditionNav]] — `IsRevealing` para el fade de rivales
+- [[FocusPromptUITK]] (S161) — pista de teclas de acariciar y agarrar

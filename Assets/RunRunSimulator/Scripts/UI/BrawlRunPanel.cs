@@ -103,21 +103,21 @@ public class BrawlRunPanel : MonoBehaviour
         switch (director.State)
         {
             case BrawlRunState.Planning:
-                title.text = "Tramo " + run.Depth + " · " + run.Rooms.Count + " salas";
-                minerita.text = "Minerita: " + Minerita(run.Material);
+                title.text = Loc.Tr("ui.brawl.run.plan.title", run.Depth, run.Rooms.Count);
+                minerita.text = Loc.Tr("ui.brawl.run.minerita", Minerita(run.Material));
                 info.text = HealthLine(run);
-                goButton.text = "Enfrentar tramo";
-                leaveButton.text = run.Depth == 1 && run.Material == 0 ? "Volver a la tienda" : "Salir con " + Minerita(run.Material) + " Minerita";
+                goButton.text = Loc.Tr("ui.brawl.run.go");
+                leaveButton.text = run.Depth == 1 && run.Material == 0 ? Loc.Tr("ui.brawl.run.leave.shop") : Loc.Tr("ui.brawl.run.leave.cash", Minerita(run.Material));
                 SetVisible(info, true);
                 SetVisible(goButton, true);
                 SetVisible(leaveButton, true);
                 break;
             default:
-                title.text = "Perdiste el combate";
+                title.text = Loc.Tr("ui.brawl.run.lost.title");
                 minerita.text = run.MaterialLost > 0
-                    ? "Se pierden " + Minerita(run.MaterialLost) + " Minerita · te llevas " + Minerita(run.Material)
-                    : "Sin botín que perder";
-                leaveButton.text = "Volver a la tienda";
+                    ? Loc.Tr("ui.brawl.run.lost.loot", Minerita(run.MaterialLost), Minerita(run.Material))
+                    : Loc.Tr("ui.brawl.run.lost.none");
+                leaveButton.text = Loc.Tr("ui.brawl.run.leave.shop");
                 SetVisible(info, false);
                 SetVisible(goButton, false);
                 SetVisible(leaveButton, true);
@@ -158,6 +158,8 @@ public class BrawlRunPanel : MonoBehaviour
 
             var chip = Element("run-room");
             chip.AddToClassList(i < run.RoomIndex ? "run-room--done" : i == run.RoomIndex ? "run-room--current" : "run-room--upcoming");
+            chip.Add(Element("run-room__runes"));
+            chip.Add(Element("run-room__frame"));
 
             var glyph = Element("run-room__glyph");
             var sprite = glyphs.For(room);

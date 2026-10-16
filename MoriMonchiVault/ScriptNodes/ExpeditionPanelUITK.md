@@ -6,7 +6,7 @@ tags: [script, ui, expedition, uitk]
 
 **Ruta:** `UI/ExpeditionPanelUITK.cs`
 
-**Responsabilidad:** Panel UITK para elegir el elenco de la bajada. Lista las criaturas del registry como tarjetas (aptas primero, luego por salud), permite marcar hasta `maxPick` (3) y muestra el detalle del MoriMochi enfocado (poderes de su kit y rol) y la fila del equipo elegido (con aviso si no hay Support). El costo de bajada aparece en el botón. "Bajar" se habilita con al menos una elegida, bloque nocturno y Dabloons suficientes. Al confirmar cierra el panel y pide la salida a `ExpeditionBridge`. Las tarjetas y el detalle los arma `ExpeditionCardBuilder`; el kit de cada criatura sale de `BrawlKitProfile.Of`.
+**Responsabilidad:** Panel UITK para elegir el elenco de la bajada. Muestra una tira de candidatos (aptas primero, luego por salud), permite marcar hasta 3 y muestra el equipo elegido como cartas (`ExpeditionCardBuilder.BuildTeamCard`) con slots vacíos. El costo de bajada aparece en el botón. "Bajar" se habilita con al menos una elegida, bloque nocturno y Dabloons suficientes. Al confirmar cierra el panel y pide la salida a `ExpeditionBridge`.
 
 ## Campos Serializados
 
@@ -14,28 +14,24 @@ tags: [script, ui, expedition, uitk]
 |-------|------|---------|-------------|
 | `document` | `UIDocument` | — | Root del panel (`UiPanels.RootOf`) |
 | `panel` | `UIPanelType` | `Expedition` | Clave de registro en `UIManager` |
-| `maxPick` | `int` | 3 | Máximo de criaturas elegidas |
 | `careGate` | `CareGateSO` | — | Criterio para `CreatureAvailability.CanExplore` |
 | `database` | `CreatureDatabaseSO` | — | Partes para resolver el kit de cada criatura |
 | `kits` | `BrawlKitDatabaseSO` | — | Kits de combate para el perfil de cada criatura |
 
 ## Elementos UXML
 
-- Textos y contenedores: `exp-title`, `exp-subtitle`, `exp-empty`, `exp-list` (ScrollView), `exp-detail` (panel de detalle; oculto sin foco), `exp-team` (fila del equipo con aviso), `exp-close`, `exp-go`.
-- Tarjetas (las arma `ExpeditionCardBuilder`): `exp-card` (+ `--off`, `--on`, `--focus`), `exp-card__icon`, `exp-card__name`, `exp-card__state`, `exp-card__bars`, `exp-card__bar-track` (+ `--weak`), `exp-card__bar-fill`, `exp-card__role`, `exp-card__powers`, `exp-power`.
+- `exp-title`, `exp-subtitle`, `exp-empty`, `exp-list` (ScrollView de candidatos), `exp-team` (fila de equipo), `exp-close`, `exp-go`.
+- Tarjetas de candidatos: `exp-card` (+ `--off`, `--on`, `--focus`) armadas por `ExpeditionCardBuilder.BuildTile`.
 
 ## Comportamiento
 
-- **Rebuild:** se llama en `Start`, al abrir el panel (`OnPanelSet` con show) y al alternar visibilidad. Excluye criaturas muertas o vendidas. Por cada criatura calcula `BrawlKitProfile.Of`, arma la tarjeta y guarda en listas paralelas (`cards`, `dnas`, `profiles`, `eligible`, `picked`).
+- **Rebuild:** se llama en `Start`, al abrir el panel (`OnPanelSet` con show) y al alternar visibilidad. Excluye criaturas muertas o vendidas. Por cada criatura calcula `BrawlKitProfile.Of` y guarda en listas paralelas (`cards`, `dnas`, `profiles`, `eligible`, `picked`, `order`).
 - **Orden:** aptas primero; luego salud descendente.
-- **Tarjeta no apta:** clase `exp-card--off`, estado "ocupado" o "no listo", y la barra más débil resaltada.
-- **Tarjeta apta:** píldora de rol y tres iconos de poder (ala, cuerno, espalda).
-- **Selección:** click o submit alterna la elección. No deja pasar de `maxPick` ni elegir no aptas. Tras cada cambio refresca el equipo.
-- **Foco:** click y submit lo fijan; hover (`PointerEnter`) lo mueve sin scroll. El foco llena el detalle con `ExpeditionCardBuilder.FillDetail`.
+- **Selección:** click o submit alterna la elección. No deja pasar del máximo ni elegir no aptas. Tras cada cambio refresca el equipo (`RefreshTeam`).
+- **Foco:** `SetFocus` / `HoverAt` mueven el resaltado; hover no hace scroll.
 - **Navegación:** `OnUINavigate` (eje x) mueve el foco; `OnUISubmit` alterna; `OnUICancel` devuelve false.
-- **Equipo:** `ExpeditionCardBuilder.FillTeam` con los perfiles y las elecciones.
-- **Botón Bajar:** texto `ui.expedition.go` (n, maxPick), con " · costo" si `BrawlRunRulesSO.Current.DescentCost > 0`. Habilitado si n ≥ 1, `ExpeditionOpen` y `Wallet.Balance(Dabloons) ≥ costo`.
-- **Subtítulo:** `ui.expedition.subtitle` (maxPick) o `ui.expedition.night_only`.
+- **Botón Bajar** (`UpdateGoButton`): texto `ui.expedition.go` (n, máximo), con " · costo" si `BrawlRunRulesSO.Current.DescentCost > 0`. Habilitado si n ≥ 1, `ExpeditionOpen` y `Wallet.Balance(Dabloons) ≥ costo`.
+- **Subtítulo:** `ui.expedition.subtitle` (máximo) o `ui.expedition.night_only`.
 - **Depart:** arma los IDs elegidos, cierra el panel con `UIManager.RequestPanelSet` y llama `ExpeditionBridge.RequestDeparture(ids)`.
 
 ## Horario
@@ -52,7 +48,7 @@ tags: [script, ui, expedition, uitk]
 ## Conexiones
 
 - [[ExpeditionBridge]] — `RequestDeparture`
-- [[ExpeditionCardBuilder]] — tarjetas, detalle y fila de equipo
+- [[ExpeditionCardBuilder]] — tiles, cartas de equipo y slots vacíos
 - [[BrawlKitProfile]] — perfil de combate por criatura
 - [[BrawlKitDatabaseSO]], [[CreatureDatabaseSO]] — kits y partes del perfil
 - [[BrawlRunRulesSO]] — costo mostrado (`Current`)
@@ -60,7 +56,7 @@ tags: [script, ui, expedition, uitk]
 - [[GameClock]] — `Block.ExpeditionOpen`
 - [[GameEvents]] — `OnDayBlockChanged`
 - [[UIManager]] — `OnPanelSetRequested`, `OnPanelToggleRequested`, `RegisterNavigable`, `UnregisterNavigable`, `RequestPanelSet`
-- [[CreatureAvailability]], [[CareGateSO]] — aptitud y necesidad más débil
+- [[CreatureAvailability]], [[CareGateSO]] — aptitud
 - [[Wallet]] — `Balance(Dabloons)`
 - [[UiPanels]] — `RootOf`, `ClampSelection`, `SetActiveIndex`
 
@@ -70,4 +66,5 @@ tags: [script, ui, expedition, uitk]
 - Suscribe `UIManager.OnPanelSetRequested` / `OnPanelToggleRequested` en `OnEnable` y desuscribe en `OnDisable`.
 - Solo lee `GameManager.Instance.Registry`; no persiste nada.
 - La lista de tarjetas se reconstruye completa en cada `Rebuild`.
-- S145: tarjetas, detalle y fila de equipo salieron de este script hacia `ExpeditionCardBuilder`; el perfil de cada criatura viene de `BrawlKitProfile`.
+- S145: las tarjetas y la fila de equipo salieron hacia `ExpeditionCardBuilder`; el perfil de cada criatura viene de `BrawlKitProfile`.
+- S161: el detalle lateral del enfocado salió del panel; el equipo se muestra como 3 cartas con slots vacíos y los candidatos en tira.

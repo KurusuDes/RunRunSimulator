@@ -24,4 +24,5 @@ MonoBehaviour:
   Id: I5
   DisplayName: Cuerda
   Category: 3
+  Icon: {fileID: 21300000, guid: 19392b1abb09744418dbda6b27cc4179, type: 3}
   Prefab: {fileID: 7951096965765657672, guid: c483ce73730410e4387a70700f2df12a, type: 3}

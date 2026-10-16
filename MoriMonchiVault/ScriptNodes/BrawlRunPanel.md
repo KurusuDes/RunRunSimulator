@@ -56,3 +56,4 @@ La tarjeta solo se muestra si hay bajada activa, `Depth > 0` y el estado es `Pla
 
 - Textos en español hardcodeados (no pasan por `Loc`), igual que `BrawlHud` y `BrawlRunHud`.
 - S146: ya no tiene `trial`, ni iconos por tipo (`combatIcon`, `dummiesIcon`, `mineralsIcon`), ni muestra el estado `RoomResult`. El avance a la siguiente sala es automático.
+- S161: restyle con el kit de Synty (tarjeta de planificación y derrota). Sin cambios de reglas.

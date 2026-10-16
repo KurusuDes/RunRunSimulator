@@ -34,6 +34,7 @@ public class BrawlHudCard
         Root = Element("brawl-card");
         Root.AddToClassList(fighter.Team == ExpeditionTeam.Player ? "brawl-card--blue" : "brawl-card--red");
         Root.Add(Element("brawl-bg"));
+        Root.Add(Element("brawl-frame"));
 
         var head = Element("brawl-card__head");
         head.Add(MakeLabel(fighter.DisplayName, "brawl-card__name"));
@@ -54,7 +55,7 @@ public class BrawlHudCard
         hp.Add(hpFill);
         hp.Add(hpShield);
         hp.Add(hpLabel);
-        hp.Add(MakeLabel("KO", "brawl-hp__ko"));
+        hp.Add(MakeLabel(Loc.Tr("ui.brawl.card.ko"), "brawl-hp__ko"));
         Root.Add(hp);
 
         var row = Element("brawl-card__slots");
@@ -139,6 +140,7 @@ public class BrawlHudCard
         if (locked)
         {
             box.Add(MakeLabel("?", "brawl-slot__lock"));
+            box.Add(Element("brawl-slot__ring"));
             slot.Add(box);
             slot.Add(MakeLabel("—", "brawl-slot__label"));
             row.Add(slot);
@@ -159,6 +161,7 @@ public class BrawlHudCard
         };
         radial.AddToClassList("brawl-slot__radial");
         box.Add(radial);
+        box.Add(Element("brawl-slot__ring"));
 
         slot.Add(box);
         slot.Add(MakeLabel(string.IsNullOrEmpty(title) ? "—" : title, "brawl-slot__label"));
@@ -178,14 +181,14 @@ public class BrawlHudCard
     {
         switch (intent)
         {
-            case BrawlIntent.Engage: return "pelea";
-            case BrawlIntent.Kite: return "dispara de lejos";
-            case BrawlIntent.Hunt: return "caza";
-            case BrawlIntent.Protect: return "protege";
-            case BrawlIntent.Heal: return "cura";
-            case BrawlIntent.Retreat: return "huye";
-            case BrawlIntent.Cast: return "concentra";
-            default: return "espera";
+            case BrawlIntent.Engage: return Loc.Tr("ui.brawl.intent.engage");
+            case BrawlIntent.Kite: return Loc.Tr("ui.brawl.intent.kite");
+            case BrawlIntent.Hunt: return Loc.Tr("ui.brawl.intent.hunt");
+            case BrawlIntent.Protect: return Loc.Tr("ui.brawl.intent.protect");
+            case BrawlIntent.Heal: return Loc.Tr("ui.brawl.intent.heal");
+            case BrawlIntent.Retreat: return Loc.Tr("ui.brawl.intent.retreat");
+            case BrawlIntent.Cast: return Loc.Tr("ui.brawl.intent.cast");
+            default: return Loc.Tr("ui.brawl.intent.idle");
         }
     }
 

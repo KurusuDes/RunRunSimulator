@@ -34,54 +34,140 @@
     align-items: stretch;
 }
 
-.breed-side {
-    width: 480px;
+.breed-picker {
+    width: 760px;
     flex-shrink: 0;
+    padding: 40px 34px 34px 34px;
 }
 
-.breed-col-title {
-    margin-top: 0;
+.breed-filters {
+    flex-direction: row;
+    justify-content: center;
+    flex-shrink: 0;
     margin-bottom: 14px;
 }
 
-.breed-list {
+.breed-filter {
+    min-width: 220px;
+    -unity-background-image-tint-color: var(--mm-tab-fill);
+    color: var(--mm-ink);
+}
+
+.breed-filter:hover {
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
+}
+
+.breed-filter.mm-button--selected {
+    -unity-background-image-tint-color: var(--mm-tab-fill-on);
+    color: rgb(255, 255, 255);
+}
+
+.breed-grid-host {
     flex-grow: 1;
 }
 
-.breed-center {
+.breed-grid {
+    flex-grow: 1;
+}
+
+.breed-grid .unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.breed-empty {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -unity-text-align: middle-center;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 26px;
+    color: var(--mm-ink-soft);
+    white-space: normal;
+    display: none;
+}
+
+.breed-tile {
+    width: 150px;
+    margin: 5px;
+    align-items: center;
+    transition-property: scale;
+    transition-duration: 0.12s;
+}
+
+.breed-tile__slot {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 8px;
+}
+
+.breed-tile__img {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.breed-tile__name {
+    width: 100%;
+    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
+    font-size: 19px;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.breed-tile__count {
+    font-size: 16px;
+    color: var(--mm-ink-soft);
+    -unity-text-align: middle-center;
+}
+
+.breed-tile:hover .mm-slot__frame {
+    -unity-background-image-tint-color: rgb(250, 214, 150);
+}
+
+.breed-tile.breed-focus {
+    scale: 1.06 1.06;
+}
+
+.breed-tile.breed-focus .mm-slot__frame {
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.breed-tile--chosen .mm-slot__frame {
+    -unity-background-image-tint-color: rgb(255, 196, 60);
+}
+
+.breed-tile--chosen .breed-tile__name {
+    color: var(--mm-section);
+}
+
+.breed-result {
     flex-grow: 1;
     flex-shrink: 1;
-    margin: 0 24px;
+    margin-left: 24px;
 }
 
-.breed-slots {
+.breed-pair {
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     flex-shrink: 0;
+    padding: 28px 34px 24px 34px;
 }
 
 .breed-slot {
-    width: 340px;
+    width: 300px;
     flex-shrink: 0;
     align-items: center;
-    -unity-background-image-tint-color: var(--mm-panel-fill);
-}
-
-.breed-slot:hover {
-    -unity-background-image-tint-color: rgba(18, 62, 55, 0.96);
-}
-
-.breed-slot.breed-focus {
-    -unity-background-image-tint-color: rgba(3, 64, 52, 0.98);
-}
-
-.breed-slot.breed-focus > .mm-panel__frame {
-    -unity-background-image-tint-color: rgb(255, 236, 170);
-}
-
-.breed-slot.breed-focus > .mm-panel__lip {
-    -unity-background-image-tint-color: rgba(96, 255, 200, 0.75);
 }
 
 .breed-slot-role {
@@ -91,9 +177,28 @@
 }
 
 .breed-portrait {
-    width: 240px;
-    height: 240px;
+    width: 220px;
+    height: 220px;
     margin-bottom: 12px;
+}
+
+.breed-runes {
+    left: 28px;
+    right: 28px;
+    top: 28px;
+    bottom: 28px;
+    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Tracery_Diamond_01.png");
+    -unity-background-image-tint-color: rgba(250, 208, 136, 0.22);
+    -unity-background-scale-mode: scale-to-fit;
+    display: none;
+}
+
+.breed-slot--empty .breed-runes {
+    display: flex;
+}
+
+.breed-slot:hover .mm-slot__frame {
+    -unity-background-image-tint-color: rgb(250, 214, 150);
 }
 
 .breed-slot-img {
@@ -116,6 +221,10 @@
     text-overflow: ellipsis;
 }
 
+.breed-slot--empty .breed-slot-name {
+    color: var(--mm-ink-soft);
+}
+
 .breed-link {
     width: 72px;
     align-items: center;
@@ -129,34 +238,122 @@
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.breed-result {
+.breed-inherit {
     flex-grow: 1;
-    margin-top: 18px;
+    flex-shrink: 1;
+    margin-top: 14px;
+    padding: 30px 34px 24px 34px;
 }
 
-.breed-egg {
-    flex-direction: row;
-    align-items: center;
+.breed-inherit-title {
+    margin: 0 0 12px 0;
     flex-shrink: 0;
 }
 
-.breed-egg__box {
-    width: 74px;
-    height: 74px;
+.inherit-list {
+    flex-shrink: 1;
 }
 
-.breed-egg__icon {
-    width: 50px;
-    height: 50px;
-    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
+.inherit-row {
+    min-height: 46px;
+    margin-bottom: 4px;
+    padding: 3px 10px;
+}
+
+.inherit-row__box {
+    width: 42px;
+    height: 42px;
+}
+
+.inherit-row__box .mm-icon {
+    width: 28px;
+    height: 28px;
     -unity-background-scale-mode: scale-to-fit;
+}
+
+.inherit-icon--horn {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Attack_01_Clean.png");
+    -unity-background-image-tint-color: rgb(232, 112, 80);
+}
+
+.inherit-icon--back {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Health_02_Clean.png");
+    -unity-background-image-tint-color: rgb(64, 196, 164);
+}
+
+.inherit-icon--wing {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_SpeedUp_01_Clean.png");
+    -unity-background-image-tint-color: rgb(250, 208, 96);
+}
+
+.inherit-icon--face {
+    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Charmed_01_Clean.png");
+    -unity-background-image-tint-color: rgb(240, 140, 200);
+}
+
+.inherit-icon--body {
+    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
+}
+
+.inherit-row__role {
+    width: 120px;
+    margin-left: 12px;
+    flex-shrink: 0;
+    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
+    font-size: 23px;
+    color: var(--mm-section);
+}
+
+.inherit-cell {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 8px;
+    padding: 4px 10px;
+    border-width: 2px;
+    border-color: rgba(0, 0, 0, 0);
+    border-radius: 6px;
+}
+
+.inherit-cell--same {
+    background-color: rgba(64, 196, 164, 0.2);
+    border-color: var(--mm-teal);
+}
+
+.inherit-cell__swatch {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.55);
+}
+
+.inherit-cell__text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 21px;
+    color: var(--mm-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.breed-foot {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    margin-top: 14px;
 }
 
 .breed-egg__time {
     flex-grow: 1;
     flex-shrink: 1;
-    min-height: 74px;
-    margin: 0 18px;
+    min-height: 60px;
+    margin: 0 18px 0 0;
     padding: 6px 18px;
 }
 
@@ -178,130 +375,14 @@
 }
 
 .breed-action {
-    min-width: 230px;
+    min-width: 280px;
+    min-height: 68px;
     margin: 0;
 }
 
 .breed-action.breed-focus {
     -unity-background-image-tint-color: rgb(255, 236, 170);
     scale: 1.05 1.05;
-}
-
-.breed-action--busy,
-.breed-action--busy:hover {
-    opacity: 0.45;
-}
-
-.breed-preview {
-    flex-direction: row;
-    flex-grow: 1;
-    margin-top: 16px;
-    background-image: url("Skin/Synty/SPR_FantasyWarrior_Gem_09.png");
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 120px 120px;
-    -unity-background-image-tint-color: rgba(255, 255, 255, 0.1);
-}
-
-.preview-parent {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
-    margin: 0 6px;
-    padding: 12px 16px;
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
-    -unity-background-image-tint-color: var(--mm-row-fill);
-    -unity-slice-scale: 0.22;
-}
-
-.preview-name {
-    -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 25px;
-    color: var(--mm-section);
-    margin-bottom: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.preview-part-row {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 5px;
-}
-
-.preview-swatch {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-    flex-shrink: 0;
-    border-radius: 6px;
-}
-
-.preview-icon {
-    border-radius: 0;
-    background-color: rgba(0, 0, 0, 0);
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.preview-icon--horn { -unity-background-image-tint-color: var(--mm-gold); }
-.preview-icon--back { -unity-background-image-tint-color: var(--mm-teal); }
-.preview-icon--wing { -unity-background-image-tint-color: var(--mm-plum); }
-
-.preview-part-text {
-    flex-grow: 1;
-    flex-shrink: 1;
-    font-size: 19px;
-    color: var(--mm-ink);
-    white-space: normal;
-}
-
-.breed-candidate {
-    flex-direction: row;
-    align-items: center;
-    min-height: 64px;
-    margin-bottom: 8px;
-    padding: 8px 14px;
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Medium_Parchment02.png");
-    -unity-background-image-tint-color: var(--mm-row-fill);
-    -unity-slice-scale: 0.22;
-    border-width: 2px;
-    border-color: rgba(0, 0, 0, 0);
-}
-
-.breed-candidate:hover {
-    -unity-background-image-tint-color: rgba(18, 62, 55, 0.95);
-}
-
-.breed-candidate.breed-focus {
-    -unity-background-image-tint-color: var(--mm-tab-fill-on);
-    border-color: var(--mm-gold);
-}
-
-.breed-candidate-text {
-    flex-grow: 1;
-    flex-shrink: 1;
-    padding-left: 54px;
-    min-height: 44px;
-    -unity-text-align: middle-left;
-    font-size: 23px;
-    color: var(--mm-ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: 40px 40px;
-}
-
-.breed-side--father .breed-candidate-text {
-    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Attack_01_Clean.png");
-    -unity-background-image-tint-color: rgb(232, 112, 80);
-}
-
-.breed-side--mother .breed-candidate-text {
-    background-image: url("Skin/Synty/ICON_FantasyWarrior_Status_Health_02_Clean.png");
-    -unity-background-image-tint-color: rgb(240, 140, 200);
 }
 
 .page-panel {

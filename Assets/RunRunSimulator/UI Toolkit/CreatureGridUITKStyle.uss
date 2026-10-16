@@ -9,16 +9,55 @@
     top: 0;
     bottom: 62px;
     padding: 24px 48px 18px 48px;
+    flex-direction: row;
+    align-items: stretch;
 }
 
-.grid-panel {
+.grid-left {
+    width: 640px;
+    flex-shrink: 0;
+}
+
+.grid-right {
+    width: 520px;
+    flex-shrink: 0;
+}
+
+.grid-center {
     flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+}
+
+.grid-core {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 340px;
+    overflow: hidden;
+}
+
+.grid-portrait {
+    width: 340px;
+    height: 560px;
 }
 
 .grid-title {
     -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 28px 44px;
-    height: 54px;
+    -unity-text-auto-size: best-fit 26px 40px;
+    height: 52px;
+}
+
+.grid-filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.filter-button {
+    min-height: 40px;
+    padding: 0 16px;
+    margin: 2px 6px 2px 0;
+    font-size: 19px;
 }
 
 .grid-container {
@@ -28,79 +67,84 @@
 .grid-container .unity-scroll-view__content-container {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
     align-content: flex-start;
-    padding: 10px 6px 16px 6px;
+    padding: 8px 4px 12px 4px;
 }
 
-.card {
-    margin: 12px;
-    padding: 12px 10px 10px 10px;
-    align-items: center;
-    justify-content: flex-start;
+.tile {
+    width: 104px;
+    height: 104px;
+    margin: 5px;
     transition-property: scale, -unity-background-image-tint-color;
     transition-duration: 0.12s;
 }
 
-.card:hover {
-    scale: 1.04 1.04;
+.tile:hover {
     -unity-background-image-tint-color: rgb(0, 70, 58);
 }
 
-.card:hover .card__frame {
+.tile:hover .tile__frame {
     -unity-background-image-tint-color: rgb(250, 232, 190);
 }
 
-.card--selected {
+.tile--selected {
     -unity-background-image-tint-color: rgb(0, 96, 76);
 }
 
-.card--selected .card__frame {
+.tile--selected .tile__frame {
     -unity-background-image-tint-color: rgb(227, 187, 113);
 }
 
-.card__name {
-    width: 100%;
-    flex-basis: 24%;
-    flex-shrink: 0;
-    margin: 0;
-    padding: 0;
-    -unity-text-generator: advanced;
-    -unity-text-auto-size: best-fit 15px 22px;
-    -unity-font-definition: url("Skin/Fonts/LTMuseum-Bold.ttf");
-    color: rgb(255, 255, 255);
+.tile__icon {
+    width: 88px;
+    height: 88px;
+}
+
+.tile__dot {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    border-width: 2px;
+    border-color: rgb(1, 14, 12);
+}
+
+.tile__dot--ready {
+    background-color: var(--mm-good);
+}
+
+.tile__dot--blocked {
+    background-color: var(--mm-warn);
+}
+
+.grid-empty {
+    font-size: 22px;
+    color: var(--mm-ink-soft);
     -unity-text-align: middle-center;
     white-space: normal;
-    overflow: hidden;
+    margin: 12px 0;
 }
 
-.card--selected .card__name {
-    color: var(--mm-section);
-}
-
-.card__icon {
-    width: 100%;
-    flex-grow: 1;
-    flex-shrink: 1;
-    margin: 4px 0;
-    border-radius: 8px;
-    background-color: rgb(120, 120, 120);
-}
-
-.card__state {
-    flex-shrink: 0;
-    height: 34px;
-    min-width: 76%;
-    margin: 0;
-    padding: 0 12px;
-    background-image: url("Skin/Synty/SPR_HUD_FantasyWarrior_Box_Small_Parchment_02.png");
-    -unity-background-image-tint-color: rgb(1, 14, 12);
-    -unity-slice-scale: 0.45;
+.grid-count {
     -unity-font-definition: url("Skin/Fonts/Grenze-SemiBold.ttf");
-    font-size: 21px;
-    color: var(--mm-teal);
-    -unity-text-align: middle-center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 20px;
+    color: var(--mm-section);
+    -unity-text-align: middle-right;
+    margin-top: 6px;
+}
+
+.side-name {
+    -unity-text-generator: advanced;
+    -unity-text-auto-size: best-fit 26px 40px;
+    height: 52px;
+}
+
+.side-spacer {
+    flex-grow: 1;
+}
+
+.side-open {
+    align-self: stretch;
 }

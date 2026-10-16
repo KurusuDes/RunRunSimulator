@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 namespace MoriMonchiSimulator
 {
 
@@ -15,6 +16,8 @@ public static class StoreRows
         public Func<BuyResult> Buy;
         public int?            PriceOverride;
         public ShopUpgradeSO   Upgrade;
+        public Sprite          Icon;
+        public string          LockedBy;
     }
 
     public static string TabLabel(Tab tab) => tab switch
@@ -66,7 +69,7 @@ public static class StoreRows
                 var locking = goals != null ? goals.LockingGoal(upgrade) : null;
                 if (locking != null)
                 {
-                    rows.Add(new Row { Name = LockedName(NameOf(upgrade.DisplayName, upgrade.Id), locking) });
+                    rows.Add(new Row { Name = NameOf(upgrade.DisplayName, upgrade.Id), LockedBy = LockedText(locking) });
                     continue;
                 }
                 var capturedUpgrade = upgrade;
@@ -131,7 +134,7 @@ public static class StoreRows
             var lockingGoal = goals != null ? goals.LockingGoal(def) : null;
             if (lockingGoal != null)
             {
-                rows.Add(new Row { Name = LockedName(NameOf(def.DisplayName, def.Id), lockingGoal) });
+                rows.Add(new Row { Name = NameOf(def.DisplayName, def.Id), Icon = def.Icon, LockedBy = LockedText(lockingGoal) });
                 continue;
             }
             var capturedDef  = def;
@@ -139,6 +142,7 @@ public static class StoreRows
             rows.Add(new Row
             {
                 Name = NameOf(def.DisplayName, def.Id),
+                Icon = def.Icon,
                 Shop = capturedShop,
                 Buy  = () => store.BuyWorldProp(capturedDef, capturedShop),
             });
@@ -176,8 +180,8 @@ public static class StoreRows
         return string.Join(", ", names);
     }
 
-    private static string LockedName(string name, GoalSO goal) =>
-        $"{name} · {Loc.Tr("ui.store.locked")} {Loc.Tr(goal.TitleKey)}";
+    private static string LockedText(GoalSO goal) =>
+        $"{Loc.Tr("ui.store.locked")} {Loc.Tr(goal.TitleKey)}";
 
     private static bool MatchesItemTab(Tab tab, WorldPropCategory cat) =>
         tab == Tab.WorldProps ? cat == WorldPropCategory.Tool

@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using MoreMountains.Feedbacks;
-using TMPro;
 using UnityEngine;
 namespace MoriMonchiSimulator
 {
 
-public class StationSupply : MonoBehaviour, IInteractable
+public class StationSupply : MonoBehaviour, IInteractable, IFocusLabel
 {
     private static readonly List<StationSupply> all = new List<StationSupply>();
     public static IReadOnlyList<StationSupply> All => all;
@@ -14,13 +13,11 @@ public class StationSupply : MonoBehaviour, IInteractable
     [SerializeField, Min(1f)] private float max = 100f;
     [SerializeField, Min(0f)] private float usePerPoint = 0.25f;
     [SerializeField, Range(0f, 1f)] private float dirtyThreshold = 0.3f;
-    [SerializeField] private TextMeshPro label;
     [SerializeField] private MMF_Player onRefill;
     [SerializeField] private MMF_Player onEmpty;
 
     private float level;
     private int lastBucket;
-    private int lastPercent = -1;
 
     public SupplyKind Kind => kind;
     public float Level01 => Mathf.Clamp01(level / max);
@@ -36,14 +33,12 @@ public class StationSupply : MonoBehaviour, IInteractable
     {
         all.Add(this);
         GameEvents.OnWorldStateReloaded += OnWorldStateReloaded;
-        UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
     }
 
     private void OnDisable()
     {
         all.Remove(this);
         GameEvents.OnWorldStateReloaded -= OnWorldStateReloaded;
-        UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
     }
 
     private void Start() => ReadFrom(GameManager.Instance != null ? GameManager.Instance.WorldState : null);
@@ -56,7 +51,6 @@ public class StationSupply : MonoBehaviour, IInteractable
             ? Mathf.Clamp(saved, 0f, max)
             : max;
         lastBucket = Bucket();
-        UpdateLabel();
     }
 
     public void Interact()
@@ -94,7 +88,6 @@ public class StationSupply : MonoBehaviour, IInteractable
     private void SetLevel(float value)
     {
         level = Mathf.Clamp(value, 0f, max);
-        UpdateLabel();
 
         int bucket = Bucket();
         if (bucket == lastBucket) return;
@@ -112,32 +105,20 @@ public class StationSupply : MonoBehaviour, IInteractable
         GameEvents.WorldStateChanged(world);
     }
 
-    private void OnLocaleChanged(UnityEngine.Localization.Locale locale)
+    public string FocusTitle
     {
-        lastPercent = -1;
-        UpdateLabel();
-    }
-
-    private void UpdateLabel()
-    {
-        if (label == null) return;
-
-        int percent = Mathf.RoundToInt(Level01 * 100f);
-        if (percent == lastPercent) return;
-        lastPercent = percent;
-
-        string key = kind switch
+        get
         {
-            SupplyKind.Food  => "ui.station.food",
-            SupplyKind.Water => "ui.station.water",
-            _                => "ui.station.clean",
-        };
-        label.text = Loc.Tr(key, percent);
-
-        float t = Level01;
-        label.color = t < 0.5f
-            ? Color.Lerp(Color.red, Color.yellow, t * 2f)
-            : Color.Lerp(Color.yellow, Color.green, (t - 0.5f) * 2f);
+            string key = kind switch
+            {
+                SupplyKind.Food  => "ui.station.food",
+                SupplyKind.Water => "ui.station.water",
+                _                => "ui.station.clean",
+            };
+            return Loc.Tr(key, Mathf.RoundToInt(Level01 * 100f));
+        }
     }
+
+    public string FocusDetail => null;
 }
 }

@@ -53,15 +53,15 @@ tags: [script, world, player]
 | `Threw` | Al lanzar lo sostenido (`OnThrow`) o un item del hotbar con hold (`UpdateGrabHold`) | sin dato |
 | `Interacted` | Tras un tap de E que ejecutó `IInteractable.Interact()` | sin dato |
 
-Consumidor: [[PlayerAnimator]], que traduce cada evento a parámetros del Animator de FPArms.
+Consumidores: [[PlayerAnimator]], que traduce cada evento a parámetros del Animator de FPArms, y [[PlayerFocusProbe]] (S161), que lee `HeldChanged` y `PetChanged` para el aviso de foco.
 
 ## Métodos clave
 
 - **`Move()`** (Update, solo Exploring): movimiento relativo a la cámara (forward/right sin Y), gravedad propia y `controller.Move`.
 - **`UpdateGrabHold()`**: si la E lleva `grabHoldDuration`, busca un `MoriMochiAgent` en vista y lo agarra con `OnGrab(holdAnchor)`. Si no hay, lanza el item activo del hotbar con `ComputeThrowImpulse`.
 - **`TryBeginPetting(out agent)`**: `OverlapSphere(transform.position, grabRange, creatureLayer)`; el primer agente que acepte `BeginPetting()` gana.
-- **`TryFindInView<T>()`**: raycast de la cámara con `QueryTriggerInteraction.Collide`, ordenado por distancia. Un collider sólido que no sea T bloquea; un trigger que no sea T se atraviesa.
-- **`ComputeThrowImpulse(ignore)`**: busca el punto de mira con un raycast de la cámara y lanza desde `holdAnchor` hacia ese punto, con `throwUpwardBias`.
+- **`TryFindInView<T>()`**: raycast de la cámara con `QueryTriggerInteraction.Collide`, ordenado por distancia. Un collider sólido que no sea T bloquea; un trigger que no sea T se atraviesa. Desde S161 salta los colliders del propio jugador (`IsChildOf(transform)`).
+- **`ComputeThrowImpulse(ignore)`**: busca el punto de mira con un raycast de la cámara y lanza desde `holdAnchor` hacia ese punto, con `throwUpwardBias`. Salta los colliders de `ignore`.
 - **`SetState(PlayerStateType)`**: Exploring bloquea el cursor y habilita el `CinemachineInputAxisController`; Menu lo libera. Salir de Exploring termina el petting activo.
 - **`ApplySettings(GameSettings)`** **(S151)**: multiplica la ganancia base de cada eje del look por `LookSensitivity` (con signo negativo en Y si `InvertY`); FOV = `FieldOfView` si es > 0, si no el base del prefab.
 
@@ -86,6 +86,11 @@ Click de ataque (`ThrowPressed`): lanza lo sostenido, o usa el item activo del h
 - `TryFindInView` usa `QueryTriggerInteraction.Collide` porque los MoriMochis llevan collider trigger mientras están NavMesh-driven.
 - El petting termina al salir de Exploring (safety net).
 
+## Cambios S161
+
+- **Bug:** el rayo de interacción (`TryFindInView`) chocaba con el propio cuerpo al mirar abajo desde el cuello de S158. Ahora salta los colliders del jugador.
+- **Aviso de foco:** la sonda [[PlayerFocusProbe]] consume `HeldChanged` y `PetChanged`. No cambia la lógica de grab ni de throw.
+
 ## Cambios S156
 
 - **Eventos estáticos hacia la capa visual:** `HeldChanged`, `PetChanged`, `Threw` e `Interacted` (ver tabla de Eventos Emitidos). Permiten que `PlayerAnimator` reaccione sin que el controller lo conozca.
@@ -107,4 +112,4 @@ Click de ataque (`ThrowPressed`): lanza lo sostenido, o usa el item activo del h
 
 ## Conexiones
 
-[[PlayerInputs]], [[PlayerAnimator]], [[ThrowableObject]], [[MoriMochiAgent]], [[HotbarController]], [[UIManager]], [[IInteractable]], [[IThrowable]], [[SettingsService]] (S151), [[GameSettings]] (S151), [[PlayerToyTug]] (S151)
+[[PlayerInputs]], [[PlayerAnimator]], [[ThrowableObject]], [[MoriMochiAgent]], [[HotbarController]], [[UIManager]], [[IInteractable]], [[IThrowable]], [[SettingsService]] (S151), [[GameSettings]] (S151), [[PlayerToyTug]] (S151), [[PlayerFocusProbe]] (S161)
