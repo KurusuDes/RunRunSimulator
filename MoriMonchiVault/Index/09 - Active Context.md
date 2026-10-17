@@ -4,6 +4,31 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-17 (Session 165 — **escena entera rearmada "como legos" sobre la grilla de POLYGON Fantasy Village (celda 2,5 m, piso 3 m) con un armador de editor; techos prearmados del paquete a tamaño original para variedad; pasto erguido** — 4 `.cs` creados; consola sin errores nuevos; verificado en Play y con chequeo automático de huecos/clipping; capturas en `Captures/S165/`)
+
+**Focus:** Juan: "quiero que lo hagas modular para que lo armes como legos todo, para que cuando tengamos que hacer cambios todo siempre calce y solo nos concentremos en las decoraciones"; "que encajen como una extensión del package… para usar la furniture adicional"; techos "como el de las referencias, tenía muchos detalles hermosos"; cierre: "verifica que no haya huecos ni clipping".
+
+**Hecho:**
+1. **Pasto erguido:** `ShopGrassBlades.mat` `_Lean` 0,25 → 0 y `_GustStrength` 0,35 → 0,2 (Genshin/Fenyx: brizna quieta en la raíz, el viento mueve la punta y empuja matas; variación en manchas grandes).
+2. **Armador modular** (`ModularBuilding` en escena + `ModularPieceSetSO` + builder/inspector de editor con botones Armar/Limpiar): un rectángulo de celdas genera piso, muros (liso/ventana/puerta/abierto por borde), zócalo de piedra bajo el piso, pilares, vigas, y techo. Techo: si el `PieceSet` tiene un prearmado para ese tamaño lo usa; si no, filas modulares de paja (anchos pares e impares, con hastiales). Lo generado vive en el hijo `_Armado`; lo que se agregue a mano al lado (rampas) sobrevive al rearmar.
+3. **Kit = el de Synty:** muros/pisos/medios muros de `PolygonGeneric/Base` con materiales FV, aberturas/pilares/vigas/paja de `PolygonFantasyVillage`. Asset `ScriptableObjects/Modular/PieceSet_FV.asset`. Exterior `Wall_01`, hastial e interior `SH_Plaster_Ext`, piso `MOD_Floor_PlanksWarm` (tablón FV aclarado), zócalo `Stone_Half_Wall_01`.
+4. **Techos prearmados** (prefabs `Prefabs/Modular/MOD_Techo_1x2|2x2|2x3|3x3` = `Roof_Thatch_Preset_01+Ends / 03 / 04 / Wavey_01` sin estirar) con hastial de relleno generado a la medida del perfil (`Models/Shop/Modular/MOD_Hastial_*`). Rampa `MOD_Rampa_2p5` (frente y puerta este de la tienda).
+5. **Grilla global:** X = 1,25 + 2,5k, Z = 2,5k. Regla: **ningún edificio comparte muro**, pasillo de 2,5 m con puertas enfrentadas (si no, los aleros se cruzan). Tienda 5×7 (y 0,5, modular, puerta doble ancha + rampa; puerta este con rampa al patio), Criadero 4×6 (zona movida −2,5 X, modular), Sala 3×3 ondulado (zona movida +2,5 X), lotes: Guardería/Linaje/Escenario 3×3, Almacén/Baño/Gimnasio 2×3, Cocina/Clínica 2×2. Equipamiento de lotes reacomodado adentro; umbrales a las puertas nuevas.
+6. Viejo apagado (no borrado): `ShopBuilding`, `ShopRoof`, `FV_Techo_*`, `FV_Remates`, `Walls` invisibles de Criadero/Sala, `Arquitectura`/`Colisiones` de lotes. NavMesh de la calle ajustado a 0,5 en la puerta y re-horneado; exclusiones de pasto actualizadas; 11 árboles corridos fuera de los techos.
+7. **Verificación:** 0 solapes entre edificios, techos cubren 100 % de cada planta, 0 huecos en muros, relieve no atraviesa pisos; Play sin errores nuevos, MoriMonchis en NavMesh cruzando la puerta este.
+
+**Quirks ⚠️:** (1) `Base_Wall_Half_Angle_02` tiene las submallas invertidas: el builder detecta la cara por la normal media. (2) Los colliders de los prearmados son simplificados: un rayo "escapa" por hastiales que a la vista están cerrados (el 2×3 se ve cerrado por dentro). (3) `refresh_unity` no importa scripts nuevos con `if_dirty`: usar `mode=force, scope=all`. (4) La decoración interior de la tienda vivía en el FBX viejo: el interior quedó vacío. (5) La división interna vieja de la tienda (z≈18) no existe: el NavMesh tiene una línea sin paso ahí.
+
+**Siguiente paso (S166):**
+1. **Decoración interior** de la tienda con furniture de FantasyVillage (estantes, cuadros, lámparas) y detalles de techo (chimeneas, buhardillas, enredaderas, matas, veletas) sobre los legos.
+2. Techos de Tienda/Criadero: hoy filas modulares rectas; si se quieren curvos, componerlos por alas o con piezas `Thatch_Convex`.
+3. Bajo del techo interior rojo (`Wood_01` de la paja) y piso aún algo oscuro.
+4. Arrastrados: NPCs vecinos, FPS en build, inglés (~160 claves), Arena sandbox, huevos como padres.
+
+**Archivos `.cs` S165 — creados (4):** `Scripts/Data/Modular/ModularPieceSetSO.cs` (NUEVO), `Scripts/World/Modular/ModularBuilding.cs` (NUEVO), `Scripts/Editor/ModularBuildingBuilder.cs` (NUEVO), `Scripts/Editor/ModularBuildingEditor.cs` (NUEVO) · **modificados (0)**
+
+---
+
 **Session:** 2026-10-16 (Session 164 — **pulido y alineación al estilo FV: zócalo suave de vuelta, paleta exterior tomada de los techos (caras de afuera separadas en materiales `_Ext`), friso interior sin zigzag, pasto con fundido por distancia y kit modular v2 (Blender) en los 11 lotes** — 0 `.cs`; shader `ArenaGrass` modificado; consola sin errores; capturas en `Captures/S164/`)
 
 **Focus:** Juan: "empecemos con la sesión de pulido y alineación"; "esos muritos que agregaste en el overhaul no me gustaron, prefería los tuyos más suaves". Decisiones: paleta solo en el exterior, kit con piloto primero, textura pintada (no ladrillos modelados), pasto por distancia entra, NPCs a otra sesión. Piloto aprobado: "me gusta, extendé el kit v2 a todos los lotes".

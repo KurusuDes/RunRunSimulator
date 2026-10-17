@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42395de11006df44ab4eabe70ebf1015, type: 3}
+  m_Name: PieceSet_FV
+  m_EditorClassIdentifier: Assembly-CSharp::MoriMonchiSimulator.ModularPieceSetSO
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Floor: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+  FloorMaterials:
+  - {fileID: 2100000, guid: db8c29b5f8b2a2e40b477b54206d0456, type: 2}
+  - {fileID: 2100000, guid: 4852f30323fcd2e4fac42c2a42a51db4, type: 2}
+  Wall: {fileID: 1314183909916261615, guid: d6b56504304c325419b598fe3ddb95ed, type: 3}
+  GableAngle: {fileID: 5836199904002715867, guid: b40bba1f88f362041b4bc17f1a080621, type: 3}
+  WallExterior: {fileID: 2100000, guid: 30f6444a435ebcc428db1ada9a34c896, type: 2}
+  WallInterior: {fileID: 2100000, guid: 570ab39c5c398a64a9194079ee57076e, type: 2}
+  GableExterior: {fileID: 2100000, guid: 570ab39c5c398a64a9194079ee57076e, type: 2}
+  Windows:
+  - {fileID: 6140902653119786238, guid: fb53986c0e949e14c927c0244f034f41, type: 3}
+  - {fileID: 3879101116263411376, guid: 1e0f147f50ba8014dab0d8c7741038b9, type: 3}
+  - {fileID: 6215386133135781885, guid: d015e38a2319fb4499d0c414e85b2849, type: 3}
+  - {fileID: 7553177074225693258, guid: f658dd757de7d3745a23fb45ba190573, type: 3}
+  Doors:
+  - {fileID: 8080451668458650835, guid: 953988172ed4a794a8f346ba1d73ffed, type: 3}
+  - {fileID: 7509264144189196578, guid: 9204f2cebe19d0e43b63bf9f4cb3f223, type: 3}
+  - {fileID: 7192940797994283712, guid: e8704551ff7f8f8409fe0d04f6d5fc0e, type: 3}
+  - {fileID: 6002543673775143189, guid: 91b27bdaf6dbd3b42bcd6271888dde67, type: 3}
+  Pillar: {fileID: 5859370544003171171, guid: 58bdbc2d7ba921240b961c837435c76c, type: 3}
+  Beam: {fileID: 3122947462111215603, guid: 4fee24ca1a2cc984298ef95e5d7cb92e, type: 3}
+  Plinth: {fileID: 4806908438423097214, guid: cab317b0dd5752d4a8f2276080d2a178, type: 3}
+  PlinthMaterial: {fileID: 2100000, guid: 8d5af36a88fa99f429ff395dfb57b5ac, type: 2}
+  PillarHalf: {fileID: 4284404269967967190, guid: fca28446f26ced74aa399f5b246fb345, type: 3}
+  RoofRow: {fileID: 8715547777828133781, guid: 31417478a69ca56479491765b7d0193b, type: 3}
+  RoofEnd: {fileID: 2401917235622354823, guid: 6ce5d4d8bc51cba4fb3231c86e65dd7e, type: 3}
+  RoofRowHalf: {fileID: 8105625515396556181, guid: bdc8bc02ee2035647a9f206ef68fac66, type: 3}
+  RoofEndHalf: {fileID: 680731718478181802, guid: 328596ff016a45948a4c0a2646e33a47, type: 3}
+  GableAngleHalf: {fileID: 4082076726467886844, guid: 861a462e8d672ee4488834ca31536b28, type: 3}
+  RoofPresets:
+  - Size: {x: 1, y: 2}
+    Prefab: {fileID: 5068954392899637199, guid: 3d4a144c3cc81074ebb4417dfd1152f3, type: 3}
+  - Size: {x: 2, y: 2}
+    Prefab: {fileID: 3849803242855780304, guid: f5f30cbfc092d144a8122e48723f36ba, type: 3}
+  - Size: {x: 2, y: 3}
+    Prefab: {fileID: 7646446029382185382, guid: 62629cb1769d6594a81a063208b5f359, type: 3}
+  - Size: {x: 3, y: 3}
+    Prefab: {fileID: 1497198398855648598, guid: 255199034073fe84d92ce3d818557e7f, type: 3}
