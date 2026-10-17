@@ -46,6 +46,9 @@ Shader "MoriMonchi/ArenaGrass"
         _FlowerTint ("Flower Tint", Color) = (1,1,1,1)
         _FlowerLift ("Flower Lift", Range(0,1)) = 0.15
         _ShadowAtRoot ("Shadow At Root", Range(0,1)) = 0
+        _FadeStart ("Fade Start", Float) = 0
+        _FadeEnd ("Fade End", Float) = 0
+        _FadeDither ("Fade Dither", Float) = 8
     }
 
     SubShader
@@ -112,6 +115,9 @@ Shader "MoriMonchi/ArenaGrass"
                 half4 _FlowerTint;
                 half _FlowerLift;
                 half _ShadowAtRoot;
+                float _FadeStart;
+                float _FadeEnd;
+                float _FadeDither;
             CBUFFER_END
 
             float4 _ArenaFogCenter;
@@ -220,7 +226,13 @@ Shader "MoriMonchi/ArenaGrass"
                 positionWS.xz += clamp(trample.rg, -1.0, 1.0) * _TrampleBend * curve;
                 positionWS.y -= flatten * _TrampleFlatten * height;
 
-                positionWS = lerp(rootWS, positionWS, SampleShopKeep(rootWS));
+                float fade = 1.0;
+                if (_FadeEnd > _FadeStart)
+                {
+                    float camDist = distance(rootWS.xz, _WorldSpaceCameraPos.xz) + (input.color.r - 0.5) * _FadeDither;
+                    fade = 1.0 - smoothstep(_FadeStart, _FadeEnd, camDist);
+                }
+                positionWS = lerp(rootWS, positionWS, SampleShopKeep(rootWS) * fade);
 
                 output.positionWS = positionWS;
                 output.positionCS = TransformWorldToHClip(positionWS);

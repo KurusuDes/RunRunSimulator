@@ -4,6 +4,30 @@ tags: [index, core]
 
 # 09 - Active Context
 
+**Session:** 2026-10-16 (Session 164 — **pulido y alineación al estilo FV: zócalo suave de vuelta, paleta exterior tomada de los techos (caras de afuera separadas en materiales `_Ext`), friso interior sin zigzag, pasto con fundido por distancia y kit modular v2 (Blender) en los 11 lotes** — 0 `.cs`; shader `ArenaGrass` modificado; consola sin errores; capturas en `Captures/S164/`)
+
+**Focus:** Juan: "empecemos con la sesión de pulido y alineación"; "esos muritos que agregaste en el overhaul no me gustaron, prefería los tuyos más suaves". Decisiones: paleta solo en el exterior, kit con piloto primero, textura pintada (no ladrillos modelados), pasto por distancia entra, NPCs a otra sesión. Piloto aprobado: "me gusta, extendé el kit v2 a todos los lotes".
+
+**Hecho:**
+1. **Zócalo:** los 11 `FV_Zocalo` (cantos rodados oscuros) apagados; vuelve el zócalo suave original. La banca de la fachada ya no atraviesa nada.
+2. **Paleta exterior:** las caras de afuera de `ShopBuilding`, Sala, Criadero, `ShopYard` y el kit pasaron a submallas con materiales `SH_*_Ext` (`Materials/Shop/FV/Ext/`; mallas en `Models/Shop/FVRestyle/Ext/*_Ext.asset`). Clasificación: cara exterior si a 1,6 m de su normal no hay techo encima (techos viejos como colliders temporales); caras hacia arriba (porche, rampa): exterior si no la encierran muros en 3 de 4 direcciones. Colores tomados del techo de paja: yeso `#DFC9A0`, viga `#5E3C25`, miel `#A9784C`, piedra `#C9BCA2`; sombra derivada del color y rim light 0,3 (el sol ×2 + rim lavaba los muros a gris). Cerca del patio (`SH_FVFence_A/B`) apagada al mismo tono.
+3. **Friso interior:** el yeso de S163 había partido las tablas del friso (zigzag). Los triángulos por debajo de ~1,4 m vuelven a su material original del FBX (tienda, Sala, Criadero, kit).
+4. **Pasto:** fuera de la Sala (rects `FrenteTienda` y `PatioEste` recortados) y de los 8 lotes de `PREVIEW_ETAPAS` (exclusiones). **Fundido por distancia** en `ArenaGrass.shader` (`_FadeStart/_FadeEnd/_FadeDither`; apagado por defecto, la tienda usa 30/55/10): la brizna se achica hasta la raíz con variación por brizna.
+5. **Kit v2** (`Tools/Blender/props/ZoneKitV2.py` → `Models/Shop/KitV2/`): muro, ventana, puerta, esquina con la misma huella y pivote que v1; por dentro idéntico a v1; por fuera entramado FV con riostras curvas, revoque con panza, ventana en arco, zócalo bajo de piedras claras redondeadas, UV en metros. Revoque `SH_Plaster_Ext` con la textura `Brick_01` de FV (yeso con piedra lisa, tiling 0,4). Cambiadas las 104 instancias (56 muros, 16 ventanas, 32 esquinas) conservando el acento de cada sala.
+6. **Postigos:** 16 reubicados al exterior de su ventana (S163 había dejado algunos dentro del lote vecino o despegados).
+
+**Quirks ⚠️:** (1) Al separar caras con una malla compartida, asignar los materiales **por instancia** (el primer intento copió los del primer muro a todos y se perdieron los acentos; se recuperaron abriendo la escena de HEAD aditiva). (2) La esquina v2 es simétrica: lleva material `_Ext` en las 4 caras (la franja que asoma al cuarto se ve exterior). (3) Ventana/puerta v2 sin jardinera ni farol exterior (tope de 8 cm). (4) El MCP se cae con cada recarga de dominio: re-fijar la instancia. (5) Muros de lotes pegados (Escenario/Gimnasio, Gimnasio/Clínica) tienen ventanas que dan a la pared vecina; sus postigos quedan embutidos.
+
+**Siguiente paso (S165) — pedidos de Juan al cierre:**
+1. **Huecos en la estructura:** Juan ve varios huecos; ubicarlos con capturas (sospechas: uniones muro-esquina del kit v2, ventana/puerta v2 más delgadas hacia afuera que v1, encuentros entre lotes y edificio, aleros FV vs muros).
+2. **Pasto ladeado hacia un lado:** el material tiene `_Lean = 0,25` (inclinación constante en la dirección de ráfaga `+X`) más ráfaga 0,35. Volver a `Index/36`: en Genshin la brizna está erguida y la variación va en manchas grandes. Bajar `_Lean` a 0 o a una inclinación aleatoria por mata, y revisar la ráfaga.
+3. NPCs: vecinos en escena con los clips nuevos, borrar `Human_Knight_*`, Body Type del protagonista.
+4. Arrastrados: FPS en build, pasada de inglés (~160 claves), Arena sandbox, huevos como candidatos a padre.
+
+**Archivos `.cs` S164 — creados (0) · modificados (0)** · **shaders:** `Shaders/ArenaGrass.shader` (modificado: fundido por distancia) · **Blender:** `Tools/Blender/props/ZoneKitV2.py` (nuevo)
+
+---
+
 **Session:** 2026-10-16 (Session 163 — **escenario alineado al estilo POLYGON Fantasy Village (techos de paja, muros de yeso, zócalo, remates, calle empedrada, relleno), pasto del patio en toda la escena, vidrio cartoon, NPCs Sidekick por rol (14 cuerpos con elfa y elfo) con Animator nuevo y 16 clips propios de Blender** — 2 `.cs` creados, 3 modificados, 1 shader nuevo; consola sin errores nuevos; verificado en Play con capturas en `Captures/S163/`)
 
 **Focus:** Juan: "exploremos qué props del paquete nos sirven de decorado… alinear nuestras estructuras para que parezcamos todos de un mismo estilo"; en paralelo NPCs Sidekick y animaciones faltantes (Blender). A mitad de sesión: "vi uno de elfos que me gustaría incluir".

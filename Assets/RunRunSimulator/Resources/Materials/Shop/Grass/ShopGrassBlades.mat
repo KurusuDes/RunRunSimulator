@@ -30,6 +30,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _BladeVariation: 0.04
+    - _FadeDither: 10
+    - _FadeEnd: 55
+    - _FadeStart: 30
     - _FlowerLift: 0.6
     - _GustScale: 0.07
     - _GustSheen: 0.14

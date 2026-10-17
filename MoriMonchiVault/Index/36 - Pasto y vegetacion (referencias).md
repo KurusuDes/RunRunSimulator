@@ -29,7 +29,8 @@ tags: [index, arte, vegetacion, pasto]
 
 ## Pendientes
 
-- **Fundido por distancia (Juan, S163)**: como en Genshin, el pasto tiene una distancia de dibujado: de lejos las briznas se desvanecen (encogen o bajan densidad) y aparecen al acercarse, así se ve bien de lejos y de cerca. Idea: en `ArenaGrass.shader` escalar la altura de la brizna a 0 entre dos distancias a cámara (`_FadeStart` / `_FadeEnd`, por ejemplo 35 y 60 m) con dither por brizna para que no se vea una línea; de lejos el suelo verde con la misma rampa de color sostiene la lectura. Además baja el costo (S163: 5 M vértices tras replicar el pasto del patio en toda la escena).
+- **Pasto ladeado (Juan, S164)**: "parece aplastado hacia un lado". Causa: `_Lean = 0,25` en `ShopGrassBlades.mat` (inclinación constante hacia la ráfaga `+X`). Corregir hacia la brizna erguida de Genshin.
+- ✅ **S164 hecho** (`_FadeStart/_FadeEnd/_FadeDither` en `ArenaGrass.shader`, tienda 30/55/10) — **Fundido por distancia (Juan, S163)**: como en Genshin, el pasto tiene una distancia de dibujado: de lejos las briznas se desvanecen (encogen o bajan densidad) y aparecen al acercarse, así se ve bien de lejos y de cerca. Idea: en `ArenaGrass.shader` escalar la altura de la brizna a 0 entre dos distancias a cámara (`_FadeStart` / `_FadeEnd`, por ejemplo 35 y 60 m) con dither por brizna para que no se vea una línea; de lejos el suelo verde con la misma rampa de color sostiene la lectura. Además baja el costo (S163: 5 M vértices tras replicar el pasto del patio en toda la escena).
 
 ## Fuentes
 - [GDC Vault: Procedural Grass in Ghost of Tsushima](https://gdcvault.com/play/1027214/Advanced-Graphics-Summit-Procedural-Grass)
